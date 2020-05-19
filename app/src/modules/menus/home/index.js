@@ -6,13 +6,13 @@ const Home = () => {
 	return (
 		<View>
 			<Text>Hello World Again</Text>
+			<Text>Hello World Again</Text>
 		</View>
 	)
 }
 
 Home.navigationOptions = () => ({
 	headerLeft: props => <ScreenHeader {...props} />,
-	title: 'Home',
 })
 
 export default Home
