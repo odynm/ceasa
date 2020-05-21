@@ -1,12 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import svgBack from '../../../res/svgs/svgBack.svg'
-//import { fv, wp } from './../../utils'
+import { wp } from 'src/utils/screen'
 import { SvgXml } from 'react-native-svg'
 import { withNavigation } from 'react-navigation'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
+import PropTypes from 'prop-types'
 import colors from 'src/constants/colors'
-import { wp } from 'src/utils/screen'
+import svgBack from '../../../../res/svgs/svgBack.svg'
 
 const hitSlop = {
 	bottom: 10,
@@ -15,7 +14,7 @@ const hitSlop = {
 	top: 10,
 }
 
-const HeaderTitle = ({ noBack, navigation }) => (
+const ScreenHeader = ({ noBack, navigation }) => (
 	<View style={styles.container}>
 		{noBack ? (
 			<View style={styles.backButton} />
@@ -47,8 +46,8 @@ const styles = StyleSheet.create({
 	},
 })
 
-HeaderTitle.propTypes = {
+ScreenHeader.propTypes = {
 	children: PropTypes.string,
 }
 
-export default withNavigation(HeaderTitle)
+export default withNavigation(ScreenHeader)

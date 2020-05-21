@@ -16,6 +16,24 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* CeasaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CeasaTests.m */; };
+		0A8A9EB9F7324679A3E3BFE0 /* NotoSansBengaliUI-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BC8D5D60524240A2996C46BB /* NotoSansBengaliUI-Black.ttf */; };
+		CC6A17E81EDA4ADEA8E9C0D1 /* NotoSansBengaliUI-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7368690B7A4F443895A8CB3C /* NotoSansBengaliUI-Bold.ttf */; };
+		E3561F204CC04E91A577F768 /* NotoSansBengali-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F339F76628394231A435CD93 /* NotoSansBengali-Black.ttf */; };
+		7746389DCC074CC2A0858605 /* NotoSansBengali-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6D7CC513BC1A4529B6EE7BF8 /* NotoSansBengali-Bold.ttf */; };
+		76FA8AC0B3E842778A2C6EA8 /* NotoSansBengali-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 949937522E0949F1A73319CB /* NotoSansBengali-ExtraBold.ttf */; };
+		4CA64A7159FC4CB6BC152E46 /* NotoSansBengali-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC2B1D5CD28B4EC0A44F27A7 /* NotoSansBengali-ExtraLight.ttf */; };
+		757EC4C8AF384E5FB3834596 /* NotoSansBengali-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 383B82C770A84A118FF68770 /* NotoSansBengali-Light.ttf */; };
+		C172CA99E0D049D79D8B11C2 /* NotoSansBengali-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52529B02E7AB4B9FB12ACB82 /* NotoSansBengali-Medium.ttf */; };
+		D7828CA31EED42749F614E19 /* NotoSansBengali-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E7C2E5F4E440DBEAB8F71 /* NotoSansBengali-Regular.ttf */; };
+		F9911DC2B7C142B58EF1AC02 /* NotoSansBengali-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 896955D65A234F1A87AFA708 /* NotoSansBengali-SemiBold.ttf */; };
+		ACB77ABB98A240BD9D50C3F7 /* NotoSansBengali-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA1DECD7338B42379AF7B064 /* NotoSansBengali-Thin.ttf */; };
+		BFA4EFC7D09F49DA81C8EEFD /* NotoSansBengaliUI-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B71B012D10F4CD0A30D7526 /* NotoSansBengaliUI-ExtraBold.ttf */; };
+		34F63D727FE4436FAC0FF425 /* NotoSansBengaliUI-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BFB245EFFA7446B3BD8D5FC2 /* NotoSansBengaliUI-ExtraLight.ttf */; };
+		2D4237988E0A43FA8280C05D /* NotoSansBengaliUI-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7C95E4F947714D019B06F378 /* NotoSansBengaliUI-Light.ttf */; };
+		DC093C02DF8F470F9C30CAA6 /* NotoSansBengaliUI-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F62E9C59AA1434999631AEA /* NotoSansBengaliUI-Medium.ttf */; };
+		9DC626AC16E14091A1278C09 /* NotoSansBengaliUI-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A63B8CC02CBF4E52B7D7C877 /* NotoSansBengaliUI-Regular.ttf */; };
+		D805750B09454C74B41A1765 /* NotoSansBengaliUI-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A3CA77AA82F444F4BAE08A27 /* NotoSansBengaliUI-SemiBold.ttf */; };
+		C4628B3348244527B7D8916E /* NotoSansBengaliUI-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C0454FE704814152B7B748BB /* NotoSansBengaliUI-Thin.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +69,24 @@
 		2D02E4901E0B4A5D006451C7 /* Ceasa-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ceasa-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		BC8D5D60524240A2996C46BB /* NotoSansBengaliUI-Black.ttf */ = {isa = PBXFileReference; name = "NotoSansBengaliUI-Black.ttf"; path = "../res/fonts/NotoSansBengaliUI-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7368690B7A4F443895A8CB3C /* NotoSansBengaliUI-Bold.ttf */ = {isa = PBXFileReference; name = "NotoSansBengaliUI-Bold.ttf"; path = "../res/fonts/NotoSansBengaliUI-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F339F76628394231A435CD93 /* NotoSansBengali-Black.ttf */ = {isa = PBXFileReference; name = "NotoSansBengali-Black.ttf"; path = "../res/fonts/NotoSansBengali-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6D7CC513BC1A4529B6EE7BF8 /* NotoSansBengali-Bold.ttf */ = {isa = PBXFileReference; name = "NotoSansBengali-Bold.ttf"; path = "../res/fonts/NotoSansBengali-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		949937522E0949F1A73319CB /* NotoSansBengali-ExtraBold.ttf */ = {isa = PBXFileReference; name = "NotoSansBengali-ExtraBold.ttf"; path = "../res/fonts/NotoSansBengali-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CC2B1D5CD28B4EC0A44F27A7 /* NotoSansBengali-ExtraLight.ttf */ = {isa = PBXFileReference; name = "NotoSansBengali-ExtraLight.ttf"; path = "../res/fonts/NotoSansBengali-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		383B82C770A84A118FF68770 /* NotoSansBengali-Light.ttf */ = {isa = PBXFileReference; name = "NotoSansBengali-Light.ttf"; path = "../res/fonts/NotoSansBengali-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		52529B02E7AB4B9FB12ACB82 /* NotoSansBengali-Medium.ttf */ = {isa = PBXFileReference; name = "NotoSansBengali-Medium.ttf"; path = "../res/fonts/NotoSansBengali-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6B2E7C2E5F4E440DBEAB8F71 /* NotoSansBengali-Regular.ttf */ = {isa = PBXFileReference; name = "NotoSansBengali-Regular.ttf"; path = "../res/fonts/NotoSansBengali-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		896955D65A234F1A87AFA708 /* NotoSansBengali-SemiBold.ttf */ = {isa = PBXFileReference; name = "NotoSansBengali-SemiBold.ttf"; path = "../res/fonts/NotoSansBengali-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		EA1DECD7338B42379AF7B064 /* NotoSansBengali-Thin.ttf */ = {isa = PBXFileReference; name = "NotoSansBengali-Thin.ttf"; path = "../res/fonts/NotoSansBengali-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1B71B012D10F4CD0A30D7526 /* NotoSansBengaliUI-ExtraBold.ttf */ = {isa = PBXFileReference; name = "NotoSansBengaliUI-ExtraBold.ttf"; path = "../res/fonts/NotoSansBengaliUI-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BFB245EFFA7446B3BD8D5FC2 /* NotoSansBengaliUI-ExtraLight.ttf */ = {isa = PBXFileReference; name = "NotoSansBengaliUI-ExtraLight.ttf"; path = "../res/fonts/NotoSansBengaliUI-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7C95E4F947714D019B06F378 /* NotoSansBengaliUI-Light.ttf */ = {isa = PBXFileReference; name = "NotoSansBengaliUI-Light.ttf"; path = "../res/fonts/NotoSansBengaliUI-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3F62E9C59AA1434999631AEA /* NotoSansBengaliUI-Medium.ttf */ = {isa = PBXFileReference; name = "NotoSansBengaliUI-Medium.ttf"; path = "../res/fonts/NotoSansBengaliUI-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A63B8CC02CBF4E52B7D7C877 /* NotoSansBengaliUI-Regular.ttf */ = {isa = PBXFileReference; name = "NotoSansBengaliUI-Regular.ttf"; path = "../res/fonts/NotoSansBengaliUI-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A3CA77AA82F444F4BAE08A27 /* NotoSansBengaliUI-SemiBold.ttf */ = {isa = PBXFileReference; name = "NotoSansBengaliUI-SemiBold.ttf"; path = "../res/fonts/NotoSansBengaliUI-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C0454FE704814152B7B748BB /* NotoSansBengaliUI-Thin.ttf */ = {isa = PBXFileReference; name = "NotoSansBengaliUI-Thin.ttf"; path = "../res/fonts/NotoSansBengaliUI-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +176,7 @@
 				00E356EF1AD99517003FC87E /* CeasaTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				6EB4F5B98419409F98C9DB8E /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -156,6 +193,32 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		6EB4F5B98419409F98C9DB8E /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				BC8D5D60524240A2996C46BB /* NotoSansBengaliUI-Black.ttf */,
+				7368690B7A4F443895A8CB3C /* NotoSansBengaliUI-Bold.ttf */,
+				F339F76628394231A435CD93 /* NotoSansBengali-Black.ttf */,
+				6D7CC513BC1A4529B6EE7BF8 /* NotoSansBengali-Bold.ttf */,
+				949937522E0949F1A73319CB /* NotoSansBengali-ExtraBold.ttf */,
+				CC2B1D5CD28B4EC0A44F27A7 /* NotoSansBengali-ExtraLight.ttf */,
+				383B82C770A84A118FF68770 /* NotoSansBengali-Light.ttf */,
+				52529B02E7AB4B9FB12ACB82 /* NotoSansBengali-Medium.ttf */,
+				6B2E7C2E5F4E440DBEAB8F71 /* NotoSansBengali-Regular.ttf */,
+				896955D65A234F1A87AFA708 /* NotoSansBengali-SemiBold.ttf */,
+				EA1DECD7338B42379AF7B064 /* NotoSansBengali-Thin.ttf */,
+				1B71B012D10F4CD0A30D7526 /* NotoSansBengaliUI-ExtraBold.ttf */,
+				BFB245EFFA7446B3BD8D5FC2 /* NotoSansBengaliUI-ExtraLight.ttf */,
+				7C95E4F947714D019B06F378 /* NotoSansBengaliUI-Light.ttf */,
+				3F62E9C59AA1434999631AEA /* NotoSansBengaliUI-Medium.ttf */,
+				A63B8CC02CBF4E52B7D7C877 /* NotoSansBengaliUI-Regular.ttf */,
+				A3CA77AA82F444F4BAE08A27 /* NotoSansBengaliUI-SemiBold.ttf */,
+				C0454FE704814152B7B748BB /* NotoSansBengaliUI-Thin.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -295,6 +358,24 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				0A8A9EB9F7324679A3E3BFE0 /* NotoSansBengaliUI-Black.ttf in Resources */,
+				CC6A17E81EDA4ADEA8E9C0D1 /* NotoSansBengaliUI-Bold.ttf in Resources */,
+				E3561F204CC04E91A577F768 /* NotoSansBengali-Black.ttf in Resources */,
+				7746389DCC074CC2A0858605 /* NotoSansBengali-Bold.ttf in Resources */,
+				76FA8AC0B3E842778A2C6EA8 /* NotoSansBengali-ExtraBold.ttf in Resources */,
+				4CA64A7159FC4CB6BC152E46 /* NotoSansBengali-ExtraLight.ttf in Resources */,
+				757EC4C8AF384E5FB3834596 /* NotoSansBengali-Light.ttf in Resources */,
+				C172CA99E0D049D79D8B11C2 /* NotoSansBengali-Medium.ttf in Resources */,
+				D7828CA31EED42749F614E19 /* NotoSansBengali-Regular.ttf in Resources */,
+				F9911DC2B7C142B58EF1AC02 /* NotoSansBengali-SemiBold.ttf in Resources */,
+				ACB77ABB98A240BD9D50C3F7 /* NotoSansBengali-Thin.ttf in Resources */,
+				BFA4EFC7D09F49DA81C8EEFD /* NotoSansBengaliUI-ExtraBold.ttf in Resources */,
+				34F63D727FE4436FAC0FF425 /* NotoSansBengaliUI-ExtraLight.ttf in Resources */,
+				2D4237988E0A43FA8280C05D /* NotoSansBengaliUI-Light.ttf in Resources */,
+				DC093C02DF8F470F9C30CAA6 /* NotoSansBengaliUI-Medium.ttf in Resources */,
+				9DC626AC16E14091A1278C09 /* NotoSansBengaliUI-Regular.ttf in Resources */,
+				D805750B09454C74B41A1765 /* NotoSansBengaliUI-SemiBold.ttf in Resources */,
+				C4628B3348244527B7D8916E /* NotoSansBengaliUI-Thin.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

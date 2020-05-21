@@ -1,18 +1,19 @@
 import React from 'react'
-import { View, Text } from 'react-native'
-import ScreenHeader from 'src/components/screen-header'
-import { SvgXml } from 'react-native-svg'
+import { translate } from 'src/i18n/translate'
+import Picker from 'src/components/fw/pickers/picker'
+import ScreenBase from 'src/components/fw/screen-base'
+import ScreenHeader from 'src/components/fw/screen-header'
 
 const Register = () => {
 	return (
-		<View>
-			<Text>Hello World 222222222222222</Text>
-			<Text>Hello World 2222222222222222222222</Text>
-		</View>
+		<ScreenBase>
+			<Picker label={translate('register.product')} />
+		</ScreenBase>
 	)
 }
 
 Register.navigationOptions = () => ({
+	title: translate('menus.register'),
 	headerLeft: props => <ScreenHeader {...props} />,
 })
 

@@ -1,7 +1,7 @@
-import Home from 'src/modules/menus/home'
-import { createStackNavigator } from 'react-navigation-stack'
-import colors from 'src/constants/colors'
 import { wp } from 'src/utils/screen'
+import { createStackNavigator } from 'react-navigation-stack'
+import Home from 'src/modules/menus/home'
+import colors from 'src/constants/colors'
 
 const HomeStack = createStackNavigator(
 	{
@@ -11,6 +11,7 @@ const HomeStack = createStackNavigator(
 		defaultNavigationOptions: () => ({
 			headerTitleStyle: {
 				color: colors.primary,
+				fontFamily: 'NotoSansBengaliUI-Bold',
 			},
 			headerTitleContainerStyle: {
 				left: wp(60),

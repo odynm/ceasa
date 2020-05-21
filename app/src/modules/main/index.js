@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import StorageService from 'src/services/storageService'
 //import CompleteRegistration from '../../components/complete-registration'
+import { View } from 'react-native'
 import { connect } from 'react-redux'
-import { userRoles } from 'src/constants/user-role'
 import { withNavigation } from 'react-navigation'
+import { userRoles } from 'src/constants/user-role'
 import { Creators as UserCreators } from 'src/ducks/user'
 import { Creators as TermsCreators } from 'src/ducks/terms'
-import screens from 'src/constants/screens'
 import stacks from 'src/constants/stacks'
-import { View } from 'react-native'
+import screens from 'src/constants/screens'
+import StorageService from 'src/services/storageService'
 
 const Main = ({ logout, navigation, loadLoggedUser, checkTerms }) => {
 	const [hasEmailRegistered, setHasEmailRegistered] = useState(false)

@@ -38,7 +38,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -53,5 +53,26 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>NotoSansBengaliUI-Black.ttf</string>
+		<string>NotoSansBengaliUI-Bold.ttf</string>
+		<string>NotoSansBengali-Black.ttf</string>
+		<string>NotoSansBengali-Bold.ttf</string>
+		<string>NotoSansBengali-ExtraBold.ttf</string>
+		<string>NotoSansBengali-ExtraLight.ttf</string>
+		<string>NotoSansBengali-Light.ttf</string>
+		<string>NotoSansBengali-Medium.ttf</string>
+		<string>NotoSansBengali-Regular.ttf</string>
+		<string>NotoSansBengali-SemiBold.ttf</string>
+		<string>NotoSansBengali-Thin.ttf</string>
+		<string>NotoSansBengaliUI-ExtraBold.ttf</string>
+		<string>NotoSansBengaliUI-ExtraLight.ttf</string>
+		<string>NotoSansBengaliUI-Light.ttf</string>
+		<string>NotoSansBengaliUI-Medium.ttf</string>
+		<string>NotoSansBengaliUI-Regular.ttf</string>
+		<string>NotoSansBengaliUI-SemiBold.ttf</string>
+		<string>NotoSansBengaliUI-Thin.ttf</string>
+	</array>
 </dict>
 </plist>

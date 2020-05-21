@@ -1,30 +1,33 @@
 import React from 'react'
-import screens from 'src/constants/screens'
 // import ToastService from '../../../services/toast.service'
 // import { translate } from '../../../i18n'
 // import { isLoggedIn } from '../../../utils/user'
+import { SvgXml } from 'react-native-svg'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import HomeStack from './items/home'
+import screens from 'src/constants/screens'
 import RegisterStack from './items/register'
-
 import svgHome from '../../../../res/svgs/svgHome.svg'
+import svgRegister from '../../../../res/svgs/svgRegister.svg'
 import svgHomeSelected from '../../../../res/svgs/svgHomeSelected.svg'
-import { SvgXml } from 'react-native-svg'
+import svgRegisterSelected from '../../../../res/svgs/svgRegisterSelected.svg'
 
 //const enabledRoutesForAnonymous = [screens.home, screens.search]
 
-HomeStack.navigationOptions = () => ({
-	tabBarLabel: 'Visão Geral',
+RegisterStack.navigationOptions = () => ({
 	tabBarIcon: ({ focused }) =>
-		focused ? <SvgXml xml={svgHomeSelected} /> : <SvgXml xml={svgHome} />,
+		focused ? (
+			<SvgXml xml={svgRegisterSelected} />
+		) : (
+			<SvgXml xml={svgRegister} />
+		),
 	tabBarOptions: {
 		showLabel: false,
 		showIcon: true,
 	},
 })
 
-RegisterStack.navigationOptions = () => ({
-	tabBarLabel: 'Visão Geral',
+HomeStack.navigationOptions = () => ({
 	tabBarIcon: ({ focused }) =>
 		focused ? <SvgXml xml={svgHomeSelected} /> : <SvgXml xml={svgHome} />,
 	tabBarOptions: {
@@ -34,7 +37,7 @@ RegisterStack.navigationOptions = () => ({
 })
 
 const MenuNavigator = createBottomTabNavigator(
-	{ Home: HomeStack, Register: RegisterStack },
+	{ Register: RegisterStack, Home: HomeStack },
 	{
 		backBehavior: 'history',
 		defaultNavigationOptions: () => ({

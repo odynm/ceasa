@@ -1,12 +1,12 @@
-import HttpService from 'src/services/httpService'
 import { getIp } from 'src/services/internetService'
+import HttpService from 'src/services/httpService'
 
 const prefix = 'terms/'
 const Types = {
 	SET_LOADING: prefix + 'SET_LOADING',
 }
 
-const setLoading = (loading) => ({
+const setLoading = loading => ({
 	payload: { loading },
 	type: Types.SET_LOADING,
 })
@@ -18,7 +18,7 @@ const areTermsAccepted = () => async () => {
 	return data
 }
 
-const acceptTerms = () => async (dispatch) => {
+const acceptTerms = () => async dispatch => {
 	dispatch(setLoading(true))
 	const ipAddress = await getIp()
 	const { data } = await HttpService.post('terms', { ipAddress })

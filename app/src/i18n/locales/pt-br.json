@@ -1,0 +1,10 @@
+{
+	"menus": {
+		"register": "Cadastrar",
+		"home": "Visão Geral"
+	},
+	"register": {
+		"product": "Produto",
+		"select": "Selecione"
+	}
+}

@@ -1,6 +1,6 @@
 import React from 'react'
-import AppNavigator from './navigators/app'
 import { createAppContainer } from 'react-navigation'
+import AppNavigator from './navigators/app'
 
 export const navigationRef = React.createRef()
 
