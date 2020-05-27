@@ -5,6 +5,14 @@
 	},
 	"register": {
 		"product": "Produto",
-		"select": "Selecione"
+		"products": "Produtos",
+		"select": "Selecione",
+		"registerNotListed": "Cadastrar produto não listado..."
+	},
+	"fw": {
+		"recentRegisterPicker": {
+			"recents": "Recentes",
+			"search": "Pesquisar"
+		}
 	}
 }

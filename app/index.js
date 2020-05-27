@@ -10,4 +10,9 @@ import App from './App';
 import { name as CeasaName } from './app.json';
 
 // prettier-ignore
+import { YellowBox } from 'react-native';
+// prettier-ignore
+YellowBox.ignoreWarnings(["Deprecation in 'createStackNavigator': 'Header.HEIGHT' will"]);
+
+// prettier-ignore
 AppRegistry.registerComponent(CeasaName, () => App);

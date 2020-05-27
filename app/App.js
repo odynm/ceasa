@@ -1,14 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react'
-import AppContainer, { navigationRef } from 'src/router'
-import HttpService from 'src/services/httpService'
-import ToastService from 'src/services/toastService'
-import LocationService from 'src/services/locationService'
-import InternetService from 'src/services/internetService'
 import { Provider } from 'react-redux'
-import Toast from 'react-native-easy-toast'
 import { onNavigationStateChange } from 'src/plugins/analytics'
 import i18n from 'i18n-js'
 import store from 'src/ducks'
+import Toast from 'react-native-easy-toast'
+import HttpService from 'src/services/httpService'
+import ToastService from 'src/services/toastService'
+import AppContainer, { navigationRef } from 'src/router'
+import LocationService from 'src/services/locationService'
+import InternetService from 'src/services/internetService'
 
 const App = () => {
 	const toastRef = useRef()

@@ -6,11 +6,11 @@ import styles from './styles'
 import KText from 'src/components/fw/ktext'
 import svgDropArrow from '../../../../../res/svgs/svgDropArrow.svg'
 
-const Picker = ({ label }) => {
+const Picker = ({ label, onPress }) => {
 	return (
 		<View>
 			<KText bold text={label} />
-			<TouchableWithoutFeedback>
+			<TouchableWithoutFeedback onPress={onPress}>
 				<View style={styles.pickerContainer}>
 					<KText
 						style={styles.pickerText}

@@ -1,6 +1,7 @@
 //import app from './app'
 import user from './user'
 import terms from './terms'
+import products from './products'
 
 import thunk from 'redux-thunk'
 import logger from 'redux-logger'
@@ -10,6 +11,7 @@ const reducers = combineReducers({
 	//app,
 	user,
 	terms,
+	products,
 })
 
 const middlewares = [thunk]

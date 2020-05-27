@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 //import CompleteRegistration from '../../components/complete-registration'
-import { View } from 'react-native'
 import { connect } from 'react-redux'
+import { View, Keyboard } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import { userRoles } from 'src/constants/user-role'
 import { Creators as UserCreators } from 'src/ducks/user'
@@ -9,6 +9,7 @@ import { Creators as TermsCreators } from 'src/ducks/terms'
 import stacks from 'src/constants/stacks'
 import screens from 'src/constants/screens'
 import StorageService from 'src/services/storageService'
+import KeyboardService from 'src/services/keyboardService'
 
 const Main = ({ logout, navigation, loadLoggedUser, checkTerms }) => {
 	const [hasEmailRegistered, setHasEmailRegistered] = useState(false)
@@ -18,6 +19,8 @@ const Main = ({ logout, navigation, loadLoggedUser, checkTerms }) => {
 
 	// TODO do we need that executeActionBasedOnUrl that was here?
 	const initialize = async () => {
+		Keyboard.addListener('keyboardDidHide', KeyboardService.keyboardHide)
+
 		// TODO consider login
 		navigation.navigate(stacks.menu)
 		return
