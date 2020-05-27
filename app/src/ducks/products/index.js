@@ -12,10 +12,20 @@ const initialState = {
 		{ id: 1, name: 'Abacate' },
 		{ id: 2, name: 'Alface' },
 		{ id: 3, name: 'Couve' },
+	],
+	productTypes: [
+		{ id: 1, name: 'Abacate' },
+		{ id: 2, name: 'Alface' },
+		{ id: 3, name: 'Couve' },
 		{ id: 4, name: 'Alcatrão' },
 		{ id: 5, name: 'Alcatrão' },
 		{ id: 6, name: 'Alcatrão' },
 		{ id: 7, name: 'Alcatrão' },
+	],
+	recentProductTypes: [
+		{ id: 1, name: 'Abacate' },
+		{ id: 2, name: 'Alface' },
+		{ id: 3, name: 'Couve' },
 	],
 }
 

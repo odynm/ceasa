@@ -6,8 +6,11 @@
 	"register": {
 		"product": "Produto",
 		"products": "Produtos",
+		"productType": "Tipo",
+		"productTypes": "Tipos",
 		"select": "Selecione",
-		"registerNotListed": "Cadastrar produto não listado..."
+		"registerNotListedProduct": "Cadastrar produto não listado...",
+		"registerNotListedProductType": "Cadastrar tipo não listado..."
 	},
 	"fw": {
 		"recentRegisterPicker": {
