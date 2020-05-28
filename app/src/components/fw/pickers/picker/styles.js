@@ -14,6 +14,10 @@ const styles = StyleSheet.create({
 		color: colors.gray,
 		paddingBottom: hp(5),
 	},
+	pickerTextSelected: {
+		color: colors.primary,
+		paddingBottom: hp(5),
+	},
 	pickerIcon: {
 		paddingRight: wp(10),
 		paddingTop: hp(5),

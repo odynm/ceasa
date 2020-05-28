@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
-import RecentRegisterPicker from 'src/components/fw/pickers/recent-register-picker'
+import Space from 'src/components/fw/space'
+import Button from 'src/components/fw/button'
+import Quantity from 'src/components/fw/quantity'
+import TextInput from 'src/components/fw/text-input'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
-import Space from 'src/components/fw/space'
+import RecentRegisterPicker from 'src/components/fw/pickers/recent-register-picker'
 
 const Register = ({
 	products,
@@ -12,9 +15,15 @@ const Register = ({
 	recentProducts,
 	recentProductTypes,
 }) => {
+	const [selectedProductId, setSelectedProductId] = useState(0)
+	const [selectedTypeId, setSelectedTypeId] = useState(0)
+	const [additionalDescription, setAdditionalDescription] = useState('')
+	const [quantity, setQuantity] = useState(1)
+
 	return (
 		<ScreenBase>
 			<RecentRegisterPicker
+				setSelectedId={setSelectedProductId}
 				list={products}
 				listRecent={recentProducts}
 				label={translate('register.product')}
@@ -23,6 +32,7 @@ const Register = ({
 			/>
 			<Space />
 			<RecentRegisterPicker
+				setSelectedId={setSelectedTypeId}
 				list={productTypes}
 				listRecent={recentProductTypes}
 				label={translate('register.productTypes')}
@@ -31,6 +41,20 @@ const Register = ({
 					'register.registerNotListedProductType',
 				)}
 			/>
+			<Space />
+			<TextInput
+				value={additionalDescription}
+				setValue={setAdditionalDescription}
+				label={translate('register.additionalDescription')}
+			/>
+			<Space size2 />
+			<Quantity
+				value={quantity}
+				setValue={setQuantity}
+				label={translate('register.quantity')}
+			/>
+			<Space size2 />
+			<Button label={translate('register.add')} />
 		</ScreenBase>
 	)
 }

@@ -20,14 +20,22 @@ const RecentRegisterPicker = ({
 	label,
 	listLabel,
 	listRecent,
+	setSelectedId,
 	labelNotRegistered,
 }) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+	const [labelPicker, setLabelPicker] = useState('')
 
 	useEffect(() => {
 		KeyboardService.subscribeHide(onKeyboardHide)
 	}, [])
+
+	const setSelected = item => {
+		setSelectedId(item.id)
+		setLabelPicker(item.name)
+		setIsOpen(false)
+	}
 
 	const onKeyboardHide = () => {
 		setIsKeyboardOpen(false)
@@ -43,7 +51,11 @@ const RecentRegisterPicker = ({
 
 	return (
 		<>
-			<Picker label={label} onPress={() => setIsOpen(true)} />
+			<Picker
+				label={label}
+				selected={labelPicker}
+				onPress={() => setIsOpen(true)}
+			/>
 			<Modal
 				isVisible={isOpen}
 				onRequestClose={() => setIsOpen(false)}
@@ -74,13 +86,16 @@ const RecentRegisterPicker = ({
 								<View style={styles.line} />
 								<View style={styles.listView}>
 									{listRecent.map(x => (
-										<View style={styles.listItemCard} key={x.id}>
-											<KText
-												bold
-												style={styles.listItemText}
-												text={x.name}
-											/>
-										</View>
+										<TouchableWithoutFeedback
+											onPress={() => setSelected(x)}>
+											<View style={styles.listItemCard} key={x.id}>
+												<KText
+													bold
+													style={styles.listItemText}
+													text={x.name}
+												/>
+											</View>
+										</TouchableWithoutFeedback>
 									))}
 								</View>
 							</>
@@ -92,7 +107,6 @@ const RecentRegisterPicker = ({
 							<TextInput
 								onBlur={onCloseKeyboard}
 								onFocus={onOpenKeyboard}
-								onCl
 								placeholder={translate(
 									'fw.recentRegisterPicker.search',
 								)}
@@ -101,13 +115,16 @@ const RecentRegisterPicker = ({
 						</View>
 						<View style={styles.listView}>
 							{list.map(x => (
-								<View style={styles.listItemCard} key={x.id}>
-									<KText
-										bold
-										style={styles.listItemText}
-										text={x.name}
-									/>
-								</View>
+								<TouchableWithoutFeedback
+									onPress={() => setSelected(x)}>
+									<View style={styles.listItemCard} key={x.id}>
+										<KText
+											bold
+											style={styles.listItemText}
+											text={x.name}
+										/>
+									</View>
+								</TouchableWithoutFeedback>
 							))}
 						</View>
 					</ScrollView>

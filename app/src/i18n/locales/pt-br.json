@@ -6,11 +6,14 @@
 	"register": {
 		"product": "Produto",
 		"products": "Produtos",
-		"productType": "Tipo",
+		"productType": "Tipo (opcional)",
 		"productTypes": "Tipos",
 		"select": "Selecione",
 		"registerNotListedProduct": "Cadastrar produto não listado...",
-		"registerNotListedProductType": "Cadastrar tipo não listado..."
+		"registerNotListedProductType": "Cadastrar tipo não listado...",
+		"additionalDescription": "Descrição adicional (opcional)",
+		"quantity": "Quantidade",
+		"add": "Adicionar"
 	},
 	"fw": {
 		"recentRegisterPicker": {
