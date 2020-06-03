@@ -4,18 +4,30 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"./admin"
+	"./db"
+	"./user"
 )
 
-func homePage(w http.ResponseWriter, r *http.Request){
+func homePage(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
+
 	fmt.Fprintf(w, "Welcome to the HomePage")
-	fmt.Println("Endpoint Hit: homepage")
 }
 
 func handleRequest() {
 	http.HandleFunc("/", homePage)
-	log.Fatal(http.ListenAndServe(":10000", nil))
 }
 
-func main(){
+func main() {
+	db.InitDb()
+
 	handleRequest()
+	user.HandleRequest()
+	admin.HandleRequest()
+	log.Fatal(http.ListenAndServe(":10000", nil))
 }

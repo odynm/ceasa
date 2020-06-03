@@ -87,9 +87,11 @@ const RecentRegisterPicker = ({
 								<View style={styles.listView}>
 									{listRecent.map(x => (
 										<TouchableWithoutFeedback
-											onPress={() => setSelected(x)}>
-											<View style={styles.listItemCard} key={x.id}>
+											onPress={() => setSelected(x)}
+											key={x.id}>
+											<View style={styles.listItemCard}>
 												<KText
+													key={x.id}
 													bold
 													style={styles.listItemText}
 													text={x.name}
@@ -116,9 +118,11 @@ const RecentRegisterPicker = ({
 						<View style={styles.listView}>
 							{list.map(x => (
 								<TouchableWithoutFeedback
-									onPress={() => setSelected(x)}>
-									<View style={styles.listItemCard} key={x.id}>
+									onPress={() => setSelected(x)}
+									key={x.id}>
+									<View style={styles.listItemCard}>
 										<KText
+											key={x.id}
 											bold
 											style={styles.listItemText}
 											text={x.name}
