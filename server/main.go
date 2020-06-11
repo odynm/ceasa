@@ -7,6 +7,7 @@ import (
 
 	"./admin"
 	"./db"
+	"./product"
 	"./storage"
 	"./user"
 )
@@ -28,6 +29,8 @@ func main() {
 	db.InitDb()
 	db.RunMigrationsPublic()
 	db.RunMigrationsUsers()
+
+	product.GenerateProductTables()
 
 	handleRequest()
 	user.HandleRequest()

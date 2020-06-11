@@ -64,7 +64,7 @@ func updateMigrations(curLastRunned int, contextId int) {
 }
 
 func RunMigrationsPublic() {
-	dir := "C:/Dev/ceasa" + "/db/public"
+	dir := utils.GetPath() + "/migrations/public"
 	_, err := os.Stat(dir)
 	utils.CrashOnError(err)
 
@@ -75,7 +75,7 @@ func RunMigrationsPublic() {
 	files, _ := ioutil.ReadDir(dir)
 
 	for i := int(lastIdRunned); i < len(files); i++ {
-		path := fmt.Sprint("C:/Dev/ceasa"+"/db/public/", i+1, ".sql")
+		path := fmt.Sprint(utils.GetPath(), "migrations/public/", i+1, ".sql")
 		file, err := os.Open(path)
 		utils.CrashOnError(err)
 
@@ -102,7 +102,7 @@ func RunMigrationsPublic() {
 }
 
 func RunMigrationsUsers() {
-	dir := "C:/Dev/ceasa" + "/db/user"
+	dir := utils.GetPath() + "/migrations/user"
 	_, err := os.Stat(dir)
 	utils.CrashOnError(err)
 
@@ -113,7 +113,7 @@ func RunMigrationsUsers() {
 	files, _ := ioutil.ReadDir(dir)
 
 	for i := int(lastIdRunned); i < len(files); i++ {
-		path := fmt.Sprint("C:/Dev/ceasa"+"/db/user/", i+1, ".sql")
+		path := fmt.Sprint(utils.GetPath(), "/migrations/user/", i+1, ".sql")
 		file, err := os.Open(path)
 		utils.CrashOnError(err)
 
@@ -155,14 +155,14 @@ func RunMigrationsUsers() {
 }
 
 func RunMigrationsNewUser(user string) {
-	dir := "C:/Dev/ceasa" + "/db/user"
+	dir := utils.GetPath() + "migrations/user/"
 	_, err := os.Stat(dir)
 	utils.CrashOnError(err)
 
 	files, _ := ioutil.ReadDir(dir)
 
 	for i := 0; i < len(files); i++ {
-		path := fmt.Sprint("C:/Dev/ceasa"+"/db/user/", i+1, ".sql")
+		path := fmt.Sprint(utils.GetPath(), "migrations/user/", i+1, ".sql")
 		file, err := os.Open(path)
 		utils.CrashOnError(err)
 
