@@ -4,8 +4,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
     http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd ">
     <changeSet id="1" author="odynm">
-        <createTable tableName="User.Info">
-            <column name="id" type="int" autoIncrement="true">
+        <createTable tableName="admin_info">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="login" type="varchar(50)">
@@ -15,13 +15,13 @@
                 <constraints nullable="false"/>
             </column>
             <column name="active" type="boolean"/>
-			<column name="deleteddate" type="datetime"/>
+			<column name="deleted_date" type="datetime"/>
 			<column name="plan" type="tinyint"/>
         </createTable>
     </changeSet>
-    <changeSet id="2" author="odynm">
-        <createTable tableName="Admin.Info">
-            <column name="id" type="int" autoIncrement="true">
+	<changeSet id="2" author="odynm">
+        <createTable tableName="user_info">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="login" type="varchar(50)">
@@ -30,7 +30,69 @@
             <column name="hash" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-			<column name="lastlogged" type="datetime"/>
+			<column name="last_logged" type="datetime"/>
+			<column name="active" type="boolean"/>
+			<column name="deleted_date" type="datetime"/>
+			<column name="plan" type="tinyint"/>
+			<column name="permissions" type="bigint"/>
+        </createTable>
+    </changeSet>
+	<changeSet id="3" author="odynm">
+        <createTable tableName="products_product">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+			<column name="user_id" type="bigint">
+				<constraints nullable="true" foreignKeyName="fk_user_product" references="user_info(id)"/>
+			</column>
+        </createTable>
+    </changeSet>
+	<changeSet id="4" author="odynm">
+        <createTable tableName="products_product_type">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+			<column name="product_id" type="bigint">
+				<constraints nullable="false" foreignKeyName="fk_producttype_product" references="products_product(id)"/>
+			</column>
+			<column name="user_id" type="bigint">
+				<constraints nullable="true" foreignKeyName="fk_producttype_user" references="user_info(id)"/>
+			</column>
+        </createTable>
+	</changeSet>
+	<changeSet id="5" author="odynm">
+        <createTable tableName="storage_item_description">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="description" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+	</changeSet>
+	<changeSet id="6" author="odynm">
+        <createTable tableName="storage_item">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+			<column name="product_type_id" type="bigint">
+				<constraints nullable="true" foreignKeyName="fk_producttype_storage" references="products_product_type(id)"/>
+			</column>
+			<column name="description_id" type="bigint">
+				<constraints nullable="true" foreignKeyName="fk_itemdescription_storage" references="storage_item_description(id)"/>
+			</column>
+			<column name="user_id" type="bigint">
+				<constraints nullable="false" foreignKeyName="fk_producttype_user" references="user_info(id)"/>
+			</column>
+			<column name="amount" type="int">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

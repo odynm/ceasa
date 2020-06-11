@@ -1,8 +1,6 @@
 package admin
 
 import (
-	"fmt"
-
 	_ "github.com/lib/pq"
 
 	"../db"
@@ -10,7 +8,7 @@ import (
 
 func dbGetId(login string) int {
 	statement := `
-		SELECT id FROM "Admin.Info"
+		SELECT id FROM "admin_info"
 		WHERE login = $1`
 	id := 0
 	err := db.Instance.Db.QueryRow(statement, login).Scan(&id)
@@ -20,26 +18,32 @@ func dbGetId(login string) int {
 	return id
 }
 
-func dbCreateAdmin(login string, hash string) {
-	statement := `
-		INSERT INTO "Admin.Info" (login, hash)
+func dbCreateAdmin(login string, hash string) int {
+	/*statement := `
+		INSERT INTO "admin_info" (login, hash)
 		VALUES ($1, $2)
 		RETURNING id`
 	id := 0
 	err := db.Instance.Db.QueryRow(statement, login, hash).Scan(&id)
 	if err != nil {
+		// just panic, this func is just for dev env
 		panic(err)
 	}
+	return id*/
+	return 0
 }
 
-func dbCheckLogin(hash string) {
+func dbGetByLogin(login string) AdminDb {
 	statement := `
-		SELECT id FROM "Admin.Info" 
-		WHERE hash = $1`
-	id := 0
-	err := db.Instance.Db.QueryRow(statement, hash).Scan(&id)
+		SELECT hash FROM "admin_info" 
+		WHERE login = $1`
+	var hash string
+	var adminDb AdminDb
+	err := db.Instance.Db.QueryRow(statement, login).Scan(&hash)
 	if err != nil {
-		panic(err)
+		return adminDb
 	}
-	fmt.Println("Found:", id)
+
+	adminDb.Hash = hash
+	return adminDb
 }

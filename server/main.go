@@ -7,6 +7,7 @@ import (
 
 	"./admin"
 	"./db"
+	"./storage"
 	"./user"
 )
 
@@ -25,9 +26,12 @@ func handleRequest() {
 
 func main() {
 	db.InitDb()
+	db.RunMigrationsPublic()
+	db.RunMigrationsUsers()
 
 	handleRequest()
 	user.HandleRequest()
 	admin.HandleRequest()
+	storage.HandleRequest()
 	log.Fatal(http.ListenAndServe(":10000", nil))
 }

@@ -1,14 +1,67 @@
 package user
 
 import (
-	"fmt"
+	"encoding/json"
+	"io"
 	"net/http"
+	"strconv"
+
+	"../admin"
+	"../utils"
 )
 
-func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to the UserPage")
+func login(w http.ResponseWriter, r *http.Request) {
+	var userDto UserDto
+	err := json.NewDecoder(r.Body).Decode(&userDto)
+	if err != nil || userDto.Login == "" {
+		utils.NoAuth(w)
+	}
+	LoginUser(userDto, w)
+}
+
+func post(w http.ResponseWriter, r *http.Request) {
+	var userDto UserDto
+	err := json.NewDecoder(r.Body).Decode(&userDto)
+	auth := r.Header.Get("Auth")
+	if err != nil {
+		utils.NoAuth(w)
+	}
+	ok := admin.IsAdminLogged(auth, w)
+	if ok {
+		CreateUser(userDto, w)
+	}
+}
+
+func test(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.ParseInt(r.Header.Get("User"), 10, 32)
+	auth := r.Header.Get("Auth")
+	ok := IsLogged(int(id), auth, w)
+	if ok {
+		io.WriteString(w, "ok")
+	}
+}
+
+func userRouter(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPost:
+		post(w, r)
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+func loginRouter(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPost:
+		login(w, r)
+	case http.MethodGet:
+		test(w, r)
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
 }
 
 func HandleRequest() {
-	http.HandleFunc("/user", homePage)
+	http.HandleFunc("/user", userRouter)
+	http.HandleFunc("/login", loginRouter)
 }

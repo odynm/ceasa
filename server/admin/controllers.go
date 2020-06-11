@@ -9,42 +9,40 @@ import (
 )
 
 func post(w http.ResponseWriter, r *http.Request) {
-	var adminLogin AdminLogin
+	var adminLogin AdminLoginDto
 	err := json.NewDecoder(r.Body).Decode(&adminLogin)
 	if err != nil {
-		fmt.Fprintf(w, "")
+		utils.BadRequest(w, "")
+		return
 	}
-	id := dbGetId(adminLogin.Login)
-	if id == 0 {
-		hash := utils.GetHash(adminLogin.Login + "@" + adminLogin.Pass)
-		dbCreateAdmin(adminLogin.Login, hash)
-	} else {
-		utils.InsertError(w, "Admin já existente")
-	}
+
+	CreateAdmin(adminLogin, w)
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	var adminLogin AdminLogin
+	var adminLogin AdminLoginDto
 	err := json.NewDecoder(r.Body).Decode(&adminLogin)
 	if err != nil {
-		fmt.Fprintf(w, "")
+		utils.BadRequest(w, "")
+		return
 	}
-	hash := utils.GetHash(adminLogin.Login + "@" + adminLogin.Pass)
-	dbCheckLogin(hash)
+
+	LoginAdmin(adminLogin, w)
 }
 
-func adminPage(w http.ResponseWriter, r *http.Request) {
+func adminRouter(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		fmt.Fprintf(w, "Welcome to the AdminPage GET")
 	case http.MethodPost:
+		// TODO this should be commented on production
 		post(w, r)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
 }
 
-func loginPage(w http.ResponseWriter, r *http.Request) {
+func loginRouter(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
 		login(w, r)
@@ -54,6 +52,6 @@ func loginPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleRequest() {
-	http.HandleFunc("/admin", adminPage)
-	http.HandleFunc("/login-admin", loginPage)
+	http.HandleFunc("/admin", adminRouter)
+	http.HandleFunc("/login-admin", loginRouter)
 }
