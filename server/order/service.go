@@ -1,26 +1,68 @@
 package order
 
 import (
-	"fmt"
 	"net/http"
+	"time"
 
 	"../client"
+	"../storage"
+	"../utils"
 )
 
 func Add(orderDto OrderDto, userId int, w http.ResponseWriter) {
-	clientId := client.AddOrUpdateClient(orderDto.Client, userId, w)
-	fmt.Println(clientId)
-	// TODO product list
-	// order := OrderCreation{
-	// 	ClientId: clientId,
-	// 	Urgent:   orderDto.Urgent,
-	// 	Released: orderDto.Released,
-	// }
-	// dbCreateOrder(order, userId)
+	var clientId int
+	var orderId int
+	var order OrderCreation
+
+	clientId = client.AddOrUpdateClient(orderDto.Client, userId, w)
+	if clientId == 0 {
+		goto Error
+	}
+	order = OrderCreation{
+		ClientId:  clientId,
+		Urgent:    orderDto.Urgent,
+		CreatedAt: time.Now(),
+	}
+	if orderDto.Released {
+		order.ReleasedAt = order.CreatedAt
+	}
+	orderId = DbCreateOrder(order, userId)
+	if orderId == 0 {
+		goto Error
+	}
+	for _, product := range orderDto.Products {
+		storageItem := storage.DbGetById(product.StorageItemId, userId)
+
+		var quantity int
+		if storageItem.Amount < product.Quantity {
+			quantity = storageItem.Amount
+		} else {
+			quantity = product.Quantity
+		}
+		productCreation := ProductCreation{
+			OrderId:         orderId,
+			ProductId:       storageItem.ProductId,
+			ProductTypeId:   storageItem.ProductTypeId,
+			DescriptionId:   storageItem.DescriptionId,
+			UnitPrice:       product.UnitPrice,
+			Quantity:        product.Quantity,
+			StorageQuantity: quantity,
+		}
+
+		if storage.DbUpdateAmount(product.StorageItemId, storageItem.Amount-quantity, userId) {
+			productId := DbCreateProduct(productCreation, userId)
+		} else {
+			goto Error
+		}
+	}
+	return
+
+Error:
+	utils.BadRequest(w, "")
 }
 
 func Get(userId int, w http.ResponseWriter) {
-	// response := dbGetStorage(userId)
+	// response := DbGetAllFull(userId)
 	// w.Header().Set("Content-Type", "application/json")
 	// js, _ := json.Marshal(response)
 	// w.Write(js)

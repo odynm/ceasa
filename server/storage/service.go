@@ -6,11 +6,11 @@ import (
 )
 
 func Add(itemDto ItemDto, userId int, w http.ResponseWriter) {
-	dbCreateStorageItem(itemDto, userId)
+	DbCreateStorageItem(itemDto, userId)
 }
 
 func Get(userId int, w http.ResponseWriter) {
-	response := dbGetStorage(userId)
+	response := DbGetAllFull(userId)
 	w.Header().Set("Content-Type", "application/json")
 	js, _ := json.Marshal(response)
 	w.Write(js)

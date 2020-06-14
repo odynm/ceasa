@@ -11,10 +11,10 @@ import (
 var tokens = map[string]bool{}
 
 func CreateAdmin(adminLogin AdminLoginDto, w http.ResponseWriter) {
-	id := dbGetId(adminLogin.Login)
+	id := DbGetId(adminLogin.Login)
 	if id == 0 {
 		hash := utils.GetHash(adminLogin.Login + "@" + adminLogin.Pass)
-		dbCreateAdmin(adminLogin.Login, hash)
+		DbCreateAdmin(adminLogin.Login, hash)
 	} else {
 		utils.InsertError(w, "Admin já existente")
 	}
@@ -22,7 +22,7 @@ func CreateAdmin(adminLogin AdminLoginDto, w http.ResponseWriter) {
 
 func LoginAdmin(adminLogin AdminLoginDto, w http.ResponseWriter) {
 	hash := utils.GetHash(adminLogin.Login + "@" + adminLogin.Pass)
-	adminDb := dbGetByLogin(adminLogin.Login)
+	adminDb := DbGetByLogin(adminLogin.Login)
 	if adminDb.Hash == hash {
 		token := utils.GetHash(adminLogin.Login + "15" + hash + "R" + time.Now().String())
 		tokens[token] = true

@@ -19,11 +19,11 @@ type AuthData struct {
 var tokens = map[int]AuthData{}
 
 func CreateUser(userDto UserDto, w http.ResponseWriter) {
-	id := dbGetId(userDto.Login)
+	id := DbGetId(userDto.Login)
 	if id == 0 {
 		hash := utils.GetHash(userDto.Login + "@" + userDto.Pass)
 		permissions := int(1) // Padrão vendedor
-		dbCreateUser(userDto.Login, hash, permissions)
+		DbCreateUser(userDto.Login, hash, permissions)
 	} else {
 		utils.InsertError(w, "User já existente")
 	}
@@ -31,7 +31,7 @@ func CreateUser(userDto UserDto, w http.ResponseWriter) {
 
 func LoginUser(adminLogin UserDto, w http.ResponseWriter) {
 	hash := utils.GetHash(adminLogin.Login + "@" + adminLogin.Pass)
-	dbUser := dbGetByLogin(adminLogin.Login)
+	dbUser := DbGetByLogin(adminLogin.Login)
 	if dbUser.Hash == hash {
 		token := utils.GetHash(adminLogin.Login + "17" + hash + "F" + time.Now().String())
 		tokens[dbUser.Id] = AuthData{
@@ -75,7 +75,7 @@ func CheckLogin(w http.ResponseWriter, r *http.Request) int {
 	auth := r.Header.Get("Auth")
 	if err != nil || len(auth) == 0 || userId == 0 || tokens[int(userId)].token != auth {
 		utils.NoAuth(w)
-		return int(userId)
+		return 0
 	} else {
 		return int(userId)
 	}

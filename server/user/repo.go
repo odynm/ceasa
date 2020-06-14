@@ -8,7 +8,7 @@ import (
 	"../db"
 )
 
-func dbGetId(login string) int {
+func DbGetId(login string) int {
 	statement := `
 		SELECT id FROM "user_info"
 		WHERE login = $1`
@@ -20,7 +20,7 @@ func dbGetId(login string) int {
 	return id
 }
 
-func dbCreateUser(login string, hash string, permissions int) int {
+func DbCreateUser(login string, hash string, permissions int) int {
 	statement := `
 		INSERT INTO "user_info" (login, hash, last_logged, active, deleted_date, plan, permissions)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -44,7 +44,7 @@ Error:
 	return 0
 }
 
-func dbGetByLogin(login string) UserDb {
+func DbGetByLogin(login string) UserDb {
 	statement := `
 		SELECT id, login, hash, Permissions FROM "user_info" 
 		WHERE login = $1 AND active = true`

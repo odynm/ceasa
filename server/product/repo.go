@@ -6,7 +6,7 @@ import (
 	"../db"
 )
 
-func dbAddProduct(product string) int {
+func DbAddProduct(product string) int {
 	statement := `
 		SELECT id FROM "products_product"
 		WHERE name = $1`
@@ -29,7 +29,7 @@ func dbAddProduct(product string) int {
 	return id
 }
 
-func dbAddProductType(productId int, productType string) int {
+func DbAddProductType(productId int, productType string) int {
 	statement := `
 		SELECT id FROM "products_product_type"
 		WHERE name = $1 AND product_id = $2`

@@ -7,27 +7,27 @@ import (
 	"../db"
 )
 
-func dbCreateOrUpdateClient(clientDto ClientDto, userId int) int {
+func DbCreateOrUpdateClient(clientDto ClientDto, userId int) int {
 	schema := fmt.Sprint("u", userId)
 
-	var idClient int
+	var clientId int
 	var place string
 	var vehicle string
 
 	statement := fmt.Sprintf(`
 			SELECT id, place, vehicle FROM %v."order_client"
 			WHERE key = $1`, schema)
-	err := db.Instance.Db.QueryRow(statement, clientDto.Key).Scan(&idClient, &place, &vehicle)
+	err := db.Instance.Db.QueryRow(statement, clientDto.Key).Scan(&clientId, &place, &vehicle)
 	if err != nil && err != sql.ErrNoRows {
 		goto Error
 	}
 
-	if idClient == 0 {
+	if clientId == 0 {
 		statement := fmt.Sprintf(`
 				INSERT INTO %v."order_client" (key, place, vehicle)
 				VALUES ($1, $2, $3)
 				RETURNING id`, schema)
-		err = db.Instance.Db.QueryRow(statement, clientDto.Key, clientDto.Place, clientDto.Vehicle).Scan(&idClient)
+		err = db.Instance.Db.QueryRow(statement, clientDto.Key, clientDto.Place, clientDto.Vehicle).Scan(&clientId)
 		if err != nil {
 			goto Error
 		}
@@ -37,10 +37,10 @@ func dbCreateOrUpdateClient(clientDto ClientDto, userId int) int {
 			UPDATE %v."order_client" 
 			SET place = $1, vehicle = $2
 			WHERE ID = $3`, schema)
-		db.Instance.Db.QueryRow(statement, clientDto.Place, clientDto.Vehicle, idClient)
+		db.Instance.Db.QueryRow(statement, clientDto.Place, clientDto.Vehicle, clientId)
 	}
 
-	return idClient
+	return clientId
 Error:
 	return 0
 }

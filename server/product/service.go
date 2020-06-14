@@ -22,18 +22,18 @@ func GenerateProductTables() {
 		if hasTypes {
 			product := strings.ReplaceAll(line, "{", "")
 			product = strings.TrimSpace(product)
-			productId := dbAddProduct(product)
+			productId := DbAddProduct(product)
 			for scanner.Scan() {
 				line = scanner.Text()
 				if strings.Contains(line, "}") {
 					break
 				}
 				productType := strings.TrimSpace(line)
-				dbAddProductType(productId, productType)
+				DbAddProductType(productId, productType)
 			}
 		} else {
 			product := strings.TrimSpace(line)
-			dbAddProduct(product)
+			DbAddProduct(product)
 		}
 	}
 }

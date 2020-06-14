@@ -7,7 +7,7 @@ type ItemDto struct {
 	Amount      int    `json:"amount"`
 }
 
-type StorageItem struct {
+type StorageItemFull struct {
 	Id              int    `json:"id"`
 	ProductId       int    `json:"productId"`
 	ProductName     string `json:"productName"`
@@ -15,4 +15,12 @@ type StorageItem struct {
 	ProductTypeName string `json:"productTypeName"`
 	Description     string `json:"description"`
 	Amount          int    `json:"amount"`
+}
+
+type StorageItem struct {
+	Id            int `json:"id"`
+	ProductId     int `json:"productId"`
+	ProductTypeId int `json:"productTypeId"`
+	DescriptionId int `json:"description"`
+	Amount        int `json:"amount"`
 }

@@ -1,47 +1,54 @@
 package order
 
-func dbCreateOrder(order OrderCreation, userId int) int {
-	//schema := fmt.Sprint("u", userId)
+import (
+	"fmt"
 
-	// 	var idDescription int
-	// 	var idItem int
+	"../db"
+)
 
-	// 	statement := fmt.Sprintf(`
-	// 		SELECT id FROM %v."storage_item_description"
-	// 		WHERE description = $1`, schema)
-	// 	err := db.Instance.Db.QueryRow(statement, itemDto.Description).Scan(&idDescription)
-	// 	if err != nil {
-	// 		goto Error
-	// 	}
+func DbCreateProduct(product ProductCreation, userId int) int {
+	schema := fmt.Sprint("u", userId)
 
-	// 	if idDescription == 0 {
-	// 		statement := fmt.Sprintf(`
-	// 			INSERT INTO %v."storage_item_description" (description)
-	// 			VALUES ($1)
-	// 			RETURNING id`, schema)
-	// 		err = db.Instance.Db.QueryRow(statement, itemDto.Description).Scan(&idDescription)
-	// 		if err != nil {
-	// 			goto Error
-	// 		}
-	// 	}
+	var id int
 
-	// 	statement = fmt.Sprintf(`
-	// 		INSERT INTO %v."storage_item" (product_id, product_type_id, description_id, amount)
-	// 		VALUES ($1, $2, $3, $4)
-	// 		RETURNING id`, schema)
-	// 	err = db.Instance.Db.
-	// 		QueryRow(statement, itemDto.Product, itemDto.ProductType, idDescription, itemDto.Amount).
-	// 		Scan(&idItem)
-	// 	if err != nil {
-	// 		goto Error
-	// 	}
+	statement := fmt.Sprintf(`
+			INSERT INTO %v."order_product" (order_id, product_id, product_type_id, description_id, quantity, storage_quantity, unit_price)
+			VALUES ($1, $2, $3, $4, $5, $6, $7)
+			RETURNING id`, schema)
+	err := db.Instance.Db.
+		QueryRow(statement, product.OrderId, product.ProductId, product.ProductTypeId, product.DescriptionId, product.Quantity, product.StorageQuantity, product.UnitPrice).
+		Scan(&id)
+	if err != nil {
+		goto Error
+	}
 
-	// 	return idItem
-	// Error:
+	return id
+Error:
 	return 0
 }
 
-func dbGetStorage(userId int) {
+func DbCreateOrder(order OrderCreation, userId int) int {
+	schema := fmt.Sprint("u", userId)
+
+	var itemId int
+
+	statement := fmt.Sprintf(`
+				INSERT INTO %v."order_order" (client_id, urgent, status, created_at, released_at)
+				VALUES ($1, $2, $3, $4, $5)
+				RETURNING id`, schema)
+	err := db.Instance.Db.
+		QueryRow(statement, order.ClientId, order.Urgent, S_Blocked, order.CreatedAt, order.ReleasedAt).
+		Scan(&itemId)
+	if err != nil {
+		goto Error
+	}
+
+	return itemId
+Error:
+	return 0
+}
+
+func DbGetStorage(userId int) {
 	// 	schema := fmt.Sprint("u", userId)
 
 	// 	var storageItems []StorageItem

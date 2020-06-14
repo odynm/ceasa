@@ -6,7 +6,7 @@ import (
 	"../db"
 )
 
-func dbGetId(login string) int {
+func DbGetId(login string) int {
 	statement := `
 		SELECT id FROM "admin_info"
 		WHERE login = $1`
@@ -18,7 +18,7 @@ func dbGetId(login string) int {
 	return id
 }
 
-func dbCreateAdmin(login string, hash string) int {
+func DbCreateAdmin(login string, hash string) int {
 	/*statement := `
 		INSERT INTO "admin_info" (login, hash)
 		VALUES ($1, $2)
@@ -33,7 +33,7 @@ func dbCreateAdmin(login string, hash string) int {
 	return 0
 }
 
-func dbGetByLogin(login string) AdminDb {
+func DbGetByLogin(login string) AdminDb {
 	statement := `
 		SELECT hash FROM "admin_info" 
 		WHERE login = $1`
