@@ -7,13 +7,13 @@ import {
 	TouchableWithoutFeedback,
 } from 'react-native'
 import { SvgXml } from 'react-native-svg'
+import { translate } from 'src/i18n/translate'
 import styles from './styles'
 import Picker from '../picker'
 import Modal from 'react-native-modal'
 import KText from 'src/components/fw/ktext'
+import svgSearch from 'res/svgs/svgSearch.svg'
 import KeyboardService from 'src/services/keyboardService'
-import svgSearch from '../../../../../res/svgs/svgSearch.svg'
-import { translate } from 'src/i18n/translate'
 
 const RecentRegisterPicker = ({
 	list,

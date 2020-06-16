@@ -4,7 +4,7 @@ import { translate } from 'src/i18n/translate'
 import { TouchableWithoutFeedback, View } from 'react-native'
 import styles from './styles'
 import KText from 'src/components/fw/ktext'
-import svgDropArrow from '../../../../../res/svgs/svgDropArrow.svg'
+import svgDropArrow from 'res/svgs/svgDropArrow.svg'
 
 const Picker = ({ label, onPress, selected }) => {
 	return (

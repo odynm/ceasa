@@ -1,4 +1,13 @@
 {
+	"loginSelect": {
+		"vendor": "Entrar como vendedor",
+		"loader": "Entrar como carregador"
+	},
+	"login": {
+		"login": "Login",
+		"user": "Usuário",
+		"password": "Senha"
+	},
 	"menus": {
 		"register": "Cadastrar",
 		"home": "Visão Geral"

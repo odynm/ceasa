@@ -22,7 +22,11 @@ const Main = ({ logout, navigation, loadLoggedUser, checkTerms }) => {
 		Keyboard.addListener('keyboardDidHide', KeyboardService.keyboardHide)
 
 		// TODO consider login
-		navigation.navigate(stacks.menu)
+		if (false /* has already logged as seller */) {
+			navigation.navigate(screens.login)
+		} else {
+			navigation.navigate(stacks.login)
+		}
 		return
 
 		const user = StorageService.user.get()

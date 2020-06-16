@@ -4,13 +4,14 @@ import { View, StyleSheet, TextInput as RNTextInput } from 'react-native'
 import KText from '../ktext'
 import colors from 'src/constants/colors'
 
-const TextInput = ({ label, value, setValue }) => (
+const TextInput = ({ label, value, setValue, password }) => (
 	<View style={styles.container}>
 		<KText bold text={label} />
 		<RNTextInput
 			value={value}
-			onChangeText={x => setValue(x)}
 			style={styles.textInput}
+			secureTextEntry={password}
+			onChangeText={x => setValue(x)}
 		/>
 	</View>
 )

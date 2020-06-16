@@ -1,9 +1,15 @@
-import {
-	widthPercentageToDP as _wp,
-	heightPercentageToDP as _hp,
-} from 'react-native-responsive-screen'
-import { Dimensions } from 'react-native'
 import { Header } from 'react-navigation-stack'
+import { Dimensions, PixelRatio } from 'react-native'
+import { widthPercentageToDP as _wp } from 'react-native-responsive-screen'
+
+const _hp = heightPercent => {
+	const elemHeight =
+		typeof heightPercent === 'number'
+			? heightPercent
+			: parseFloat(heightPercent)
+
+	return PixelRatio.roundToNearestPixel((getWorkableArea() * elemHeight) / 100)
+}
 
 export const heightRatio = 667
 export const widthRatio = 375

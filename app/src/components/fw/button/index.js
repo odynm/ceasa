@@ -1,15 +1,15 @@
 import React from 'react'
 import { hp, wp } from 'src/utils/screen'
-import { TouchableWithoutFeedback, StyleSheet, View } from 'react-native'
+import { TouchableOpacity, StyleSheet, View } from 'react-native'
 import KText from '../ktext'
 import colors from 'src/constants/colors'
 
-const Button = ({ label }) => (
-	<TouchableWithoutFeedback>
+const Button = ({ label, onPress }) => (
+	<TouchableOpacity onPress={onPress}>
 		<View style={styles.container}>
 			<KText style={styles.text} bold text={label} />
 		</View>
-	</TouchableWithoutFeedback>
+	</TouchableOpacity>
 )
 
 const styles = StyleSheet.create({
