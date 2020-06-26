@@ -50,7 +50,7 @@ func Add(orderDto OrderDto, userId int, w http.ResponseWriter) {
 		}
 
 		if storage.DbUpdateAmount(product.StorageItemId, storageItem.Amount-quantity, userId) {
-			productId := DbCreateProduct(productCreation, userId)
+			DbCreateProduct(productCreation, userId)
 		} else {
 			goto Error
 		}

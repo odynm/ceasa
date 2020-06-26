@@ -21,8 +21,9 @@ const areTermsAccepted = () => async () => {
 const acceptTerms = () => async dispatch => {
 	dispatch(setLoading(true))
 	const ipAddress = await getIp()
-	const { data } = await HttpService.post('terms', { ipAddress })
-	return data
+	//const { data } = await HttpService.post('terms', { ipAddress })
+	//return data
+	return {}
 }
 
 export const Creators = {

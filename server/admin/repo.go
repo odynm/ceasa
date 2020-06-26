@@ -19,7 +19,7 @@ func DbGetId(login string) int {
 }
 
 func DbCreateAdmin(login string, hash string) int {
-	/*statement := `
+	statement := `
 		INSERT INTO "admin_info" (login, hash)
 		VALUES ($1, $2)
 		RETURNING id`
@@ -29,8 +29,7 @@ func DbCreateAdmin(login string, hash string) int {
 		// just panic, this func is just for dev env
 		panic(err)
 	}
-	return id*/
-	return 0
+	return id
 }
 
 func DbGetByLogin(login string) AdminDb {

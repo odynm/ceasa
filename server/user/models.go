@@ -2,7 +2,7 @@ package user
 
 type UserDto struct {
 	Login string `json:"login"`
-	Pass  string `json:"pass"`
+	Pass  string `json:"password"`
 }
 
 type UserDb struct {

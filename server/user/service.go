@@ -29,11 +29,11 @@ func CreateUser(userDto UserDto, w http.ResponseWriter) {
 	}
 }
 
-func LoginUser(adminLogin UserDto, w http.ResponseWriter) {
-	hash := utils.GetHash(adminLogin.Login + "@" + adminLogin.Pass)
-	dbUser := DbGetByLogin(adminLogin.Login)
+func LoginUser(userLogin UserDto, w http.ResponseWriter) {
+	hash := utils.GetHash(userLogin.Login + "@" + userLogin.Pass)
+	dbUser := DbGetByLogin(userLogin.Login)
 	if dbUser.Hash == hash {
-		token := utils.GetHash(adminLogin.Login + "17" + hash + "F" + time.Now().String())
+		token := utils.GetHash(userLogin.Login + "17" + hash + "F" + time.Now().String())
 		tokens[dbUser.Id] = AuthData{
 			token:        token,
 			loaderToken:  utils.GetHash("L" + time.Now().String()),
@@ -49,6 +49,27 @@ func LoginUser(adminLogin UserDto, w http.ResponseWriter) {
 	} else {
 		utils.NoAuth(w)
 	}
+}
+
+func RefreshTokenUser(refresh UserDto, w http.ResponseWriter) {
+	// dbUser := DbGetRefresh(refresh.Token)
+	// if dbUser.RefreshToken == refresh.Token {
+	// 	token := utils.GetHash(adminLogin.Login + "17" + hash + "F" + time.Now().String())
+	// 	tokens[dbUser.Id] = AuthData{
+	// 		token:        token,
+	// 		loaderToken:  utils.GetHash("L" + time.Now().String()),
+	// 		creationDate: time.Now(),
+	// 	}
+	// 	response := UserResponse{
+	// 		Id:    dbUser.Id,
+	// 		Token: token,
+	// 	}
+	// 	w.Header().Set("Content-Type", "application/json")
+	// 	js, _ := json.Marshal(response)
+	// 	w.Write(js)
+	// } else {
+	// 	utils.NoAuth(w)
+	// }
 }
 
 func IsLogged(id int, auth string, w http.ResponseWriter) bool {

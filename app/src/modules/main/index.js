@@ -21,48 +21,46 @@ const Main = ({ logout, navigation, loadLoggedUser, checkTerms }) => {
 	const initialize = async () => {
 		Keyboard.addListener('keyboardDidHide', KeyboardService.keyboardHide)
 
-		// TODO consider login
-		if (false /* has already logged as seller */) {
-			navigation.navigate(screens.login)
-		} else {
-			navigation.navigate(stacks.login)
-		}
-		return
+		// // TODO consider login
+		// if (false /* has already logged as seller */) {
+		// 	navigation.navigate(screens.login)
+		// } else {
+		// 	navigation.navigate(stacks.login)
+		// }
+		// return
 
-		const user = StorageService.user.get()
-		const introduction = StorageService.introduction.get()
+		const user = await StorageService.user.get()
+		const introduction = await StorageService.introduction.get()
 
-		if (user.email) {
+		if (user && user.username) {
 			await loadLoggedUser()
 
-			const accepted = await checkTerms()
-			if (!accepted) {
-				return navigation.navigate(screens.terms)
-			}
+			// const accepted = await checkTerms()
+			// if (!accepted) {
+			// 	return navigation.navigate(screens.terms)
+			// }
 
-			setHasRegistrationInProgress(
-				(await StorageService.registrationsInProgress.get([])).includes(
-					user.id,
-				),
-			)
-			const regularRegistration = Object.values(userRoles).includes(
-				user.userType,
-			)
+			// setHasRegistrationInProgress(
+			// 	(await StorageService.registrationsInProgress.get([])).includes(
+			// 		user.id,
+			// 	),
+			// )
+			// const regularRegistration = Object.values(userRoles).includes(
+			// 	user.userType,
+			// )
 
-			// navigation.navigate(screens.rateExperience)
-			// return
+			// if (regularRegistration && !hasRegistrationInProgress) {
+			return navigation.navigate(stacks.menu)
+			// }
 
-			if (regularRegistration && !hasRegistrationInProgress) {
-				return navigation.navigate(screens.tabs)
-			}
-
-			setHasEmailRegistered(true)
+			//setHasEmailRegistered(true)
 		}
 		//else if (introduction.read) {
 		//navigation.navigate(screens.login)
 		//}
 		else {
-			navigation.navigate(screens.introduction)
+			navigation.navigate(screens.login)
+			//navigation.navigate(screens.introduction)
 		}
 	}
 

@@ -5,39 +5,54 @@ const prefix = 'user/'
 const Types = {
 	LOGOUT: prefix + 'LOGOUT',
 	SET_USER: prefix + 'SET_USER',
+	SET_TOKEN: prefix + 'SET_TOKEN',
 	SET_LOADING: prefix + 'SET_LOADING',
-	//REFRESH_TOKEN: prefix + 'UPDATE_TOKENS',
 	LOAD_FROM_STORAGE: prefix + 'LOAD_FROM_STORAGE',
 }
 
-// const refreshToken = ({ accessToken, refreshToken }) => async (dispatch) => {
-// 	const user = await StorageService.user.get()
-// 	user.accessToken = accessToken
-// 	user.refreshToken = refreshToken
+const login = (user, password) => async dispatch => {
+	await dispatch(setLoading(true))
+	const response = await HttpService.post('login', {
+		login: user,
+		password,
+	})
+	console.warn(response)
+	// check if success true
+	await StorageService.user.set({ username: user })
+	await dispatch(setToken(response))
+	await dispatch(setLoading(false))
 
-// 	await dispatch(setUser(user))
+	return response
+}
 
-// 	dispatch({
-// 		type: Types.UPDATE_TOKENS,
-// 		payload: { accessToken, refreshToken },
-// 	})
-
-// 	return { accessToken, refreshToken }
-// }
+const updateToken = authToken => async dispatch => {
+	// const user = await StorageService.user.get()
+	// user.authToken = authToken
+	// await dispatch(setToken(response.data))
+	// return authToken
+}
 
 const setLoading = loading => ({
 	payload: { loading },
 	type: Types.SET_LOADING,
 })
 
+const setToken = data => ({
+	type: Types.SET_TOKEN,
+	payload: data,
+})
+
+const setUser = user => dispatch => {
+	dispatch({
+		type: Types.SET_USER,
+		payload: user,
+	})
+	return StorageService.user.set(user)
+}
+
 const loadLoggedUser = () => dispatch => {
 	dispatch({ type: Types.LOAD_FROM_STORAGE })
 	return StorageService.user.get().then(user => dispatch(setUser(user)))
-}
-
-const setUser = user => dispatch => {
-	dispatch({ type: Types.SET_USER, payload: user })
-	return StorageService.user.set(user)
 }
 
 const logout = () => async dispatch => {
@@ -50,8 +65,8 @@ const logout = () => async dispatch => {
 const initialState = {
 	id: '',
 	name: '',
-	email: '',
 	roles: [],
+	username: '',
 	userType: '',
 	fullName: '',
 	avatarUrl: '',
@@ -62,9 +77,10 @@ const initialState = {
 }
 
 export const Creators = {
+	login,
 	logout,
 	setUser,
-	//refreshToken,
+	updateToken,
 	loadLoggedUser,
 }
 
@@ -75,16 +91,20 @@ export default function reducer(state = initialState, action) {
 		case Types.SET_USER:
 			return {
 				...state,
-				id: action.payload.id,
+				//id: action.payload.id,
 				name: action.payload.name,
-				email: action.payload.email,
 				roles: action.payload.roles,
+				username: action.payload.username,
 				userType: action.payload.userType,
 				fullName: action.payload.fullName,
 				avatarUrl: action.payload.avatarUrl,
-				accessToken: action.payload.accessToken,
 				creationDate: action.payload.creationDate,
-				refreshToken: action.payload.refreshToken,
+			}
+		case Types.SET_TOKEN:
+			return {
+				...state,
+				accessToken: action.payload.Token,
+				id: action.payload.Id,
 			}
 		default:
 			return state

@@ -15,6 +15,8 @@ CREATE TABLE public.user_info
     id int NOT NULL DEFAULT nextval('user_info_id_seq'::regclass),
     login character varying(50) NOT NULL,
     hash character varying(50) NOT NULL,
+    refresh_token character varying(50),
+    refresh_token_expiration timestamp,
     last_logged timestamp,
     active boolean,
     deleted_date timestamp,

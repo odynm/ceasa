@@ -19,6 +19,15 @@ func login(w http.ResponseWriter, r *http.Request) {
 	LoginUser(userDto, w)
 }
 
+func refresh(w http.ResponseWriter, r *http.Request) {
+	var userDto UserDto
+	err := json.NewDecoder(r.Body).Decode(&userDto)
+	if err != nil || userDto.Login == "" {
+		utils.NoAuth(w)
+	}
+	RefreshTokenUser(userDto, w)
+}
+
 func post(w http.ResponseWriter, r *http.Request) {
 	var userDto UserDto
 	err := json.NewDecoder(r.Body).Decode(&userDto)
@@ -61,7 +70,17 @@ func loginRouter(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func refreshRouter(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPost:
+		refresh(w, r)
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
 func HandleRequest() {
 	http.HandleFunc("/user", userRouter)
 	http.HandleFunc("/login", loginRouter)
+	http.HandleFunc("/refresh", refreshRouter)
 }
