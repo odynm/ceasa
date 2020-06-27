@@ -11,14 +11,19 @@ import ScreenBase from 'src/components/fw/screen-base'
 import { Creators as UserCreators } from 'src/ducks/user'
 import { connect } from 'react-redux'
 import stacks from 'src/constants/stacks'
+import ToastService from 'src/services/toastService'
 
 const Login = ({ login, navigation, userId, accessToken }) => {
 	const [userText, setUserText] = useState('')
 	const [passwordText, setPasswordText] = useState('')
 
 	const handleLogin = async () => {
-		await login(userText, passwordText)
-		navigation.navigate(stacks.menu)
+		const success = await login(userText, passwordText)
+		if (success) {
+			navigation.navigate(stacks.menu)
+		} else {
+			ToastService.show({ message: translate('login.error') })
+		}
 	}
 
 	return (

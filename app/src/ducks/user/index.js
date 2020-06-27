@@ -12,17 +12,17 @@ const Types = {
 
 const login = (user, password) => async dispatch => {
 	await dispatch(setLoading(true))
-	const response = await HttpService.post('login', {
+	const { data, success } = await HttpService.post('login', {
 		login: user,
 		password,
 	})
-	console.warn(response)
-	// check if success true
-	await StorageService.user.set({ username: user })
-	await dispatch(setToken(response))
+	if (success) {
+		await StorageService.user.set(user)
+		await dispatch(setToken(data))
+	}
 	await dispatch(setLoading(false))
 
-	return response
+	return success
 }
 
 const updateToken = authToken => async dispatch => {

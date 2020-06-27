@@ -10,6 +10,7 @@ import stacks from 'src/constants/stacks'
 import screens from 'src/constants/screens'
 import StorageService from 'src/services/storageService'
 import KeyboardService from 'src/services/keyboardService'
+import ToastService from 'src/services/toastService'
 
 const Main = ({ logout, navigation, loadLoggedUser, checkTerms }) => {
 	const [hasEmailRegistered, setHasEmailRegistered] = useState(false)
@@ -32,7 +33,7 @@ const Main = ({ logout, navigation, loadLoggedUser, checkTerms }) => {
 		const user = await StorageService.user.get()
 		const introduction = await StorageService.introduction.get()
 
-		if (user && user.username) {
+		if (user) {
 			await loadLoggedUser()
 
 			// const accepted = await checkTerms()

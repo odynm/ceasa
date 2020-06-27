@@ -1,4 +1,4 @@
-const initialize = (toastRef) => {
+const initialize = toastRef => {
 	ToastService.toastRef = toastRef
 }
 

@@ -6,7 +6,8 @@
 	"login": {
 		"login": "Login",
 		"user": "Usuário",
-		"password": "Senha"
+		"password": "Senha",
+		"error": "Usuário ou senha incorretos"
 	},
 	"menus": {
 		"register": "Cadastrar",

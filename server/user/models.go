@@ -13,8 +13,8 @@ type UserDb struct {
 }
 
 type UserResponse struct {
-	Id    int
-	Token string
+	Id    int    `json:"id"`
+	Token string `json:"token"`
 }
 
 const (

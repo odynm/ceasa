@@ -25,7 +25,7 @@ const App = () => {
 		}
 
 		HttpService.initialize()
-		ToastService.initialize()
+		ToastService.initialize(toastRef)
 
 		await LocationService.initialize()
 		i18n.locale = 'pt-BR' //TODO set according to location

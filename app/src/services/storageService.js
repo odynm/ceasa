@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 
 const setItem = key => async item => {
 	try {
-		console.warn('set', item)
+		console.warn('set', key, item)
 		await AsyncStorage.setItem(key, JSON.stringify(item))
 	} catch (error) {
 		console.warn(error)
@@ -11,6 +11,7 @@ const setItem = key => async item => {
 
 const getItem = key => async defaultValue => {
 	try {
+		console.warn('key', key)
 		const item = await AsyncStorage.getItem(key)
 		console.warn('retrieve', item)
 		if (item) {

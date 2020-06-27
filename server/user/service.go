@@ -1,7 +1,6 @@
 package user
 
 import (
-	"encoding/json"
 	"io"
 	"net/http"
 	"strconv"
@@ -44,10 +43,9 @@ func LoginUser(userLogin UserDto, w http.ResponseWriter) {
 			Token: token,
 		}
 		w.Header().Set("Content-Type", "application/json")
-		js, _ := json.Marshal(response)
-		w.Write(js)
+		utils.Success(w, response)
 	} else {
-		utils.NoAuth(w)
+		utils.Failed(w)
 	}
 }
 
