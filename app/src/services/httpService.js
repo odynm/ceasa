@@ -19,10 +19,10 @@ import * as retryAxios from 'retry-axios'
 // })
 
 const requestInterceptor = requestConfig => {
-	const { accessToken, id } = store.getState().user
-	if (accessToken && id) {
-		requestConfig.headers.Auth = accessToken
-		requestConfig.headers.User = id
+	const { user } = store.getState().user
+	if (user.accessToken && user.id) {
+		requestConfig.headers.Auth = user.accessToken
+		requestConfig.headers.User = user.id
 	}
 	//config.headers['accept-language'] = i18n.locale
 	return requestConfig
@@ -35,24 +35,21 @@ const responseErrorInterceptor = async error => {
 		console.warn('net not reachable')
 		//ToastService.show({ message: translate('app.noInternet') })
 	}
-	console.warn('err', error)
 
 	const status = error && error.response ? error.response.status : null
 	if (status == 401) {
 		try {
-			const { refreshToken } = store.getState().user
-			const { data } = await HttpService.post('user/refresh-token', {
-				refreshToken,
-			})
-			const action = UserCreators.updateTokens(data)
-			const { accessToken } = await store.dispatch(action)
-			error.config.headers.Authorization = accessToken
-			return axios.request(error.config)
-		} catch {
+			// TODO preciso disso aí embaixo mesmo?
+			// const action = UserCreators.updateToken(data)
+			// const { accessToken } = await store.dispatch(action)
+			// error.config.headers.Authorization = accessToken
+			// return axios.request(error.config)
+		} catch (ex) {
+			console.warn('erro', ex)
 			await store.dispatch(UserCreators.logout())
 		}
 	} else if (status != null) {
-		console.warn('Return status', status)
+		console.warn('Return status', status, JSON.stringify(error))
 	} else {
 		console.warn('server down')
 	}

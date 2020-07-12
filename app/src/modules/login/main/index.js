@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import { SvgXml } from 'react-native-svg'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
+import { Creators as UserCreators } from 'src/ducks/user'
 import styles from './styles'
+import stacks from 'src/constants/stacks'
 import svgLogo from 'res/svgs/svgLogo.svg'
 import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
+import ToastService from 'src/services/toastService'
 import TextInput from 'src/components/fw/text-input'
 import ScreenBase from 'src/components/fw/screen-base'
-import { Creators as UserCreators } from 'src/ducks/user'
-import { connect } from 'react-redux'
-import stacks from 'src/constants/stacks'
-import ToastService from 'src/services/toastService'
 
 const Login = ({ login, navigation, userId, accessToken }) => {
 	const [userText, setUserText] = useState('')

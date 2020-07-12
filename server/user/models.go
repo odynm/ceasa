@@ -14,7 +14,7 @@ type UserDb struct {
 
 type UserResponse struct {
 	Id    int    `json:"id"`
-	Token string `json:"token"`
+	Token string `json:"accessToken"`
 }
 
 const (

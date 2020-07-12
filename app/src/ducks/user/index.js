@@ -5,7 +5,6 @@ const prefix = 'user/'
 const Types = {
 	LOGOUT: prefix + 'LOGOUT',
 	SET_USER: prefix + 'SET_USER',
-	SET_TOKEN: prefix + 'SET_TOKEN',
 	SET_LOADING: prefix + 'SET_LOADING',
 	LOAD_FROM_STORAGE: prefix + 'LOAD_FROM_STORAGE',
 }
@@ -17,8 +16,7 @@ const login = (user, password) => async dispatch => {
 		password,
 	})
 	if (success) {
-		await StorageService.user.set(user)
-		await dispatch(setToken(data))
+		await dispatch(setUser(data))
 	}
 	await dispatch(setLoading(false))
 
@@ -37,17 +35,12 @@ const setLoading = loading => ({
 	type: Types.SET_LOADING,
 })
 
-const setToken = data => ({
-	type: Types.SET_TOKEN,
-	payload: data,
-})
-
-const setUser = user => dispatch => {
+const setUser = user => async dispatch => {
 	dispatch({
 		type: Types.SET_USER,
-		payload: user,
+		payload: { user },
 	})
-	return StorageService.user.set(user)
+	await StorageService.user.set(user)
 }
 
 const loadLoggedUser = () => dispatch => {
@@ -63,17 +56,14 @@ const logout = () => async dispatch => {
 }
 
 const initialState = {
-	id: '',
-	name: '',
-	roles: [],
-	username: '',
-	userType: '',
-	fullName: '',
-	avatarUrl: '',
+	user: {
+		id: '',
+		username: '',
+		accessToken: '',
+		refreshToken: '',
+		creationDate: null,
+	},
 	loading: true,
-	accessToken: '',
-	refreshToken: '',
-	creationDate: null,
 }
 
 export const Creators = {
@@ -91,20 +81,7 @@ export default function reducer(state = initialState, action) {
 		case Types.SET_USER:
 			return {
 				...state,
-				//id: action.payload.id,
-				name: action.payload.name,
-				roles: action.payload.roles,
-				username: action.payload.username,
-				userType: action.payload.userType,
-				fullName: action.payload.fullName,
-				avatarUrl: action.payload.avatarUrl,
-				creationDate: action.payload.creationDate,
-			}
-		case Types.SET_TOKEN:
-			return {
-				...state,
-				accessToken: action.payload.Token,
-				id: action.payload.Id,
+				user: action.payload.user,
 			}
 		default:
 			return state
