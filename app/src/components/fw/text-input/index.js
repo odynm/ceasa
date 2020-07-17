@@ -3,17 +3,21 @@ import { hp, fv } from 'src/utils/screen'
 import { View, StyleSheet, TextInput as RNTextInput } from 'react-native'
 import KText from '../ktext'
 import colors from 'src/constants/colors'
+import Error from 'src/components/fw/error'
 
-const TextInput = ({ label, value, setValue, password }) => (
-	<View style={styles.container}>
-		<KText bold text={label} />
-		<RNTextInput
-			value={value}
-			style={styles.textInput}
-			secureTextEntry={password}
-			onChangeText={x => setValue(x)}
-		/>
-	</View>
+const TextInput = ({ label, value, setValue, password, errorMessage }) => (
+	<>
+		<View style={styles.container}>
+			<KText bold text={label} />
+			<RNTextInput
+				value={value}
+				style={styles.textInput}
+				secureTextEntry={password}
+				onChangeText={x => setValue(x)}
+			/>
+		</View>
+		<Error text={errorMessage} />
+	</>
 )
 
 const styles = StyleSheet.create({

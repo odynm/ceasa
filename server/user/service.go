@@ -4,6 +4,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"../utils"
@@ -20,19 +21,21 @@ var tokens = map[int]AuthData{}
 func CreateUser(userDto UserDto, w http.ResponseWriter) {
 	id := DbGetId(userDto.Login)
 	if id == 0 {
+		login := strings.ToUpper(userDto.Login)
 		hash := utils.GetHash(userDto.Login + "@" + userDto.Pass)
 		permissions := int(1) // Padrão vendedor
-		DbCreateUser(userDto.Login, hash, permissions)
+		DbCreateUser(login, hash, permissions)
 	} else {
 		utils.InsertError(w, "User já existente")
 	}
 }
 
 func LoginUser(userLogin UserDto, w http.ResponseWriter) {
-	hash := utils.GetHash(userLogin.Login + "@" + userLogin.Pass)
-	dbUser := DbGetByLogin(userLogin.Login)
+	login := strings.ToUpper(userLogin.Login)
+	hash := utils.GetHash(login + "@" + userLogin.Pass)
+	dbUser := DbGetByLogin(login)
 	if dbUser.Hash == hash {
-		token := utils.GetHash(userLogin.Login + "17" + hash + "F" + time.Now().String())
+		token := utils.GetHash(login + "17" + hash + "F" + time.Now().String())
 		tokens[dbUser.Id] = AuthData{
 			token:        token,
 			loaderToken:  utils.GetHash("L" + time.Now().String()),
@@ -45,7 +48,7 @@ func LoginUser(userLogin UserDto, w http.ResponseWriter) {
 		w.Header().Set("Content-Type", "application/json")
 		utils.Success(w, response)
 	} else {
-		utils.Failed(w)
+		utils.Failed(w, -1)
 	}
 }
 

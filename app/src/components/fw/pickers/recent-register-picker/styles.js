@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
 		height: hp(350),
 	},
 	labelNotRegistered: {
-		textAlign: 'center',
 		marginBottom: hp(5),
+		textAlign: 'center',
 	},
 	scrollView: {
 		paddingRight: wp(8),
@@ -57,6 +57,10 @@ const styles = StyleSheet.create({
 	},
 	listItemText: {
 		fontSize: fv(18),
+	},
+	error: {
+		color: colors.red,
+		fontSize: fv(12),
 	},
 })
 

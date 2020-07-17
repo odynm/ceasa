@@ -55,8 +55,8 @@ const Main = ({ logout, navigation, loadLoggedUser, checkTerms }) => {
 			// }
 
 			//setHasEmailRegistered(true)
-		} else if (introduction.read) {
-			navigation.navigate(screens.login)
+			// } else if (introduction.read) {
+			// 	navigation.navigate(screens.login)
 		} else {
 			navigation.navigate(screens.login)
 			//navigation.navigate(screens.introduction)

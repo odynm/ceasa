@@ -1,17 +1,22 @@
 package storage
 
 import (
-	"encoding/json"
 	"net/http"
+
+	"../utils"
 )
 
 func Add(itemDto ItemDto, userId int, w http.ResponseWriter) {
-	DbCreateStorageItem(itemDto, userId)
+	result := DbCreateStorageItem(itemDto, userId)
+	if result == 0 {
+		utils.Failed(w, -1)
+	} else {
+		utils.Success(w, result)
+	}
 }
 
 func Get(userId int, w http.ResponseWriter) {
 	response := DbGetAllFull(userId)
 	w.Header().Set("Content-Type", "application/json")
-	js, _ := json.Marshal(response)
-	w.Write(js)
+	utils.Success(w, response)
 }

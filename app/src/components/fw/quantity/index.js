@@ -46,36 +46,36 @@ const Quantity = ({ label, value, setValue }) => {
 
 const styles = StyleSheet.create({
 	container: {
+		alignContent: 'stretch',
 		width: '100%',
 		flexDirection: 'row',
-		alignContent: 'stretch',
 	},
 	justify: {
 		justifyContent: 'center',
 	},
 	inputs: {
 		alignContent: 'flex-end',
-		marginLeft: 'auto',
 		flexDirection: 'row',
+		marginLeft: 'auto',
 	},
 	round: {
-		borderColor: colors.primary,
-		borderRadius: hp(30) / 2,
-		borderWidth: 1,
-		height: hp(30),
-		width: wp(30),
 		alignContent: 'center',
+		borderColor: colors.primary,
+		borderRadius: wp(30) / 2,
+		borderWidth: 1,
+		height: wp(30),
+		width: wp(30),
 	},
 	font: {
 		textAlign: 'center',
 		fontSize: fv(22),
 	},
 	text: {
-		padding: 0,
 		borderBottomWidth: 1,
 		borderColor: colors.primary,
-		textAlign: 'center',
 		fontSize: fv(16),
+		padding: 0,
+		textAlign: 'center',
 		width: wp(50),
 	},
 })

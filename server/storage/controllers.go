@@ -15,8 +15,8 @@ func add(w http.ResponseWriter, r *http.Request) {
 		err := json.NewDecoder(r.Body).Decode(&itemDto)
 		if err != nil ||
 			itemDto.Product == 0 ||
-			itemDto.ProductType == 0 {
-			utils.BadRequest(w, "Storage item format is incorrect")
+			itemDto.Amount == 0 {
+			utils.Failed(w, -1)
 		}
 
 		Add(itemDto, userId, w)

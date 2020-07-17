@@ -1,36 +1,44 @@
+import HttpService from 'src/services/httpService'
+
+const prefix = 'user/'
+const Types = {
+	SET_PRODUCTS: prefix + 'SET_PRODUCTS',
+}
+
+const setProducts = products => ({
+	payload: products,
+	type: Types.SET_PRODUCTS,
+})
+
+const loadProducts = () => async dispatch => {
+	const { data, success } = await HttpService.get('product/all')
+	if (success) {
+		//data.types.unshift({ id: 0, name: 'Qualquer' })
+		await dispatch(setProducts(data))
+	}
+
+	return success
+}
+
 const initialState = {
-	products: [
-		{ id: 1, name: 'Abacate' },
-		{ id: 2, name: 'Alface' },
-		{ id: 3, name: 'Couve' },
-		{ id: 4, name: 'Alcatrão' },
-		{ id: 5, name: 'Alcatrão' },
-		{ id: 6, name: 'Alcatrão' },
-		{ id: 7, name: 'Alcatrão' },
-	],
-	recentProducts: [
-		{ id: 1, name: 'Abacate' },
-		{ id: 2, name: 'Alface' },
-		{ id: 3, name: 'Couve' },
-	],
-	productTypes: [
-		{ id: 1, name: 'Abacate' },
-		{ id: 2, name: 'Alface' },
-		{ id: 3, name: 'Couve' },
-		{ id: 4, name: 'Alcatrão' },
-		{ id: 5, name: 'Alcatrão' },
-		{ id: 6, name: 'Alcatrão' },
-		{ id: 7, name: 'Alcatrão' },
-	],
-	recentProductTypes: [
-		{ id: 1, name: 'Abacate' },
-		{ id: 2, name: 'Alface' },
-		{ id: 3, name: 'Couve' },
-	],
+	products: [],
+	recentProducts: [],
+	productTypes: [],
+	recentProductTypes: [],
+}
+
+export const Creators = {
+	loadProducts,
 }
 
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
+		case Types.SET_PRODUCTS:
+			return {
+				...state,
+				products: action.payload.products,
+				productTypes: action.payload.types,
+			}
 		default:
 			return state
 	}

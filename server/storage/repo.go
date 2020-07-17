@@ -6,6 +6,8 @@ import (
 	"../db"
 
 	"strings"
+
+	"../utils"
 )
 
 func DbUpdateAmount(id int, amount int, userId int) bool {
@@ -33,11 +35,8 @@ func DbCreateStorageItem(itemDto ItemDto, userId int) int {
 		SELECT id FROM %v."storage_item_description"
 		WHERE description = $1`, schema)
 	err := db.Instance.Db.QueryRow(statement, itemDto.Description).Scan(&descriptionId)
-	if err != nil {
-		goto Error
-	}
 
-	if descriptionId == 0 {
+	if descriptionId == 0 || err != nil {
 		statement := fmt.Sprintf(`
 			INSERT INTO %v."storage_item_description" (description)
 			VALUES ($1)
@@ -53,7 +52,7 @@ func DbCreateStorageItem(itemDto ItemDto, userId int) int {
 		VALUES ($1, $2, $3, $4)
 		RETURNING id`, schema)
 	err = db.Instance.Db.
-		QueryRow(statement, itemDto.Product, itemDto.ProductType, descriptionId, itemDto.Amount).
+		QueryRow(statement, itemDto.Product, utils.NullIfZero(itemDto.ProductType), descriptionId, itemDto.Amount).
 		Scan(&itemId)
 	if err != nil {
 		goto Error

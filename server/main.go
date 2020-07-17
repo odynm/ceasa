@@ -38,5 +38,6 @@ func main() {
 	admin.HandleRequest()
 	storage.HandleRequest()
 	order.HandleRequest()
+	product.HandleRequest()
 	log.Fatal(http.ListenAndServe(":10000", nil))
 }

@@ -39,7 +39,8 @@ const responseErrorInterceptor = async error => {
 	const status = error && error.response ? error.response.status : null
 	if (status == 401) {
 		try {
-			// TODO preciso disso aí embaixo mesmo?
+			await store.dispatch(UserCreators.logout())
+			// TODO refresh token
 			// const action = UserCreators.updateToken(data)
 			// const { accessToken } = await store.dispatch(action)
 			// error.config.headers.Authorization = accessToken
@@ -72,10 +73,10 @@ const initialize = () => {
 // const paramsSerializer = params =>
 // 	qs.stringify(params, { arrayFormat: 'repeat' })
 
-// const get = (url, configs) =>
-// 	HttpService.instance
-// 		.get(url, { paramsSerializer, ...configs })
-// 		.then(({ data }) => data)
+// I removed paramsSerializer from this, I don't know if something changed
+const get = (url, configs) =>
+	HttpService.instance.get(url, configs).then(({ data }) => data)
+
 // const put = (url, data, configs) =>
 // 	HttpService.instance.put(url, data, configs).then(({ data }) => data)
 
@@ -95,7 +96,7 @@ const post = (url, data, configs) =>
 // const CancelToken = axios.CancelToken
 
 const HttpService = {
-	// get,
+	get,
 	// put,
 	post,
 	// isCancel,

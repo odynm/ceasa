@@ -3,8 +3,8 @@ import {
 	View,
 	TextInput,
 	ScrollView,
+	TouchableOpacity,
 	KeyboardAvoidingView,
-	TouchableWithoutFeedback,
 } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import { translate } from 'src/i18n/translate'
@@ -18,14 +18,17 @@ import KeyboardService from 'src/services/keyboardService'
 const RecentRegisterPicker = ({
 	list,
 	label,
+	loading,
+	disabled,
 	listLabel,
+	selectedId,
 	listRecent,
+	errorMessage,
 	setSelectedId,
 	labelNotRegistered,
 }) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
-	const [labelPicker, setLabelPicker] = useState('')
 
 	useEffect(() => {
 		KeyboardService.subscribeHide(onKeyboardHide)
@@ -33,7 +36,6 @@ const RecentRegisterPicker = ({
 
 	const setSelected = item => {
 		setSelectedId(item.id)
-		setLabelPicker(item.name)
 		setIsOpen(false)
 	}
 
@@ -53,7 +55,10 @@ const RecentRegisterPicker = ({
 		<>
 			<Picker
 				label={label}
-				selected={labelPicker}
+				loading={loading}
+				disabled={disabled}
+				errorMessage={errorMessage}
+				selected={list && list.find(x => x.id === selectedId)?.name}
 				onPress={() => setIsOpen(true)}
 			/>
 			<Modal
@@ -64,10 +69,13 @@ const RecentRegisterPicker = ({
 				<KeyboardAvoidingView
 					style={
 						isKeyboardOpen
-							? { ...styles.openContainer, ...styles.containerSmall }
+							? {
+									...styles.openContainer,
+									...styles.containerSmall,
+							  }
 							: styles.openContainer
 					}>
-					<TouchableWithoutFeedback>
+					<TouchableOpacity>
 						{/* TODO: make this button work*/}
 						<KText
 							bold
@@ -75,7 +83,7 @@ const RecentRegisterPicker = ({
 							text={labelNotRegistered}
 							style={styles.labelNotRegistered}
 						/>
-					</TouchableWithoutFeedback>
+					</TouchableOpacity>
 					<ScrollView style={styles.scrollView} persistentScrollbar={true}>
 						{listRecent && listRecent.length > 0 && (
 							<>
@@ -86,7 +94,7 @@ const RecentRegisterPicker = ({
 								<View style={styles.line} />
 								<View style={styles.listView}>
 									{listRecent.map(x => (
-										<TouchableWithoutFeedback
+										<TouchableOpacity
 											onPress={() => setSelected(x)}
 											key={x.id}>
 											<View style={styles.listItemCard}>
@@ -97,7 +105,7 @@ const RecentRegisterPicker = ({
 													text={x.name}
 												/>
 											</View>
-										</TouchableWithoutFeedback>
+										</TouchableOpacity>
 									))}
 								</View>
 							</>
@@ -117,7 +125,7 @@ const RecentRegisterPicker = ({
 						</View>
 						<View style={styles.listView}>
 							{list.map(x => (
-								<TouchableWithoutFeedback
+								<TouchableOpacity
 									onPress={() => setSelected(x)}
 									key={x.id}>
 									<View style={styles.listItemCard}>
@@ -128,7 +136,7 @@ const RecentRegisterPicker = ({
 											text={x.name}
 										/>
 									</View>
-								</TouchableWithoutFeedback>
+								</TouchableOpacity>
 							))}
 						</View>
 					</ScrollView>
