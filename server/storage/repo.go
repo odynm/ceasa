@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"database/sql"
 	"fmt"
 
 	"../db"
@@ -109,16 +110,30 @@ func DbGetAllFull(userId int) []StorageItemFull {
 
 	for rows.Next() {
 		var storageItem StorageItemFull
+		var productTypeId sql.NullInt32
+		var productTypeName sql.NullString
+		var description sql.NullString
+
 		err := rows.Scan(&storageItem.Id,
 			&storageItem.ProductId,
 			&storageItem.ProductName,
-			&storageItem.ProductTypeId,
-			&storageItem.ProductTypeName,
-			&storageItem.Description,
+			&productTypeId,
+			&productTypeName,
+			&description,
 			&storageItem.Amount)
 
 		if err != nil {
 			goto Error
+		}
+
+		if productTypeId.Valid {
+			storageItem.ProductTypeId = int(productTypeId.Int32)
+		}
+		if productTypeName.Valid {
+			storageItem.ProductTypeName = string(productTypeName.String)
+		}
+		if description.Valid {
+			storageItem.Description = string(description.String)
 		}
 
 		storageItems = append(storageItems, storageItem)

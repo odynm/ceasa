@@ -1,6 +1,7 @@
 //import app from './app'
 import user from './user'
 import terms from './terms'
+import storage from './storage'
 import products from './products'
 
 import thunk from 'redux-thunk'
@@ -11,6 +12,7 @@ const reducers = combineReducers({
 	//app,
 	user,
 	terms,
+	storage,
 	products,
 })
 
