@@ -11,7 +11,8 @@
 	},
 	"menus": {
 		"storage": "Cadastrar",
-		"home": "Visão Geral"
+		"home": "Visão Geral",
+		"sell": "Vender"
 	},
 	"storage": {
 		"product": "Produto",

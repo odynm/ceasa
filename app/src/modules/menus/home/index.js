@@ -14,7 +14,7 @@ const Home = () => {
 }
 
 Home.navigationOptions = () => ({
-	title: translate('storage.home'),
+	title: translate('menus.home'),
 	headerLeft: props => <ScreenHeader {...props} />,
 })
 

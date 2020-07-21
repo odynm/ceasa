@@ -2,13 +2,23 @@ import React from 'react'
 import { SvgXml } from 'react-native-svg'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import HomeStack from './items/home'
-import svgHome from 'res/svgs/svgHome.svg'
+import SellStack from './items/sell'
 import StorageStack from './items/storage'
+import svgHome from 'res/svgs/svgHome.svg'
 import svgStorage from 'res/svgs/svgStorage.svg'
 import svgHomeSelected from 'res/svgs/svgHomeSelected.svg'
 import svgStorageSelected from 'res/svgs/svgStorageSelected.svg'
 
 //const enabledRoutesForAnonymous = [screens.home, screens.search]
+
+HomeStack.navigationOptions = () => ({
+	tabBarIcon: ({ focused }) =>
+		focused ? <SvgXml xml={svgHomeSelected} /> : <SvgXml xml={svgHome} />,
+	tabBarOptions: {
+		showLabel: false,
+		showIcon: true,
+	},
+})
 
 StorageStack.navigationOptions = () => ({
 	tabBarIcon: ({ focused }) =>
@@ -23,7 +33,7 @@ StorageStack.navigationOptions = () => ({
 	},
 })
 
-HomeStack.navigationOptions = () => ({
+SellStack.navigationOptions = () => ({
 	tabBarIcon: ({ focused }) =>
 		focused ? <SvgXml xml={svgHomeSelected} /> : <SvgXml xml={svgHome} />,
 	tabBarOptions: {
@@ -33,12 +43,13 @@ HomeStack.navigationOptions = () => ({
 })
 
 const MenuNavigator = createBottomTabNavigator(
-	{ Storage: StorageStack, Home: HomeStack },
+	{ Home: HomeStack, Storage: StorageStack, Sell: SellStack },
 	{
 		backBehavior: 'history',
 		defaultNavigationOptions: () => ({
 			tabBarOnLongPress: () => 0,
 			tabBarOnPress: ({ defaultHandler, ...props }) => {
+				//TODO what is this exactly?
 				if (/*isLoggedIn()*/ true) {
 					return defaultHandler()
 				}

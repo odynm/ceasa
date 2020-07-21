@@ -14,7 +14,7 @@ import ToastService from 'src/services/toastService'
 import TextInput from 'src/components/fw/text-input'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
-import StoredItemCard from './components/stored-item-card'
+import StoredItemCard from 'src/components/ceasa/stored-item-card'
 import CloseKeyboardView from 'src/components/fw/screen-base/close-keyboard-view'
 import RecentRegisterPicker from 'src/components/fw/pickers/recent-register-picker'
 
