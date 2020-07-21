@@ -1,3 +1,5 @@
+import { translate } from 'src/i18n/translate'
+
 const initialize = toastRef => {
 	ToastService.toastRef = toastRef
 }
@@ -8,9 +10,14 @@ const show = ({ message, duration = defaultDuration }) => {
 	ToastService.toastRef.current.show(message, duration)
 }
 
+const serverError = () => {
+	show({ message: translate('errors.serverError') })
+}
+
 const ToastService = {
 	show,
 	initialize,
+	serverError,
 	toastRef: null,
 }
 

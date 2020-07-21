@@ -3,19 +3,19 @@ import { SvgXml } from 'react-native-svg'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import HomeStack from './items/home'
 import svgHome from 'res/svgs/svgHome.svg'
-import RegisterStack from './items/register'
-import svgRegister from 'res/svgs/svgRegister.svg'
+import StorageStack from './items/storage'
+import svgStorage from 'res/svgs/svgStorage.svg'
 import svgHomeSelected from 'res/svgs/svgHomeSelected.svg'
-import svgRegisterSelected from 'res/svgs/svgRegisterSelected.svg'
+import svgStorageSelected from 'res/svgs/svgStorageSelected.svg'
 
 //const enabledRoutesForAnonymous = [screens.home, screens.search]
 
-RegisterStack.navigationOptions = () => ({
+StorageStack.navigationOptions = () => ({
 	tabBarIcon: ({ focused }) =>
 		focused ? (
-			<SvgXml xml={svgRegisterSelected} />
+			<SvgXml xml={svgStorageSelected} />
 		) : (
-			<SvgXml xml={svgRegister} />
+			<SvgXml xml={svgStorage} />
 		),
 	tabBarOptions: {
 		showLabel: false,
@@ -33,7 +33,7 @@ HomeStack.navigationOptions = () => ({
 })
 
 const MenuNavigator = createBottomTabNavigator(
-	{ Register: RegisterStack, Home: HomeStack },
+	{ Storage: StorageStack, Home: HomeStack },
 	{
 		backBehavior: 'history',
 		defaultNavigationOptions: () => ({

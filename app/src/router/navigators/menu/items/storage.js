@@ -1,11 +1,11 @@
 import { wp } from 'src/utils/screen'
 import { createStackNavigator } from 'react-navigation-stack'
 import colors from 'src/constants/colors'
-import Register from 'src/modules/menus/register'
+import Storage from 'src/modules/menus/storage'
 
-const RegisterStack = createStackNavigator(
+const StorageStack = createStackNavigator(
 	{
-		Register,
+		Storage,
 	},
 	{
 		defaultNavigationOptions: () => ({
@@ -20,4 +20,4 @@ const RegisterStack = createStackNavigator(
 	},
 )
 
-export default RegisterStack
+export default StorageStack

@@ -10,10 +10,10 @@
 		"error": "Usuário ou senha incorretos"
 	},
 	"menus": {
-		"register": "Cadastrar",
+		"storage": "Cadastrar",
 		"home": "Visão Geral"
 	},
-	"register": {
+	"storage": {
 		"product": "Produto",
 		"products": "Produtos",
 		"productType": "Tipo (opcional)",
@@ -23,7 +23,13 @@
 		"registerNotListedProductType": "Cadastrar tipo não listado...",
 		"additionalDescription": "Descrição adicional (opcional)",
 		"quantity": "Quantidade",
-		"add": "Adicionar"
+		"add": "Adicionar",
+		"errors": {
+			"noProduct": "Selecione o produto"
+		}
+	},
+	"errors": {
+		"serverError": "Não foi possível comunicar com o servidor"
 	},
 	"fw": {
 		"recentRegisterPicker": {

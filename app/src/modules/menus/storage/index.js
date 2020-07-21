@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { View, ScrollView } from 'react-native'
@@ -8,7 +8,9 @@ import { validateCreate } from 'src/ducks/storage/validations/create'
 import styles from './styles'
 import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
+import Loader from 'src/components/fw/loader'
 import Quantity from 'src/components/fw/quantity'
+import ToastService from 'src/services/toastService'
 import TextInput from 'src/components/fw/text-input'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
@@ -16,11 +18,13 @@ import StoredItemCard from './components/stored-item-card'
 import CloseKeyboardView from 'src/components/fw/screen-base/close-keyboard-view'
 import RecentRegisterPicker from 'src/components/fw/pickers/recent-register-picker'
 
-const Register = ({
+const Storage = ({
+	working,
 	products,
-	storedItems,
+	setWorking,
 	addStorage,
 	getStorage,
+	storedItems,
 	loadProducts,
 	productTypes,
 	recentProducts,
@@ -33,6 +37,8 @@ const Register = ({
 	const [quantity, setQuantity] = useState(1)
 	const [errors, setErrors] = useState({})
 
+	const scrollViewRef = useRef()
+
 	useEffect(() => {
 		loadProducts()
 		getStorage()
@@ -44,7 +50,7 @@ const Register = ({
 		)
 	}, [selectedProductId])
 
-	const handleAdd = () => {
+	const handleAdd = async () => {
 		const data = {
 			selectedTypeId,
 			selectedProductId,
@@ -53,11 +59,18 @@ const Register = ({
 		}
 
 		if (validateCreate(data, setErrors)) {
-			addStorage(data)
-			setSelectedProductId(0)
-			setSelectedTypeId(0)
-			setAdditionalDescription('')
-			setQuantity(1)
+			setWorking(true)
+			const success = await addStorage(data)
+			if (success) {
+				setSelectedProductId(0)
+				setSelectedTypeId(0)
+				setAdditionalDescription('')
+				setQuantity(1)
+				scrollViewRef.current.scrollToEnd()
+			} else {
+				ToastService.serverError()
+			}
+			setWorking(false)
 		}
 	}
 
@@ -73,11 +86,11 @@ const Register = ({
 					listRecent={recentProducts}
 					selectedId={selectedProductId}
 					setSelectedId={setSelectedProductId}
-					label={translate('register.product')}
-					listLabel={translate('register.products')}
+					label={translate('storage.product')}
+					listLabel={translate('storage.products')}
 					loading={!products || products.length === 0}
 					labelNotRegistered={translate(
-						'register.registerNotListedProduct',
+						'storage.registerNotListedProduct',
 					)}
 				/>
 				<RecentRegisterPicker
@@ -85,28 +98,34 @@ const Register = ({
 					listRecent={recentProductTypes}
 					selectedId={selectedTypeId}
 					setSelectedId={setSelectedTypeId}
-					label={translate('register.productType')}
-					listLabel={translate('register.productTypes')}
+					label={translate('storage.productType')}
+					listLabel={translate('storage.productTypes')}
 					loading={!productTypes || productTypes.length === 0}
 					labelNotRegistered={translate(
-						'register.registerNotListedProductType',
+						'storage.registerNotListedProductType',
 					)}
 				/>
 				<TextInput
 					value={additionalDescription}
 					setValue={setAdditionalDescription}
-					label={translate('register.additionalDescription')}
+					label={translate('storage.additionalDescription')}
 				/>
 				<Quantity
 					value={quantity}
 					setValue={setQuantity}
-					label={translate('register.quantity')}
+					label={translate('storage.quantity')}
 				/>
 				<Space size2 />
-				<Button onPress={handleAdd} label={translate('register.add')} />
+				{working ? (
+					<Loader />
+				) : (
+					<Button onPress={handleAdd} label={translate('storage.add')} />
+				)}
 			</CloseKeyboardView>
 			<View style={styles.storedContainer}>
 				<ScrollView
+					ref={scrollViewRef}
+					persistentScrollbar={true}
 					showsVerticalScrollIndicator={true}
 					style={styles.stored}>
 					{storedItems.map((item, index) => {
@@ -126,18 +145,20 @@ const Register = ({
 	)
 }
 
-Register.navigationOptions = () => ({
-	title: translate('menus.register'),
+Storage.navigationOptions = () => ({
+	title: translate('menus.storage'),
 	headerLeft: props => <ScreenHeader {...props} />,
 })
 
 const mapDispatchToProps = {
 	addStorage: StorageCreators.add,
 	getStorage: StorageCreators.get,
+	setWorking: StorageCreators.setWorking,
 	loadProducts: ProductCreators.loadProducts,
 }
 
 const mapStateToProps = ({ products, storage }) => ({
+	working: storage.working,
 	products: products.products,
 	storedItems: storage.storedItems,
 	productTypes: products.productTypes,
@@ -148,4 +169,4 @@ const mapStateToProps = ({ products, storage }) => ({
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(Register)
+)(Storage)

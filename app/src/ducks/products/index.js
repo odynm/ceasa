@@ -1,6 +1,6 @@
 import HttpService from 'src/services/httpService'
 
-const prefix = 'user/'
+const prefix = 'products/'
 const Types = {
 	SET_PRODUCTS: prefix + 'SET_PRODUCTS',
 }

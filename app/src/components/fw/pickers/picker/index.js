@@ -47,7 +47,7 @@ const Picker = ({
 								text={
 									selected && selected.length > 0
 										? selected
-										: translate('register.select')
+										: translate('storage.select')
 								}
 							/>
 							<View style={styles.pickerIcon}>

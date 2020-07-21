@@ -58,7 +58,7 @@ func Add(orderDto OrderDto, userId int, w http.ResponseWriter) {
 	return
 
 Error:
-	utils.BadRequest(w, "")
+	utils.BadRequest(w, "Order")
 }
 
 func Get(userId int, w http.ResponseWriter) {
