@@ -51,7 +51,7 @@ const Main = ({ logout, navigation, loadLoggedUser, checkTerms }) => {
 			// )
 
 			// if (regularRegistration && !hasRegistrationInProgress) {
-			return navigation.navigate(stacks.menu)
+			return navigation.navigate(screens.sell)
 			// }
 
 			//setHasEmailRegistered(true)

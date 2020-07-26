@@ -3,10 +3,12 @@ import { fv } from 'src/utils/screen'
 import { Text, StyleSheet } from 'react-native'
 import colors from 'src/constants/colors'
 
-const KText = ({ style, text, bold, link }) => {
+const KText = ({ style, text, fontSize, bold, link }) => {
 	const weightStyle = bold ? styles.bold : styles.regular
 	const coloredStyle = link ? { ...weightStyle, ...styles.link } : weightStyle
-	const mergedStyles = { ...styles.font, ...coloredStyle }
+	const fontSizeStyle =
+		fontSize > 0 ? { ...coloredStyle, fontSize: fv(fontSize) } : coloredStyle
+	const mergedStyles = { ...styles.font, ...fontSizeStyle }
 	return <Text style={[mergedStyles, style]}>{text}</Text>
 }
 

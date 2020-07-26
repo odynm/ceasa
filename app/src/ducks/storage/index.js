@@ -30,7 +30,7 @@ const add = item => async (dispatch, getStore) => {
 		product: item.selectedProductId,
 		productType: item.selectedTypeId,
 		description: item.additionalDescription,
-		amount: item.quantity,
+		amount: item.amount,
 	}
 	const { success, data } = await HttpService.post('storage', mappedItemServer)
 
@@ -43,7 +43,7 @@ const add = item => async (dispatch, getStore) => {
 					? productTypes.find(x => x.id === item.selectedTypeId).name
 					: '',
 			description: item.additionalDescription,
-			amount: item.quantity,
+			amount: item.amount,
 		}
 		const newStoredItems = [...storedItems, mappedItemView]
 		dispatch(setStoredItems(newStoredItems))

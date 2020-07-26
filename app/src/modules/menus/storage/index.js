@@ -9,7 +9,7 @@ import styles from './styles'
 import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
 import Loader from 'src/components/fw/loader'
-import Quantity from 'src/components/fw/quantity'
+import Amount from 'src/components/fw/amount'
 import ToastService from 'src/services/toastService'
 import TextInput from 'src/components/fw/text-input'
 import ScreenBase from 'src/components/fw/screen-base'
@@ -34,7 +34,7 @@ const Storage = ({
 	const [selectedTypeId, setSelectedTypeId] = useState(0)
 	const [productTypesFiltered, setProductTypesFiltered] = useState([])
 	const [additionalDescription, setAdditionalDescription] = useState('')
-	const [quantity, setQuantity] = useState(1)
+	const [amount, setAmount] = useState(1)
 	const [errors, setErrors] = useState({})
 
 	const scrollViewRef = useRef()
@@ -55,7 +55,7 @@ const Storage = ({
 			selectedTypeId,
 			selectedProductId,
 			additionalDescription,
-			quantity,
+			amount,
 		}
 
 		if (validateCreate(data, setErrors)) {
@@ -65,7 +65,7 @@ const Storage = ({
 				setSelectedProductId(0)
 				setSelectedTypeId(0)
 				setAdditionalDescription('')
-				setQuantity(1)
+				setAmount(1)
 				scrollViewRef.current.scrollToEnd()
 			} else {
 				ToastService.serverError()
@@ -110,10 +110,10 @@ const Storage = ({
 					setValue={setAdditionalDescription}
 					label={translate('storage.additionalDescription')}
 				/>
-				<Quantity
-					value={quantity}
-					setValue={setQuantity}
-					label={translate('storage.quantity')}
+				<Amount
+					value={amount}
+					setValue={setAmount}
+					label={translate('storage.amount')}
 				/>
 				<Space size2 />
 				{working ? (

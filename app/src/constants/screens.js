@@ -3,6 +3,7 @@ const screens = {
 	introduction: 'Introduction',
 	home: 'Home',
 	login: 'Login',
+	sell: 'Sell',
 }
 
 export default screens

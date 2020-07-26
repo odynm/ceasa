@@ -1,11 +1,11 @@
 import React from 'react'
-import { hp, wp, fv } from 'src/utils/screen'
+import { wp, fv } from 'src/utils/screen'
 import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 import KText from '../ktext'
 import colors from 'src/constants/colors'
 
-const Quantity = ({ label, value, setValue }) => {
-	const setQuantityText = text => {
+const Amount = ({ label, value, setValue }) => {
+	const setAmountText = text => {
 		const number = parseInt(text)
 		setValue(number)
 	}
@@ -31,7 +31,7 @@ const Quantity = ({ label, value, setValue }) => {
 				</TouchableOpacity>
 				<TextInput
 					value={value > 0 ? '' + value : ''}
-					onChangeText={setQuantityText}
+					onChangeText={setAmountText}
 					style={styles.text}
 				/>
 				<TouchableOpacity onPress={onClickMore}>
@@ -80,4 +80,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default Quantity
+export default Amount

@@ -23,11 +23,27 @@
 		"registerNotListedProduct": "Cadastrar produto não listado...",
 		"registerNotListedProductType": "Cadastrar tipo não listado...",
 		"additionalDescription": "Descrição adicional (opcional)",
-		"quantity": "Quantidade",
+		"amount": "Quantidade",
 		"add": "Adicionar",
 		"errors": {
 			"noProduct": "Selecione o produto"
 		}
+	},
+	"sell": {
+		"restart": "Recomeçar venda",
+		"total": "Total:",
+		"generateLoad": "Gerar carregamento",
+		"unitPrice": "Un.",
+		"amount": "Qtde.",
+		"inStock": "Em estoque",
+		"sellProduct": "Vender produto",
+		"sellAvailable": "Disponível",
+		"sellAmount": "Quantidade venda",
+		"sellUnitPrice": "Preço (unidade)",
+		"sellTotal": "Total",
+		"add": "Adicionar",
+		"continue": "Continuar",
+		"errors": {}
 	},
 	"errors": {
 		"serverError": "Não foi possível comunicar com o servidor"

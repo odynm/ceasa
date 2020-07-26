@@ -1,5 +1,5 @@
 import { Header } from 'react-navigation-stack'
-import { Dimensions, PixelRatio } from 'react-native'
+import { Dimensions, PixelRatio, StatusBar } from 'react-native'
 import { widthPercentageToDP as _wp } from 'react-native-responsive-screen'
 
 const _hp = heightPercent => {
@@ -23,4 +23,6 @@ export const hp = height => _hp((height * 100) / heightRatio)
 export const fv = value => (value * Dimensions.get('window').width) / widthRatio
 
 export const getWorkableArea = () =>
-	Dimensions.get('window').height - Header.HEIGHT
+	Dimensions.get('window').height - Header.HEIGHT - StatusBar.currentHeight
+
+export const getWidth = () => Dimensions.get('window').width
