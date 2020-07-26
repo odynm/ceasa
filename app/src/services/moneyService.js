@@ -42,7 +42,22 @@ const textToMoney = (text, currency) => {
 	}
 }
 
+const toMoney = (number, currency) => {
+	if (number && typeof number === 'number') {
+		switch (currency) {
+			case 'BRL':
+				return {
+					text: number.toFixed(2).replace('.', ','),
+					value: number,
+				}
+		}
+	} else {
+		return defaultMoney
+	}
+}
+
 const MoneyService = {
+	toMoney,
 	textToMoney,
 }
 

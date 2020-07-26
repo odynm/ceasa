@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { translate } from 'src/i18n/translate'
 import { View, StyleSheet } from 'react-native'
 import KText from 'src/components/fw/ktext'
@@ -6,12 +6,27 @@ import Space from 'src/components/fw/space'
 import KModal from 'src/components/fw/kmodal'
 import Button from 'src/components/fw/button'
 import Amount from 'src/components/fw/amount'
+import MoneyService from 'src/services/moneyService'
 import MoneyInput from 'src/components/fw/money-input'
 import CloseKeyboardView from 'src/components/fw/screen-base/close-keyboard-view'
 
 const PriceSelect = ({ onClose, open, selectedProduct }) => {
 	const [amount, setAmount] = useState(1)
 	const [price, setPrice] = useState({ text: '', value: 0 })
+	const [total, setTotal] = useState({ text: '0,00', value: 0.0 })
+
+	const updateTotal = () => {
+		setTotal(MoneyService.toMoney(amount * price.value, 'BRL'))
+	}
+
+	const handlePriceChange = value => {
+		setPrice(value)
+		updateTotal()
+	}
+
+	useEffect(() => {
+		updateTotal()
+	}, [amount])
 
 	return (
 		<KModal
@@ -45,14 +60,14 @@ const PriceSelect = ({ onClose, open, selectedProduct }) => {
 					<MoneyInput
 						style={styles.right}
 						value={price}
-						setValue={setPrice}
+						setValue={handlePriceChange}
 						label={translate('sell.sellUnitPrice')}
 					/>
 				</View>
 				<Space />
 				<View style={styles.row}>
 					<KText bold text={translate('sell.sellTotal')} />
-					<KText style={styles.right} bold text={100} />
+					<KText bold style={styles.right} text={total.text} />
 				</View>
 				<Space />
 				<Button small label={translate('sell.add')} onPress={() => {}} />
