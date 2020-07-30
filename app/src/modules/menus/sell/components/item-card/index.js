@@ -4,26 +4,55 @@ import { translate } from 'src/i18n/translate'
 import { View, StyleSheet } from 'react-native'
 import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
+import MoneyService from 'src/services/moneyService'
 
-const ItemCard = ({ product, productType, description, amount }) => {
+const ItemCard = ({
+	total,
+	amount,
+	product,
+	unitPrice,
+	productType,
+	description,
+}) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.row}>
 				<KText bold text={`${product} ${productType}`} />
 			</View>
-			{description && description.length > 0 && (
+			{description && description.length > 0 ? (
 				<View style={styles.row}>
-					<View style={styles.alignRight}>
-						<KText text={description} />
-					</View>
+					<KText text={description} />
 				</View>
+			) : (
+				undefined
 			)}
 			<View style={styles.row}>
-				<KText text={`${translate('sell.unitPrice')} ${'R$ 100,00'} `} />
-				<KText text={`${translate('sell.amount')} ${20}`} />
+				<KText
+					style={styles.itemLabel}
+					fontSize={14}
+					text={`${translate('sell.unitPrice')} `}
+				/>
+				<KText
+					bold
+					text={`${MoneyService.getCurrency().text} ${unitPrice.text} `}
+				/>
+				<KText
+					style={styles.itemLabel}
+					fontSize={14}
+					text={`${translate('sell.amount')}`}
+				/>
+				<KText bold text={`${amount}`} />
 
 				<View style={styles.alignRight}>
-					<KText text={`${translate('sell.total')} ${'R$ 8.000,00'}`} />
+					<KText
+						style={styles.itemLabel}
+						fontSize={14}
+						text={`${translate('sell.total')}`}
+					/>
+					<KText
+						bold
+						text={`${MoneyService.getCurrency().text} ${total.text}`}
+					/>
 				</View>
 			</View>
 		</View>
@@ -46,6 +75,9 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		marginLeft: 'auto',
 		marginRight: 0,
+	},
+	itemLabel: {
+		lineHeight: hp(25),
 	},
 })
 

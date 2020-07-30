@@ -41,9 +41,17 @@
 		"sellAmount": "Quantidade venda",
 		"sellUnitPrice": "Preço (unidade)",
 		"sellTotal": "Total",
+		"exceededWarning": "Excede estoque",
+		"finishSell": "Finalizar venda",
+		"areYouSure": "Você quer confirmar a venda?",
+		"dontHaveInStorage": "Falta no estoque:",
+		"yes": "Sim",
+		"no": "Não",
 		"add": "Adicionar",
 		"continue": "Continuar",
-		"errors": {}
+		"errors": {
+			"priceRequired": "Digite o preço"
+		}
 	},
 	"errors": {
 		"serverError": "Não foi possível comunicar com o servidor"

@@ -4,10 +4,11 @@ import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
 
-const KModal = ({ children, onClose, open, big, header }) => {
-	const containerStyle = big
-		? styles.container
-		: [styles.container, { height: wp(325), marginBottom: hp(150) }]
+const KModal = ({ children, onClose, open, size, header }) => {
+	const containerStyle =
+		size > 0
+			? [styles.container, { height: hp(size), marginBottom: hp(size) / 2 }]
+			: styles.container
 
 	return (
 		open && (
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: wp(10),
 	},
 	content: {
+		flex: 1,
 		marginBottom: hp(20),
 		marginHorizontal: wp(10),
 		marginTop: hp(10),

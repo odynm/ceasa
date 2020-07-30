@@ -9,6 +9,9 @@ const styles = StyleSheet.create({
 	rowAlignText: {
 		alignSelf: 'center',
 	},
+	items: {
+		marginTop: hp(10),
+	},
 	addButton: {
 		alignItems: 'center',
 		borderRadius: hp(25),

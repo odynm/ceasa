@@ -1,21 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
+import { Creators as OrderCreators } from 'src/ducks/order'
 import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as ProductCreators } from 'src/ducks/products'
-import { View, TouchableOpacity, ScrollView, CheckBox } from 'react-native'
+import { View, TouchableOpacity, ScrollView } from 'react-native'
 import styles from './styles'
 import Space from 'src/components/fw/space'
 import KText from 'src/components/fw/ktext'
 import ItemCard from './components/item-card'
 import Button from 'src/components/fw/button'
 import AddProduct from './components/add-product'
+import MoneyService from 'src/services/moneyService'
+import CheckBox from '@react-native-community/checkbox'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
 
-const Sell = ({ getStorage, storedItems, loadProducts }) => {
+const Sell = ({
+	orderItems,
+	getStorage,
+	storedItems,
+	loadProducts,
+	addOrderItem,
+}) => {
 	const [errors, setErrors] = useState({})
-	const [totalPrice, setTotalPrice] = useState(0)
+	const [generateLoad, setGenerateLoad] = useState(true)
+	const [totalPrice, setTotalPrice] = useState({
+		text: '0,00',
+		value: 0.0,
+	})
 
 	const [openAddMenu, setOpenAddMenu] = useState(false)
 
@@ -24,8 +37,17 @@ const Sell = ({ getStorage, storedItems, loadProducts }) => {
 		getStorage()
 	}, [])
 
-	const addProduct = id => {
-		console.warn(id)
+	useEffect(() => {
+		setTotalPrice(
+			orderItems.reduce((prev, cur) => MoneyService.add(prev, cur.total), {
+				text: '0,00',
+				value: 0.0,
+			}),
+		)
+	}, [orderItems])
+
+	const addProduct = product => {
+		addOrderItem(product)
 	}
 
 	return (
@@ -34,8 +56,18 @@ const Sell = ({ getStorage, storedItems, loadProducts }) => {
 			useKeyboardAvoid={false}
 			useKeyboardClose={false}>
 			<Button label={translate('sell.restart')} />
-			<ScrollView>
-				<ItemCard />
+			<ScrollView style={styles.items}>
+				{orderItems.map((item, index) => (
+					<ItemCard
+						key={index}
+						total={item.total}
+						amount={item.amount}
+						unitPrice={item.unitPrice}
+						product={item.productName}
+						description={item.description}
+						productType={item.productTypeName}
+					/>
+				))}
 			</ScrollView>
 			<View style={styles.footer}>
 				<View style={styles.row}>
@@ -49,7 +81,7 @@ const Sell = ({ getStorage, storedItems, loadProducts }) => {
 						bold
 						fontSize={24}
 						style={styles.rowAlignText}
-						text={totalPrice}
+						text={`${MoneyService.getCurrency().text} ${totalPrice.text}`}
 					/>
 					<TouchableOpacity
 						onPress={() => setOpenAddMenu(true)}
@@ -64,7 +96,11 @@ const Sell = ({ getStorage, storedItems, loadProducts }) => {
 						style={styles.rowAlignText}
 						text={translate('sell.generateLoad')}
 					/>
-					<CheckBox style={styles.checkbox} />
+					<CheckBox
+						value={generateLoad}
+						style={styles.checkbox}
+						onValueChange={checked => setGenerateLoad(checked)}
+					/>
 				</View>
 				<Space size2 />
 				<Button label={translate('sell.continue')} />
@@ -86,10 +122,12 @@ Sell.navigationOptions = () => ({
 
 const mapDispatchToProps = {
 	getStorage: StorageCreators.get,
+	addOrderItem: OrderCreators.addOrderItem,
 	loadProducts: ProductCreators.loadProducts,
 }
 
-const mapStateToProps = ({ products, storage }) => ({
+const mapStateToProps = ({ products, storage, order }) => ({
+	orderItems: order.orderItems,
 	storedItems: storage.storedItems,
 })
 

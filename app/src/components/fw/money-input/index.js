@@ -6,7 +6,7 @@ import colors from 'src/constants/colors'
 import Error from 'src/components/fw/error'
 import MoneyService, { defaultMoney } from 'src/services/moneyService'
 
-const MoneyInput = ({ label, value, setValue, errorMessage }) => {
+const MoneyInput = ({ max, label, value, setValue, errorMessage }) => {
 	const [inputText, setInputText] = useState(value.text)
 
 	const handleChange = text => {
@@ -14,19 +14,21 @@ const MoneyInput = ({ label, value, setValue, errorMessage }) => {
 			setValue(defaultMoney)
 			return
 		}
-		const money = MoneyService.textToMoney(text, 'BRL')
+		if (text.length > ('' + max).length + 3) {
+			return
+		}
+		const money = MoneyService.textToMoney(text)
 
 		setInputText(money.text)
 		setValue(money)
 	}
 
 	return (
-		<>
+		<View>
 			<View style={styles.row}>
 				<KText bold text={label} />
 				<View style={styles.right}>
-					{/* TODO: make the currency type configurable in a ducks */}
-					<KText bold text={'R$'} />
+					<KText bold text={MoneyService.getCurrency().text} />
 					<View style={styles.inputContainer}>
 						<RNTextInput
 							keyboardType={'number-pad'}
@@ -37,8 +39,10 @@ const MoneyInput = ({ label, value, setValue, errorMessage }) => {
 					</View>
 				</View>
 			</View>
-			<Error text={errorMessage} />
-		</>
+			<View style={styles.error}>
+				<Error text={errorMessage} />
+			</View>
+		</View>
 	)
 }
 
@@ -52,6 +56,11 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		marginLeft: 'auto',
 		marginRight: 0,
+	},
+	error: {
+		marginLeft: 'auto',
+		marginRight: 0,
+		marginTop: -hp(15),
 	},
 	inputContainer: {
 		borderBottomColor: colors.gray,

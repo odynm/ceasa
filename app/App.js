@@ -5,6 +5,7 @@ import i18n from 'i18n-js'
 import store from 'src/ducks'
 import Toast from 'react-native-easy-toast'
 import HttpService from 'src/services/httpService'
+import MoneyService from 'src/services/moneyService'
 import ToastService from 'src/services/toastService'
 import AppContainer, { navigationRef } from 'src/router'
 import LocationService from 'src/services/locationService'
@@ -25,6 +26,7 @@ const App = () => {
 		}
 
 		HttpService.initialize()
+		MoneyService.initialize()
 		ToastService.initialize(toastRef)
 
 		await LocationService.initialize()

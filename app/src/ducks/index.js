@@ -1,5 +1,6 @@
-//import app from './app'
+import app from './app'
 import user from './user'
+import order from './order'
 import terms from './terms'
 import storage from './storage'
 import products from './products'
@@ -9,8 +10,9 @@ import logger from 'redux-logger'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 
 const reducers = combineReducers({
-	//app,
+	app,
 	user,
+	order,
 	terms,
 	storage,
 	products,

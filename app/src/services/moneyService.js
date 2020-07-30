@@ -1,8 +1,21 @@
+import store from 'src/ducks'
+
 export const defaultMoney = {
 	text: '',
 	raw: '',
 	value: 0.0,
 }
+
+const currency = { name: '', text: '', separator: '' }
+
+const initialize = () => {
+	const currencyStore = store.getState().app.currency
+	currency.name = currencyStore.name
+	currency.text = currencyStore.text
+	currency.separator = currencyStore.separator
+}
+
+export const getCurrency = () => currency
 
 const formatMoneyText = (text, separator) => {
 	const money = defaultMoney
@@ -12,21 +25,18 @@ const formatMoneyText = (text, separator) => {
 		return money
 	}
 
-	if (rawText.length > 2) {
+	if (rawText.length === 1) {
+		money.text = '0.0' + rawText
+	} else if (rawText.length === 2) {
+		money.text = '0.' + rawText
+	} else {
 		money.text =
 			rawText.slice(0, rawText.length - 2) +
 			'.' +
 			rawText.slice(rawText.length - 2)
-	} else if (rawText.length === 1) {
-		money.text = '0.0' + rawText
-	} else {
-		money.text = '0.' + rawText
 	}
 
 	const number = parseFloat(money.text)
-	if (number > 9999) {
-		return
-	}
 
 	money.value = number
 	money.raw = text
@@ -35,16 +45,13 @@ const formatMoneyText = (text, separator) => {
 	return money
 }
 
-const textToMoney = (text, currency) => {
-	switch (currency) {
-		case 'BRL':
-			return formatMoneyText(text, ',')
-	}
+const textToMoney = text => {
+	return formatMoneyText(text, currency.separator)
 }
 
-const toMoney = (number, currency) => {
+const toMoney = number => {
 	if (number && typeof number === 'number') {
-		switch (currency) {
+		switch (currency.name) {
 			case 'BRL':
 				return {
 					text: number.toFixed(2).replace('.', ','),
@@ -56,8 +63,16 @@ const toMoney = (number, currency) => {
 	}
 }
 
+const add = (a, b) => {
+	const total = a.value + b.value
+	return toMoney(total)
+}
+
 const MoneyService = {
+	add,
 	toMoney,
+	initialize,
+	getCurrency,
 	textToMoney,
 }
 

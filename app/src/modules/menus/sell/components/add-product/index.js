@@ -26,6 +26,7 @@ const AddProduct = ({ items, addProduct, open, setOpen }) => {
 			/>
 			<PriceSelect
 				onClose={onClose}
+				addProduct={addProduct}
 				open={open && sellModalOpen}
 				selectedProduct={selectedProduct}
 			/>
