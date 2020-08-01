@@ -5,6 +5,7 @@ const Types = {
 	SET_LOADING: prefix + 'SET_LOADING',
 	SET_WORKING: prefix + 'SET_WORKING',
 	SET_STORED_ITEMS: prefix + 'SET_STORED_ITEMS',
+	SET_STORED_ITEMS_ORDER_AWARE: prefix + 'SET_STORED_ITEMS_ORDER_AWARE',
 }
 
 const setLoading = loading => ({
@@ -22,8 +23,25 @@ const setStoredItems = storedItems => ({
 	type: Types.SET_STORED_ITEMS,
 })
 
+const setStoredItemsOrderAware = storedItemsOrderAware => ({
+	payload: { storedItemsOrderAware },
+	type: Types.SET_STORED_ITEMS_ORDER_AWARE,
+})
+
+const decreaseItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
+	const { storedItemsOrderAware } = getStore().storage
+	const index = storedItemsOrderAware.findIndex(x => x.id === id)
+	const item = storedItemsOrderAware[index]
+	const newAmount = item.amount - amount >= 0 ? item.amount - amount : 0
+	const newStoredItemsOrderAware = [...storedItemsOrderAware]
+	if (item) {
+		newStoredItemsOrderAware[index].amount = newAmount
+		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
+	}
+}
+
 const add = item => async (dispatch, getStore) => {
-	const { storedItems } = getStore().storage
+	const { storedItems, storedItemsOrderAware } = getStore().storage
 	const { products, productTypes } = getStore().products
 
 	const mappedItemServer = {
@@ -47,6 +65,12 @@ const add = item => async (dispatch, getStore) => {
 		}
 		const newStoredItems = [...storedItems, mappedItemView]
 		dispatch(setStoredItems(newStoredItems))
+
+		const newStoredItemsOrderAware = [
+			...storedItemsOrderAware,
+			mappedItemView,
+		]
+		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
 	}
 
 	return success
@@ -57,6 +81,7 @@ const get = () => async dispatch => {
 	const { data, success } = await HttpService.get('storage')
 	if (success) {
 		dispatch(setStoredItems(data))
+		dispatch(setStoredItemsOrderAware(data))
 	}
 	dispatch(setLoading(false))
 }
@@ -65,12 +90,14 @@ const initialState = {
 	loading: false,
 	working: false,
 	storedItems: [],
+	storedItemsOrderAware: [],
 }
 
 export const Creators = {
 	add,
 	get,
 	setWorking,
+	decreaseItemsOrder,
 }
 
 export default function reducer(state = initialState, action) {
@@ -81,6 +108,11 @@ export default function reducer(state = initialState, action) {
 			return { ...state, loading: action.payload.working }
 		case Types.SET_STORED_ITEMS:
 			return { ...state, storedItems: action.payload.storedItems }
+		case Types.SET_STORED_ITEMS_ORDER_AWARE:
+			return {
+				...state,
+				storedItemsOrderAware: action.payload.storedItemsOrderAware,
+			}
 		default:
 			return state
 	}

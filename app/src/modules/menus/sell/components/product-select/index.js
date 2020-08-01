@@ -14,10 +14,10 @@ const ProductSelect = ({ onClose, open, items, selectProduct }) => {
 							key={index}
 							onPress={() => selectProduct(item)}>
 							<StoredItemCard
-								product={item.productName}
-								productType={item.productTypeName}
-								description={item.description}
 								amount={item.amount}
+								product={item.productName}
+								description={item.description}
+								productType={item.productTypeName}
 							/>
 						</TouchableOpacity>
 					))}

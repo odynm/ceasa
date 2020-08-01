@@ -36,6 +36,7 @@ const PriceSelect = ({ open, onClose, addProduct, selectedProduct }) => {
 	const addItem = () => {
 		addProduct({
 			amount: amount,
+			id: selectedProduct.id,
 			total: { text: total.text, value: total.value }, // to pass by value
 			unitPrice: { text: price.text, value: price.value }, // to pass by value
 			description: selectedProduct.description,

@@ -4,7 +4,7 @@ import ProductSelect from '../product-select'
 
 const AddProduct = ({ items, addProduct, open, setOpen }) => {
 	const [sellModalOpen, setSellModalOpen] = useState(false)
-	const [selectedProduct, setSelectedProduct] = useState(0)
+	const [selectedProduct, setSelectedProduct] = useState({})
 
 	const selectProduct = item => {
 		setSellModalOpen(true)

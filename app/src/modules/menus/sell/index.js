@@ -19,9 +19,10 @@ import ScreenHeader from 'src/components/fw/screen-header'
 const Sell = ({
 	orderItems,
 	getStorage,
-	storedItems,
 	loadProducts,
 	addOrderItem,
+	decreaseItemsOrder,
+	storedItemsOrderAware,
 }) => {
 	const [errors, setErrors] = useState({})
 	const [generateLoad, setGenerateLoad] = useState(true)
@@ -48,6 +49,7 @@ const Sell = ({
 
 	const addProduct = product => {
 		addOrderItem(product)
+		decreaseItemsOrder({ id: product.id, amount: product.amount })
 	}
 
 	return (
@@ -107,9 +109,9 @@ const Sell = ({
 			</View>
 			<AddProduct
 				open={openAddMenu}
-				items={storedItems}
 				addProduct={addProduct}
 				setOpen={setOpenAddMenu}
+				items={storedItemsOrderAware}
 			/>
 		</ScreenBase>
 	)
@@ -124,11 +126,12 @@ const mapDispatchToProps = {
 	getStorage: StorageCreators.get,
 	addOrderItem: OrderCreators.addOrderItem,
 	loadProducts: ProductCreators.loadProducts,
+	decreaseItemsOrder: StorageCreators.decreaseItemsOrder,
 }
 
 const mapStateToProps = ({ products, storage, order }) => ({
 	orderItems: order.orderItems,
-	storedItems: storage.storedItems,
+	storedItemsOrderAware: storage.storedItemsOrderAware,
 })
 
 export default connect(
