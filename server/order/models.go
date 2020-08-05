@@ -17,7 +17,7 @@ const (
 type ProductDto struct {
 	StorageItemId int `json:"storageItem"`
 	UnitPrice     int `json:"unitPrice"`
-	Quantity      int `json:"quantity"`
+	Amount      int `json:"amount"`
 }
 
 type ProductCreation struct {
@@ -26,8 +26,8 @@ type ProductCreation struct {
 	ProductTypeId   int
 	DescriptionId   int
 	UnitPrice       int
-	Quantity        int
-	StorageQuantity int
+	Amount        int
+	StorageAmount int
 }
 
 type OrderDto struct {

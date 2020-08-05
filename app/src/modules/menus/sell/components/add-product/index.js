@@ -18,18 +18,22 @@ const AddProduct = ({ items, addProduct, open, setOpen }) => {
 
 	return (
 		<>
-			<ProductSelect
-				items={items}
-				onClose={onClose}
-				open={open && !sellModalOpen}
-				selectProduct={selectProduct}
-			/>
-			<PriceSelect
-				onClose={onClose}
-				addProduct={addProduct}
-				open={open && sellModalOpen}
-				selectedProduct={selectedProduct}
-			/>
+			{open ? (
+				<>
+					<ProductSelect
+						items={items}
+						onClose={onClose}
+						open={open && !sellModalOpen}
+						selectProduct={selectProduct}
+					/>
+					<PriceSelect
+						onClose={onClose}
+						addProduct={addProduct}
+						open={open && sellModalOpen}
+						selectedProduct={selectedProduct}
+					/>
+				</>
+			) : null}
 		</>
 	)
 }

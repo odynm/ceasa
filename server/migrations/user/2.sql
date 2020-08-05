@@ -72,8 +72,8 @@ CREATE TABLE _user_.order_product
 (
     id int NOT NULL DEFAULT nextval('_user_.order_product_id_seq'::regclass),
     unit_price int NOT NULL,
-    quantity int NOT NULL,
-    storage_quantity int NOT NULL,  
+    amount int NOT NULL,
+    storage_amount int NOT NULL,  
     order_id int NOT NULL,
     product_id int NOT NULL,
     product_type_id int,

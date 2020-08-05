@@ -39,7 +39,8 @@
 		"react-navigation-tabs": "^2.8.13",
 		"redux-logger": "^3.0.6",
 		"redux-thunk": "^2.3.0",
-		"retry-axios": "^2.2.1"
+		"retry-axios": "^2.2.1",
+		"rfdc": "^1.1.4"
 	},
 	"devDependencies": {
 		"@babel/core": "7.9.6",

@@ -128,17 +128,19 @@ const Storage = ({
 					persistentScrollbar={true}
 					showsVerticalScrollIndicator={true}
 					style={styles.stored}>
-					{storedItems.map((item, index) => {
-						return (
-							<StoredItemCard
-								key={index}
-								product={item.productName}
-								productType={item.productTypeName}
-								description={item.description}
-								amount={item.amount}
-							/>
-						)
-					})}
+					{storedItems && storedItems.length > 0
+						? storedItems.map((item, index) => {
+								return (
+									<StoredItemCard
+										key={index}
+										product={item.productName}
+										productType={item.productTypeName}
+										description={item.description}
+										amount={item.amount}
+									/>
+								)
+						  })
+						: null}
 				</ScrollView>
 			</View>
 		</ScreenBase>

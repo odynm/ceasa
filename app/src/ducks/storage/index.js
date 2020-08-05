@@ -1,3 +1,4 @@
+import rfdc from 'rfdc'
 import HttpService from 'src/services/httpService'
 
 const prefix = 'storage/'
@@ -27,6 +28,13 @@ const setStoredItemsOrderAware = storedItemsOrderAware => ({
 	payload: { storedItemsOrderAware },
 	type: Types.SET_STORED_ITEMS_ORDER_AWARE,
 })
+
+const resetStorageOrder = () => (dispatch, getState) => {
+	const { storedItems } = getState().storage
+	dispatch(setStoredItemsOrderAware(rfdc()(storedItems)))
+	dispatch(setLoading(false))
+	dispatch(setWorking(false))
+}
 
 const decreaseItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
 	const { storedItemsOrderAware } = getStore().storage
@@ -63,13 +71,15 @@ const add = item => async (dispatch, getStore) => {
 			description: item.additionalDescription,
 			amount: item.amount,
 		}
-		const newStoredItems = [...storedItems, mappedItemView]
+		const current = storedItems && storedItems.length > 0 ? storedItems : []
+		const newStoredItems = [...current, mappedItemView]
 		dispatch(setStoredItems(newStoredItems))
 
-		const newStoredItemsOrderAware = [
-			...storedItemsOrderAware,
-			mappedItemView,
-		]
+		const currentOrderAware =
+			storedItemsOrderAware && storedItemsOrderAware.length > 0
+				? storedItemsOrderAware
+				: []
+		const newStoredItemsOrderAware = [...currentOrderAware, mappedItemView]
 		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
 	}
 
@@ -81,7 +91,7 @@ const get = () => async dispatch => {
 	const { data, success } = await HttpService.get('storage')
 	if (success) {
 		dispatch(setStoredItems(data))
-		dispatch(setStoredItemsOrderAware(data))
+		dispatch(setStoredItemsOrderAware(rfdc()(data)))
 	}
 	dispatch(setLoading(false))
 }
@@ -97,6 +107,7 @@ export const Creators = {
 	add,
 	get,
 	setWorking,
+	resetStorageOrder,
 	decreaseItemsOrder,
 }
 

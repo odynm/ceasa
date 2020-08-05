@@ -4,19 +4,37 @@ import { TouchableOpacity, StyleSheet, View } from 'react-native'
 import KText from '../ktext'
 import colors from 'src/constants/colors'
 
-const Button = ({ tiny, small, label, onPress, style, textStyle }) => {
+const Button = ({
+	tiny,
+	small,
+	label,
+	style,
+	onPress,
+	disabled,
+	textStyle,
+}) => {
 	const containerStyles = small
 		? [styles.container, { width: wp(280) }]
 		: tiny
 		? [styles.container, { width: wp(140) }]
 		: styles.container
 
-	const mergedStyles = [containerStyles, style]
-	const mergedTextStyles = [styles.text, textStyle]
+	const disabledStyles = disabled
+		? [containerStyles, { borderColor: colors.gray }]
+		: containerStyles
+	const disabledTextStyles = disabled
+		? [styles.text, { color: colors.gray }]
+		: styles.text
+
+	const mergedStyles = [disabledStyles, style]
+	const mergedTextStyles = [disabledTextStyles, textStyle]
 
 	return (
 		<View style={mergedStyles}>
-			<TouchableOpacity onPress={onPress}>
+			<TouchableOpacity
+				onPress={() => {
+					if (!disabled) onPress()
+				}}>
 				<KText style={mergedTextStyles} bold text={label} />
 			</TouchableOpacity>
 		</View>

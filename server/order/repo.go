@@ -12,11 +12,11 @@ func DbCreateProduct(product ProductCreation, userId int) int {
 	var id int
 
 	statement := fmt.Sprintf(`
-			INSERT INTO %v."order_product" (order_id, product_id, product_type_id, description_id, quantity, storage_quantity, unit_price)
+			INSERT INTO %v."order_product" (order_id, product_id, product_type_id, description_id, amount, storage_amount, unit_price)
 			VALUES ($1, $2, $3, $4, $5, $6, $7)
 			RETURNING id`, schema)
 	err := db.Instance.Db.
-		QueryRow(statement, product.OrderId, product.ProductId, product.ProductTypeId, product.DescriptionId, product.Quantity, product.StorageQuantity, product.UnitPrice).
+		QueryRow(statement, product.OrderId, product.ProductId, product.ProductTypeId, product.DescriptionId, product.Amount, product.StorageAmount, product.UnitPrice).
 		Scan(&id)
 	if err != nil {
 		goto Error

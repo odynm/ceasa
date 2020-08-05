@@ -9,7 +9,7 @@ import (
 	"../utils"
 )
 
-func Add(orderDto OrderDto, userId int, w http.ResponseWriter) {
+func Add(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	var clientId int
 	var orderId int
 	var order OrderCreation
@@ -33,32 +33,33 @@ func Add(orderDto OrderDto, userId int, w http.ResponseWriter) {
 	for _, product := range orderDto.Products {
 		storageItem := storage.DbGetById(product.StorageItemId, userId)
 
-		var quantity int
-		if storageItem.Amount < product.Quantity {
-			quantity = storageItem.Amount
+		var amount int
+		if storageItem.Amount < product.Amount {
+			amount = storageItem.Amount
 		} else {
-			quantity = product.Quantity
+			amount = product.Amount
 		}
 		productCreation := ProductCreation{
-			OrderId:         orderId,
-			ProductId:       storageItem.ProductId,
-			ProductTypeId:   storageItem.ProductTypeId,
-			DescriptionId:   storageItem.DescriptionId,
-			UnitPrice:       product.UnitPrice,
-			Quantity:        product.Quantity,
-			StorageQuantity: quantity,
+			OrderId:       orderId,
+			ProductId:     storageItem.ProductId,
+			ProductTypeId: storageItem.ProductTypeId,
+			DescriptionId: storageItem.DescriptionId,
+			UnitPrice:     product.UnitPrice,
+			Amount:        product.Amount,
+			StorageAmount: amount,
 		}
 
-		if storage.DbUpdateAmount(product.StorageItemId, storageItem.Amount-quantity, userId) {
+		if storage.DbUpdateAmount(product.StorageItemId, storageItem.Amount-amount, userId) {
 			DbCreateProduct(productCreation, userId)
 		} else {
 			goto Error
 		}
 	}
-	return
+	return orderId
 
 Error:
 	utils.BadRequest(w, "Order")
+	return 0
 }
 
 func Get(userId int, w http.ResponseWriter) {

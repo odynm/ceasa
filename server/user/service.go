@@ -22,7 +22,7 @@ func CreateUser(userDto UserDto, w http.ResponseWriter) {
 	id := DbGetId(userDto.Login)
 	if id == 0 {
 		login := strings.ToUpper(userDto.Login)
-		hash := utils.GetHash(userDto.Login + "@" + userDto.Pass)
+		hash := utils.GetHash(login + "@" + userDto.Pass)
 		permissions := int(1) // Padrão vendedor
 		DbCreateUser(login, hash, permissions)
 	} else {

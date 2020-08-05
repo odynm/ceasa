@@ -36,21 +36,32 @@
 		"unitPrice": "Un.",
 		"amount": "Qtde.",
 		"inStock": "Em estoque",
+		"emptyStorage": "O estoque está vazio",
+		"noItemsAdded": "Nenhum produto adicionado",
 		"sellProduct": "Vender produto",
 		"sellAvailable": "Disponível",
 		"sellAmount": "Quantidade venda",
 		"sellUnitPrice": "Preço (unidade)",
 		"sellTotal": "Total",
+		"clientKey": "Nome/Placa/Box",
+		"clientPlace": "Lugar (opcional)",
+		"clientVehicle": "Veículo (opcional)",
 		"exceededWarning": "Excede estoque",
-		"finishSell": "Finalizar venda",
-		"areYouSure": "Você quer confirmar a venda?",
-		"dontHaveInStorage": "Falta no estoque:",
-		"yes": "Sim",
-		"no": "Não",
 		"add": "Adicionar",
 		"continue": "Continuar",
+		"addSell": "Adicionar Venda",
+		"added": "Venda adicionada!",
+		"modal": {
+			"finishSell": "Finalizar venda",
+			"areYouSure": "Você quer confirmar a venda?",
+			"dontHaveInStorage": "Falta no estoque:",
+			"yes": "Sim",
+			"no": "Não"
+		},
 		"errors": {
-			"priceRequired": "Digite o preço"
+			"priceRequired": "Digite o preço",
+			"noItems": "Adicione um produto antes de continuar",
+			"insertClient": "Digite informação do cliente"
 		}
 	},
 	"errors": {

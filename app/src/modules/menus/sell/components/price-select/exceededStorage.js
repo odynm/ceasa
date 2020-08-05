@@ -20,9 +20,9 @@ const ModalExceededStorage = ({
 			size={250}
 			open={open}
 			onClose={handleCloseExceededStorage}
-			header={translate('sell.finishSell')}>
-			<KText fontSize={18} bold text={translate('sell.areYouSure')} />
-			<KText bold text={translate('sell.dontHaveInStorage')} />
+			header={translate('sell.modal.finishSell')}>
+			<KText fontSize={18} bold text={translate('sell.modal.areYouSure')} />
+			<KText bold text={translate('sell.modal.dontHaveInStorage')} />
 			<Space />
 			<View style={styles.row}>
 				<KText
@@ -42,10 +42,14 @@ const ModalExceededStorage = ({
 					tiny
 					style={styles.redButtonView}
 					textStyle={styles.redButtonText}
-					label={translate('sell.no')}
+					label={translate('sell.modal.no')}
 					onPress={handleCloseExceededStorage}
 				/>
-				<Button tiny label={translate('sell.yes')} onPress={addItem} />
+				<Button
+					tiny
+					label={translate('sell.modal.yes')}
+					onPress={addItem}
+				/>
 			</View>
 		</KModal>
 	)

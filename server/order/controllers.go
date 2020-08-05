@@ -20,7 +20,10 @@ func add(w http.ResponseWriter, r *http.Request) {
 			utils.BadRequest(w, "Order format is incorrect")
 		}
 
-		Add(orderDto, userId, w)
+		result := Add(orderDto, userId, w)
+		if result > 0 {
+			utils.Success(w, result)
+		}
 	}
 }
 

@@ -9,8 +9,25 @@ const styles = StyleSheet.create({
 	rowAlignText: {
 		alignSelf: 'center',
 	},
+	totalRow: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		height: hp(50),
+	},
+	totalRowInside: {
+		flexDirection: 'row',
+		marginLeft: 0,
+		marginRight: 'auto',
+	},
 	items: {
 		marginTop: hp(10),
+	},
+	clientView: {
+		marginTop: hp(10),
+		height: hp(350),
+	},
+	centerText: {
+		textAlign: 'center',
 	},
 	addButton: {
 		alignItems: 'center',
