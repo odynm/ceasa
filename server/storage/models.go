@@ -1,5 +1,7 @@
 package storage
 
+import "database/sql"
+
 type ItemDto struct {
 	Product     int    `json:"product"`
 	ProductType int    `json:"productType"`
@@ -18,9 +20,9 @@ type StorageItemFull struct {
 }
 
 type StorageItem struct {
-	Id            int `json:"id"`
-	ProductId     int `json:"productId"`
-	ProductTypeId int `json:"productTypeId"`
-	DescriptionId int `json:"description"`
-	Amount        int `json:"amount"`
+	Id            int           `json:"id"`
+	ProductId     int           `json:"productId"`
+	ProductTypeId sql.NullInt32 `json:"productTypeId"`
+	DescriptionId sql.NullInt32 `json:"description"`
+	Amount        int           `json:"amount"`
 }

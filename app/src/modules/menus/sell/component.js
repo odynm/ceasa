@@ -14,7 +14,7 @@ import ScreenBase from 'src/components/fw/screen-base'
 import CheckBox from '@react-native-community/checkbox'
 import CloseKeyboardView from 'src/components/fw/screen-base/close-keyboard-view'
 
-const SellComponent = (
+const SellComponent = ({
 	client,
 	errors,
 	working,
@@ -22,6 +22,7 @@ const SellComponent = (
 	setClient,
 	clientStep,
 	orderItems,
+	totalPrice,
 	handlePress,
 	handleClear,
 	openAddMenu,
@@ -29,8 +30,7 @@ const SellComponent = (
 	setOpenAddMenu,
 	setGenerateLoad,
 	storedItemsOrderAware,
-	totalPrice = { text: '0,00' },
-) => {
+}) => {
 	return (
 		<ScreenBase
 			useScroll={false}

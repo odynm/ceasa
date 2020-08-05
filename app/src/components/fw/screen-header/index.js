@@ -14,27 +14,37 @@ const hitSlop = {
 	top: 10,
 }
 
-const ScreenHeader = ({ noBack, navigation }) => (
-	<View style={styles.container}>
-		{noBack ? (
-			<View style={styles.backButton} />
-		) : (
-			<TouchableOpacity
-				hitSlop={hitSlop}
-				activeOpacity={0.3}
-				style={styles.backButton}
-				onPress={() => navigation.goBack(null)}>
-				<SvgXml
-					xml={svgBack}
-					stroke={colors.primary}
-					strokeWidth="5"
-					strokeLinejoin={'round'}
-					strokeLinecap={'round'}
-				/>
-			</TouchableOpacity>
-		)}
-	</View>
-)
+const ScreenHeader = ({ noBack, navigation, customFunction }) => {
+	const handlePress = () => {
+		if (customFunction) {
+			customFunction()
+		} else {
+			navigation.goBack(null)
+		}
+	}
+
+	return (
+		<View style={styles.container}>
+			{noBack ? (
+				<View style={styles.backButton} />
+			) : (
+				<TouchableOpacity
+					hitSlop={hitSlop}
+					activeOpacity={0.3}
+					style={styles.backButton}
+					onPress={handlePress}>
+					<SvgXml
+						xml={svgBack}
+						stroke={colors.primary}
+						strokeWidth="5"
+						strokeLinejoin={'round'}
+						strokeLinecap={'round'}
+					/>
+				</TouchableOpacity>
+			)}
+		</View>
+	)
+}
 
 const styles = StyleSheet.create({
 	backButton: {

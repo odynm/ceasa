@@ -1,6 +1,7 @@
 package order
 
 import (
+	"database/sql"
 	"time"
 
 	"../client"
@@ -17,15 +18,15 @@ const (
 type ProductDto struct {
 	StorageItemId int `json:"storageItem"`
 	UnitPrice     int `json:"unitPrice"`
-	Amount      int `json:"amount"`
+	Amount        int `json:"amount"`
 }
 
 type ProductCreation struct {
-	OrderId         int
-	ProductId       int
-	ProductTypeId   int
-	DescriptionId   int
-	UnitPrice       int
+	OrderId       int
+	ProductId     int
+	ProductTypeId sql.NullInt32
+	DescriptionId sql.NullInt32
+	UnitPrice     int
 	Amount        int
 	StorageAmount int
 }

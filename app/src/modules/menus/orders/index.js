@@ -4,7 +4,7 @@ import { translate } from 'src/i18n/translate'
 import KText from 'src/components/fw/ktext'
 import ScreenHeader from 'src/components/fw/screen-header'
 
-const Home = () => {
+const Orders = () => {
 	return (
 		<View>
 			<KText text={'Hello World Again'} />
@@ -13,9 +13,9 @@ const Home = () => {
 	)
 }
 
-Home.navigationOptions = () => ({
+Orders.navigationOptions = () => ({
 	title: translate('menus.home'),
-	headerLeft: props => <ScreenHeader noBack {...props} />,
+	headerLeft: props => <ScreenHeader {...props} />,
 })
 
-export default Home
+export default Orders

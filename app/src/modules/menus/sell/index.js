@@ -6,12 +6,13 @@ import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as ProductCreators } from 'src/ducks/products'
 import { validateCreate } from 'src/ducks/order/validations/create'
 import SellComponent from './component'
+import SellHeader from './components/header'
 import MoneyService from 'src/services/moneyService'
 import ToastService from 'src/services/toastService'
-import ScreenHeader from 'src/components/fw/screen-header'
 
 const Sell = ({
 	client,
+	clientStep,
 	setClient,
 	sendOrder,
 	resetOrder,
@@ -20,6 +21,7 @@ const Sell = ({
 	loadProducts,
 	addOrderItem,
 	generateLoad,
+	setClientStep,
 	setGenerateLoad,
 	resetStorageOrder,
 	decreaseItemsOrder,
@@ -31,8 +33,6 @@ const Sell = ({
 		text: '0,00',
 		value: 0.0,
 	})
-	const [clientStep, setClientStep] = useState(false)
-
 	const [openAddMenu, setOpenAddMenu] = useState(false)
 
 	useEffect(() => {
@@ -56,7 +56,6 @@ const Sell = ({
 
 	const handleClear = () => {
 		setOpenAddMenu(false)
-		setClientStep(false)
 		setTotalPrice({
 			text: '0,00',
 			value: 0.0,
@@ -109,7 +108,7 @@ const Sell = ({
 
 Sell.navigationOptions = () => ({
 	title: translate('menus.sell'),
-	headerLeft: props => <ScreenHeader {...props} />,
+	headerLeft: props => <SellHeader {...props} />,
 })
 
 const mapDispatchToProps = {
@@ -119,13 +118,15 @@ const mapDispatchToProps = {
 	resetOrder: OrderCreators.resetOrder,
 	addOrderItem: OrderCreators.addOrderItem,
 	loadProducts: ProductCreators.loadProducts,
+	setClientStep: OrderCreators.setClientStep,
 	setGenerateLoad: OrderCreators.setGenerateLoad,
 	resetStorageOrder: StorageCreators.resetStorageOrder,
 	decreaseItemsOrder: StorageCreators.decreaseItemsOrder,
 }
 
-const mapStateToProps = ({ products, storage, order }) => ({
+const mapStateToProps = ({ storage, order }) => ({
 	client: order.client,
+	clientStep: order.clientStep,
 	orderItems: order.orderItems,
 	generateLoad: order.generateLoad,
 	storedItemsOrderAware: storage.storedItemsOrderAware,

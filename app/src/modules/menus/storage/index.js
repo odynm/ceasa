@@ -149,7 +149,7 @@ const Storage = ({
 
 Storage.navigationOptions = () => ({
 	title: translate('menus.storage'),
-	headerLeft: props => <ScreenHeader {...props} />,
+	headerLeft: props => <ScreenHeader noBack {...props} />,
 })
 
 const mapDispatchToProps = {

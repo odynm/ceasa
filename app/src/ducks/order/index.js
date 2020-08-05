@@ -4,6 +4,7 @@ const prefix = 'order/'
 const Types = {
 	SET_CLIENT: prefix + 'SET_CLIENT',
 	SET_ORDER_ITEMS: prefix + 'SET_ORDER_ITEMS',
+	SET_CLIENT_STEP: prefix + 'SET_CLIENT_STEP',
 	SET_GENERATE_LOAD: prefix + 'SET_GENERATE_LOAD',
 }
 
@@ -17,12 +18,18 @@ const setOrderItems = orderItems => ({
 	type: Types.SET_ORDER_ITEMS,
 })
 
+const setClientStep = clientStep => ({
+	payload: { clientStep },
+	type: Types.SET_CLIENT_STEP,
+})
+
 const setGenerateLoad = generateLoad => ({
 	payload: { generateLoad },
 	type: Types.SET_GENERATE_LOAD,
 })
 
 const resetOrder = () => dispatch => {
+	dispatch(setClientStep(false))
 	dispatch(setGenerateLoad(true))
 	dispatch(setOrderItems([]))
 	dispatch(setClient({ key: '', place: '', vehicle: '' }))
@@ -52,6 +59,7 @@ const sendOrder = () => async (dispatch, getState) => {
 
 const initialState = {
 	orderItems: [],
+	clientStep: false,
 	generateLoad: true,
 	client: { key: '', place: '', vehicle: '' },
 }
@@ -61,6 +69,7 @@ export const Creators = {
 	sendOrder,
 	resetOrder,
 	addOrderItem,
+	setClientStep,
 	setGenerateLoad,
 }
 
@@ -75,6 +84,11 @@ export default function reducer(state = initialState, action) {
 			return {
 				...state,
 				orderItems: action.payload.orderItems,
+			}
+		case Types.SET_CLIENT_STEP:
+			return {
+				...state,
+				clientStep: action.payload.clientStep,
 			}
 		case Types.SET_GENERATE_LOAD:
 			return {
