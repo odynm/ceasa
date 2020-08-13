@@ -42,6 +42,29 @@ type OrderCreation struct {
 	ClientId    int
 	ProductsIds []int
 	Urgent      bool
+	Status      int
 	CreatedAt   time.Time
 	ReleasedAt  time.Time
+}
+
+type OrderListItemProduct struct {
+	Id              int    `json:"id"`
+	ProductId       int    `json:"productId"`
+	ProductName     string `json:"productName"`
+	ProductTypeId   int    `json:"productTypeId"`
+	ProductTypeName string `json:"productTypeName"`
+	Description     string `json:"description"`
+	UnitPrice       int    `json:"unitPrice"`
+	Amount          int    `json:"amount"`
+	StorageAmount   int    `json:"storageAmount"`
+}
+
+type OrderListItem struct {
+	Id         int                    `json:"id"`
+	Client     client.ClientDto       `json:"client"`
+	Products   []OrderListItemProduct `json:"products"`
+	Urgent     bool                   `json:"urgent"`
+	CreatedAt  time.Time              `json:"createdAt"`
+	ReleasedAt time.Time              `json:"releasedAt"`
+	Status     int                    `json:"status"`
 }

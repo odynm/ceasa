@@ -8,24 +8,26 @@ import Loader from 'src/components/fw/loader'
 import ItemCard from './components/item-card'
 import Button from 'src/components/fw/button'
 import AddProduct from './components/add-product'
-import TextInput from 'src/components/fw/text-input'
 import MoneyService from 'src/services/moneyService'
 import ScreenBase from 'src/components/fw/screen-base'
 import CheckBox from '@react-native-community/checkbox'
 import CloseKeyboardView from 'src/components/fw/screen-base/close-keyboard-view'
+import ClientSegment from 'src/components/ceasa/sell/client-segment'
 
 const SellComponent = ({
 	client,
 	errors,
 	working,
-	addProduct,
+	released,
 	setClient,
+	addProduct,
 	clientStep,
 	orderItems,
 	totalPrice,
 	handlePress,
 	handleClear,
 	openAddMenu,
+	setReleased,
 	generateLoad,
 	setOpenAddMenu,
 	setGenerateLoad,
@@ -39,26 +41,11 @@ const SellComponent = ({
 			<Button
 				onPress={handleClear}
 				label={translate('sell.restart')}
-				disabled={orderItems || (orderItems && orderItems.length === 0)}
+				disabled={!orderItems || (orderItems && orderItems.length === 0)}
 			/>
 			{clientStep ? (
 				<CloseKeyboardView style={styles.clientView}>
-					<TextInput
-						value={client.key}
-						errorMessage={errors.key}
-						label={translate('sell.clientKey')}
-						setValue={value => setClient({ ...client, key: value })}
-					/>
-					<TextInput
-						value={client.place}
-						label={translate('sell.clientPlace')}
-						setValue={value => setClient({ ...client, place: value })}
-					/>
-					<TextInput
-						value={client.vehicle}
-						label={translate('sell.clientVehicle')}
-						setValue={value => setClient({ ...client, vehicle: value })}
-					/>
+					<ClientSegment client={client} setClient={setClient} />
 				</CloseKeyboardView>
 			) : (
 				<ScrollView style={styles.items}>
@@ -119,6 +106,18 @@ const SellComponent = ({
 						value={generateLoad}
 						style={styles.checkbox}
 						onValueChange={checked => setGenerateLoad(checked)}
+					/>
+				</View>
+				<View style={styles.row}>
+					<KText
+						bold
+						style={styles.rowAlignText}
+						text={translate('sell.released')}
+					/>
+					<CheckBox
+						value={released}
+						style={styles.checkbox}
+						onValueChange={checked => setReleased(checked)}
 					/>
 				</View>
 				<Space size2 />

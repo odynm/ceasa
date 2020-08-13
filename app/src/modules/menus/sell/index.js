@@ -12,12 +12,14 @@ import ToastService from 'src/services/toastService'
 
 const Sell = ({
 	client,
+	released,
 	clientStep,
 	setClient,
 	sendOrder,
 	resetOrder,
 	orderItems,
 	getStorage,
+	setReleased,
 	loadProducts,
 	addOrderItem,
 	generateLoad,
@@ -90,6 +92,7 @@ const Sell = ({
 			client={client}
 			errors={errors}
 			working={working}
+			released={released}
 			setClient={setClient}
 			addProduct={addProduct}
 			totalPrice={totalPrice}
@@ -98,6 +101,7 @@ const Sell = ({
 			openAddMenu={openAddMenu}
 			handlePress={handlePress}
 			handleClear={handleClear}
+			setReleased={setReleased}
 			generateLoad={generateLoad}
 			setOpenAddMenu={setOpenAddMenu}
 			setGenerateLoad={setGenerateLoad}
@@ -116,6 +120,7 @@ const mapDispatchToProps = {
 	setClient: OrderCreators.setClient,
 	sendOrder: OrderCreators.sendOrder,
 	resetOrder: OrderCreators.resetOrder,
+	setReleased: OrderCreators.setReleased,
 	addOrderItem: OrderCreators.addOrderItem,
 	loadProducts: ProductCreators.loadProducts,
 	setClientStep: OrderCreators.setClientStep,
@@ -126,6 +131,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = ({ storage, order }) => ({
 	client: order.client,
+	released: order.released,
 	clientStep: order.clientStep,
 	orderItems: order.orderItems,
 	generateLoad: order.generateLoad,

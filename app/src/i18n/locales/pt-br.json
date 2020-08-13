@@ -12,7 +12,9 @@
 	"menus": {
 		"storage": "Cadastrar",
 		"home": "Visão Geral",
-		"sell": "Vender"
+		"sell": "Vender",
+		"orders": "Pedidos",
+		"editOrder": "Alterar Pedido"
 	},
 	"storage": {
 		"product": "Produto",
@@ -33,6 +35,7 @@
 		"restart": "Recomeçar venda",
 		"total": "Total:",
 		"generateLoad": "Gerar carregamento",
+		"released": "Carregamento liberado",
 		"unitPrice": "Un.",
 		"amount": "Qtde.",
 		"inStock": "Em estoque",
@@ -63,6 +66,15 @@
 			"noItems": "Adicione um produto antes de continuar",
 			"insertClient": "Digite informação do cliente"
 		}
+	},
+	"orders": {
+		"blocked": "NÃO LIBERADO"
+	},
+	"editOrder": {
+		"delete": "Excluir Pedido",
+		"editProducts": "Alterar lista de produtos",
+		"released": "Carregamento liberado",
+		"edit": "Editar"
 	},
 	"errors": {
 		"serverError": "Não foi possível comunicar com o servidor"

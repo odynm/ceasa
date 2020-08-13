@@ -2,7 +2,7 @@ import { translate } from 'src/i18n/translate'
 
 const validateCreate = (data, setErrors) => {
 	let errors = {}
-	console.warn(data.key)
+
 	if (!data.key || data.key === '') {
 		errors = {
 			...errors,

@@ -28,10 +28,11 @@ func add(w http.ResponseWriter, r *http.Request) {
 }
 
 func get(w http.ResponseWriter, r *http.Request) {
-	// userId := user.CheckLogin(w, r)
-	// if userId > 0 {
-	// 	Get(userId, w)
-	// }
+	userId := user.CheckLogin(w, r)
+	if userId > 0 {
+		GetForVendor(userId, w)
+		// TODO get for loader
+	}
 }
 
 func orderRouter(w http.ResponseWriter, r *http.Request) {

@@ -51,7 +51,7 @@ const Main = ({ logout, navigation, loadLoggedUser, checkTerms }) => {
 			// )
 
 			// if (regularRegistration && !hasRegistrationInProgress) {
-			return navigation.navigate(screens.sell)
+			return navigation.navigate(screens.orders)
 			// }
 
 			//setHasEmailRegistered(true)

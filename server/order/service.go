@@ -18,13 +18,16 @@ func Add(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	if clientId == 0 {
 		goto Error
 	}
+
 	order = OrderCreation{
 		ClientId:  clientId,
 		Urgent:    orderDto.Urgent,
 		CreatedAt: time.Now(),
+		Status:    S_Blocked,
 	}
 	if orderDto.Released {
 		order.ReleasedAt = order.CreatedAt
+		order.Status = S_Released
 	}
 	orderId = DbCreateOrder(order, userId)
 	if orderId == 0 {
@@ -62,9 +65,12 @@ Error:
 	return 0
 }
 
-func Get(userId int, w http.ResponseWriter) {
-	// response := DbGetAllFull(userId)
-	// w.Header().Set("Content-Type", "application/json")
-	// js, _ := json.Marshal(response)
-	// w.Write(js)
+func GetForVendor(userId int, w http.ResponseWriter) {
+	response, ok := DbGetOrdersVendor(userId)
+	if ok {
+		w.Header().Set("Content-Type", "application/json")
+		utils.Success(w, response)
+	} else {
+		utils.Failed(w, -1)
+	}
 }

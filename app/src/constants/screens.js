@@ -5,6 +5,7 @@ const screens = {
 	login: 'Login',
 	sell: 'Sell',
 	orders: 'Orders',
+	editOrder: 'EditOrder',
 }
 
 export default screens
