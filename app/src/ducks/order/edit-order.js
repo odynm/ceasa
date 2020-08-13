@@ -40,6 +40,7 @@ export const Creators = {
 	setReleased: common.setReleased,
 	addOrderItem: common.addOrderItem,
 	setClientStep: common.setClientStep,
+	setOrderItems: common.setOrderItems,
 }
 
 export default function reducer(state = initialState, action) {

@@ -6,6 +6,7 @@ const screens = {
 	sell: 'Sell',
 	orders: 'Orders',
 	editOrder: 'EditOrder',
+	editProductsOrder: 'EditProductsOrder',
 }
 
 export default screens

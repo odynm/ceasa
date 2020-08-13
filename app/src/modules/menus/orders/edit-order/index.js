@@ -2,9 +2,11 @@ import React from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
+import { withNavigation } from 'react-navigation'
 import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
 import styles from './styles'
 import orderStatus from 'src/enums/order'
+import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import KText from 'src/components/fw/ktext'
 import Loader from 'src/components/fw/loader'
@@ -17,12 +19,19 @@ import ClientSegment from 'src/components/ceasa/sell/client-segment'
 const EditOrder = ({
 	client,
 	status,
+	urgent,
 	working,
 	released,
 	setClient,
+	setUrgent,
+	navigation,
 	setReleased,
 }) => {
 	const handleDelete = () => {}
+
+	const handleEditProducts = () => {
+		navigation.navigate(screens.editProductsOrder)
+	}
 
 	return (
 		<ScreenBase
@@ -51,21 +60,35 @@ const EditOrder = ({
 			</View>
 			<Button
 				small
-				onPress={handleDelete}
+				onPress={handleEditProducts}
 				style={styles.editProductView}
 				label={translate('editOrder.editProducts')}
 			/>
 			<View style={styles.footer}>
+				{status === orderStatus.blocked && (
+					<View style={styles.row}>
+						<KText
+							bold
+							style={styles.rowAlignText}
+							text={translate('editOrder.released')}
+						/>
+						<CheckBox
+							value={released}
+							style={styles.checkbox}
+							onValueChange={checked => setReleased(checked)}
+						/>
+					</View>
+				)}
 				<View style={styles.row}>
 					<KText
 						bold
 						style={styles.rowAlignText}
-						text={translate('editOrder.released')}
+						text={translate('editOrder.urgent')}
 					/>
 					<CheckBox
-						value={released}
+						value={urgent}
 						style={styles.checkbox}
-						onValueChange={checked => setReleased(checked)}
+						onValueChange={checked => setUrgent(checked)}
 					/>
 				</View>
 				<Space size2 />
@@ -86,16 +109,18 @@ EditOrder.navigationOptions = () => ({
 
 const mapDispatchToProps = {
 	setClient: EditOrderCreators.setClient,
+	setUrgent: EditOrderCreators.setUrgent,
 	setReleased: EditOrderCreators.setReleased,
 }
 
 const mapStateToProps = ({ editOrder }) => ({
 	status: editOrder.status,
 	client: editOrder.client,
+	urgent: editOrder.urgent,
 	released: editOrder.released,
 })
 
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(EditOrder)
+)(withNavigation(EditOrder))

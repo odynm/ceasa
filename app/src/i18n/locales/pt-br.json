@@ -14,7 +14,8 @@
 		"home": "Visão Geral",
 		"sell": "Vender",
 		"orders": "Pedidos",
-		"editOrder": "Alterar Pedido"
+		"editOrder": "Alterar Pedido",
+		"editProductsOrder": "Alterar Produtos do Pedido"
 	},
 	"storage": {
 		"product": "Produto",
@@ -74,6 +75,7 @@
 		"delete": "Excluir Pedido",
 		"editProducts": "Alterar lista de produtos",
 		"released": "Carregamento liberado",
+		"urgent": "Definir como urgente",
 		"edit": "Editar"
 	},
 	"errors": {
