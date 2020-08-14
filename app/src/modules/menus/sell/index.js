@@ -115,6 +115,15 @@ Sell.navigationOptions = () => ({
 	headerLeft: props => <SellHeader {...props} />,
 })
 
+const mapStateToProps = ({ storage, order }) => ({
+	client: order.client,
+	released: order.released,
+	clientStep: order.clientStep,
+	orderItems: order.orderItems,
+	generateLoad: order.generateLoad,
+	storedItemsOrderAware: storage.storedItemsOrderAware,
+})
+
 const mapDispatchToProps = {
 	getStorage: StorageCreators.get,
 	setClient: OrderCreators.setClient,
@@ -128,15 +137,6 @@ const mapDispatchToProps = {
 	resetStorageOrder: StorageCreators.resetStorageOrder,
 	decreaseItemsOrder: StorageCreators.decreaseItemsOrder,
 }
-
-const mapStateToProps = ({ storage, order }) => ({
-	client: order.client,
-	released: order.released,
-	clientStep: order.clientStep,
-	orderItems: order.orderItems,
-	generateLoad: order.generateLoad,
-	storedItemsOrderAware: storage.storedItemsOrderAware,
-})
 
 export default connect(
 	mapStateToProps,

@@ -10,7 +10,7 @@ const Types = {
 	SET_CLIENT_STEP: prefix + 'SET_CLIENT_STEP',
 }
 
-const common = new commonObj(Types)
+const common = new commonObj(Types, 'editOrder')
 
 const setStatus = status => ({
 	payload: { status },

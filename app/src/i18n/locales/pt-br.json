@@ -52,6 +52,7 @@
 		"clientVehicle": "Veículo (opcional)",
 		"exceededWarning": "Excede estoque",
 		"add": "Adicionar",
+		"edit": "Editar",
 		"continue": "Continuar",
 		"addSell": "Adicionar Venda",
 		"added": "Venda adicionada!",

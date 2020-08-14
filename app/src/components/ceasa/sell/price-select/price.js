@@ -13,6 +13,7 @@ import MoneyInput from 'src/components/fw/money-input'
 import CloseKeyboardView from 'src/components/fw/screen-base/close-keyboard-view'
 
 const ModalPrice = ({
+	edit,
 	open,
 	total,
 	price,
@@ -92,8 +93,8 @@ const ModalPrice = ({
 				<Button
 					small
 					style={styles.button}
-					label={translate('sell.add')}
 					onPress={handleAdd}
+					label={edit ? translate('sell.edit') : translate('sell.add')}
 				/>
 			</CloseKeyboardView>
 		</KModal>

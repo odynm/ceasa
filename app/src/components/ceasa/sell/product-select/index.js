@@ -5,13 +5,13 @@ import KText from 'src/components/fw/ktext'
 import KModal from 'src/components/fw/kmodal'
 import StoredItemCard from 'src/components/ceasa/stored-item-card'
 
-const ProductSelect = ({ onClose, open, items, selectProduct }) => {
+const ProductSelect = ({ onClose, open, storageItems, selectProduct }) => {
 	return (
 		<KModal open={open} onClose={onClose} header={translate('sell.inStock')}>
 			<ScrollView onStartShouldSetResponder={() => true}>
 				<View onStartShouldSetResponder={() => true}>
-					{items && items.length > 0 ? (
-						items.map((item, index) => (
+					{storageItems && storageItems.length > 0 ? (
+						storageItems.map((item, index) => (
 							<TouchableOpacity
 								key={index}
 								onPress={() => selectProduct(item)}>

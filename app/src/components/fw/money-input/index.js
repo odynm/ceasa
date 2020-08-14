@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { hp, fv, wp } from 'src/utils/screen'
 import { View, StyleSheet, TextInput as RNTextInput } from 'react-native'
 import KText from '../ktext'
@@ -8,6 +8,10 @@ import MoneyService, { defaultMoney } from 'src/services/moneyService'
 
 const MoneyInput = ({ max, label, value, setValue, errorMessage }) => {
 	const [inputText, setInputText] = useState(value.text)
+
+	useEffect(() => {
+		handleChange(value.text)
+	}, [value])
 
 	const handleChange = text => {
 		if (text === undefined || text.length > value.raw + 1) {

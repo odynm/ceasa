@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { StyleSheet, View } from 'react-native'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
+import { Creators as StorageCreators } from 'src/ducks/storage'
+import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
 import MoneyService from 'src/services/moneyService'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
@@ -11,7 +13,12 @@ import AddProduct from 'src/components/ceasa/sell/add-product'
 import TotalSegment from 'src/components/ceasa/sell/total-segment'
 import ProductListSegment from 'src/components/ceasa/sell/product-list-segment'
 
-const EditProductsOrder = ({ orderItems }) => {
+const EditProductsOrder = ({
+	orderItems,
+	addOrderItem,
+	decreaseItemsOrder,
+	storedItemsOrderAware,
+}) => {
 	const [totalPrice, setTotalPrice] = useState({
 		text: '0,00',
 		value: 0.0,
@@ -27,24 +34,37 @@ const EditProductsOrder = ({ orderItems }) => {
 		)
 	}, [orderItems])
 
+	const addProduct = product => {
+		addOrderItem(product)
+		decreaseItemsOrder({ id: product.id, amount: product.amount })
+	}
+
+	const editProduct = product => {
+		addOrderItem(product)
+	}
+
 	return (
 		<ScreenBase
 			useScroll={false}
 			useKeyboardAvoid={false}
 			useKeyboardClose={false}>
-			<ProductListSegment style={styles.items} orderItems={orderItems} />
+			<ProductListSegment
+				style={styles.items}
+				orderItems={orderItems}
+				editProduct={editProduct}
+			/>
 			<View style={styles.footer}>
 				<TotalSegment
 					totalPrice={totalPrice}
 					setOpenAddMenu={setOpenAddMenu}
 				/>
-				<AddProduct
-					open={openAddMenu}
-					//addProduct={addProduct}
-					setOpen={setOpenAddMenu}
-					//items={storedItemsOrderAware}
-				/>
 			</View>
+			<AddProduct
+				open={openAddMenu}
+				addProduct={addProduct}
+				setOpen={setOpenAddMenu}
+				storageItems={storedItemsOrderAware}
+			/>
 		</ScreenBase>
 	)
 }
@@ -53,11 +73,15 @@ EditProductsOrder.navigationOptions = () => ({
 	headerLeft: props => <ScreenHeader {...props} />,
 })
 
-const mapStateToProps = ({ editOrder }) => ({
+const mapStateToProps = ({ storage, editOrder }) => ({
 	orderItems: editOrder.orderItems,
+	storedItemsOrderAware: storage.storedItemsOrderAware,
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+	addOrderItem: EditOrderCreators.addOrderItem,
+	decreaseItemsOrder: StorageCreators.decreaseItemsOrder,
+}
 
 const styles = StyleSheet.create({
 	items: {
@@ -69,4 +93,7 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default connect(mapStateToProps)(withNavigation(EditProductsOrder))
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(withNavigation(EditProductsOrder))

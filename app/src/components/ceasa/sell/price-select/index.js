@@ -4,7 +4,14 @@ import ModalPrice from './price'
 import ModalExceededStorage from './exceededStorage'
 import MoneyService from 'src/services/moneyService'
 
-const PriceSelect = ({ open, onClose, addProduct, selectedProduct }) => {
+const PriceSelect = ({
+	edit,
+	open,
+	onClose,
+	addProduct,
+	initialValues,
+	selectedProduct,
+}) => {
 	const [errors, setErrors] = useState({})
 	const [amount, setAmount] = useState(1)
 	const [price, setPrice] = useState({ text: '', value: 0.0 })
@@ -12,6 +19,17 @@ const PriceSelect = ({ open, onClose, addProduct, selectedProduct }) => {
 	const [modalExceededStorageOpen, setModalExceededStorageOpen] = useState(
 		false,
 	)
+
+	useEffect(() => {
+		if (initialValues && initialValues.price && initialValues.amount) {
+			setPrice(initialValues.price)
+			setAmount(initialValues.amount)
+		}
+	}, [initialValues])
+
+	useEffect(() => {
+		updateTotal()
+	}, [amount])
 
 	const updateTotal = () => {
 		if (price.value) {
@@ -28,10 +46,6 @@ const PriceSelect = ({ open, onClose, addProduct, selectedProduct }) => {
 		setPrice(value)
 		updateTotal()
 	}
-
-	useEffect(() => {
-		updateTotal()
-	}, [amount])
 
 	const addItem = () => {
 		addProduct({
@@ -69,6 +83,7 @@ const PriceSelect = ({ open, onClose, addProduct, selectedProduct }) => {
 	return (
 		<>
 			<ModalPrice
+				edit={edit}
 				open={open}
 				total={total}
 				price={price}

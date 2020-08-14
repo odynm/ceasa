@@ -98,7 +98,7 @@ const SellComponent = ({
 				open={openAddMenu}
 				addProduct={addProduct}
 				setOpen={setOpenAddMenu}
-				items={storedItemsOrderAware}
+				storageItems={storedItemsOrderAware}
 			/>
 		</ScreenBase>
 	)

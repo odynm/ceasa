@@ -9,7 +9,7 @@ const Types = {
 	SET_GENERATE_LOAD: prefix + 'SET_GENERATE_LOAD',
 }
 
-const common = new commonObj(Types)
+const common = new commonObj(Types, 'order')
 
 const initialState = {
 	orderItems: [],

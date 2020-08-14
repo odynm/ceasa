@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PriceSelect from '../price-select'
 import ProductSelect from '../product-select'
 
-const AddProduct = ({ items, addProduct, open, setOpen }) => {
+const AddProduct = ({ storageItems, addProduct, open, setOpen }) => {
 	const [sellModalOpen, setSellModalOpen] = useState(false)
 	const [selectedProduct, setSelectedProduct] = useState({})
 
@@ -21,8 +21,8 @@ const AddProduct = ({ items, addProduct, open, setOpen }) => {
 			{open ? (
 				<>
 					<ProductSelect
-						items={items}
 						onClose={onClose}
+						storageItems={storageItems}
 						open={open && !sellModalOpen}
 						selectProduct={selectProduct}
 					/>

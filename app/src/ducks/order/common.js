@@ -1,6 +1,6 @@
 import HttpService from 'src/services/httpService'
 
-function common(types) {
+function common(types, duck) {
 	this.setClient = client => ({
 		payload: { client },
 		type: types.SET_CLIENT,
@@ -35,12 +35,18 @@ function common(types) {
 
 	this.addOrderItem = orderItem => (dispatch, getState) => {
 		if (orderItem === undefined) return
-		const { orderItems } = getState().order
-		dispatch(this.setOrderItems([...orderItems, orderItem]))
+		const { orderItems } = getState()[duck]
+		const index = orderItems.findIndex(x => x.id === orderItem.id)
+		if (index > 0) {
+			orderItems[index] = orderItem
+			dispatch(this.setOrderItems(orderItems))
+		} else {
+			dispatch(this.setOrderItems([...orderItems, orderItem]))
+		}
 	}
 
 	this.sendOrder = () => async (dispatch, getState) => {
-		const { client, orderItems, generateLoad, released } = getState().order
+		const { client, orderItems, generateLoad, released } = getState()[duck]
 		const postData = {
 			client,
 			generateLoad: generateLoad, // TODO treat on backend
