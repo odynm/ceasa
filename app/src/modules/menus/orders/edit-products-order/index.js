@@ -18,6 +18,7 @@ const EditProductsOrder = ({
 	addOrderItem,
 	decreaseItemsOrder,
 	storedItemsOrderAware,
+	setProductListIsDirty,
 }) => {
 	const [totalPrice, setTotalPrice] = useState({
 		text: '0,00',
@@ -35,11 +36,13 @@ const EditProductsOrder = ({
 	}, [orderItems])
 
 	const addProduct = product => {
+		setProductListIsDirty(true)
 		addOrderItem(product)
 		decreaseItemsOrder({ id: product.id, amount: product.amount })
 	}
 
 	const editProduct = product => {
+		setProductListIsDirty(true)
 		addOrderItem(product)
 	}
 
@@ -81,6 +84,7 @@ const mapStateToProps = ({ storage, editOrder }) => ({
 const mapDispatchToProps = {
 	addOrderItem: EditOrderCreators.addOrderItem,
 	decreaseItemsOrder: StorageCreators.decreaseItemsOrder,
+	setProductListIsDirty: EditOrderCreators.setProductListIsDirty,
 }
 
 const styles = StyleSheet.create({

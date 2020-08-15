@@ -50,7 +50,7 @@ function common(types, duck) {
 		const postData = {
 			client,
 			generateLoad: generateLoad, // TODO treat on backend
-			released: released,
+			//released: released, // TODO delete released from everything, should use status.released
 			products: orderItems.map(x => ({
 				storageItem: x.id,
 				unitPrice: x.unitPrice.value * 100,

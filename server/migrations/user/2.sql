@@ -75,21 +75,13 @@ CREATE TABLE _user_.order_product
     amount int NOT NULL,
     storage_amount int NOT NULL,  
     order_id int NOT NULL,
-    product_id int NOT NULL,
-    product_type_id int,
-    description_id int,
+    storage_id int NOT NULL,
     CONSTRAINT order_product_pkey PRIMARY KEY (id),
     CONSTRAINT fk_product_order FOREIGN KEY (order_id)
         REFERENCES _user_.order_order (id)
         ON DELETE NO ACTION,
-    CONSTRAINT fk_product_product FOREIGN KEY (product_id)
-        REFERENCES public.products_product (id)
-        ON DELETE NO ACTION,
-    CONSTRAINT fk_product_product_type FOREIGN KEY (product_type_id)
-        REFERENCES public.products_product_type (id)
-        ON DELETE NO ACTION,
-    CONSTRAINT fk_product_description FOREIGN KEY (description_id)
-        REFERENCES _user_.storage_item_description (id)
+    CONSTRAINT fk_product_storage FOREIGN KEY (storage_id)
+        REFERENCES _user_.storage_item (id)
         ON DELETE NO ACTION
 )
 WITH (

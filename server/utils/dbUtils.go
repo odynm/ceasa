@@ -1,6 +1,8 @@
 package utils
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 func NullIfZero(num int) sql.NullInt32 {
 	return sql.NullInt32{

@@ -11,6 +11,20 @@ import (
 	"../utils"
 )
 
+func DbIncreaseAmount(id int, increaseAmount int, userId int) bool {
+	schema := fmt.Sprint("u", userId)
+
+	statement := fmt.Sprintf(`
+		UPDATE %v."storage_item"
+		SET amount = amount + $1
+		WHERE id = $2`, schema)
+	_, err := db.Instance.Db.Exec(statement, increaseAmount, id)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func DbUpdateAmount(id int, amount int, userId int) bool {
 	schema := fmt.Sprint("u", userId)
 
@@ -71,6 +85,7 @@ func DbGetById(storageId int, userId int) StorageItem {
 
 	statement := fmt.Sprintf(`
 		SELECT 
+			id,
 			product_id,
 			product_type_id,
 			description_id,
@@ -80,7 +95,7 @@ func DbGetById(storageId int, userId int) StorageItem {
 
 	db.Instance.Db.
 		QueryRow(statement, storageId).
-		Scan(&storageItem.ProductId, &storageItem.ProductTypeId, &storageItem.DescriptionId, &storageItem.Amount)
+		Scan(&storageItem.Id, &storageItem.ProductId, &storageItem.ProductTypeId, &storageItem.DescriptionId, &storageItem.Amount)
 
 	return storageItem
 }
@@ -92,16 +107,18 @@ func DbGetAllFull(userId int) []StorageItemFull {
 
 	statement := fmt.Sprintf(`
 	SELECT 
-		id,
-		product_id,
-		(SELECT name FROM public.products_product WHERE id = product_id) as product_description,
-		product_type_id,
-		(SELECT name FROM public.products_product_type WHERE id = product_type_id) as product_type_name,
-		(SELECT description FROM %v.storage_item_description WHERE id = description_id) as description,
+		si.id,
+		pp.id as "product_id",
+		pp.name as "product_name",
+		pt.id as "product_type_id",
+		pt.name as "product_type_name",
+		sid.description as "description",
 		amount
-	FROM %v.storage_item`, schema, schema)
+	FROM %v.storage_item si
+	INNER JOIN public.products_product pp ON pp.id = si.product_id
+	INNER JOIN public.products_product_type pt ON pt.id = si.product_type_id
+	INNER JOIN %v.storage_item_description sid ON sid.id = si.description_id`, schema, schema)
 
-	fmt.Println(statement)
 	rows, err := db.Instance.Db.Query(statement)
 
 	if err != nil {
@@ -134,6 +151,47 @@ func DbGetAllFull(userId int) []StorageItemFull {
 		}
 		if description.Valid {
 			storageItem.Description = string(description.String)
+		}
+
+		storageItems = append(storageItems, storageItem)
+	}
+
+	return storageItems
+Error:
+	return nil
+}
+
+func DbGetAll(userId int) []StorageItem {
+	schema := fmt.Sprint("u", userId)
+
+	var storageItems []StorageItem
+
+	statement := fmt.Sprintf(`
+	SELECT 
+		id,
+		product_id,
+		product_type_id,
+		description_id,
+		amount
+	FROM %v.storage_item`, schema)
+
+	rows, err := db.Instance.Db.Query(statement)
+
+	if err != nil {
+		goto Error
+	}
+
+	for rows.Next() {
+		var storageItem StorageItem
+
+		err := rows.Scan(&storageItem.Id,
+			&storageItem.ProductId,
+			&storageItem.ProductTypeId,
+			&storageItem.DescriptionId,
+			&storageItem.Amount)
+
+		if err != nil {
+			goto Error
 		}
 
 		storageItems = append(storageItems, storageItem)

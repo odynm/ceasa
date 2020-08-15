@@ -16,11 +16,21 @@ func add(w http.ResponseWriter, r *http.Request) {
 		if err != nil ||
 			orderDto.Client.Key == "" ||
 			orderDto.Products == nil ||
-			len(orderDto.Products) == 0 {
+			(len(orderDto.Products) == 0 && orderDto.ProductListIsDirty == false) {
 			utils.BadRequest(w, "Order format is incorrect")
 		}
 
-		result := Add(orderDto, userId, w)
+		var result int
+
+		if orderDto.Id > 0 {
+			_, ok := GetIds(userId, orderDto.Id, w) //TODO não preciso do client id na edição
+			if ok {
+				result = Edit(orderDto, userId, w)
+			}
+		} else {
+			result = Add(orderDto, userId, w)
+		}
+
 		if result > 0 {
 			utils.Success(w, result)
 		}

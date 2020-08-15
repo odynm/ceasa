@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
@@ -21,16 +21,25 @@ const EditOrder = ({
 	status,
 	urgent,
 	working,
-	released,
 	setClient,
 	setUrgent,
+	setStatus,
 	navigation,
-	setReleased,
 }) => {
+	const [internalStatus, setInternalStatus] = useState(status)
+
 	const handleDelete = () => {}
 
 	const handleEditProducts = () => {
 		navigation.navigate(screens.editProductsOrder)
+	}
+
+	const setOrderStatus = checked => {
+		if (checked) {
+			setInternalStatus(orderStatus.released)
+		} else {
+			setInternalStatus(orderStatus.blocked)
+		}
 	}
 
 	return (
@@ -38,7 +47,7 @@ const EditOrder = ({
 			useScroll={false}
 			useKeyboardAvoid={false}
 			useKeyboardClose={false}>
-			{status === orderStatus.blocked && (
+			{internalStatus === orderStatus.blocked && (
 				<View>
 					{/* <Button
 						onPress={handleDelete}
@@ -73,9 +82,9 @@ const EditOrder = ({
 							text={translate('editOrder.released')}
 						/>
 						<CheckBox
-							value={released}
+							value={internalStatus === orderStatus.released}
 							style={styles.checkbox}
-							onValueChange={checked => setReleased(checked)}
+							onValueChange={checked => setOrderStatus(checked)}
 						/>
 					</View>
 				)}
@@ -110,14 +119,13 @@ EditOrder.navigationOptions = () => ({
 const mapDispatchToProps = {
 	setClient: EditOrderCreators.setClient,
 	setUrgent: EditOrderCreators.setUrgent,
-	setReleased: EditOrderCreators.setReleased,
+	setStatus: EditOrderCreators.setStatus,
 }
 
 const mapStateToProps = ({ editOrder }) => ({
 	status: editOrder.status,
 	client: editOrder.client,
 	urgent: editOrder.urgent,
-	released: editOrder.released,
 })
 
 export default connect(

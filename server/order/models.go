@@ -1,7 +1,6 @@
 package order
 
 import (
-	"database/sql"
 	"time"
 
 	"../client"
@@ -21,21 +20,23 @@ type ProductDto struct {
 	Amount        int `json:"amount"`
 }
 
-type ProductCreation struct {
+type OrderProduct struct {
+	Id            int
 	OrderId       int
-	ProductId     int
-	ProductTypeId sql.NullInt32
-	DescriptionId sql.NullInt32
+	StorageItemId int
 	UnitPrice     int
 	Amount        int
 	StorageAmount int
 }
 
 type OrderDto struct {
-	Client   client.ClientDto `json:"client"`
-	Products []ProductDto     `json:"products"`
-	Urgent   bool             `json:"urgent"`
-	Released bool             `json:"released"`
+	Id                 int              `json:"id"`
+	Client             client.ClientDto `json:"client"`
+	Products           []ProductDto     `json:"products"`
+	Urgent             bool             `json:"urgent"`
+	Released           bool             `json:"released"`
+	ProductListIsDirty bool             `json:"productListIsDirty"`
+	Status             int              `json:"status"`
 }
 
 type OrderCreation struct {
@@ -67,4 +68,9 @@ type OrderListItem struct {
 	CreatedAt  time.Time              `json:"createdAt"`
 	ReleasedAt time.Time              `json:"releasedAt"`
 	Status     int                    `json:"status"`
+}
+
+type OrderIds struct {
+	Id       int
+	ClientId int
 }
