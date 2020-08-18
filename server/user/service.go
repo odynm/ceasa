@@ -11,9 +11,9 @@ import (
 )
 
 type AuthData struct {
-	token        string
-	loaderToken  string
-	creationDate time.Time
+	Token        string
+	LoaderToken  string
+	CreationDate time.Time
 }
 
 var tokens = map[int]AuthData{}
@@ -37,9 +37,9 @@ func LoginUser(userLogin UserDto, w http.ResponseWriter) {
 	if dbUser.Hash == hash {
 		token := utils.GetHash(login + "17" + hash + "F" + time.Now().String())
 		tokens[dbUser.Id] = AuthData{
-			token:        token,
-			loaderToken:  utils.GetHash("L" + time.Now().String()),
-			creationDate: time.Now(),
+			Token:        token,
+			LoaderToken:  utils.GetHash("L" + time.Now().String()),
+			CreationDate: time.Now(),
 		}
 		response := UserResponse{
 			Id:    dbUser.Id,
@@ -74,13 +74,13 @@ func RefreshTokenUser(refresh UserDto, w http.ResponseWriter) {
 }
 
 func IsLogged(id int, auth string, w http.ResponseWriter) bool {
-	if len(auth) == 0 || id == 0 || tokens[id].token != auth {
+	if len(auth) == 0 || id == 0 || tokens[id].Token != auth {
 		utils.NoAuth(w)
 		return false
 	} else {
 		today := time.Now()
-		if tokens[id].creationDate.Year() != today.Year() ||
-			tokens[id].creationDate.YearDay() != today.YearDay() {
+		if tokens[id].CreationDate.Year() != today.Year() ||
+			tokens[id].CreationDate.YearDay() != today.YearDay() {
 			w.Header().Set("Content-Type", "application/json")
 			utils.NoAuth(w)
 			io.WriteString(w, "{ \"refresh\":\"true\"}")
@@ -95,10 +95,15 @@ func CheckLogin(w http.ResponseWriter, r *http.Request) int {
 	userStr := r.Header.Get("User")
 	userId, err := strconv.ParseInt(userStr, 10, 32)
 	auth := r.Header.Get("Auth")
-	if err != nil || len(auth) == 0 || userId == 0 || tokens[int(userId)].token != auth {
+	if err != nil || len(auth) == 0 || userId == 0 || tokens[int(userId)].Token != auth {
 		utils.NoAuth(w)
 		return 0
 	} else {
 		return int(userId)
 	}
+}
+
+func GetUserIdAuthData(userId int, w http.ResponseWriter) (AuthData, bool) {
+	authData := tokens[userId]
+	return authData, true
 }
