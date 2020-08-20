@@ -45,7 +45,7 @@ func LoginLoader(loaderDto LoaderDto, w http.ResponseWriter) {
 			Id:    loader.Id,
 			Token: token,
 		}
-		w.Header().Set("Content-Type", "application/json")
+
 		utils.Success(w, response)
 	} else {
 		utils.Failed(w, -1)
@@ -61,5 +61,16 @@ func CheckLogin(w http.ResponseWriter, r *http.Request) int {
 		return 0
 	} else {
 		return int(loaderId)
+	}
+}
+
+func GetLoaderUserId(w http.ResponseWriter, r *http.Request) int {
+	userStr := r.Header.Get("User")
+	userId, err := strconv.ParseInt(userStr, 10, 32)
+	if err != nil || userId == 0 {
+		utils.NoAuth(w)
+		return 0
+	} else {
+		return int(userId)
 	}
 }

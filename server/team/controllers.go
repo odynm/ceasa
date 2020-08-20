@@ -1,9 +1,10 @@
 package team
 
 import (
+	"encoding/json"
 	"net/http"
-	"time"
 
+	"../loader"
 	"../user"
 	"../utils"
 )
@@ -13,8 +14,8 @@ func getCode(w http.ResponseWriter, r *http.Request) {
 	if userId > 0 {
 		auth, ok := user.GetUserIdAuthData(userId, w)
 		if ok {
-			joinTeamToken := JoinTeamToken {
-				Token: auth.LoaderToken + time.Now().String()
+			joinTeamToken := JoinTeamToken{
+				Token: auth.LoaderToken,
 			}
 			utils.Success(w, joinTeamToken)
 		}
@@ -23,8 +24,24 @@ func getCode(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func create(w http.ResponseWriter, r *http.Request) {
-	// sent by the loader with the target user team code
+func join(w http.ResponseWriter, r *http.Request) {
+	loaderId := loader.CheckLogin(w, r)
+	if loaderId > 0 {
+		userId := loader.GetLoaderUserId(w, r)
+		if userId > 0 {
+			var joinTeamToken JoinTeamToken
+			err := json.NewDecoder(r.Body).Decode(&joinTeamToken)
+			if err != nil || joinTeamToken.Token != "" {
+				AddToTeam(loaderId, userId, joinTeamToken.Token, w)
+			} else {
+				utils.Failed(w, -1)
+			}
+		} else {
+			utils.NoAuth(w)
+		}
+	} else {
+		utils.NoAuth(w)
+	}
 }
 
 func teamCodeRouter(w http.ResponseWriter, r *http.Request) {
@@ -39,13 +56,13 @@ func teamCodeRouter(w http.ResponseWriter, r *http.Request) {
 func teamRouter(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
-		create(w, r)
+		join(w, r)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
 }
 
 func HandleRequest() {
-	http.HandleFunc("team/code", teamCodeRouter)
-	http.HandleFunc("team/create", teamRouter)
+	http.HandleFunc("/team/code", teamCodeRouter)
+	http.HandleFunc("/team/join", teamRouter)
 }

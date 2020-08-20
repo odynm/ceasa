@@ -12,7 +12,6 @@ import (
 func GetAll(userId int, w http.ResponseWriter) {
 	response, ok := DbGetAll(userId)
 	if ok {
-		w.Header().Set("Content-Type", "application/json")
 		utils.Success(w, response)
 	} else {
 		utils.Failed(w, -1)

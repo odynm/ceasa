@@ -22,14 +22,14 @@ func DbGetLoader(loaderDto LoaderDto) (Loader, bool) {
 	var loader Loader
 
 	statement := `
-		SELECT (name, device_id)
+		SELECT id, name, device_id
 		FROM "loader_info"
 		WHERE active = true AND device_id = (SELECT id FROM device WHERE hash = $1)`
 	result := db.Instance.Db.QueryRow(statement, loaderDto.Device)
-	err := result.Scan(&loader.Name, &loader.DeviceId)
+	err := result.Scan(&loader.Id, &loader.Name, &loader.DeviceId)
 
 	if err != nil {
-		return loader, true
+		return loader, false
 	}
-	return loader, false
+	return loader, true
 }

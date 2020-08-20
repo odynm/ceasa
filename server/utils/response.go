@@ -15,6 +15,7 @@ type SuccessStruct struct {
 }
 
 func Success(w http.ResponseWriter, item interface{}) {
+	w.Header().Set("Content-Type", "application/json")
 	success := SuccessStruct{
 		Success: true,
 		Data:    item,
@@ -24,6 +25,7 @@ func Success(w http.ResponseWriter, item interface{}) {
 }
 
 func Failed(w http.ResponseWriter, errorCode int) {
+	w.Header().Set("Content-Type", "application/json")
 	success := SuccessStruct{
 		Success: false,
 		Data: ErrorData{

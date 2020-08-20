@@ -45,7 +45,6 @@ func LoginUser(userLogin UserDto, w http.ResponseWriter) {
 			Id:    dbUser.Id,
 			Token: token,
 		}
-		w.Header().Set("Content-Type", "application/json")
 		utils.Success(w, response)
 	} else {
 		utils.Failed(w, -1)
@@ -65,7 +64,7 @@ func RefreshTokenUser(refresh UserDto, w http.ResponseWriter) {
 	// 		Id:    dbUser.Id,
 	// 		Token: token,
 	// 	}
-	// 	w.Header().Set("Content-Type", "application/json")
+	//
 	// 	js, _ := json.Marshal(response)
 	// 	w.Write(js)
 	// } else {
@@ -81,7 +80,6 @@ func IsLogged(id int, auth string, w http.ResponseWriter) bool {
 		today := time.Now()
 		if tokens[id].CreationDate.Year() != today.Year() ||
 			tokens[id].CreationDate.YearDay() != today.YearDay() {
-			w.Header().Set("Content-Type", "application/json")
 			utils.NoAuth(w)
 			io.WriteString(w, "{ \"refresh\":\"true\"}")
 			return false

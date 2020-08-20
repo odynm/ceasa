@@ -145,7 +145,6 @@ func GetIds(userId int, id int, w http.ResponseWriter) (OrderIds, bool) {
 func GetForVendor(userId int, w http.ResponseWriter) {
 	response, ok := DbGetOrdersVendor(userId)
 	if ok {
-		w.Header().Set("Content-Type", "application/json")
 		utils.Success(w, response)
 	} else {
 		utils.Failed(w, -1)

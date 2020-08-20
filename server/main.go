@@ -7,9 +7,11 @@ import (
 
 	"./admin"
 	"./db"
+	"./loader"
 	"./order"
 	"./product"
 	"./storage"
+	"./team"
 	"./user"
 )
 
@@ -39,5 +41,7 @@ func main() {
 	storage.HandleRequest()
 	order.HandleRequest()
 	product.HandleRequest()
+	loader.HandleRequest()
+	team.HandleRequest()
 	log.Fatal(http.ListenAndServe(":10000", nil))
 }
