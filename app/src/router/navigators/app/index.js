@@ -1,13 +1,15 @@
 import { createSwitchNavigator } from 'react-navigation'
-import LoginStack from '../login'
 import Main from 'src/modules/main'
 import MenuNavigator from '../menu'
 import TestScreen from 'src/modules/_test'
 import Introduction from 'src/modules/introduction'
+import LoginVendorStack from '../login/login-vendor'
+import LoginLoaderStack from '../login/login-loader'
 
 const AppNavigator = createSwitchNavigator({
 	Main,
-	LoginStack,
+	LoginVendorStack,
+	LoginLoaderStack,
 	Introduction,
 	Menu: MenuNavigator,
 	TestScreen,

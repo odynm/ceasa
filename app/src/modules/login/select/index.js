@@ -14,6 +14,10 @@ const Login = ({ navigation }) => {
 		navigation.navigate(screens.login)
 	}
 
+	const clickLoader = () => {
+		navigation.navigate(screens.loginLoader)
+	}
+
 	return (
 		<ScreenBase>
 			<SvgXml style={styles.logo} xml={svgLogo} />
@@ -22,7 +26,10 @@ const Login = ({ navigation }) => {
 				label={translate('loginSelect.vendor')}
 			/>
 			<Space size2 />
-			<Button label={translate('loginSelect.loader')} />
+			<Button
+				onPress={clickLoader}
+				label={translate('loginSelect.loader')}
+			/>
 		</ScreenBase>
 	)
 }

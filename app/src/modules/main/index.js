@@ -58,6 +58,7 @@ const Main = ({ logout, navigation, loadLoggedUser, checkTerms }) => {
 			// } else if (introduction.read) {
 			// 	navigation.navigate(screens.login)
 		} else {
+			// TODO ajustar para cair na tela certa de acordo com o login anteriormente feito
 			navigation.navigate(screens.login)
 			//navigation.navigate(screens.introduction)
 		}

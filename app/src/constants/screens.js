@@ -3,6 +3,7 @@ const screens = {
 	introduction: 'Introduction',
 	home: 'Home',
 	login: 'Login',
+	loginLoader: 'LoginLoader',
 	sell: 'Sell',
 	orders: 'Orders',
 	editOrder: 'EditOrder',
