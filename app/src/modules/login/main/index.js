@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { SvgXml } from 'react-native-svg'
 import { translate } from 'src/i18n/translate'
+import { TouchableOpacity } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import { Creators as UserCreators } from 'src/ducks/user'
 import styles from './styles'
+import colors from 'src/constants/colors'
 import stacks from 'src/constants/stacks'
+import svgBack from 'res/svgs/svgBack.svg'
 import svgLogo from 'res/svgs/svgLogo.svg'
 import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
@@ -26,8 +29,24 @@ const Login = ({ login, navigation, userId, accessToken }) => {
 		}
 	}
 
+	const handlePress = async () => {
+		navigation.goBack(null)
+	}
+
 	return (
 		<ScreenBase>
+			<TouchableOpacity
+				activeOpacity={0.3}
+				style={styles.backButton}
+				onPress={handlePress}>
+				<SvgXml
+					xml={svgBack}
+					stroke={colors.primary}
+					strokeWidth="5"
+					strokeLinejoin={'round'}
+					strokeLinecap={'round'}
+				/>
+			</TouchableOpacity>
 			<SvgXml style={styles.logo} xml={svgLogo} />
 			<TextInput
 				value={userText}

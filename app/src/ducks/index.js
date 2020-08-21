@@ -1,5 +1,6 @@
 import app from './app'
 import user from './user'
+import team from './team'
 import order from './order'
 import terms from './terms'
 import storage from './storage'
@@ -15,6 +16,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 const reducers = combineReducers({
 	app,
 	user,
+	team,
 	order,
 	terms,
 	storage,

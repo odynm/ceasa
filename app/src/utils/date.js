@@ -3,6 +3,6 @@ export const toHour = date => {
 	const minutes = date.getMinutes()
 
 	const hh = hour < 10 ? '0: ' + hour : hour
-	const mm = minutes < 10 ? '0: ' + minutes : minutes
+	const mm = minutes < 10 ? '0' + minutes : minutes
 	return hh + ':' + mm
 }

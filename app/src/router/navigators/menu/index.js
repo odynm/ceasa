@@ -2,6 +2,7 @@ import React from 'react'
 import { SvgXml } from 'react-native-svg'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import HomeStack from './items/home'
+import UserStack from './items/user'
 import SellStack from './items/sell'
 import OrdersStack from './items/orders'
 import StorageStack from './items/storage'
@@ -52,12 +53,22 @@ OrdersStack.navigationOptions = () => ({
 	},
 })
 
+UserStack.navigationOptions = () => ({
+	tabBarIcon: ({ focused }) =>
+		focused ? <SvgXml xml={svgHomeSelected} /> : <SvgXml xml={svgHome} />,
+	tabBarOptions: {
+		showLabel: false,
+		showIcon: true,
+	},
+})
+
 const MenuNavigator = createBottomTabNavigator(
 	{
 		Home: HomeStack,
 		Storage: StorageStack,
 		Sell: SellStack,
 		Orders: OrdersStack,
+		User: UserStack,
 	},
 	{
 		backBehavior: 'history',
