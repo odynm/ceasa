@@ -34,7 +34,20 @@ const loadLoaderTeams = () => async dispatch => {
 	dispatch(setLoading(false))
 }
 
+const joinTeam = code => async dispatch => {
+	dispatch(setLoading(true))
+	const { success, data } = await HttpService.post('team/join', {
+		token: code,
+	})
+	console.warn(success, data)
+	if (success) {
+		//dispatch(setTeamCode(data.token))
+	}
+	dispatch(setLoading(false))
+}
+
 export const Creators = {
+	joinTeam,
 	loadTeamCode,
 	loadLoaderTeams,
 }
