@@ -35,7 +35,7 @@ func CreateLoader(createLoader CreateLoaderDto, w http.ResponseWriter) int {
 
 func LoginLoader(loaderDto LoaderDto, w http.ResponseWriter) {
 	loader, ok := DbGetLoader(loaderDto)
-	if ok {
+	if ok && loader.Id > 0 {
 		token := utils.GetHash(loader.Name + "84" + loaderDto.Device + "D" + time.Now().String())
 		tokens[loader.Id] = LoaderAuthData{
 			token:        token,
@@ -43,6 +43,7 @@ func LoginLoader(loaderDto LoaderDto, w http.ResponseWriter) {
 		}
 		response := LoaderResponse{
 			Id:    loader.Id,
+			Name:  loader.Name,
 			Token: token,
 		}
 

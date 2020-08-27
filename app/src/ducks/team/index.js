@@ -25,13 +25,24 @@ const loadTeamCode = () => async dispatch => {
 	dispatch(setLoading(false))
 }
 
+const loadLoaderTeams = () => async dispatch => {
+	dispatch(setLoading(true))
+	const { success, data } = await HttpService.get('team')
+	if (success) {
+		dispatch(loadLoaderTeams(data))
+	}
+	dispatch(setLoading(false))
+}
+
 export const Creators = {
 	loadTeamCode,
+	loadLoaderTeams,
 }
 
 const initialState = {
 	teamCode: '',
 	loading: false,
+	loaderTeams: [],
 }
 
 export default function reducer(state = initialState, action) {
@@ -40,6 +51,8 @@ export default function reducer(state = initialState, action) {
 			return { ...state, loading: action.payload.loading }
 		case Types.SET_TEAM_CODE:
 			return { ...state, teamCode: action.payload.teamCode }
+		case Types.SET_LOADER_TEAMS:
+			return { ...state, loaderTeams: action.payload.loaderTeams }
 		default:
 			return state
 	}

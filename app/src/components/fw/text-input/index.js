@@ -5,12 +5,20 @@ import KText from '../ktext'
 import colors from 'src/constants/colors'
 import Error from 'src/components/fw/error'
 
-const TextInput = ({ label, value, setValue, password, errorMessage }) => (
+const TextInput = ({
+	label,
+	value,
+	setValue,
+	password,
+	maxLength,
+	errorMessage,
+}) => (
 	<>
 		<View style={styles.container}>
 			<KText bold text={label} />
 			<RNTextInput
 				value={value}
+				maxLength={maxLength}
 				style={styles.textInput}
 				secureTextEntry={password}
 				onChangeText={x => setValue(x)}

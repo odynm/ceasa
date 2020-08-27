@@ -9,6 +9,18 @@ import (
 	"../utils"
 )
 
+func getAll(w http.ResponseWriter, r *http.Request) {
+	loaderId := loader.CheckLogin(w, r)
+	if loaderId > 0 {
+		teams, ok := GetAllTeams(loaderId, w)
+		if ok {
+			utils.Success(w, teams)
+		}
+	} else {
+		utils.NoAuth(w)
+	}
+}
+
 func getCode(w http.ResponseWriter, r *http.Request) {
 	userId := user.CheckLogin(w, r)
 	if userId > 0 {
@@ -44,6 +56,15 @@ func join(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func teamRouter(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		getAll(w, r)
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
 func teamCodeRouter(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
@@ -53,7 +74,7 @@ func teamCodeRouter(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func teamRouter(w http.ResponseWriter, r *http.Request) {
+func teamJoinRouter(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
 		join(w, r)
@@ -63,6 +84,7 @@ func teamRouter(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleRequest() {
+	http.HandleFunc("/team", teamRouter)
 	http.HandleFunc("/team/code", teamCodeRouter)
-	http.HandleFunc("/team/join", teamRouter)
+	http.HandleFunc("/team/join", teamJoinRouter)
 }

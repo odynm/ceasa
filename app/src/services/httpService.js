@@ -20,9 +20,13 @@ import * as retryAxios from 'retry-axios'
 
 const requestInterceptor = requestConfig => {
 	const { user } = store.getState().user
+	const { loader } = store.getState().loader
 	if (user.accessToken && user.id) {
 		requestConfig.headers.Auth = user.accessToken
 		requestConfig.headers.User = user.id
+	} else if (loader.accessToken && loader.id) {
+		requestConfig.headers.Auth = loader.accessToken
+		requestConfig.headers.Loader = loader.id
 	}
 	//config.headers['accept-language'] = i18n.locale
 	return requestConfig

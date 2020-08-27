@@ -7,6 +7,10 @@ const styles = StyleSheet.create({
 		marginBottom: hp(70),
 		marginTop: hp(80),
 	},
+	button: {
+		marginBottom: hp(30),
+		marginTop: 'auto',
+	},
 })
 
 export default styles

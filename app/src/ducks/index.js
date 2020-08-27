@@ -3,6 +3,7 @@ import user from './user'
 import team from './team'
 import order from './order'
 import terms from './terms'
+import loader from './loader'
 import storage from './storage'
 import products from './products'
 import editOrder from './order/edit-order'
@@ -19,6 +20,7 @@ const reducers = combineReducers({
 	team,
 	order,
 	terms,
+	loader,
 	storage,
 	products,
 	editOrder,

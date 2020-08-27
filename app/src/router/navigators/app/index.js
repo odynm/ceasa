@@ -5,11 +5,13 @@ import TestScreen from 'src/modules/_test'
 import Introduction from 'src/modules/introduction'
 import LoginVendorStack from '../login/login-vendor'
 import LoginLoaderStack from '../login/login-loader'
+import LoginLoaderTeamStack from '../login/login-loader-team'
 
 const AppNavigator = createSwitchNavigator({
 	Main,
 	LoginVendorStack,
 	LoginLoaderStack,
+	LoginLoaderTeamStack,
 	Introduction,
 	Menu: MenuNavigator,
 	TestScreen,

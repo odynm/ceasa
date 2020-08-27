@@ -1,13 +1,13 @@
 import { wp } from 'src/utils/screen'
 import { createStackNavigator } from 'react-navigation-stack'
 import colors from 'src/constants/colors'
-import LoginSelect from 'src/modules/login/select'
-import LoginLoader from 'src/modules/login/loader/main'
+import ReadQr from 'src/modules/login/loader/read-qr'
+import LoaderTeams from 'src/modules/login/loader/teams'
 
-const LoginLoaderStack = createStackNavigator(
+const LoginLoaderTeamStack = createStackNavigator(
 	{
-		LoginSelect,
-		LoginLoader,
+		LoaderTeams,
+		ReadQr,
 	},
 	{
 		defaultNavigationOptions: () => ({
@@ -22,4 +22,4 @@ const LoginLoaderStack = createStackNavigator(
 	},
 )
 
-export default LoginLoaderStack
+export default LoginLoaderTeamStack

@@ -7,6 +7,14 @@ import (
 	"../utils"
 )
 
+func GetAllTeams(loaderId int, w http.ResponseWriter) ([]Team, bool) {
+	teams, ok := DbGetAllTeams(loaderId)
+	if !ok {
+		utils.Failed(w, -1)
+	}
+	return teams, ok
+}
+
 func AddToTeam(loaderId int, userId int, token string, w http.ResponseWriter) {
 	teamId := DbGetTeam(loaderId, userId)
 	if teamId > 0 {

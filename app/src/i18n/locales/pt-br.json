@@ -9,6 +9,22 @@
 		"password": "Senha",
 		"error": "Usuário ou senha incorretos"
 	},
+	"loaderLogin": {
+		"login": "Login",
+		"createTitle": "Entrar como carregador",
+		"createText": "Escreva seu nome para começar como carregador:",
+		"name": "Nome",
+		"nameRequired": "Insira um nome com pelo menos 3 caracteres",
+		"loginButton": "Entrar"
+	},
+	"loaderTeams": {
+		"teams": "Equipes",
+		"loggedAs": "Carregador",
+		"edit": "Editar",
+		"logout": "Sair",
+		"none": "Você não está em nenhuma equipe ainda",
+		"read": "Ler Código"
+	},
 	"menus": {
 		"storage": "Cadastrar",
 		"home": "Visão Geral",

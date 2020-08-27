@@ -4,6 +4,8 @@ const screens = {
 	home: 'Home',
 	login: 'Login',
 	loginLoader: 'LoginLoader',
+	loaderTeams: 'LoaderTeams',
+	readQr: 'ReadQr',
 	sell: 'Sell',
 	orders: 'Orders',
 	editOrder: 'EditOrder',

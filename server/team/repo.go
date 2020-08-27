@@ -2,6 +2,35 @@ package team
 
 import "../db"
 
+func DbGetAllTeams(loaderId int) ([]Team, bool) {
+	var teams []Team
+	statement := `
+		SELECT id, loaderId, userId
+		FROM "team_info"
+		WHERE loader_id = $1`
+	rows, err := db.Instance.Db.Query(statement, loaderId)
+
+	if err != nil {
+		goto Error
+	}
+
+	for rows.Next() {
+		var team Team
+		err := rows.Scan(&team.Id, &team.LoaderId, &team.UserId)
+
+		if err != nil {
+			goto Error
+		}
+
+		teams = append(teams, team)
+	}
+
+	return teams, true
+
+Error:
+	return teams, false
+}
+
 func DbGetTeam(loaderId int, userId int) int {
 	statement := `
 		SELECT id
