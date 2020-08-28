@@ -39,17 +39,12 @@ func getCode(w http.ResponseWriter, r *http.Request) {
 func join(w http.ResponseWriter, r *http.Request) {
 	loaderId := loader.CheckLogin(w, r)
 	if loaderId > 0 {
-		userId := loader.GetLoaderUserId(w, r)
-		if userId > 0 {
-			var joinTeamToken JoinTeamToken
-			err := json.NewDecoder(r.Body).Decode(&joinTeamToken)
-			if err != nil || joinTeamToken.Token != "" {
-				AddToTeam(loaderId, userId, joinTeamToken.Token, w)
-			} else {
-				utils.Failed(w, -1)
-			}
+		var joinTeamToken JoinTeamToken
+		err := json.NewDecoder(r.Body).Decode(&joinTeamToken)
+		if err != nil || joinTeamToken.Token != "" {
+			AddToTeam(loaderId, joinTeamToken.Token, w)
 		} else {
-			utils.NoAuth(w)
+			utils.Failed(w, -1)
 		}
 	} else {
 		utils.NoAuth(w)

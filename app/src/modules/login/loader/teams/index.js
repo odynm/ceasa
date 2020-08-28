@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
-import { View, ScrollView } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import { Creators as TeamCreators } from 'src/ducks/team'
+import { Creators as LoaderCreators } from 'src/ducks/loader'
+import { View, ScrollView, TouchableWithoutFeedback } from 'react-native'
 import styles from './styles'
+import TeamCard from './card'
 import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import KText from 'src/components/fw/ktext'
@@ -15,6 +17,7 @@ import ScreenHeader from 'src/components/fw/screen-header'
 
 const LoaderTeams = ({
 	loader,
+	setUserId,
 	navigation,
 	loaderTeams,
 	teamsLoading,
@@ -24,9 +27,10 @@ const LoaderTeams = ({
 		loadLoaderTeams()
 	}, [])
 
-	useEffect(() => {
-		console.warn(loaderTeams)
-	}, [loaderTeams])
+	const handleSelect = userId => {
+		setUserId(userId)
+		//TODO go to order list
+	}
 
 	return (
 		<>
@@ -57,9 +61,19 @@ const LoaderTeams = ({
 						<KText bold fontSize={22} text={loader.name} />
 					</View>
 					{loaderTeams && loaderTeams.length > 0 ? (
-						<ScrollView>
-							<View />
-						</ScrollView>
+						<>
+							<Space />
+							<KText text={translate('loaderTeams.registeredTeams')} />
+							<Space />
+							<ScrollView>
+								{loaderTeams.map((x, i) => (
+									<TouchableWithoutFeedback
+										onPress={() => handleSelect(x.userId)}>
+										<TeamCard key={i} name={x.userName} />
+									</TouchableWithoutFeedback>
+								))}
+							</ScrollView>
+						</>
 					) : (
 						<KText text={translate('loaderTeams.none')} />
 					)}
@@ -86,6 +100,7 @@ const mapStateToProps = ({ team, loader }) => ({
 })
 
 const mapDispatchToProps = {
+	setUserId: LoaderCreators.setUserId,
 	loadLoaderTeams: TeamCreators.loadLoaderTeams,
 }
 

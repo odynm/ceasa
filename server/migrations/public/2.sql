@@ -65,13 +65,13 @@ CREATE TABLE public.team_info
     id int NOT NULL DEFAULT nextval('public.team_info_id_seq'::regclass),
     user_id int NOT NULL,
     loader_id int NOT NULL,
-    CONSTRAINT team_info_pkey PRIMARY KEY (id)
+    CONSTRAINT team_info_pkey PRIMARY KEY (id),
     CONSTRAINT fk_team_user FOREIGN KEY (user_id)
         REFERENCES public.user_info (id)
         ON DELETE NO ACTION,
     CONSTRAINT fk_team_loader FOREIGN KEY (loader_id)
         REFERENCES public.loader_info (id)
-        ON DELETE NO ACTION,
+        ON DELETE NO ACTION
 )
 WITH (
     OIDS=FALSE

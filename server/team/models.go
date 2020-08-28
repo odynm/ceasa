@@ -9,3 +9,11 @@ type Team struct {
 	LoaderId int `json:"loaderId"`
 	UserId   int `json:"userId"`
 }
+
+type TeamFull struct {
+	Id         int    `json:"id"`
+	LoaderId   int    `json:"loaderId"`
+	LoaderName string `json:"loaderName"`
+	UserId     int    `json:"userId"`
+	UserName   string `json:"userName"`
+}

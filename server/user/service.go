@@ -105,3 +105,12 @@ func GetUserIdAuthData(userId int, w http.ResponseWriter) (AuthData, bool) {
 	authData := tokens[userId]
 	return authData, true
 }
+
+func GetUserFromLoaderToken(loaderToken string) (int, bool) {
+	for key, token := range tokens {
+		if token.LoaderToken == loaderToken {
+			return key, true
+		}
+	}
+	return 0, false
+}

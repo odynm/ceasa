@@ -1,20 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
 import { Creators as TeamCreators } from 'src/ducks/team'
+import Loader from 'src/components/fw/loader'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import ScreenHeader from 'src/components/fw/screen-header'
 
-const ReadQr = ({ navigation, loadLoaderTeams }) => {
-	const handleRead = e => {
+const ReadQr = ({ navigation, joinTeam, loadLoaderTeams }) => {
+	const [loading, setLoading] = useState(false)
+
+	const handleRead = async e => {
 		const code = e.data
-		console.warn(code)
+		setLoading(true)
+		await joinTeam(code)
+		setLoading(false)
+
 		loadLoaderTeams()
 		navigation.goBack(null)
 	}
 
-	return <QRCodeScanner cameraType={'front'} onRead={handleRead} />
+	return (
+		<>
+			{loading ? (
+				<Loader fullScreen />
+			) : (
+				<QRCodeScanner cameraType={'front'} onRead={handleRead} />
+			)}
+		</>
+	)
 }
 
 ReadQr.navigationOptions = () => ({
@@ -25,6 +39,7 @@ ReadQr.navigationOptions = () => ({
 const mapStateToProps = ({}) => ({})
 
 const mapDispatchToProps = {
+	joinTeam: TeamCreators.joinTeam,
 	loadLoaderTeams: TeamCreators.loadLoaderTeams,
 }
 

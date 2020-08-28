@@ -5,6 +5,7 @@ const prefix = 'loader/'
 const Types = {
 	SET_LOADER: prefix + 'SET_LOADER',
 	SET_LOADING: prefix + 'SET_LOADING',
+	SET_USER_ID: prefix + 'SET_USER_ID',
 }
 
 const setLoading = loading => ({
@@ -15,6 +16,11 @@ const setLoading = loading => ({
 const setLoader = loader => ({
 	payload: { loader },
 	type: Types.SET_LOADER,
+})
+
+const setUserId = userId => ({
+	payload: { userId },
+	type: Types.SET_USER_ID,
 })
 
 const login = () => async dispatch => {
@@ -45,15 +51,19 @@ const create = name => async dispatch => {
 export const Creators = {
 	login,
 	create,
+	setUserId,
 }
 
 const initialState = {
+	userId: 0, // used for team
 	loader: {},
 	loading: false,
 }
 
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
+		case Types.SET_USER_ID:
+			return { ...state, userId: action.payload.userId }
 		case Types.SET_LOADER:
 			return { ...state, loader: action.payload.loader }
 		case Types.SET_LOADING:

@@ -4,6 +4,7 @@ const prefix = 'team/'
 const Types = {
 	SET_LOADING: prefix + 'SET_LOADING',
 	SET_TEAM_CODE: prefix + 'SET_TEAM_CODE',
+	SET_LOADER_TEAMS: prefix + 'SET_LOADER_TEAMS',
 }
 
 const setLoading = loading => ({
@@ -14,6 +15,11 @@ const setLoading = loading => ({
 const setTeamCode = teamCode => ({
 	payload: { teamCode },
 	type: Types.SET_TEAM_CODE,
+})
+
+const setLoaderTeams = loaderTeams => ({
+	payload: { loaderTeams },
+	type: Types.SET_LOADER_TEAMS,
 })
 
 const loadTeamCode = () => async dispatch => {
@@ -29,7 +35,7 @@ const loadLoaderTeams = () => async dispatch => {
 	dispatch(setLoading(true))
 	const { success, data } = await HttpService.get('team')
 	if (success) {
-		dispatch(loadLoaderTeams(data))
+		dispatch(setLoaderTeams(data))
 	}
 	dispatch(setLoading(false))
 }

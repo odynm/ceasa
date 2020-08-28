@@ -2,11 +2,13 @@ package team
 
 import "../db"
 
-func DbGetAllTeams(loaderId int) ([]Team, bool) {
-	var teams []Team
+func DbGetAllTeams(loaderId int) ([]TeamFull, bool) {
+	var teams []TeamFull
 	statement := `
-		SELECT id, loaderId, userId
-		FROM "team_info"
+		SELECT t.id, t.loader_id, t.user_id, l.name, u.login
+		FROM "team_info" t
+		INNER JOIN "loader_info" l ON l.id = loader_id
+		INNER JOIN "user_info" u ON u.id = user_id
 		WHERE loader_id = $1`
 	rows, err := db.Instance.Db.Query(statement, loaderId)
 
@@ -15,8 +17,8 @@ func DbGetAllTeams(loaderId int) ([]Team, bool) {
 	}
 
 	for rows.Next() {
-		var team Team
-		err := rows.Scan(&team.Id, &team.LoaderId, &team.UserId)
+		var team TeamFull
+		err := rows.Scan(&team.Id, &team.LoaderId, &team.UserId, &team.LoaderName, &team.UserName)
 
 		if err != nil {
 			goto Error
