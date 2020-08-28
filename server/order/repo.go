@@ -187,7 +187,7 @@ func DbGetOrderProductsFull(userId int, orderId int) ([]OrderListItemProduct, bo
 	FROM %v.order_product op
 	INNER JOIN %v.storage_item si ON si.id = op.storage_id
 	INNER JOIN public.products_product pp ON pp.id = si.product_id
-	INNER JOIN public.products_product_type pt ON pt.id = si.product_type_id
+	LEFT JOIN public.products_product_type pt ON pt.id = si.product_type_id
 	INNER JOIN %v.storage_item_description sid ON sid.id = si.description_id 
 	WHERE order_id = $1`, schema, schema, schema)
 
