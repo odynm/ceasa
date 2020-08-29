@@ -151,6 +151,15 @@ func GetForVendor(userId int, w http.ResponseWriter) {
 	}
 }
 
+func GetForLoader(userId int, w http.ResponseWriter) {
+	response, ok := DbGetOrdersVendor(userId)
+	if ok {
+		utils.Success(w, response)
+	} else {
+		utils.Failed(w, -1)
+	}
+}
+
 func addProducts(userId int, orderId int, products []ProductDto) bool {
 	for _, product := range products {
 		storageItem := storage.DbGetById(product.StorageItemId, userId)

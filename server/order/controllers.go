@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"../loader"
 	"../user"
 	"../utils"
 )
@@ -41,7 +42,22 @@ func get(w http.ResponseWriter, r *http.Request) {
 	userId := user.CheckLogin(w, r)
 	if userId > 0 {
 		GetForVendor(userId, w)
-		// TODO get for loader
+	} else {
+		utils.Failed(w, -1)
+	}
+}
+
+func getLoader(w http.ResponseWriter, r *http.Request) {
+	loaderId := loader.CheckLogin(w, r)
+	if loaderId > 0 {
+		userId := loader.GetLoaderUserId(w, r)
+		if userId > 0 {
+			GetForLoader(userId, w)
+		} else {
+			utils.Failed(w, -1)
+		}
+	} else {
+		utils.Failed(w, -1)
 	}
 }
 
@@ -56,6 +72,16 @@ func orderRouter(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func orderLoaderRouter(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		getLoader(w, r)
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
 func HandleRequest() {
 	http.HandleFunc("/order", orderRouter)
+	http.HandleFunc("/order/loader", orderLoaderRouter)
 }
