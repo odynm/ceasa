@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { toHour } from 'src/utils/date'
 import { withNavigation } from 'react-navigation'
 import { Creators as OrdersLoaderCreators } from 'src/ducks/orders-loader'
 import screens from 'src/constants/screens'
-import OrderCard from 'src/ducks/order/card'
-import MoneyService from 'src/services/moneyService'
 import ScreenBase from 'src/components/fw/screen-base'
+import OrderCard from 'src/components/ceasa/order/card'
 
-const OrdersLoader = ({ orderList, loadOrders, navigation }) => {
+const OrdersLoader = ({
+	orderList,
+	loadOrders,
+	navigation,
+	setSelectedOrderId,
+}) => {
 	useEffect(() => {
 		loadOrders()
 	}, [])
@@ -26,7 +30,10 @@ const OrdersLoader = ({ orderList, loadOrders, navigation }) => {
 						loader={item.loader}
 						status={item.status}
 						clientKey={item.client.key}
-						editOrder={() => {}}
+						onPress={() => {
+							setSelectedOrderId(item.id)
+							navigation.navigate(screens.loaderOrderInfo)
+						}}
 						releasedHour={item.releasedAt && toHour(item.releasedAt)}
 					/>
 				))}
@@ -37,6 +44,7 @@ const OrdersLoader = ({ orderList, loadOrders, navigation }) => {
 
 const mapDispatchToProps = {
 	loadOrders: OrdersLoaderCreators.loadOrders,
+	setSelectedOrderId: OrdersLoaderCreators.setSelectedOrderId,
 }
 
 const mapStateToProps = ({ ordersLoader }) => ({

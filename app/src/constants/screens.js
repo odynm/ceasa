@@ -10,6 +10,7 @@ const screens = {
 	orders: 'Orders',
 	editOrder: 'EditOrder',
 	editProductsOrder: 'EditProductsOrder',
+	loaderOrderInfo: 'LoaderOrderInfo',
 }
 
 export default screens

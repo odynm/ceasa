@@ -6,14 +6,14 @@ import orderStatus from 'src/enums/order'
 import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
 
-const OrderCard = ({ clientKey, status, loader, editOrder, releasedHour }) => {
+const OrderCard = ({ clientKey, status, loader, onPress, releasedHour }) => {
 	const style = [
 		styles.container,
 		status === orderStatus.blocked ? styles.white : undefined,
 	]
 
 	return (
-		<TouchableWithoutFeedback onPress={editOrder}>
+		<TouchableWithoutFeedback onPress={onPress}>
 			<View style={style}>
 				<View style={styles.card}>
 					<KText fontSize={14} text={loader} style={styles.loader} />

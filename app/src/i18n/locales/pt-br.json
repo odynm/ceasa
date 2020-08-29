@@ -97,6 +97,13 @@
 		"urgent": "Definir como urgente",
 		"edit": "Editar"
 	},
+	"loaderOrderInfo": {
+		"clientKey": "Nome/Placa/Box",
+		"clientPlace": "Lugar",
+		"clientVehicle": "Veículo",
+		"products": "Produtos",
+		"begin": "Começar"
+	},
 	"errors": {
 		"serverError": "Não foi possível comunicar com o servidor"
 	},

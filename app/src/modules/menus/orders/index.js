@@ -6,9 +6,9 @@ import { withNavigation } from 'react-navigation'
 import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
 import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
 import screens from 'src/constants/screens'
-import OrderCard from 'src/ducks/order/card'
 import MoneyService from 'src/services/moneyService'
 import ScreenBase from 'src/components/fw/screen-base'
+import OrderCard from 'src/components/ceasa/order/card'
 
 const OrdersVendor = ({
 	setClient,
@@ -48,7 +48,7 @@ const OrdersVendor = ({
 						loader={item.loader}
 						status={item.status}
 						clientKey={item.client.key}
-						editOrder={() => editOrder({ item })}
+						onPress={() => editOrder({ item })}
 						releasedHour={item.releasedAt && toHour(item.releasedAt)}
 					/>
 				))}
