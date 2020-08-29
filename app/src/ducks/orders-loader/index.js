@@ -1,6 +1,6 @@
 import HttpService from 'src/services/httpService'
 
-const prefix = 'order-vendor/'
+const prefix = 'order-loader/'
 const Types = {
 	SET_ORDER_LIST: prefix + 'SET_ORDER_LIST',
 }

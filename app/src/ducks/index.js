@@ -8,6 +8,7 @@ import storage from './storage'
 import products from './products'
 import editOrder from './order/edit-order'
 import ordersVendor from './orders-vendor'
+import ordersLoader from './orders-loader'
 
 import rfdc from 'rfdc'
 import thunk from 'redux-thunk'
@@ -25,6 +26,7 @@ const reducers = combineReducers({
 	products,
 	editOrder,
 	ordersVendor,
+	ordersLoader,
 })
 
 const middlewares = [thunk]

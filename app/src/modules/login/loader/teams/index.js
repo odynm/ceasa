@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
+import { View, ScrollView } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import { Creators as TeamCreators } from 'src/ducks/team'
 import { Creators as LoaderCreators } from 'src/ducks/loader'
-import { View, ScrollView, TouchableWithoutFeedback } from 'react-native'
 import styles from './styles'
 import TeamCard from './card'
+import stacks from 'src/constants/stacks'
 import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import KText from 'src/components/fw/ktext'
@@ -29,7 +30,7 @@ const LoaderTeams = ({
 
 	const handleSelect = userId => {
 		setUserId(userId)
-		//TODO go to order list
+		navigation.navigate(stacks.loaderMenu)
 	}
 
 	return (
@@ -67,10 +68,11 @@ const LoaderTeams = ({
 							<Space />
 							<ScrollView>
 								{loaderTeams.map((x, i) => (
-									<TouchableWithoutFeedback
-										onPress={() => handleSelect(x.userId)}>
-										<TeamCard key={i} name={x.userName} />
-									</TouchableWithoutFeedback>
+									<TeamCard
+										key={i}
+										name={x.userName}
+										onPress={() => handleSelect(x.userId)}
+									/>
 								))}
 							</ScrollView>
 						</>

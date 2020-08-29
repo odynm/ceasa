@@ -3,38 +3,16 @@ import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { toHour } from 'src/utils/date'
 import { withNavigation } from 'react-navigation'
-import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
-import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
+import { Creators as OrdersLoaderCreators } from 'src/ducks/orders-loader'
 import screens from 'src/constants/screens'
 import OrderCard from 'src/ducks/order/card'
 import MoneyService from 'src/services/moneyService'
 import ScreenBase from 'src/components/fw/screen-base'
 
-const OrdersVendor = ({
-	setClient,
-	setStatus,
-	orderList,
-	loadOrders,
-	navigation,
-	setOrderItems,
-}) => {
+const OrdersLoader = ({ orderList, loadOrders, navigation }) => {
 	useEffect(() => {
 		loadOrders()
 	}, [])
-
-	const editOrder = ({ item }) => {
-		setStatus(item.status)
-		setClient(item.client)
-
-		setOrderItems(
-			item.products.map(x => ({
-				...x,
-				unitPrice: MoneyService.toMoney(x.unitPrice / 100),
-				total: MoneyService.toMoney(x.amount * (x.unitPrice / 100)),
-			})),
-		)
-		navigation.navigate(screens.editOrder)
-	}
 
 	return (
 		<View>
@@ -48,7 +26,7 @@ const OrdersVendor = ({
 						loader={item.loader}
 						status={item.status}
 						clientKey={item.client.key}
-						editOrder={() => editOrder({ item })}
+						editOrder={() => {}}
 						releasedHour={item.releasedAt && toHour(item.releasedAt)}
 					/>
 				))}
@@ -58,17 +36,14 @@ const OrdersVendor = ({
 }
 
 const mapDispatchToProps = {
-	setStatus: EditOrderCreators.setStatus,
-	setClient: EditOrderCreators.setClient,
-	loadOrders: OrdersVendorCreators.loadOrders,
-	setOrderItems: EditOrderCreators.setOrderItems,
+	loadOrders: OrdersLoaderCreators.loadOrders,
 }
 
-const mapStateToProps = ({ ordersVendor }) => ({
-	orderList: ordersVendor.orderList,
+const mapStateToProps = ({ ordersLoader }) => ({
+	orderList: ordersLoader.orderList,
 })
 
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(withNavigation(OrdersVendor))
+)(withNavigation(OrdersLoader))
