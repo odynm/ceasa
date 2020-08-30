@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"./admin"
+	"./carry"
 	"./db"
 	"./loader"
 	"./order"
@@ -43,5 +44,6 @@ func main() {
 	product.HandleRequest()
 	loader.HandleRequest()
 	team.HandleRequest()
+	carry.HandleRequest()
 	log.Fatal(http.ListenAndServe(":10000", nil))
 }

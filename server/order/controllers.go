@@ -54,10 +54,10 @@ func getLoader(w http.ResponseWriter, r *http.Request) {
 		if userId > 0 {
 			GetForLoader(userId, w)
 		} else {
-			utils.Failed(w, -1)
+			utils.NoAuth(w)
 		}
 	} else {
-		utils.Failed(w, -1)
+		utils.NoAuth(w)
 	}
 }
 
