@@ -116,7 +116,7 @@ func DbGetAllFull(userId int) []StorageItemFull {
 		amount
 	FROM %v.storage_item si
 	INNER JOIN public.products_product pp ON pp.id = si.product_id
-	INNER JOIN public.products_product_type pt ON pt.id = si.product_type_id
+	LEFT JOIN public.products_product_type pt ON pt.id = si.product_type_id
 	INNER JOIN %v.storage_item_description sid ON sid.id = si.description_id`, schema, schema)
 
 	rows, err := db.Instance.Db.Query(statement)

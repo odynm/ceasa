@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
 		borderColor: colors.primary,
 		borderRadius: wp(10),
 		borderWidth: 1,
+		marginBottom: hp(10),
 	},
 	card: {
 		paddingHorizontal: wp(10),

@@ -6,6 +6,15 @@ const getOrder = ({ orderList, selectedOrderId }) => {
 	return {}
 }
 
+const getOrderCarrying = ({ carryingList, selectedCarryingOrderId }) => {
+	const order = carryingList.find(item => item.id === selectedCarryingOrderId)
+	if (order) {
+		return order
+	}
+	return {}
+}
+
 export const Selectors = {
 	getOrder,
+	getOrderCarrying,
 }
