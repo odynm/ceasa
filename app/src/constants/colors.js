@@ -4,6 +4,7 @@ const colors = {
 	lightGray: '#cccccc',
 	link: '#2C3696',
 	red: '#ff0000',
+	lemonChiffon: '#FFF9C5',
 }
 
 export default colors

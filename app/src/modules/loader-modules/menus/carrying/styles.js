@@ -11,6 +11,13 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		width: wp(375),
 	},
+	scrollView: {
+		width: wp(375),
+	},
+	footer: {
+		marginBottom: hp(50),
+		marginTop: 'auto',
+	},
 })
 
 export default styles

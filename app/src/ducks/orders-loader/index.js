@@ -28,6 +28,31 @@ const setSelectedCarryingOrderId = selectedCarryingOrderId => ({
 	type: Types.SET_SELECTED_CARRYING_ORDER_ID,
 })
 
+const setAmountDelivered = ({ carryItemId, itemId, amountDelivered }) => (
+	dispatch,
+	getState,
+) => {
+	const { carryingList } = getState().ordersLoader
+
+	const newCarryingList = carryingList.map(carryItem =>
+		carryItem.id === carryItemId
+			? {
+					...carryItem,
+					products: carryItem.products.map(product =>
+						product.id === itemId
+							? { ...product, amountDelivered: amountDelivered }
+							: product,
+					),
+			  }
+			: carryItem,
+	)
+
+	dispatch({
+		payload: { carryingList: newCarryingList },
+		type: Types.SET_CARRYING_LIST,
+	})
+}
+
 const loadOrders = () => async dispatch => {
 	const { data, success } = await HttpService.get('order/loader')
 	const mappedData = data.map(item => ({
@@ -42,15 +67,28 @@ const loadOrders = () => async dispatch => {
 	return success
 }
 
-const loadCarryingOrders = () => async dispatch => {
+const loadCarryingOrders = () => async (dispatch, getState) => {
+	const { carryingList } = getState().ordersLoader
+
 	const { data, success } = await HttpService.get('carry')
-	const mappedData = data.map(item => ({
+	// Because the partial state of the carry array will be stored locally, we
+	// need to filter the array for items that have been loaded already
+	const filteredData = data.filter(
+		item => !carryingList.some(x => x.id === item.id),
+	)
+
+	const mappedData = filteredData.map(item => ({
 		...item,
+		products: item.products.map(product => ({
+			...product,
+			amountDelivered: product.amount,
+		})),
 		createdAt: new Date(item.createdAt),
 		releasedAt: new Date(item.releasedAt),
 	}))
-	if (success && data) {
-		await dispatch(setCarryingOrderList(mappedData))
+
+	if (success && mappedData) {
+		await dispatch(setCarryingOrderList([...carryingList, ...mappedData]))
 	}
 
 	return success
@@ -73,6 +111,7 @@ const initialState = {
 export const Creators = {
 	loadOrders,
 	startCarrying,
+	setAmountDelivered,
 	setSelectedOrderId,
 	loadCarryingOrders,
 	setSelectedCarryingOrderId,

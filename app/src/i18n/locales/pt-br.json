@@ -104,6 +104,9 @@
 		"products": "Produtos",
 		"begin": "Começar"
 	},
+	"loaderCarrying": {
+		"finish": "Finalizar"
+	},
 	"errors": {
 		"serverError": "Não foi possível comunicar com o servidor"
 	},

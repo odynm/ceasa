@@ -1,20 +1,25 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
+import { translate } from 'src/i18n/translate'
 import { View, ScrollView } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import { Creators as OrdersLoaderCreators } from 'src/ducks/orders-loader'
 import { Selectors as OrdersLoaderSelectors } from 'src/ducks/orders-loader'
 import styles from './styles'
-import CarryCard from './card'
+import CarryCard from './carry-card'
+import ProductCard from './product-card'
+import KText from 'src/components/fw/ktext'
 import Space from 'src/components/fw/space'
+import Button from 'src/components/fw/button'
 import Loader from 'src/components/fw/loader'
 import ScreenBase from 'src/components/fw/screen-base'
 import ClientSegment from 'src/components/ceasa/order/client-segment'
 
 const Carrying = ({
 	carryingList,
-	loadCarryingOrders,
 	carryingOrder,
+	loadCarryingOrders,
+	setAmountDelivered,
 	selectedCarryingOrderId,
 	setSelectedCarryingOrderId,
 }) => {
@@ -35,7 +40,10 @@ const Carrying = ({
 				useKeyboardAvoid={false}
 				useKeyboardClose={false}>
 				<View style={styles.headerCards}>
-					<ScrollView horizontal={true}>
+					<ScrollView
+						showsHorizontalScrollIndicator={false}
+						style={styles.scrollView}
+						horizontal={true}>
 						{carryingList.map((item, index) => (
 							<CarryCard
 								key={index}
@@ -50,7 +58,35 @@ const Carrying = ({
 				</View>
 				<Space size4 />
 				{carryingOrder && carryingOrder.client ? (
-					<ClientSegment client={carryingOrder.client} />
+					<>
+						<ClientSegment client={carryingOrder.client} />
+						<KText text={translate('loaderOrderInfo.products')} />
+						<ScrollView>
+							{carryingOrder.products.map((item, index) => (
+								<ProductCard
+									key={index}
+									id={item.id}
+									amount={item.amount}
+									orderId={carryingOrder.id}
+									product={item.productName}
+									description={item.description}
+									productType={item.productTypeName}
+									amountDelivered={item.amountDelivered}
+									setAmountDelivered={setAmountDelivered}
+								/>
+							))}
+						</ScrollView>
+						<View style={styles.footer}>
+							{false ? (
+								<Loader />
+							) : (
+								<Button
+									label={translate('loaderCarrying.finish')}
+									onPress={() => {}}
+								/>
+							)}
+						</View>
+					</>
 				) : (
 					<Loader />
 				)}
@@ -61,6 +97,7 @@ const Carrying = ({
 
 const mapDispatchToProps = {
 	loadCarryingOrders: OrdersLoaderCreators.loadCarryingOrders,
+	setAmountDelivered: OrdersLoaderCreators.setAmountDelivered,
 	setSelectedCarryingOrderId: OrdersLoaderCreators.setSelectedCarryingOrderId,
 }
 
