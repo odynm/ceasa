@@ -101,6 +101,27 @@ const startCarrying = id => async () => {
 	return success
 }
 
+const finishCarrying = ({ orderId, products }) => async (
+	dispatch,
+	getState,
+) => {
+	console.warn(products)
+	const { success } = await HttpService.post('carry/finish', {
+		orderId,
+		products,
+	})
+
+	if (success) {
+		const { carryingList } = getState().ordersLoader
+
+		// Delete from list
+		const filteredData = carryingList.filter(item => item.id !== orderId)
+		await dispatch(setCarryingOrderList(filteredData))
+	}
+
+	return success
+}
+
 const initialState = {
 	orderList: [],
 	carryingList: [],
@@ -111,6 +132,7 @@ const initialState = {
 export const Creators = {
 	loadOrders,
 	startCarrying,
+	finishCarrying,
 	setAmountDelivered,
 	setSelectedOrderId,
 	loadCarryingOrders,

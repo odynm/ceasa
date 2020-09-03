@@ -105,7 +105,14 @@
 		"begin": "Começar"
 	},
 	"loaderCarrying": {
-		"finish": "Finalizar"
+		"finish": "Finalizar",
+		"modal": {
+			"finishCarry": "Finalizar entrega",
+			"areYouSure": "Finalizar entrega?",
+			"itemsNotDelivered": "Os seguintes itens NÃO foram entregues e voltarão ao estoque:",
+			"no": "Não",
+			"yes": "Sim"
+		}
 	},
 	"errors": {
 		"serverError": "Não foi possível comunicar com o servidor"

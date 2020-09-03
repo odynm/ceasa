@@ -28,6 +28,26 @@ func startCarrying(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func finishCarrying(w http.ResponseWriter, r *http.Request) {
+	loaderId := loader.CheckLogin(w, r)
+	if loaderId > 0 {
+		userId := loader.GetLoaderUserId(w, r)
+		if userId > 0 {
+			var orderCarry OrderCarryFinish
+			err := json.NewDecoder(r.Body).Decode(&orderCarry)
+			if err == nil {
+				FinishCarrying(orderCarry.OrderId, userId, loaderId, w)
+			} else {
+				utils.Failed(w, -1)
+			}
+		} else {
+			utils.NoAuth(w)
+		}
+	} else {
+		utils.NoAuth(w)
+	}
+}
+
 func getAll(w http.ResponseWriter, r *http.Request) {
 	loaderId := loader.CheckLogin(w, r)
 	if loaderId > 0 {
@@ -60,7 +80,17 @@ func carryRouterStart(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func carryRouterFinish(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPost:
+		finishCarrying(w, r)
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
 func HandleRequest() {
 	http.HandleFunc("/carry", carryRouter)
 	http.HandleFunc("/carry/start", carryRouterStart)
+	http.HandleFunc("/carry/finish", carryRouterFinish)
 }

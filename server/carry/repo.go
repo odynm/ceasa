@@ -30,6 +30,29 @@ Error:
 	return 0
 }
 
+func DbFinishCarrying(orderId int, userId int, loaderId int) int {
+	schema := fmt.Sprint("u", userId)
+
+	var itemId int
+
+	statement := fmt.Sprintf(`
+				UPDATE %v."order_order" SET
+					loader_id = $1, 
+					status = $2
+				WHERE id = $3
+				RETURNING id`, schema)
+	err := db.Instance.Db.
+		QueryRow(statement, loaderId, order.S_Done, orderId).
+		Scan(&itemId)
+	if err != nil {
+		goto Error
+	}
+
+	return itemId
+Error:
+	return 0
+}
+
 func DbGetActiveOrders(userId int, loaderId int) ([]order.OrderListItem, bool) {
 	schema := fmt.Sprint("u", userId)
 
