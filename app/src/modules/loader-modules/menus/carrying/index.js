@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { View, ScrollView } from 'react-native'
 import { withNavigation } from 'react-navigation'
+import { Creators as AppCreators } from 'src/ducks/app'
 import { Creators as OrdersLoaderCreators } from 'src/ducks/orders-loader'
 import { Selectors as OrdersLoaderSelectors } from 'src/ducks/orders-loader'
 import styles from './styles'
@@ -12,11 +13,14 @@ import KText from 'src/components/fw/ktext'
 import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
 import Loader from 'src/components/fw/loader'
+import AppLoader from 'src/components/fw/app-loader'
 import ModalNotDelivered from './modal-not-delivered'
 import ScreenBase from 'src/components/fw/screen-base'
+import ConfirmationModal from 'src/components/fw/confirmation-modal'
 import ClientSegment from 'src/components/ceasa/order/client-segment'
 
 const Carrying = ({
+	setAppLoader,
 	carryingList,
 	carryingOrder,
 	finishCarrying,
@@ -25,10 +29,17 @@ const Carrying = ({
 	selectedCarryingOrderId,
 	setSelectedCarryingOrderId,
 }) => {
+	const [modalAccept, setModalAccept] = useState(false)
 	const [modalWarning, setModalWarning] = useState(false)
 
+	const initialize = async () => {
+		setAppLoader(true)
+		await loadCarryingOrders()
+		setAppLoader(false)
+	}
+
 	useEffect(() => {
-		loadCarryingOrders()
+		initialize()
 	}, [])
 
 	useEffect(() => {
@@ -49,7 +60,7 @@ const Carrying = ({
 		if (carryingOrder.products.some(x => x.amountDelivered !== x.amount)) {
 			setModalWarning(true)
 		} else {
-			handleFinish()
+			setModalAccept(true)
 		}
 	}
 
@@ -59,16 +70,16 @@ const Carrying = ({
 	}
 
 	return (
-		<>
+		<AppLoader solid>
 			<ScreenBase
 				useScroll={false}
 				useKeyboardAvoid={false}
 				useKeyboardClose={false}>
 				<View style={styles.headerCards}>
 					<ScrollView
-						showsHorizontalScrollIndicator={false}
+						horizontal={true}
 						style={styles.scrollView}
-						horizontal={true}>
+						showsHorizontalScrollIndicator={false}>
 						{carryingList.map((item, index) => (
 							<CarryCard
 								key={index}
@@ -113,7 +124,7 @@ const Carrying = ({
 						</View>
 					</>
 				) : (
-					<Loader />
+					<KText text={translate('loaderCarrying.none')} />
 				)}
 			</ScreenBase>
 			<ModalNotDelivered
@@ -125,16 +136,24 @@ const Carrying = ({
 						  )
 						: []
 				}
-				handleCloseYes={handleCloseModalYes}
 				handleCloseNo={() => {
 					setModalWarning(false)
 				}}
+				handleCloseYes={handleCloseModalYes}
 			/>
-		</>
+			<ConfirmationModal
+				open={modalAccept}
+				onAccept={handleFinish}
+				onClose={() => setModalAccept(false)}
+				header={translate('loaderCarrying.modalAccept.header')}
+				content={translate('loaderCarrying.modalAccept.content')}
+			/>
+		</AppLoader>
 	)
 }
 
 const mapDispatchToProps = {
+	setAppLoader: AppCreators.setAppLoader,
 	finishCarrying: OrdersLoaderCreators.finishCarrying,
 	loadCarryingOrders: OrdersLoaderCreators.loadCarryingOrders,
 	setAmountDelivered: OrdersLoaderCreators.setAmountDelivered,

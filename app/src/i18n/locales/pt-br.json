@@ -1,4 +1,8 @@
 {
+	"app": {
+		"no": "Não",
+		"yes": "Sim"
+	},
 	"loginSelect": {
 		"vendor": "Entrar como vendedor",
 		"loader": "Entrar como carregador"
@@ -77,9 +81,7 @@
 		"modal": {
 			"finishSell": "Finalizar venda",
 			"areYouSure": "Você quer confirmar a venda?",
-			"dontHaveInStorage": "Falta no estoque:",
-			"yes": "Sim",
-			"no": "Não"
+			"dontHaveInStorage": "Falta no estoque:"
 		},
 		"errors": {
 			"priceRequired": "Digite o preço",
@@ -106,12 +108,15 @@
 	},
 	"loaderCarrying": {
 		"finish": "Finalizar",
+		"none": "Você não começou a carregar nada ainda",
 		"modal": {
 			"finishCarry": "Finalizar entrega",
 			"areYouSure": "Finalizar entrega?",
-			"itemsNotDelivered": "Os seguintes itens NÃO foram entregues e voltarão ao estoque:",
-			"no": "Não",
-			"yes": "Sim"
+			"itemsNotDelivered": "Os seguintes itens NÃO foram entregues e voltarão ao estoque:"
+		},
+		"modalAccept": {
+			"header": "Confirmar carregamento",
+			"content": "Você quer confirmar este carregamento?"
 		}
 	},
 	"errors": {

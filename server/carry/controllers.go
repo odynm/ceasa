@@ -36,7 +36,7 @@ func finishCarrying(w http.ResponseWriter, r *http.Request) {
 			var orderCarry OrderCarryFinish
 			err := json.NewDecoder(r.Body).Decode(&orderCarry)
 			if err == nil {
-				FinishCarrying(orderCarry.OrderId, userId, loaderId, w)
+				FinishCarrying(orderCarry, userId, loaderId, w)
 			} else {
 				utils.Failed(w, -1)
 			}

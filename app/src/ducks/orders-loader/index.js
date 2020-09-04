@@ -73,22 +73,24 @@ const loadCarryingOrders = () => async (dispatch, getState) => {
 	const { data, success } = await HttpService.get('carry')
 	// Because the partial state of the carry array will be stored locally, we
 	// need to filter the array for items that have been loaded already
-	const filteredData = data.filter(
-		item => !carryingList.some(x => x.id === item.id),
-	)
+	if (success && data) {
+		const filteredData = data.filter(
+			item => !carryingList.some(x => x.id === item.id),
+		)
 
-	const mappedData = filteredData.map(item => ({
-		...item,
-		products: item.products.map(product => ({
-			...product,
-			amountDelivered: product.amount,
-		})),
-		createdAt: new Date(item.createdAt),
-		releasedAt: new Date(item.releasedAt),
-	}))
+		const mappedData = filteredData.map(item => ({
+			...item,
+			products: item.products.map(product => ({
+				...product,
+				amountDelivered: product.amount,
+			})),
+			createdAt: new Date(item.createdAt),
+			releasedAt: new Date(item.releasedAt),
+		}))
 
-	if (success && mappedData) {
-		await dispatch(setCarryingOrderList([...carryingList, ...mappedData]))
+		if (mappedData) {
+			await dispatch(setCarryingOrderList([...carryingList, ...mappedData]))
+		}
 	}
 
 	return success

@@ -30,8 +30,8 @@ const ModalNotDelivered = ({
 				text={translate('loaderCarrying.modal.itemsNotDelivered')}
 			/>
 			<Space />
-			{products.map(item => (
-				<View style={styles.row}>
+			{products.map((item, index) => (
+				<View key={index} style={styles.row}>
 					<KText
 						bold
 						text={`${item.productName} ${item.productTypeName}`}
@@ -46,15 +46,15 @@ const ModalNotDelivered = ({
 			<View style={styles.rowButtons}>
 				<Button
 					tiny
+					onPress={handleCloseNo}
+					label={translate('app.no')}
 					style={styles.redButtonView}
 					textStyle={styles.redButtonText}
-					label={translate('loaderCarrying.modal.no')}
-					onPress={handleCloseNo}
 				/>
 				<Button
 					tiny
-					label={translate('loaderCarrying.modal.yes')}
 					onPress={handleCloseYes}
+					label={translate('app.yes')}
 				/>
 			</View>
 		</KModal>

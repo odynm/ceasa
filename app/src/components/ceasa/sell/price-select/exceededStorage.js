@@ -40,16 +40,12 @@ const ModalExceededStorage = ({
 			<View style={styles.rowButtons}>
 				<Button
 					tiny
+					label={translate('app.no')}
 					style={styles.redButtonView}
 					textStyle={styles.redButtonText}
-					label={translate('sell.modal.no')}
 					onPress={handleCloseExceededStorage}
 				/>
-				<Button
-					tiny
-					label={translate('sell.modal.yes')}
-					onPress={addItem}
-				/>
+				<Button tiny label={translate('app.yes')} onPress={addItem} />
 			</View>
 		</KModal>
 	)

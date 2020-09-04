@@ -10,10 +10,7 @@ type OrderCarryFinish struct {
 }
 
 type OrderCarryItem struct {
-	Id              int    `json:"id"`
-	ProductId       int    `json:"productId"`
-	ProductTypeId   int    `json:"productTypeId"`
-	Description     string `json:"description"`
-	Amount          int    `json:"amount"`
-	AmountDelivered int    `json:"amountDelivered"`
+	Id              int `json:"id"`
+	Amount          int `json:"amount"`
+	AmountDelivered int `json:"amountDelivered"`
 }

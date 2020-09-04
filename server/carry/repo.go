@@ -107,3 +107,24 @@ func DbGetActiveOrders(userId int, loaderId int) ([]order.OrderListItem, bool) {
 Error:
 	return nil, false
 }
+
+func DbGetStorageIdFromProductOrderId(userId int, productOrderId int) (int, bool) {
+	schema := fmt.Sprint("u", userId)
+
+	var storageId int
+
+	statement := fmt.Sprintf(`
+				SELECT storage_id
+				FROM %v.order_product
+				WHERE id = $1`, schema)
+	err := db.Instance.Db.
+		QueryRow(statement, productOrderId).
+		Scan(&storageId)
+	if err != nil {
+		goto Error
+	}
+
+	return storageId, true
+Error:
+	return storageId, false
+}
