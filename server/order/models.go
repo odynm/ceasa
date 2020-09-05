@@ -61,13 +61,15 @@ type OrderListItemProduct struct {
 }
 
 type OrderListItem struct {
-	Id         int                    `json:"id"`
-	Client     client.ClientDto       `json:"client"`
-	Products   []OrderListItemProduct `json:"products"`
-	Urgent     bool                   `json:"urgent"`
-	CreatedAt  time.Time              `json:"createdAt"`
-	ReleasedAt time.Time              `json:"releasedAt"`
-	Status     int                    `json:"status"`
+	Id          int                    `json:"id"`
+	Client      client.ClientDto       `json:"client"`
+	Products    []OrderListItemProduct `json:"products"`
+	Urgent      bool                   `json:"urgent"`
+	CreatedAt   time.Time              `json:"createdAt"`
+	ReleasedAt  time.Time              `json:"releasedAt"`
+	CompletedAt time.Time              `json:"completedAt"`
+	Status      int                    `json:"status"`
+	Loader      string                 `json:"loader"`
 }
 
 type OrderIds struct {

@@ -38,7 +38,8 @@ func DbFinishCarrying(orderId int, userId int, loaderId int) int {
 	statement := fmt.Sprintf(`
 				UPDATE %v."order_order" SET
 					loader_id = $1, 
-					status = $2
+					status = $2,
+					completed_at = NOW()
 				WHERE id = $3
 				RETURNING id`, schema)
 	err := db.Instance.Db.

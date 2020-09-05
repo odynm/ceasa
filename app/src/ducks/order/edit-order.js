@@ -2,6 +2,7 @@ import commonObj from './common'
 
 const prefix = 'edit-order/'
 const Types = {
+	SET_ORDER: prefix + 'SET_ORDER',
 	SET_URGENT: prefix + 'SET_URGENT',
 	SET_STATUS: prefix + 'SET_STATUS',
 	SET_CLIENT: prefix + 'SET_CLIENT',
@@ -12,14 +13,14 @@ const Types = {
 
 const common = new commonObj(Types, 'editOrder')
 
-const setStatus = status => ({
-	payload: { status },
-	type: Types.SET_STATUS,
-})
-
 const setUrgent = urgent => ({
 	payload: { urgent },
 	type: Types.SET_URGENT,
+})
+
+const setOrder = order => ({
+	payload: { order },
+	type: Types.SET_ORDER,
 })
 
 const setProductListIsDirty = productListIsDirty => ({
@@ -28,6 +29,7 @@ const setProductListIsDirty = productListIsDirty => ({
 })
 
 const initialState = {
+	id: 0,
 	status: 0,
 	urgent: false,
 	orderItems: [],
@@ -37,8 +39,9 @@ const initialState = {
 }
 
 export const Creators = {
-	setStatus: setStatus,
+	setOrder: setOrder,
 	setUrgent: setUrgent,
+	setStatus: common.setStatus,
 	setClient: common.setClient,
 	sendOrder: common.sendOrder,
 	resetOrder: common.resetOrder,
@@ -50,6 +53,14 @@ export const Creators = {
 
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
+		case Types.SET_ORDER:
+			return {
+				...state,
+				status: action.payload.order.status,
+				urgent: action.payload.order.urgent,
+				client: action.payload.order.client,
+				id: action.payload.order.id,
+			}
 		case Types.SET_STATUS:
 			return {
 				...state,

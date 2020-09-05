@@ -6,20 +6,21 @@ import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as ProductCreators } from 'src/ducks/products'
 import { validateCreate } from 'src/ducks/order/validations/create'
 import SellComponent from './component'
+import orderStatus from 'src/enums/order'
 import SellHeader from './components/header'
 import MoneyService from 'src/services/moneyService'
 import ToastService from 'src/services/toastService'
 
 const Sell = ({
 	client,
-	released,
+	status,
+	setStatus,
 	clientStep,
 	setClient,
 	sendOrder,
 	resetOrder,
 	orderItems,
 	getStorage,
-	setReleased,
 	loadProducts,
 	addOrderItem,
 	generateLoad,
@@ -66,6 +67,14 @@ const Sell = ({
 		resetStorageOrder()
 	}
 
+	const setReleasedStatus = checked => {
+		if (checked) {
+			setStatus(orderStatus.released)
+		} else {
+			setStatus(orderStatus.blocked)
+		}
+	}
+
 	const handlePress = async () => {
 		if (clientStep) {
 			if (validateCreate(client, setErrors)) {
@@ -89,10 +98,10 @@ const Sell = ({
 
 	return (
 		<SellComponent
+			status={status}
 			client={client}
 			errors={errors}
 			working={working}
-			released={released}
 			setClient={setClient}
 			addProduct={addProduct}
 			totalPrice={totalPrice}
@@ -101,7 +110,7 @@ const Sell = ({
 			openAddMenu={openAddMenu}
 			handlePress={handlePress}
 			handleClear={handleClear}
-			setReleased={setReleased}
+			setReleasedStatus={setReleasedStatus}
 			generateLoad={generateLoad}
 			setOpenAddMenu={setOpenAddMenu}
 			setGenerateLoad={setGenerateLoad}
@@ -117,7 +126,7 @@ Sell.navigationOptions = () => ({
 
 const mapStateToProps = ({ storage, order }) => ({
 	client: order.client,
-	released: order.released,
+	status: order.status,
 	clientStep: order.clientStep,
 	orderItems: order.orderItems,
 	generateLoad: order.generateLoad,
@@ -126,10 +135,10 @@ const mapStateToProps = ({ storage, order }) => ({
 
 const mapDispatchToProps = {
 	getStorage: StorageCreators.get,
+	setStatus: OrderCreators.setStatus,
 	setClient: OrderCreators.setClient,
 	sendOrder: OrderCreators.sendOrder,
 	resetOrder: OrderCreators.resetOrder,
-	setReleased: OrderCreators.setReleased,
 	addOrderItem: OrderCreators.addOrderItem,
 	loadProducts: ProductCreators.loadProducts,
 	setClientStep: OrderCreators.setClientStep,

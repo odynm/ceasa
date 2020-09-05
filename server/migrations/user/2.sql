@@ -43,6 +43,7 @@ CREATE TABLE _user_.order_order
     status smallint NOT NULL,
     created_at timestamp,
     released_at timestamp,
+    completed_at timestamp,
     CONSTRAINT order_order_pkey PRIMARY KEY (id),
     CONSTRAINT fk_client_order FOREIGN KEY (client_id)
         REFERENCES _user_.order_client (id)

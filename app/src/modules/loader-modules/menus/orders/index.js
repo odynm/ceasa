@@ -27,6 +27,7 @@ const OrdersLoader = ({
 				{orderList.map((item, index) => (
 					<OrderCard
 						key={index}
+						urgent={item.urgent}
 						loader={item.loader}
 						status={item.status}
 						clientKey={item.client.key}

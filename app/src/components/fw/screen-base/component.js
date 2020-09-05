@@ -43,8 +43,9 @@ const ScreenBaseComponent = ({
 
 const styles = StyleSheet.create({
 	scrollView: {
-		flex: 1,
 		backgroundColor: 'white',
+		flex: 1,
+		minHeight: getWorkableArea() - hp(30),
 	},
 	containerView: {
 		minHeight: getWorkableArea(),

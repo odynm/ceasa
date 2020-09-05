@@ -90,7 +90,9 @@
 		}
 	},
 	"orders": {
-		"blocked": "NÃO LIBERADO"
+		"blocked": "NÃO LIBERADO",
+		"doneAt": "Concluída às",
+		"urgent": "URGENTE"
 	},
 	"editOrder": {
 		"delete": "Excluir Pedido",

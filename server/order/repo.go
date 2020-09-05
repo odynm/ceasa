@@ -88,9 +88,12 @@ func DbGetOrdersVendor(userId int) ([]OrderListItem, bool) {
 		"order".urgent,
 		"order".created_at,
 		"order".released_at,
-		"order".status
+		"order".completed_at,
+		"order".status,
+		"loader".name as loader_name
 	FROM %v.order_order AS "order"
 	INNER JOIN %v.order_client as "client" ON "order".client_id = "client".id
+	LEFT JOIN public.loader_info as "loader" ON "order".loader_id = "loader".id
 	`, schema, schema)
 
 	fmt.Println(statement)
@@ -102,6 +105,9 @@ func DbGetOrdersVendor(userId int) ([]OrderListItem, bool) {
 
 	for rows.Next() {
 		var orderItem OrderListItem
+		var loaderName sql.NullString
+		var completedAtTime sql.NullTime
+
 		err := rows.Scan(&orderItem.Id,
 			&orderItem.Client.Key,
 			&orderItem.Client.Place,
@@ -109,10 +115,19 @@ func DbGetOrdersVendor(userId int) ([]OrderListItem, bool) {
 			&orderItem.Urgent,
 			&orderItem.CreatedAt,
 			&orderItem.ReleasedAt,
-			&orderItem.Status)
+			&completedAtTime,
+			&orderItem.Status,
+			&loaderName)
 
 		if err != nil {
 			goto Error
+		}
+
+		if loaderName.Valid {
+			orderItem.Loader = loaderName.String
+		}
+		if completedAtTime.Valid {
+			orderItem.CompletedAt = completedAtTime.Time
 		}
 
 		orderProducts, ok := DbGetOrderProductsFull(userId, orderItem.Id)

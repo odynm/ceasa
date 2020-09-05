@@ -2,6 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import { translate } from 'src/i18n/translate'
 import styles from './styles'
+import orderStatus from 'src/enums/order'
 import Space from 'src/components/fw/space'
 import KText from 'src/components/fw/ktext'
 import Loader from 'src/components/fw/loader'
@@ -18,7 +19,7 @@ const SellComponent = ({
 	client,
 	errors,
 	working,
-	released,
+	status,
 	setClient,
 	addProduct,
 	clientStep,
@@ -27,10 +28,10 @@ const SellComponent = ({
 	handlePress,
 	handleClear,
 	openAddMenu,
-	setReleased,
 	generateLoad,
 	setOpenAddMenu,
 	setGenerateLoad,
+	setReleasedStatus,
 	storedItemsOrderAware,
 }) => {
 	return (
@@ -75,9 +76,9 @@ const SellComponent = ({
 						text={translate('sell.released')}
 					/>
 					<CheckBox
-						value={released}
 						style={styles.checkbox}
-						onValueChange={checked => setReleased(checked)}
+						value={status === orderStatus.released}
+						onValueChange={checked => setReleasedStatus(checked)}
 					/>
 				</View>
 				<Space size2 />

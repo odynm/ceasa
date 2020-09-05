@@ -3,13 +3,13 @@ import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
+import { Creators as AppCreators } from 'src/ducks/app'
 import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
 import styles from './styles'
 import orderStatus from 'src/enums/order'
 import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import KText from 'src/components/fw/ktext'
-import Loader from 'src/components/fw/loader'
 import Button from 'src/components/fw/button'
 import ScreenBase from 'src/components/fw/screen-base'
 import CheckBox from '@react-native-community/checkbox'
@@ -20,15 +20,23 @@ const EditOrder = ({
 	client,
 	status,
 	urgent,
-	working,
 	setClient,
 	setUrgent,
 	setStatus,
+	sendOrder,
 	navigation,
+	setAppLoader,
 }) => {
 	const [internalStatus, setInternalStatus] = useState(status)
 
 	const handleDelete = () => {}
+
+	const handleEdit = async () => {
+		setAppLoader(true)
+		await sendOrder()
+		setAppLoader(false)
+		navigation.navigate(screens.orders)
+	}
 
 	const handleEditProducts = () => {
 		navigation.navigate(screens.editProductsOrder)
@@ -101,11 +109,7 @@ const EditOrder = ({
 					/>
 				</View>
 				<Space size2 />
-				{working ? (
-					<Loader />
-				) : (
-					<Button label={translate('editOrder.edit')} onPress={() => {}} />
-				)}
+				<Button onPress={handleEdit} label={translate('editOrder.edit')} />
 			</View>
 		</ScreenBase>
 	)
@@ -117,9 +121,11 @@ EditOrder.navigationOptions = () => ({
 })
 
 const mapDispatchToProps = {
+	setAppLoader: AppCreators.setAppLoader,
 	setClient: EditOrderCreators.setClient,
 	setUrgent: EditOrderCreators.setUrgent,
 	setStatus: EditOrderCreators.setStatus,
+	sendOrder: EditOrderCreators.sendOrder,
 }
 
 const mapStateToProps = ({ editOrder }) => ({

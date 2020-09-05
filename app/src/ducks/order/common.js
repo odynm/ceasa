@@ -6,9 +6,9 @@ function common(types, duck) {
 		type: types.SET_CLIENT,
 	})
 
-	this.setReleased = releasd => ({
-		payload: { releasd },
-		type: types.SET_RELEASED,
+	this.setStatus = status => ({
+		payload: { status },
+		type: types.SET_STATUS,
 	})
 
 	this.setOrderItems = orderItems => ({
@@ -45,12 +45,21 @@ function common(types, duck) {
 		}
 	}
 
-	this.sendOrder = () => async (dispatch, getState) => {
-		const { client, orderItems, generateLoad, released } = getState()[duck]
-		const postData = {
+	this.sendOrder = () => async (_, getState) => {
+		const {
+			id,
+			status,
 			client,
+			urgent,
+			orderItems,
+			generateLoad,
+		} = getState()[duck]
+		const postData = {
+			id,
+			client,
+			status,
+			urgent,
 			generateLoad: generateLoad, // TODO treat on backend
-			//released: released, // TODO delete released from everything, should use status.released
 			products: orderItems.map(x => ({
 				storageItem: x.id,
 				unitPrice: x.unitPrice.value * 100,

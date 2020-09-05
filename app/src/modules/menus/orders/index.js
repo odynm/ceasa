@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
+import { hp } from 'src/utils/screen'
 import { connect } from 'react-redux'
 import { toHour } from 'src/utils/date'
 import { withNavigation } from 'react-navigation'
@@ -11,8 +12,7 @@ import ScreenBase from 'src/components/fw/screen-base'
 import OrderCard from 'src/components/ceasa/order/card'
 
 const OrdersVendor = ({
-	setClient,
-	setStatus,
+	setOrder,
 	orderList,
 	loadOrders,
 	navigation,
@@ -23,8 +23,7 @@ const OrdersVendor = ({
 	}, [])
 
 	const editOrder = ({ item }) => {
-		setStatus(item.status)
-		setClient(item.client)
+		setOrder(item)
 
 		setOrderItems(
 			item.products.map(x => ({
@@ -39,27 +38,29 @@ const OrdersVendor = ({
 	return (
 		<View>
 			<ScreenBase
-				useScroll={false}
+				useScroll={true}
 				useKeyboardAvoid={false}
 				useKeyboardClose={false}>
-				{orderList.map((item, index) => (
-					<OrderCard
-						key={index}
-						loader={item.loader}
-						status={item.status}
-						clientKey={item.client.key}
-						onPress={() => editOrder({ item })}
-						releasedHour={item.releasedAt && toHour(item.releasedAt)}
-					/>
-				))}
+				<View style={{ marginBottom: hp(50) }}>
+					{orderList.map((item, index) => (
+						<OrderCard
+							key={index}
+							urgent={item.urgent}
+							loader={item.loader}
+							status={item.status}
+							clientKey={item.client.key}
+							onPress={() => editOrder({ item })}
+							releasedHour={item.releasedAt && toHour(item.releasedAt)}
+						/>
+					))}
+				</View>
 			</ScreenBase>
 		</View>
 	)
 }
 
 const mapDispatchToProps = {
-	setStatus: EditOrderCreators.setStatus,
-	setClient: EditOrderCreators.setClient,
+	setOrder: EditOrderCreators.setOrder,
 	loadOrders: OrdersVendorCreators.loadOrders,
 	setOrderItems: EditOrderCreators.setOrderItems,
 }
