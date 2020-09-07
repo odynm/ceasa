@@ -1,9 +1,10 @@
 import React from 'react'
 import { SvgXml } from 'react-native-svg'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
-import OrdersLoaderStack from './items/orders'
-import CarryingLoaderStack from './items/carrying'
 import svgHome from 'res/svgs/svgHome.svg'
+import OrdersLoaderStack from './items/orders'
+import OptionsLoaderStack from './items/options'
+import CarryingLoaderStack from './items/carrying'
 import svgHomeSelected from 'res/svgs/svgHomeSelected.svg'
 
 //const enabledRoutesForAnonymous = [screens.home, screens.search]
@@ -26,10 +27,20 @@ CarryingLoaderStack.navigationOptions = () => ({
 	},
 })
 
+OptionsLoaderStack.navigationOptions = () => ({
+	tabBarIcon: ({ focused }) =>
+		focused ? <SvgXml xml={svgHomeSelected} /> : <SvgXml xml={svgHome} />,
+	tabBarOptions: {
+		showLabel: false,
+		showIcon: true,
+	},
+})
+
 const LoaderMenuNavigator = createBottomTabNavigator(
 	{
 		Orders: OrdersLoaderStack,
 		Carrying: CarryingLoaderStack,
+		Options: OptionsLoaderStack,
 	},
 	{
 		backBehavior: 'history',

@@ -3,6 +3,7 @@ const screens = {
 	introduction: 'Introduction',
 	home: 'Home',
 	login: 'Login',
+	loginSelect: 'LoginSelect',
 	loginLoader: 'LoginLoader',
 	loaderTeams: 'LoaderTeams',
 	readQr: 'ReadQr',

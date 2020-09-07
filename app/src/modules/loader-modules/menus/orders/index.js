@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { toHour } from 'src/utils/date'
 import { withNavigation } from 'react-navigation'
@@ -19,27 +18,25 @@ const OrdersLoader = ({
 	}, [])
 
 	return (
-		<View>
-			<ScreenBase
-				useScroll={false}
-				useKeyboardAvoid={false}
-				useKeyboardClose={false}>
-				{orderList.map((item, index) => (
-					<OrderCard
-						key={index}
-						urgent={item.urgent}
-						loader={item.loader}
-						status={item.status}
-						clientKey={item.client.key}
-						onPress={() => {
-							setSelectedOrderId(item.id)
-							navigation.navigate(screens.loaderOrderInfo)
-						}}
-						releasedHour={item.releasedAt && toHour(item.releasedAt)}
-					/>
-				))}
-			</ScreenBase>
-		</View>
+		<ScreenBase
+			useScroll={true}
+			useKeyboardAvoid={false}
+			useKeyboardClose={false}>
+			{orderList.map((item, index) => (
+				<OrderCard
+					key={index}
+					urgent={item.urgent}
+					loader={item.loader}
+					status={item.status}
+					clientKey={item.client.key}
+					onPress={() => {
+						setSelectedOrderId(item.id)
+						navigation.navigate(screens.loaderOrderInfo)
+					}}
+					releasedHour={item.releasedAt && toHour(item.releasedAt)}
+				/>
+			))}
+		</ScreenBase>
 	)
 }
 

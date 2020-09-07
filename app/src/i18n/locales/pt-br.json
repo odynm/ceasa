@@ -121,6 +121,9 @@
 			"content": "Você quer confirmar este carregamento?"
 		}
 	},
+	"optionsLoader": {
+		"logout": "Sair"
+	},
 	"errors": {
 		"serverError": "Não foi possível comunicar com o servidor"
 	},

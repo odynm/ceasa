@@ -43,14 +43,16 @@ const LoaderTeams = ({
 						<Button
 							tiny
 							style={styles.editButton}
-							//onPress={handleCreate}
+							onPress={() => {}}
 							label={translate('loaderTeams.edit')}
 						/>
 						<Button
 							tiny
 							style={styles.editButton}
-							//onPress={handleCreate}
 							label={translate('loaderTeams.logout')}
+							onPress={() => {
+								navigation.navigate(screens.loginSelect)
+							}}
 						/>
 					</View>
 					<Space />
