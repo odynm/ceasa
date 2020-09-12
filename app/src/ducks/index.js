@@ -9,8 +9,8 @@ import products from './products'
 import editOrder from './order/edit-order'
 import ordersVendor from './orders-vendor'
 import ordersLoader from './orders-loader'
+import editStorage from './storage/edit-storage'
 
-import rfdc from 'rfdc'
 import thunk from 'redux-thunk'
 import logger from 'redux-logger'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
@@ -25,6 +25,7 @@ const reducers = combineReducers({
 	storage,
 	products,
 	editOrder,
+	editStorage,
 	ordersVendor,
 	ordersLoader,
 })

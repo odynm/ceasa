@@ -3,10 +3,10 @@ import { translate } from 'src/i18n/translate'
 const validateCreate = (data, setErrors) => {
 	let errors = {}
 
-	if (data.selectedProductId <= 0) {
+	if (data.productId <= 0) {
 		errors = {
 			...errors,
-			selectedProductId: translate('storage.errors.noProduct'),
+			productId: translate('storage.errors.noProduct'),
 		}
 	}
 

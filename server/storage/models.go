@@ -3,6 +3,7 @@ package storage
 import "database/sql"
 
 type ItemDto struct {
+	Id          int    `json:"id"`
 	Product     int    `json:"product"`
 	ProductType int    `json:"productType"`
 	Description string `json:"description"`

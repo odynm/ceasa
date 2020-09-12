@@ -7,8 +7,7 @@ import ScreenHeader from 'src/components/fw/screen-header'
 const Home = () => {
 	return (
 		<View>
-			<KText text={'Hello World Again'} />
-			<Text>Hello World Again</Text>
+			<KText text={'-'} />
 		</View>
 	)
 }

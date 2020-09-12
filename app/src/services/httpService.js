@@ -93,10 +93,8 @@ const get = (url, configs) =>
 const post = (url, data, configs) =>
 	HttpService.instance.post(url, data, configs).then(({ data }) => data)
 
-// const deleteRequest = (url, configs) =>
-// 	HttpService.instance
-// 		.delete(url, { paramsSerializer, ...configs })
-// 		.then(({ data }) => data)
+const deleteRequest = (url, configs) =>
+	HttpService.instance.delete(url, configs).then(({ data }) => data)
 
 // const isCancel = axios.isCancel
 // const CancelToken = axios.CancelToken
@@ -109,7 +107,7 @@ const HttpService = {
 	initialize,
 	// CancelToken,
 	// instance: null,
-	// delete: deleteRequest
+	delete: deleteRequest,
 }
 
 export default HttpService

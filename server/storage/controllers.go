@@ -17,9 +17,13 @@ func add(w http.ResponseWriter, r *http.Request) {
 			itemDto.Product == 0 ||
 			itemDto.Amount == 0 {
 			utils.Failed(w, -1)
+		} else {
+			if itemDto.Id == 0 {
+				Add(itemDto, userId, w)
+			} else {
+				Edit(itemDto, userId, w)
+			}
 		}
-
-		Add(itemDto, userId, w)
 	}
 }
 

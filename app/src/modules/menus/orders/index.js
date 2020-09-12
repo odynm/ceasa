@@ -3,10 +3,12 @@ import { View } from 'react-native'
 import { hp } from 'src/utils/screen'
 import { connect } from 'react-redux'
 import { toHour } from 'src/utils/date'
+import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
 import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
 import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
 import screens from 'src/constants/screens'
+import KText from 'src/components/fwx/ktext'
 import MoneyService from 'src/services/moneyService'
 import ScreenBase from 'src/components/fw/screen-base'
 import OrderCard from 'src/components/ceasa/order/card'
@@ -36,11 +38,11 @@ const OrdersVendor = ({
 	}
 
 	return (
-		<View>
-			<ScreenBase
-				useScroll={true}
-				useKeyboardAvoid={false}
-				useKeyboardClose={false}>
+		<ScreenBase
+			useScroll={true}
+			useKeyboardAvoid={false}
+			useKeyboardClose={false}>
+			{orderList && orderList.length > 0 ? (
 				<View style={{ marginBottom: hp(50) }}>
 					{orderList.map((item, index) => (
 						<OrderCard
@@ -54,8 +56,12 @@ const OrdersVendor = ({
 						/>
 					))}
 				</View>
-			</ScreenBase>
-		</View>
+			) : (
+				<View>
+					<KText text={translate('orders.none')} />
+				</View>
+			)}
+		</ScreenBase>
 	)
 }
 

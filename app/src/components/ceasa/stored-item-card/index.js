@@ -1,18 +1,26 @@
 import React from 'react'
 import { wp, hp } from 'src/utils/screen'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
 
-const StoredItemCard = ({ product, productType, description, amount }) => {
+const StoredItemCard = ({
+	amount,
+	product,
+	onPress,
+	productType,
+	description,
+}) => {
 	return (
-		<View style={styles.container}>
-			<View style={styles.row}>
-				<KText bold text={`${product} ${productType}`} />
-				<KText bold style={styles.amount} text={amount} />
+		<TouchableOpacity onPress={onPress}>
+			<View style={styles.container}>
+				<View style={styles.row}>
+					<KText bold text={`${product} ${productType}`} />
+					<KText bold style={styles.amount} text={amount} />
+				</View>
+				<KText text={description} />
 			</View>
-			<KText text={description} />
-		</View>
+		</TouchableOpacity>
 	)
 }
 

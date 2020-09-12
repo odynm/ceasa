@@ -3,6 +3,7 @@ package order
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"../loader"
 	"../user"
@@ -43,7 +44,7 @@ func get(w http.ResponseWriter, r *http.Request) {
 	if userId > 0 {
 		GetForVendor(userId, w)
 	} else {
-		utils.Failed(w, -1)
+		utils.NoAuth(w)
 	}
 }
 
@@ -61,12 +62,33 @@ func getLoader(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func delete(w http.ResponseWriter, r *http.Request) {
+	userId := user.CheckLogin(w, r)
+	if userId > 0 {
+		orderStr, ok := r.URL.Query()["id"]
+		if ok {
+			orderId, err := strconv.ParseInt(orderStr[0], 10, 32)
+			if err != nil && orderId == 0 {
+				utils.Failed(w, -1)
+			} else {
+				DeleteOrder(userId, int(orderId), w)
+			}
+		} else {
+			utils.Failed(w, -1)
+		}
+	} else {
+		utils.NoAuth(w)
+	}
+}
+
 func orderRouter(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
 		add(w, r)
 	case http.MethodGet:
 		get(w, r)
+	case http.MethodDelete:
+		delete(w, r)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}

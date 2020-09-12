@@ -1,4 +1,5 @@
 import commonObj from './common'
+import HttpService from 'src/services/httpService'
 
 const prefix = 'edit-order/'
 const Types = {
@@ -8,6 +9,7 @@ const Types = {
 	SET_CLIENT: prefix + 'SET_CLIENT',
 	SET_ORDER_ITEMS: prefix + 'SET_ORDER_ITEMS',
 	SET_CLIENT_STEP: prefix + 'SET_CLIENT_STEP',
+	SET_CONFIRM_DELETE: prefix + 'SET_CONFIRM_DELETE',
 	SET_PRODUCT_LIST_IS_DIRTY: prefix + 'SET_PRODUCT_LIST_IS_DIRTY',
 }
 
@@ -23,10 +25,20 @@ const setOrder = order => ({
 	type: Types.SET_ORDER,
 })
 
+const setConfirmDelete = confirmDelete => ({
+	payload: { confirmDelete },
+	type: Types.SET_CONFIRM_DELETE,
+})
+
 const setProductListIsDirty = productListIsDirty => ({
 	payload: { productListIsDirty },
 	type: Types.SET_PRODUCT_LIST_IS_DIRTY,
 })
+
+const deleteOrder = async orderId => {
+	const { success } = await HttpService.delete(`order?id=${orderId}`)
+	console.warn(success)
+}
 
 const initialState = {
 	id: 0,
@@ -34,6 +46,7 @@ const initialState = {
 	urgent: false,
 	orderItems: [],
 	clientStep: false,
+	confirmDelete: false,
 	productListIsDirty: false,
 	client: { key: '', place: '', vehicle: '' },
 }
@@ -41,11 +54,13 @@ const initialState = {
 export const Creators = {
 	setOrder: setOrder,
 	setUrgent: setUrgent,
+	deleteOrder: deleteOrder,
 	setStatus: common.setStatus,
 	setClient: common.setClient,
 	sendOrder: common.sendOrder,
 	resetOrder: common.resetOrder,
 	addOrderItem: common.addOrderItem,
+	setConfirmDelete: setConfirmDelete,
 	setClientStep: common.setClientStep,
 	setOrderItems: common.setOrderItems,
 	setProductListIsDirty: setProductListIsDirty,
@@ -85,6 +100,11 @@ export default function reducer(state = initialState, action) {
 			return {
 				...state,
 				clientStep: action.payload.clientStep,
+			}
+		case Types.SET_CONFIRM_DELETE:
+			return {
+				...state,
+				confirmDelete: action.payload.confirmDelete,
 			}
 		case Types.SET_PRODUCT_LIST_IS_DIRTY:
 			return {

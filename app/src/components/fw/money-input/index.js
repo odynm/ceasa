@@ -6,11 +6,26 @@ import colors from 'src/constants/colors'
 import Error from 'src/components/fw/error'
 import MoneyService, { defaultMoney } from 'src/services/moneyService'
 
+//Dirty trick :(
+let reseting = false
+
 const MoneyInput = ({ max, label, value, setValue, errorMessage }) => {
 	const [inputText, setInputText] = useState(value.text)
 
 	useEffect(() => {
-		handleChange(value.text)
+		return () => {
+			reseting = true
+			setInputText('')
+			setValue(defaultMoney)
+		}
+	}, [])
+
+	useEffect(() => {
+		if (reseting) {
+			reseting = false
+		} else {
+			handleChange(value.text)
+		}
 	}, [value])
 
 	const handleChange = text => {

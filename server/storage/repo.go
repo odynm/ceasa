@@ -78,6 +78,49 @@ Error:
 	return 0
 }
 
+func DbUpdateStorageItem(itemDto ItemDto, userId int) int {
+	schema := fmt.Sprint("u", userId)
+	itemDto.Description = strings.TrimSpace(itemDto.Description)
+
+	var descriptionId int
+	var itemId int
+
+	statement := fmt.Sprintf(`
+		SELECT id FROM %v."storage_item_description"
+		WHERE description = $1`, schema)
+	err := db.Instance.Db.QueryRow(statement, itemDto.Description).Scan(&descriptionId)
+
+	if descriptionId == 0 || err != nil {
+		statement := fmt.Sprintf(`
+			INSERT INTO %v."storage_item_description" (description)
+			VALUES ($1)
+			RETURNING id`, schema)
+		err = db.Instance.Db.QueryRow(statement, itemDto.Description).Scan(&descriptionId)
+		if err != nil {
+			goto Error
+		}
+	}
+
+	statement = fmt.Sprintf(`
+		UPDATE %v."storage_item" SET 
+			product_id = $1, 
+			product_type_id = $2, 
+			description_id = $3, 
+			amount = $4
+		WHERE id = $5
+		RETURNING id`, schema)
+	err = db.Instance.Db.
+		QueryRow(statement, itemDto.Product, utils.NullIfZero(itemDto.ProductType), descriptionId, itemDto.Amount, itemDto.Id).
+		Scan(&itemId)
+	if err != nil {
+		goto Error
+	}
+
+	return itemId
+Error:
+	return 0
+}
+
 func DbGetById(storageId int, userId int) StorageItem {
 	schema := fmt.Sprint("u", userId)
 

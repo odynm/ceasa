@@ -1,7 +1,8 @@
 {
 	"app": {
 		"no": "Não",
-		"yes": "Sim"
+		"yes": "Sim",
+		"delete": "Excluir"
 	},
 	"loginSelect": {
 		"vendor": "Entrar como vendedor",
@@ -37,6 +38,7 @@
 		"orders": "Pedidos",
 		"user": "Usuário",
 		"editOrder": "Alterar Pedido",
+		"editStorage": "Alterar Estoque",
 		"editProductsOrder": "Alterar Produtos do Pedido"
 	},
 	"storage": {
@@ -92,14 +94,23 @@
 	"orders": {
 		"blocked": "NÃO LIBERADO",
 		"doneAt": "Concluída às",
-		"urgent": "URGENTE"
+		"urgent": "URGENTE",
+		"none": "Ainda não há nenhum pedido cadastrado."
 	},
 	"editOrder": {
 		"delete": "Excluir Pedido",
 		"editProducts": "Alterar lista de produtos",
 		"released": "Carregamento liberado",
 		"urgent": "Definir como urgente",
-		"edit": "Editar"
+		"edit": "Editar",
+		"deleteModal": {
+			"header": "Deletar Pedido",
+			"content": "Tem certeza que quer deletar esse pedido?"
+		}
+	},
+	"editStorage": {
+		"edit": "Editar",
+		"delete": "Excluir Item"
 	},
 	"loaderOrderInfo": {
 		"clientKey": "Nome/Placa/Box",

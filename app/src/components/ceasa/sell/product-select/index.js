@@ -1,6 +1,6 @@
 import React from 'react'
 import { translate } from 'src/i18n/translate'
-import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, ScrollView, StyleSheet } from 'react-native'
 import KText from 'src/components/fw/ktext'
 import KModal from 'src/components/fw/kmodal'
 import StoredItemCard from 'src/components/ceasa/stored-item-card'
@@ -12,16 +12,14 @@ const ProductSelect = ({ onClose, open, storageItems, selectProduct }) => {
 				<View onStartShouldSetResponder={() => true}>
 					{storageItems && storageItems.length > 0 ? (
 						storageItems.map((item, index) => (
-							<TouchableOpacity
+							<StoredItemCard
 								key={index}
-								onPress={() => selectProduct(item)}>
-								<StoredItemCard
-									amount={item.amount}
-									product={item.productName}
-									description={item.description}
-									productType={item.productTypeName}
-								/>
-							</TouchableOpacity>
+								amount={item.amount}
+								product={item.productName}
+								description={item.description}
+								productType={item.productTypeName}
+								onPress={() => selectProduct(item)}
+							/>
 						))
 					) : (
 						<View>

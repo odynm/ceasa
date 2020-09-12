@@ -63,11 +63,11 @@ const ModalPrice = ({
 				<Space />
 				<View style={styles.row}>
 					<MoneyInput
-						errorMessage={errors.price}
 						max={9999}
 						value={price}
 						style={styles.right}
 						setValue={handlePriceChange}
+						errorMessage={errors.price}
 						label={translate('sell.sellUnitPrice')}
 					/>
 				</View>

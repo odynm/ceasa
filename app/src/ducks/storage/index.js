@@ -53,37 +53,69 @@ const add = item => async (dispatch, getStore) => {
 	const { products, productTypes } = getStore().products
 
 	const mappedItemServer = {
-		product: item.selectedProductId,
-		productType: item.selectedTypeId,
-		description: item.additionalDescription,
+		id: item.id,
 		amount: item.amount,
+		product: item.productId,
+		description: item.description,
+		productType: item.productTypeId,
 	}
+
 	const { success, data } = await HttpService.post('storage', mappedItemServer)
 
 	if (success) {
 		const mappedItemView = {
 			id: data,
-			productName: products.find(x => x.id === item.selectedProductId).name,
+			productName: products.find(x => x.id === item.productId).name,
 			productTypeName:
-				item.selectedTypeId > 0
-					? productTypes.find(x => x.id === item.selectedTypeId).name
+				item.productTypeId > 0
+					? productTypes.find(x => x.id === item.productTypeId).name
 					: '',
-			description: item.additionalDescription,
+			description: item.description,
 			amount: item.amount,
 		}
-		const current = storedItems && storedItems.length > 0 ? storedItems : []
-		const newStoredItems = [...current, mappedItemView]
-		dispatch(setStoredItems(newStoredItems))
+		if (item.id === 0) {
+			const current =
+				storedItems && storedItems.length > 0 ? storedItems : []
+			const newStoredItems = [...current, mappedItemView]
+			dispatch(setStoredItems(newStoredItems))
 
-		const currentOrderAware =
-			storedItemsOrderAware && storedItemsOrderAware.length > 0
-				? storedItemsOrderAware
-				: []
-		const newStoredItemsOrderAware = [...currentOrderAware, mappedItemView]
-		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
+			const currentOrderAware =
+				storedItemsOrderAware && storedItemsOrderAware.length > 0
+					? storedItemsOrderAware
+					: []
+			const newStoredItemsOrderAware = [...currentOrderAware, mappedItemView]
+			dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
+		} else {
+			const index = storedItems.findIndex(x => x.id === item.id)
+			const newStoredItems = storedItems.map((x, i) =>
+				i === index
+					? { ...x, amount: item.amount, description: item.description }
+					: x,
+			)
+			dispatch(setStoredItems(newStoredItems))
+
+			const indexOrderAware = storedItemsOrderAware.findIndex(
+				x => x.id === item.id,
+			)
+			const newStoredItemsOrderAware = storedItemsOrderAware.map((x, i) =>
+				i === indexOrderAware
+					? { ...x, amount: item.amount, description: item.description }
+					: x,
+			)
+			dispatch(setStoredItems(newStoredItemsOrderAware))
+		}
 	}
 
 	return success
+}
+
+const deleteItem = item => async (dispatch, getStore) => {
+	const { success } = await HttpService.delete('storage', item.id)
+	if (success) {
+		//TODO
+		// dispatch(setStoredItems(data))
+		// dispatch(setStoredItemsOrderAware(rfdc()(data))) //review this because i can only get from server once? (rfdc)?
+	}
 }
 
 const get = () => async dispatch => {
@@ -106,6 +138,7 @@ const initialState = {
 export const Creators = {
 	add,
 	get,
+	deleteItem,
 	setWorking,
 	resetStorageOrder,
 	decreaseItemsOrder,

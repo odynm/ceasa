@@ -2,10 +2,13 @@ import React, { useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { View, ScrollView } from 'react-native'
+import { withNavigation } from 'react-navigation'
 import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as ProductCreators } from 'src/ducks/products'
 import { validateCreate } from 'src/ducks/storage/validations/create'
+import { Creators as EditStorageCreators } from 'src/ducks/storage/edit-storage'
 import styles from './styles'
+import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
 import Loader from 'src/components/fw/loader'
@@ -21,6 +24,7 @@ import RecentRegisterPicker from 'src/components/fw/pickers/recent-register-pick
 const Storage = ({
 	working,
 	products,
+	navigation,
 	setWorking,
 	addStorage,
 	getStorage,
@@ -29,11 +33,12 @@ const Storage = ({
 	productTypes,
 	recentProducts,
 	recentProductTypes,
+	setStorageItemEdit,
 }) => {
-	const [selectedProductId, setSelectedProductId] = useState(0)
-	const [selectedTypeId, setSelectedTypeId] = useState(0)
+	const [productId, setProductId] = useState(0)
+	const [productTypeId, setProductTypeId] = useState(0)
 	const [productTypesFiltered, setProductTypesFiltered] = useState([])
-	const [additionalDescription, setAdditionalDescription] = useState('')
+	const [description, setDescription] = useState('')
 	const [amount, setAmount] = useState(1)
 	const [errors, setErrors] = useState({})
 
@@ -46,32 +51,38 @@ const Storage = ({
 
 	useEffect(() => {
 		setProductTypesFiltered(
-			productTypes.filter(x => x.productId === selectedProductId),
+			productTypes.filter(x => x.productId === productId),
 		)
-	}, [selectedProductId])
+	}, [productId])
 
 	const handleAdd = async () => {
 		const data = {
-			selectedTypeId,
-			selectedProductId,
-			additionalDescription,
 			amount,
+			productId,
+			description,
+			productTypeId,
 		}
 
 		if (validateCreate(data, setErrors)) {
 			setWorking(true)
 			const success = await addStorage(data)
 			if (success) {
-				setSelectedProductId(0)
-				setSelectedTypeId(0)
-				setAdditionalDescription('')
 				setAmount(1)
+				setProductId(0)
+				setDescription('')
+				setProductTypeId(0)
 				scrollViewRef.current.scrollToEnd()
 			} else {
 				ToastService.serverError()
 			}
 			setWorking(false)
 		}
+	}
+
+	const handleEdit = id => {
+		const storedItem = storedItems.find(x => x.id === id)
+		setStorageItemEdit(storedItem)
+		navigation.navigate(screens.editStorage)
 	}
 
 	return (
@@ -81,11 +92,11 @@ const Storage = ({
 			useKeyboardClose={false}>
 			<CloseKeyboardView>
 				<RecentRegisterPicker
-					errorMessage={errors.selectedProductId}
 					list={products}
+					selectedId={productId}
 					listRecent={recentProducts}
-					selectedId={selectedProductId}
-					setSelectedId={setSelectedProductId}
+					setSelectedId={setProductId}
+					errorMessage={errors.productId}
 					label={translate('storage.product')}
 					listLabel={translate('storage.products')}
 					loading={!products || products.length === 0}
@@ -94,10 +105,10 @@ const Storage = ({
 					)}
 				/>
 				<RecentRegisterPicker
+					selectedId={productTypeId}
 					list={productTypesFiltered}
 					listRecent={recentProductTypes}
-					selectedId={selectedTypeId}
-					setSelectedId={setSelectedTypeId}
+					setSelectedId={setProductTypeId}
 					label={translate('storage.productType')}
 					listLabel={translate('storage.productTypes')}
 					loading={!productTypes || productTypes.length === 0}
@@ -106,8 +117,8 @@ const Storage = ({
 					)}
 				/>
 				<TextInput
-					value={additionalDescription}
-					setValue={setAdditionalDescription}
+					value={description}
+					setValue={setDescription}
 					label={translate('storage.additionalDescription')}
 				/>
 				<Amount
@@ -125,18 +136,21 @@ const Storage = ({
 			<View style={styles.storedContainer}>
 				<ScrollView
 					ref={scrollViewRef}
+					style={styles.stored}
 					persistentScrollbar={true}
-					showsVerticalScrollIndicator={true}
-					style={styles.stored}>
+					showsVerticalScrollIndicator={true}>
 					{storedItems && storedItems.length > 0
 						? storedItems.map((item, index) => {
 								return (
 									<StoredItemCard
 										key={index}
-										product={item.productName}
-										productType={item.productTypeName}
-										description={item.description}
 										amount={item.amount}
+										product={item.productName}
+										description={item.description}
+										productType={item.productTypeName}
+										onPress={() => {
+											handleEdit(item.id)
+										}}
 									/>
 								)
 						  })
@@ -157,6 +171,7 @@ const mapDispatchToProps = {
 	getStorage: StorageCreators.get,
 	setWorking: StorageCreators.setWorking,
 	loadProducts: ProductCreators.loadProducts,
+	setStorageItemEdit: EditStorageCreators.setStorageItem,
 }
 
 const mapStateToProps = ({ products, storage }) => ({
@@ -171,4 +186,4 @@ const mapStateToProps = ({ products, storage }) => ({
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(Storage)
+)(withNavigation(Storage))

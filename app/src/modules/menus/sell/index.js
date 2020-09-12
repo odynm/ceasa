@@ -5,6 +5,7 @@ import { Creators as OrderCreators } from 'src/ducks/order'
 import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as ProductCreators } from 'src/ducks/products'
 import { validateCreate } from 'src/ducks/order/validations/create'
+import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
 import SellComponent from './component'
 import orderStatus from 'src/enums/order'
 import SellHeader from './components/header'
@@ -21,6 +22,7 @@ const Sell = ({
 	resetOrder,
 	orderItems,
 	getStorage,
+	loadOrders,
 	loadProducts,
 	addOrderItem,
 	generateLoad,
@@ -52,8 +54,8 @@ const Sell = ({
 		)
 	}, [orderItems])
 
-	const addProduct = product => {
-		addOrderItem(product)
+	const addProduct = async product => {
+		await addOrderItem(product)
 		decreaseItemsOrder({ id: product.id, amount: product.amount })
 	}
 
@@ -86,6 +88,7 @@ const Sell = ({
 				handleClear()
 				setWorking(false)
 				await getStorage()
+				await loadOrders()
 			}
 		} else {
 			if (orderItems && orderItems.length > 0) {
@@ -110,10 +113,10 @@ const Sell = ({
 			openAddMenu={openAddMenu}
 			handlePress={handlePress}
 			handleClear={handleClear}
-			setReleasedStatus={setReleasedStatus}
 			generateLoad={generateLoad}
 			setOpenAddMenu={setOpenAddMenu}
 			setGenerateLoad={setGenerateLoad}
+			setReleasedStatus={setReleasedStatus}
 			storedItemsOrderAware={storedItemsOrderAware}
 		/>
 	)
@@ -142,6 +145,7 @@ const mapDispatchToProps = {
 	addOrderItem: OrderCreators.addOrderItem,
 	loadProducts: ProductCreators.loadProducts,
 	setClientStep: OrderCreators.setClientStep,
+	loadOrders: OrdersVendorCreators.loadOrders,
 	setGenerateLoad: OrderCreators.setGenerateLoad,
 	resetStorageOrder: StorageCreators.resetStorageOrder,
 	decreaseItemsOrder: StorageCreators.decreaseItemsOrder,

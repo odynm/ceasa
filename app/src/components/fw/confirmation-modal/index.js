@@ -14,10 +14,12 @@ const ConfirmationModal = ({ content, onClose, onAccept, open, header }) => {
 					<View
 						onStartShouldSetResponder={() => true}
 						style={styles.container}>
-						{header && header.length > 0 && (
+						{header && header.length > 0 ? (
 							<View style={styles.header}>
 								<KText bold text={header} />
 							</View>
+						) : (
+							undefined
 						)}
 						<View style={styles.content}>
 							<KText text={content} />

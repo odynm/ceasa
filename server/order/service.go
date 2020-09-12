@@ -160,6 +160,28 @@ func GetForLoader(userId int, w http.ResponseWriter) {
 	}
 }
 
+func DeleteOrder(userId int, orderId int, w http.ResponseWriter) {
+	dbStoredProducts, ok := DbGetOrderProducts(userId, orderId)
+	if ok {
+		for _, dbStoredProduct := range dbStoredProducts {
+			storage.DbIncreaseAmount(dbStoredProduct.StorageItemId, dbStoredProduct.Amount, userId)
+		}
+		utils.Success(w, orderId)
+	} else {
+		utils.Failed(w, -1)
+	}
+	if ok {
+		ok = DbDeleteProductsFromOrderId(userId, orderId)
+		if ok {
+			ok = DbDeleteOrder(userId, orderId)
+		} else {
+			utils.Failed(w, -1)
+		}
+	} else {
+		utils.Failed(w, -1)
+	}
+}
+
 func addProducts(userId int, orderId int, products []ProductDto) bool {
 	for _, product := range products {
 		storageItem := storage.DbGetById(product.StorageItemId, userId)
