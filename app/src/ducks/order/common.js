@@ -59,7 +59,7 @@ function common(types, duck) {
 			client,
 			status,
 			urgent,
-			generateLoad: generateLoad, // TODO treat on backend
+			generateLoad: generateLoad,
 			products: orderItems.map(x => ({
 				storageItem: x.id,
 				unitPrice: x.unitPrice.value * 100,

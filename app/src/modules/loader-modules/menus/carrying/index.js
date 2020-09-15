@@ -21,6 +21,7 @@ import ConfirmationModal from 'src/components/fw/confirmation-modal'
 import ClientSegment from 'src/components/ceasa/order/client-segment'
 
 const Carrying = ({
+	loadOrders,
 	setAppLoader,
 	carryingList,
 	carryingOrder,
@@ -49,12 +50,16 @@ const Carrying = ({
 		}
 	}, [carryingList])
 
-	const handleFinish = () => {
-		finishCarrying({
+	const handleFinish = async () => {
+		setAppLoader(true)
+		await finishCarrying({
 			orderId: carryingOrder.id,
 			products: carryingOrder.products,
 		})
-		setSelectedCarryingOrderId(carryingList[0].id)
+		const item = carryingList.find(x => x)
+		setSelectedCarryingOrderId(item ? item.id : 0)
+		await loadOrders()
+		setAppLoader(false)
 	}
 
 	const handlePress = () => {
@@ -65,9 +70,9 @@ const Carrying = ({
 		}
 	}
 
-	const handleCloseModalYes = () => {
+	const handleCloseModalYes = async () => {
 		setModalWarning(false)
-		handleFinish()
+		await handleFinish()
 	}
 
 	return (
@@ -160,6 +165,7 @@ Carrying.navigationOptions = () => ({
 
 const mapDispatchToProps = {
 	setAppLoader: AppCreators.setAppLoader,
+	loadOrders: OrdersLoaderCreators.loadOrders,
 	finishCarrying: OrdersLoaderCreators.finishCarrying,
 	loadCarryingOrders: OrdersLoaderCreators.loadCarryingOrders,
 	setAmountDelivered: OrdersLoaderCreators.setAmountDelivered,

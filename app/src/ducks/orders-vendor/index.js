@@ -1,3 +1,4 @@
+import sort from '../order/sort'
 import HttpService from 'src/services/httpService'
 
 const prefix = 'order-vendor/'
@@ -18,7 +19,10 @@ const loadOrders = () => async dispatch => {
 			createdAt: new Date(item.createdAt),
 			releasedAt: new Date(item.releasedAt),
 		}))
-		await dispatch(setOrderList(mappedData))
+		const orderedData = mappedData.sort((a, b) => {
+			return sort(a, b)
+		})
+		await dispatch(setOrderList(orderedData))
 	}
 
 	return success

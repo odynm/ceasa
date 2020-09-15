@@ -1,3 +1,4 @@
+import sort from '../order/sort'
 import HttpService from 'src/services/httpService'
 
 const prefix = 'orders-loader/'
@@ -60,8 +61,11 @@ const loadOrders = () => async dispatch => {
 		createdAt: new Date(item.createdAt),
 		releasedAt: new Date(item.releasedAt),
 	}))
+	const orderedData = mappedData.sort((a, b) => {
+		return sort(a, b)
+	})
 	if (success && data) {
-		await dispatch(setOrderList(mappedData))
+		await dispatch(setOrderList(orderedData))
 	}
 
 	return success

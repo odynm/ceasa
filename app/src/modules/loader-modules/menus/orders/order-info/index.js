@@ -18,6 +18,7 @@ import ClientSegment from 'src/components/ceasa/order/client-segment'
 
 const LoaderOrderInfo = ({
 	order,
+	loadOrders,
 	navigation,
 	startCarrying,
 	loadCarryingOrders,
@@ -25,6 +26,8 @@ const LoaderOrderInfo = ({
 	const startJob = async () => {
 		await startCarrying(order.id)
 		await loadCarryingOrders()
+		await loadOrders()
+		navigation.goBack(null)
 		navigation.navigate(screens.loaderCarryingOrders)
 	}
 
@@ -73,6 +76,7 @@ LoaderOrderInfo.navigationOptions = () => ({
 })
 
 const mapDispatchToProps = {
+	loadOrders: OrdersLoaderCreators.loadOrders,
 	startCarrying: OrdersLoaderCreators.startCarrying,
 	loadCarryingOrders: OrdersLoaderCreators.loadCarryingOrders,
 }
