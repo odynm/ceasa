@@ -24,6 +24,7 @@ import RecentRegisterPicker from 'src/components/fw/pickers/recent-register-pick
 const Storage = ({
 	working,
 	products,
+	orderItems,
 	navigation,
 	setWorking,
 	addStorage,
@@ -80,9 +81,13 @@ const Storage = ({
 	}
 
 	const handleEdit = id => {
-		const storedItem = storedItems.find(x => x.id === id)
-		setStorageItemEdit(storedItem)
-		navigation.navigate(screens.editStorage)
+		if (orderItems && orderItems.length > 0) {
+			ToastService.show({ message: translate('storage.errors.cantEdit') })
+		} else {
+			const storedItem = storedItems.find(x => x.id === id)
+			setStorageItemEdit(storedItem)
+			navigation.navigate(screens.editStorage)
+		}
 	}
 
 	return (
@@ -174,9 +179,10 @@ const mapDispatchToProps = {
 	setStorageItemEdit: EditStorageCreators.setStorageItem,
 }
 
-const mapStateToProps = ({ products, storage }) => ({
+const mapStateToProps = ({ products, storage, order }) => ({
 	working: storage.working,
 	products: products.products,
+	orderItems: order.orderItems,
 	storedItems: storage.storedItems,
 	productTypes: products.productTypes,
 	recentProducts: products.recentProducts,

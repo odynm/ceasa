@@ -53,7 +53,8 @@
 		"amount": "Quantidade",
 		"add": "Adicionar",
 		"errors": {
-			"noProduct": "Selecione o produto"
+			"noProduct": "Selecione o produto",
+			"cantEdit": "Você não pode editar o estoque enquanto faz uma venda."
 		}
 	},
 	"sell": {
