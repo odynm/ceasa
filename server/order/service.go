@@ -152,7 +152,7 @@ func GetForVendor(userId int, w http.ResponseWriter) {
 }
 
 func GetForLoader(userId int, w http.ResponseWriter) {
-	response, ok := DbGetOrdersVendor(userId)
+	response, ok := DbGetOrdersLoader(userId)
 	if ok {
 		utils.Success(w, response)
 	} else {

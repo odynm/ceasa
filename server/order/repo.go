@@ -75,6 +75,14 @@ Error:
 }
 
 func DbGetOrdersVendor(userId int) ([]OrderListItem, bool) {
+	return dbGetOrders(userId, "(0)")
+}
+
+func DbGetOrdersLoader(userId int) ([]OrderListItem, bool) {
+	return dbGetOrders(userId, "(0, 1)")
+}
+
+func dbGetOrders(userId int, excludedStatus string) ([]OrderListItem, bool) {
 	schema := fmt.Sprint("u", userId)
 
 	var orderList []OrderListItem
@@ -94,7 +102,8 @@ func DbGetOrdersVendor(userId int) ([]OrderListItem, bool) {
 	FROM %v.order_order AS "order"
 	INNER JOIN %v.order_client as "client" ON "order".client_id = "client".id
 	LEFT JOIN public.loader_info as "loader" ON "order".loader_id = "loader".id
-	`, schema, schema)
+	WHERE "order".status NOT IN %v
+	`, schema, schema, excludedStatus)
 
 	fmt.Println(statement)
 	rows, err := db.Instance.Db.Query(statement)

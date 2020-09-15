@@ -12,6 +12,7 @@ import KText from 'src/components/fw/ktext'
 import MoneyService from 'src/services/moneyService'
 import ScreenBase from 'src/components/fw/screen-base'
 import OrderCard from 'src/components/ceasa/order/card'
+import ScreenHeader from 'src/components/fw/screen-header'
 
 const OrdersVendor = ({
 	setOrder,
@@ -64,6 +65,11 @@ const OrdersVendor = ({
 		</ScreenBase>
 	)
 }
+
+OrdersVendor.navigationOptions = () => ({
+	title: translate('menus.orders'),
+	headerLeft: props => <ScreenHeader noBack {...props} />,
+})
 
 const mapDispatchToProps = {
 	setOrder: EditOrderCreators.setOrder,

@@ -46,7 +46,11 @@ const SellComponent = ({
 			/>
 			{clientStep ? (
 				<CloseKeyboardView style={styles.clientView}>
-					<ClientSegment client={client} setClient={setClient} />
+					<ClientSegment
+						client={client}
+						errors={errors}
+						setClient={setClient}
+					/>
 				</CloseKeyboardView>
 			) : (
 				<ProductListSegment style={styles.items} orderItems={orderItems} />

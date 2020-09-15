@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { toHour } from 'src/utils/date'
+import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
 import { Creators as OrdersLoaderCreators } from 'src/ducks/orders-loader'
 import screens from 'src/constants/screens'
 import ScreenBase from 'src/components/fw/screen-base'
 import OrderCard from 'src/components/ceasa/order/card'
+import ScreenHeader from 'src/components/fw/screen-header'
 
 const OrdersLoader = ({
 	orderList,
@@ -39,6 +41,11 @@ const OrdersLoader = ({
 		</ScreenBase>
 	)
 }
+
+OrdersLoader.navigationOptions = () => ({
+	title: translate('loaderMenus.orders'),
+	headerLeft: props => <ScreenHeader noBack {...props} />,
+})
 
 const mapDispatchToProps = {
 	loadOrders: OrdersLoaderCreators.loadOrders,

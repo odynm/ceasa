@@ -41,6 +41,11 @@
 		"editStorage": "Alterar Estoque",
 		"editProductsOrder": "Alterar Produtos do Pedido"
 	},
+	"loaderMenus": {
+		"orders": "Pedidos",
+		"options": "Opções",
+		"carrying": "Carregamentos"
+	},
 	"storage": {
 		"product": "Produto",
 		"products": "Produtos",

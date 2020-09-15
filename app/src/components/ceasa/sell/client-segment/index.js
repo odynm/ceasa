@@ -3,11 +3,12 @@ import { View } from 'react-native'
 import { translate } from 'src/i18n/translate'
 import TextInput from 'src/components/fw/text-input'
 
-const ClientSegment = ({ client, setClient }) => {
+const ClientSegment = ({ client, errors, setClient }) => {
 	return (
 		<View>
 			<TextInput
 				value={client.key}
+				errorMessage={errors.key}
 				label={translate('sell.clientKey')}
 				setValue={value => setClient({ ...client, key: value })}
 			/>

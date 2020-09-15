@@ -6,7 +6,7 @@ const validateCreate = (data, setErrors) => {
 	if (!data.key || data.key === '') {
 		errors = {
 			...errors,
-			name: translate('sell.errors.insertClient'),
+			key: translate('sell.errors.insertClient'),
 		}
 	}
 

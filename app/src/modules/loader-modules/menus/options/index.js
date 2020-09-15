@@ -6,6 +6,7 @@ import { withNavigation } from 'react-navigation'
 import screens from 'src/constants/screens'
 import Button from 'src/components/fw/button'
 import ScreenBase from 'src/components/fw/screen-base'
+import ScreenHeader from 'src/components/fw/screen-header'
 
 const OptionsLoader = ({ navigation }) => {
 	useEffect(() => {}, [])
@@ -26,6 +27,11 @@ const OptionsLoader = ({ navigation }) => {
 		</View>
 	)
 }
+
+OptionsLoader.navigationOptions = () => ({
+	title: translate('loaderMenus.options'),
+	headerLeft: props => <ScreenHeader noBack {...props} />,
+})
 
 const mapDispatchToProps = {}
 

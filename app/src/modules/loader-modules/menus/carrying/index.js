@@ -16,6 +16,7 @@ import Loader from 'src/components/fw/loader'
 import AppLoader from 'src/components/fw/app-loader'
 import ModalNotDelivered from './modal-not-delivered'
 import ScreenBase from 'src/components/fw/screen-base'
+import ScreenHeader from 'src/components/fw/screen-header'
 import ConfirmationModal from 'src/components/fw/confirmation-modal'
 import ClientSegment from 'src/components/ceasa/order/client-segment'
 
@@ -151,6 +152,11 @@ const Carrying = ({
 		</AppLoader>
 	)
 }
+
+Carrying.navigationOptions = () => ({
+	title: translate('loaderMenus.carrying'),
+	headerLeft: props => <ScreenHeader noBack {...props} />,
+})
 
 const mapDispatchToProps = {
 	setAppLoader: AppCreators.setAppLoader,
