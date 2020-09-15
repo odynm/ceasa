@@ -13,19 +13,28 @@ import Button from 'src/components/fw/button'
 import TextInput from 'src/components/fw/text-input'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
+import ScreenHeaderDeleteStorage from './header'
+import ConfirmationModal from 'src/components/fw/confirmation-modal'
+import KText from 'src/components/fw/ktext'
 
 const EditStorage = ({
 	add,
 	setAmount,
 	deleteItem,
 	navigation,
+	loadStorage,
 	storageItem,
 	setAppLoader,
+	confirmDelete,
 	setDescription,
+	setConfirmDelete,
 }) => {
 	const handleDelete = async () => {
 		setAppLoader(true)
-		await deleteItem(storageItem)
+		const success = await deleteItem(storageItem)
+		if (success) {
+			await loadStorage()
+		}
 		setAppLoader(false)
 		navigation.navigate(screens.storage)
 	}
@@ -38,49 +47,67 @@ const EditStorage = ({
 	}
 
 	return (
-		<ScreenBase
-			useScroll={false}
-			useKeyboardAvoid={false}
-			useKeyboardClose={false}>
-			<Button
-				tiny
-				onPress={handleDelete}
-				style={styles.redButtonView}
-				textStyle={styles.redButtonText}
-				label={translate('editStorage.delete')}
+		<>
+			<ScreenBase
+				useScroll={false}
+				useKeyboardAvoid={false}
+				useKeyboardClose={true}>
+				<KText
+					bold
+					fontSize={24}
+					text={`${storageItem.productName} ${
+						storageItem.productTypeName
+					}`}
+				/>
+				<Space />
+				<TextInput
+					setValue={setDescription}
+					value={storageItem.description}
+					label={translate('storage.additionalDescription')}
+				/>
+				<Space />
+				<Amount
+					setValue={setAmount}
+					value={storageItem.amount}
+					label={translate('storage.amount')}
+				/>
+				<Button
+					onPress={handleEdit}
+					style={styles.button}
+					label={translate('editStorage.edit')}
+				/>
+			</ScreenBase>
+			<ConfirmationModal
+				open={confirmDelete}
+				onAccept={handleDelete}
+				onClose={() => setConfirmDelete(false)}
+				header={translate('editStorage.deleteModal.header')}
+				content={translate('editStorage.deleteModal.content')}
 			/>
-			<TextInput
-				setValue={setDescription}
-				value={storageItem.description}
-				label={translate('storage.additionalDescription')}
-			/>
-			<Space />
-			<Amount
-				setValue={setAmount}
-				value={storageItem.amount}
-				label={translate('storage.amount')}
-			/>
-			<Button onPress={handleEdit} label={translate('editStorage.edit')} />
-		</ScreenBase>
+		</>
 	)
 }
 
 EditStorage.navigationOptions = () => ({
-	title: translate('menus.editStorage'),
+	title: translate('menus.editOrder'),
 	headerLeft: props => <ScreenHeader {...props} />,
+	headerRight: props => <ScreenHeaderDeleteStorage {...props} />,
 })
 
 const mapDispatchToProps = {
 	add: StorageCreators.add,
-	delete: StorageCreators.delete,
+	loadStorage: StorageCreators.get,
+	deleteItem: StorageCreators.deleteItem,
 	setAppLoader: AppCreators.setAppLoader,
 	setAmount: EditStorageCreators.setAmount,
 	setDescription: EditStorageCreators.setDescription,
 	setStorageItem: EditStorageCreators.setStorageItem,
+	setConfirmDelete: EditStorageCreators.setConfirmDelete,
 }
 
 const mapStateToProps = ({ editStorage }) => ({
 	storageItem: editStorage.storageItem,
+	confirmDelete: editStorage.confirmDelete,
 })
 
 export default connect(

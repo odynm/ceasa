@@ -28,3 +28,10 @@ func Get(userId int, w http.ResponseWriter) {
 	response := DbGetAllFull(userId)
 	utils.Success(w, response)
 }
+
+func DeleteStorage(userId int, storageId int, w http.ResponseWriter) {
+	ok := DbDeleteStorage(userId, storageId)
+	if !ok {
+		utils.Failed(w, -1)
+	}
+}

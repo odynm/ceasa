@@ -244,3 +244,18 @@ func DbGetAll(userId int) []StorageItem {
 Error:
 	return nil
 }
+
+func DbDeleteStorage(userId int, storageId int) bool {
+	schema := fmt.Sprint("u", userId)
+
+	statement := fmt.Sprintf(`
+					DELETE FROM %v.storage_item WHERE id = $1`, schema)
+	_, err := db.Instance.Db.Exec(statement, storageId)
+	if err != nil {
+		goto Error
+	}
+
+	return true
+Error:
+	return false
+}

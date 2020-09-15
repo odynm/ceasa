@@ -110,7 +110,10 @@
 	},
 	"editStorage": {
 		"edit": "Editar",
-		"delete": "Excluir Item"
+		"deleteModal": {
+			"header": "Deletar Item do Estoque",
+			"content": "Tem certeza que quer deletar esse item do seu estoque?"
+		}
 	},
 	"loaderOrderInfo": {
 		"clientKey": "Nome/Placa/Box",

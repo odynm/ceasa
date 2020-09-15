@@ -1,12 +1,10 @@
 import { StyleSheet } from 'react-native'
-import colors from 'src/constants/colors'
+import { hp } from 'src/utils/screen'
 
 const styles = StyleSheet.create({
-	redButtonView: {
-		borderColor: colors.red,
-	},
-	redButtonText: {
-		color: colors.red,
+	button: {
+		marginBottom: hp(50),
+		marginTop: 'auto',
 	},
 })
 

@@ -173,7 +173,10 @@ func DeleteOrder(userId int, orderId int, w http.ResponseWriter) {
 	if ok {
 		ok = DbDeleteProductsFromOrderId(userId, orderId)
 		if ok {
-			ok = DbDeleteOrder(userId, orderId)
+			DbDeleteOrder(userId, orderId)
+			if !ok {
+				utils.Failed(w, -1)
+			}
 		} else {
 			utils.Failed(w, -1)
 		}

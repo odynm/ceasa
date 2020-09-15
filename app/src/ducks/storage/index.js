@@ -109,21 +109,21 @@ const add = item => async (dispatch, getStore) => {
 	return success
 }
 
-const deleteItem = item => async (dispatch, getStore) => {
-	const { success } = await HttpService.delete('storage', item.id)
-	if (success) {
-		//TODO
-		// dispatch(setStoredItems(data))
-		// dispatch(setStoredItemsOrderAware(rfdc()(data))) //review this because i can only get from server once? (rfdc)?
-	}
+const deleteItem = item => async () => {
+	const { success } = await HttpService.delete(`storage?id=${item.id}`)
+	return success
 }
 
-const get = () => async dispatch => {
+const get = () => async (dispatch, getStore) => {
 	dispatch(setLoading(true))
 	const { data, success } = await HttpService.get('storage')
 	if (success) {
 		dispatch(setStoredItems(data))
-		dispatch(setStoredItemsOrderAware(rfdc()(data)))
+
+		const { orderItems } = getStore().order
+		if (orderItems || orderItems.length === 0) {
+			dispatch(setStoredItemsOrderAware(rfdc()(data)))
+		}
 	}
 	dispatch(setLoading(false))
 }

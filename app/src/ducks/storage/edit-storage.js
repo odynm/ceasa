@@ -3,6 +3,7 @@ const Types = {
 	SET_AMOUNT: prefix + 'SET_AMOUNT',
 	SET_DESCRIPTION: prefix + 'SET_DESCRIPTION',
 	SET_STORAGE_ITEM: prefix + 'SET_STORAGE_ITEM',
+	SET_CONFIRM_DELETE: prefix + 'SET_CONFIRM_DELETE',
 }
 
 const setStorageItem = storageItem => ({
@@ -20,13 +21,20 @@ const setDescription = description => ({
 	type: Types.SET_DESCRIPTION,
 })
 
+const setConfirmDelete = confirmDelete => ({
+	payload: { confirmDelete },
+	type: Types.SET_CONFIRM_DELETE,
+})
+
 export const Creators = {
 	setAmount,
 	setStorageItem,
 	setDescription,
+	setConfirmDelete,
 }
 
 const initialState = {
+	confirmDelete: false,
 	storageItem: {
 		id: 0,
 		amount: 0,
@@ -54,6 +62,11 @@ export default function reducer(state = initialState, action) {
 			}
 		case Types.SET_STORAGE_ITEM:
 			return { ...state, storageItem: action.payload.storageItem }
+		case Types.SET_CONFIRM_DELETE:
+			return {
+				...state,
+				confirmDelete: action.payload.confirmDelete,
+			}
 		default:
 			return state
 	}
