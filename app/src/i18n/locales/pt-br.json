@@ -101,7 +101,10 @@
 		"blocked": "NÃO LIBERADO",
 		"doneAt": "Concluída às",
 		"urgent": "URGENTE",
-		"none": "Ainda não há nenhum pedido cadastrado."
+		"none": "Ainda não há nenhum pedido cadastrado.",
+		"errors": {
+			"cantEditAnymore": "Você não pode mais editar esse pedido"
+		}
 	},
 	"editOrder": {
 		"delete": "Excluir Pedido",

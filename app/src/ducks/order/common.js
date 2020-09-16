@@ -66,9 +66,8 @@ function common(types, duck) {
 				amount: x.amount,
 			})),
 		}
-		const { success, data } = await HttpService.post('order', postData)
-		console.warn(data)
-		return success
+		const data = await HttpService.post('order', postData)
+		return data
 	}
 }
 

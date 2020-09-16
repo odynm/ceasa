@@ -7,12 +7,14 @@ import { Creators as AppCreators } from 'src/ducks/app'
 import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
 import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
 import styles from './styles'
+import errors from 'src/constants/errors'
 import orderStatus from 'src/enums/order'
 import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import KText from 'src/components/fw/ktext'
 import Button from 'src/components/fw/button'
 import ScreenHeaderDeleteOrder from './header'
+import ToastService from 'src/services/toastService'
 import ScreenBase from 'src/components/fw/screen-base'
 import CheckBox from '@react-native-community/checkbox'
 import ScreenHeader from 'src/components/fw/screen-header'
@@ -44,9 +46,18 @@ const EditOrder = ({
 
 	const handleEdit = async () => {
 		setAppLoader(true)
-		await sendOrder()
+		const data = await sendOrder()
+		if (data.success) {
+			navigation.navigate(screens.orders)
+		} else {
+			if (data.data.errorCode === errors.ORDER_CANT_EDIT) {
+				ToastService.show({
+					message: translate('orders.errors.cantEditAnymore'),
+				})
+			}
+		}
+		await loadOrders()
 		setAppLoader(false)
-		navigation.navigate(screens.orders)
 	}
 
 	const handleEditProducts = () => {
@@ -79,7 +90,14 @@ const EditOrder = ({
 					</View>
 				)}
 				<View style={styles.client}>
-					<ClientSegment client={client} setClient={setClient} />
+					<ClientSegment
+						client={client}
+						setClient={setClient}
+						editable={
+							status !== orderStatus.carrying &&
+							status !== orderStatus.done
+						}
+					/>
 				</View>
 				<Button
 					small
@@ -87,39 +105,45 @@ const EditOrder = ({
 					style={styles.editProductView}
 					label={translate('editOrder.editProducts')}
 				/>
-				<View style={styles.footer}>
-					{status === orderStatus.blocked && (
+				{status === orderStatus.carrying ? (
+					undefined // TODO add info about carrier
+				) : status === orderStatus.done ? (
+					undefined // TODO add info about done order
+				) : (
+					<View style={styles.footer}>
+						{status === orderStatus.blocked && (
+							<View style={styles.row}>
+								<KText
+									bold
+									style={styles.rowAlignText}
+									text={translate('editOrder.released')}
+								/>
+								<CheckBox
+									value={internalStatus === orderStatus.released}
+									style={styles.checkbox}
+									onValueChange={checked => setOrderStatus(checked)}
+								/>
+							</View>
+						)}
 						<View style={styles.row}>
 							<KText
 								bold
 								style={styles.rowAlignText}
-								text={translate('editOrder.released')}
+								text={translate('editOrder.urgent')}
 							/>
 							<CheckBox
-								value={internalStatus === orderStatus.released}
+								value={urgent}
 								style={styles.checkbox}
-								onValueChange={checked => setOrderStatus(checked)}
+								onValueChange={checked => setUrgent(checked)}
 							/>
+							<Space size2 />
 						</View>
-					)}
-					<View style={styles.row}>
-						<KText
-							bold
-							style={styles.rowAlignText}
-							text={translate('editOrder.urgent')}
-						/>
-						<CheckBox
-							value={urgent}
-							style={styles.checkbox}
-							onValueChange={checked => setUrgent(checked)}
+						<Button
+							onPress={handleEdit}
+							label={translate('editOrder.edit')}
 						/>
 					</View>
-					<Space size2 />
-					<Button
-						onPress={handleEdit}
-						label={translate('editOrder.edit')}
-					/>
-				</View>
+				)}
 			</ScreenBase>
 			<ConfirmationModal
 				open={confirmDelete}

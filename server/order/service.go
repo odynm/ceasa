@@ -50,8 +50,16 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	var order OrderCreation
 	var ok bool
 
+	orderStatus := DbGetOrderStatus(userId, orderDto.Id)
+
+	if orderStatus == S_Carrying || orderStatus == S_Done || orderStatus == S_Deleted {
+		utils.Failed(w, utils.ORDER_CANT_EDIT)
+		goto Error
+	}
+
 	clientId = client.AddOrUpdateClient(orderDto.Client, userId, w)
 	if clientId == 0 {
+		utils.Failed(w, utils.ORDER_GENERIC)
 		goto Error
 	}
 
@@ -65,12 +73,14 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	}
 	orderId = DbEditOrder(order, orderDto.Id, userId)
 	if orderId == 0 {
+		utils.Failed(w, utils.ORDER_GENERIC)
 		goto Error
 	}
 	if orderDto.ProductListIsDirty {
 		var dbStoredProducts []OrderProduct
 		dbStoredProducts, ok = DbGetOrderProducts(userId, orderId)
 		if !ok {
+			utils.Failed(w, utils.ORDER_GENERIC)
 			goto Error
 		}
 
@@ -116,11 +126,13 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 
 		ok = DbDeleteProductsFromOrderId(userId, orderId)
 		if !ok {
+			utils.Failed(w, utils.ORDER_GENERIC)
 			goto Error
 		}
 
 		ok = addProducts(userId, orderId, orderDto.Products)
 		if !ok {
+			utils.Failed(w, utils.ORDER_GENERIC)
 			goto Error
 		}
 	}
@@ -128,7 +140,6 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	return orderId
 
 Error:
-	utils.BadRequest(w, "Order")
 	return 0
 }
 

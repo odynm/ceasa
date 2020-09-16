@@ -82,6 +82,25 @@ func DbGetOrdersLoader(userId int) ([]OrderListItem, bool) {
 	return dbGetOrders(userId, "(0, 1)")
 }
 
+func DbGetOrderStatus(userId int, orderId int) int {
+	schema := fmt.Sprint("u", userId)
+	var status int
+
+	statement := fmt.Sprintf(`
+	SELECT 
+		status
+	FROM %v.order_order
+	WHERE id = $1`, schema)
+
+	err := db.Instance.Db.QueryRow(statement, orderId).Scan(&status)
+
+	if err != nil {
+		return 0
+	}
+
+	return status
+}
+
 func dbGetOrders(userId int, excludedStatus string) ([]OrderListItem, bool) {
 	schema := fmt.Sprint("u", userId)
 

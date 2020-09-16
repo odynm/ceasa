@@ -12,12 +12,14 @@ const TextInput = ({
 	password,
 	maxLength,
 	errorMessage,
+	editable = true,
 }) => (
 	<>
 		<View style={styles.container}>
 			<KText bold text={label} />
 			<RNTextInput
 				value={value}
+				editable={editable}
 				maxLength={maxLength}
 				style={styles.textInput}
 				secureTextEntry={password}
