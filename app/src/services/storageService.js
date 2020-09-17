@@ -33,6 +33,7 @@ const removeItem = key => async () => {
 
 const keys = {
 	user: 'user',
+	loginType: 'loginType',
 	introduction: 'introduction',
 }
 
@@ -46,6 +47,11 @@ const StorageService = {
 		get: getItem(keys.introduction),
 		set: setItem(keys.introduction),
 		remove: removeItem(keys.introduction),
+	},
+	loginType: {
+		get: getItem(keys.loginType),
+		set: setItem(keys.loginType),
+		remove: removeItem(keys.loginType),
 	},
 }
 

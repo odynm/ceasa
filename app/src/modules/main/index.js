@@ -13,6 +13,8 @@ import KeyboardService from 'src/services/keyboardService'
 import ToastService from 'src/services/toastService'
 import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
 import RefresherService from 'src/services/refresherService'
+import rfdc from 'rfdc'
+import { loginType } from 'src/constants/login-type'
 
 const Main = ({
 	logout,
@@ -21,6 +23,7 @@ const Main = ({
 	loadOrders,
 	checkTerms,
 }) => {
+	const [hasStartedRefresher, setHasStartedRefresher] = useState(false)
 	const [hasEmailRegistered, setHasEmailRegistered] = useState(false)
 	const [hasRegistrationInProgress, setHasRegistrationInProgress] = useState(
 		false,
@@ -38,12 +41,11 @@ const Main = ({
 		// }
 		// return
 
-		const isLoggedIn = () => {
-			return true
+		if (!hasStartedRefresher) {
+			RefresherService.addFunction(loadOrders)
+			RefresherService.start()
+			setHasStartedRefresher(true)
 		}
-
-		RefresherService.addFunction(loadOrders, [isLoggedIn])
-		RefresherService.start()
 
 		const user = await StorageService.user.get()
 		const introduction = await StorageService.introduction.get()
@@ -74,10 +76,20 @@ const Main = ({
 			// 	navigation.navigate(screens.login)
 		} else {
 			// TODO ajustar para cair na tela certa de acordo com o login anteriormente feito
-			navigation.navigate(screens.login)
+
+			switch (await StorageService.loginType.get()) {
+				case loginType.none:
+					navigation.navigate(screens.loginSelect)
+					break
+				case loginType.loader:
+					navigation.navigate(screens.loginLoader)
+					break
+				case loginType.vendor:
+					navigation.navigate(screens.login)
+					break
+			}
 			//navigation.navigate(screens.introduction)
 		}
-		navigation.navigate(screens.login)
 	}
 
 	useEffect(() => {

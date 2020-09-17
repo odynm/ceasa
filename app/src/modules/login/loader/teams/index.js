@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { View, ScrollView } from 'react-native'
 import { withNavigation } from 'react-navigation'
+import { loginType } from 'src/constants/login-type'
 import { Creators as TeamCreators } from 'src/ducks/team'
 import { Creators as LoaderCreators } from 'src/ducks/loader'
 import styles from './styles'
@@ -14,6 +15,7 @@ import KText from 'src/components/fw/ktext'
 import Loader from 'src/components/fw/loader'
 import Button from 'src/components/fw/button'
 import ScreenBase from 'src/components/fw/screen-base'
+import StorageService from 'src/services/storageService'
 import ScreenHeader from 'src/components/fw/screen-header'
 
 const LoaderTeams = ({
@@ -25,6 +27,7 @@ const LoaderTeams = ({
 	loadLoaderTeams,
 }) => {
 	useEffect(() => {
+		StorageService.loginType.set(loginType.loader)
 		loadLoaderTeams()
 	}, [])
 

@@ -4,6 +4,7 @@ import { SvgXml } from 'react-native-svg'
 import { translate } from 'src/i18n/translate'
 import { TouchableOpacity } from 'react-native'
 import { withNavigation } from 'react-navigation'
+import { loginType } from 'src/constants/login-type'
 import { Creators as UserCreators } from 'src/ducks/user'
 import styles from './styles'
 import colors from 'src/constants/colors'
@@ -15,6 +16,7 @@ import Button from 'src/components/fw/button'
 import ToastService from 'src/services/toastService'
 import TextInput from 'src/components/fw/text-input'
 import ScreenBase from 'src/components/fw/screen-base'
+import StorageService from 'src/services/storageService'
 
 const Login = ({ login, navigation, userId, accessToken }) => {
 	const [userText, setUserText] = useState('')
@@ -23,6 +25,7 @@ const Login = ({ login, navigation, userId, accessToken }) => {
 	const handleLogin = async () => {
 		const success = await login(userText, passwordText)
 		if (success) {
+			await StorageService.loginType.set(loginType.vendor)
 			navigation.navigate(stacks.menu)
 		} else {
 			ToastService.show({ message: translate('login.error') })
