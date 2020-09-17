@@ -11,8 +11,16 @@ import screens from 'src/constants/screens'
 import StorageService from 'src/services/storageService'
 import KeyboardService from 'src/services/keyboardService'
 import ToastService from 'src/services/toastService'
+import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
+import RefresherService from 'src/services/refresherService'
 
-const Main = ({ logout, navigation, loadLoggedUser, checkTerms }) => {
+const Main = ({
+	logout,
+	navigation,
+	loadLoggedUser,
+	loadOrders,
+	checkTerms,
+}) => {
 	const [hasEmailRegistered, setHasEmailRegistered] = useState(false)
 	const [hasRegistrationInProgress, setHasRegistrationInProgress] = useState(
 		false,
@@ -29,6 +37,13 @@ const Main = ({ logout, navigation, loadLoggedUser, checkTerms }) => {
 		// 	navigation.navigate(stacks.login)
 		// }
 		// return
+
+		const isLoggedIn = () => {
+			return true
+		}
+
+		RefresherService.addFunction(loadOrders, [isLoggedIn])
+		RefresherService.start()
 
 		const user = await StorageService.user.get()
 		const introduction = await StorageService.introduction.get()
@@ -97,6 +112,7 @@ const mapDispatchToProps = {
 	logout: UserCreators.logout,
 	checkTerms: TermsCreators.check,
 	loadLoggedUser: UserCreators.loadLoggedUser,
+	loadOrders: OrdersVendorCreators.loadOrders,
 }
 
 export default withNavigation(
