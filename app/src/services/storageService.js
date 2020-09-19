@@ -35,6 +35,7 @@ const keys = {
 	user: 'user',
 	loginType: 'loginType',
 	introduction: 'introduction',
+	refresherRunning: 'refresherRunning',
 }
 
 const StorageService = {
