@@ -53,6 +53,11 @@ const StorageService = {
 		set: setItem(keys.loginType),
 		remove: removeItem(keys.loginType),
 	},
+	refresherRunning: {
+		get: getItem(keys.refresherRunning),
+		set: setItem(keys.refresherRunning),
+		remove: removeItem(keys.refresherRunning),
+	},
 }
 
 export default StorageService

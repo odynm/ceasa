@@ -52,6 +52,7 @@ export const Creators = {
 	login,
 	create,
 	setUserId,
+	setLoader,
 }
 
 const initialState = {

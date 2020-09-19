@@ -7,6 +7,7 @@ import Toast from 'react-native-easy-toast'
 import HttpService from 'src/services/httpService'
 import MoneyService from 'src/services/moneyService'
 import ToastService from 'src/services/toastService'
+import Refresher from 'src/components/ceasa/refresher'
 import AppContainer, { navigationRef } from 'src/router'
 import LocationService from 'src/services/locationService'
 import InternetService from 'src/services/internetService'
@@ -38,10 +39,13 @@ const App = () => {
 	return (
 		<Provider store={store}>
 			{appLoaded && (
-				<AppContainer
-					ref={navigationRef}
-					onNavigationStateChange={onNavigationStateChange}
-				/>
+				<>
+					<Refresher />
+					<AppContainer
+						ref={navigationRef}
+						onNavigationStateChange={onNavigationStateChange}
+					/>
+				</>
 			)}
 			<Toast ref={toastRef} />
 		</Provider>

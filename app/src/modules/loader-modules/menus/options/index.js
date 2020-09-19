@@ -3,12 +3,13 @@ import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
+import { Creators as LoaderCreators } from 'src/ducks/loader'
 import screens from 'src/constants/screens'
 import Button from 'src/components/fw/button'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
 
-const OptionsLoader = ({ navigation }) => {
+const OptionsLoader = ({ navigation, setLoader, setUserId }) => {
 	useEffect(() => {}, [])
 
 	return (
@@ -20,6 +21,8 @@ const OptionsLoader = ({ navigation }) => {
 				<Button
 					label={translate('optionsLoader.logout')}
 					onPress={() => {
+						setUserId(0)
+						setLoader({})
 						navigation.navigate(screens.loaderTeams)
 					}}
 				/>
@@ -33,7 +36,10 @@ OptionsLoader.navigationOptions = () => ({
 	headerLeft: props => <ScreenHeader noBack {...props} />,
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+	setLoader: LoaderCreators.setLoader,
+	setUserId: LoaderCreators.setUserId,
+}
 
 const mapStateToProps = ({}) => ({})
 
