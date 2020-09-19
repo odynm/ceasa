@@ -1,7 +1,8 @@
+import { AppState } from 'react-native'
 import config from 'src/config'
 import StorageService from './storageService'
 
-let _stop = true
+let _stop = false
 let _user
 let _loader
 let _loaderUserId
@@ -22,15 +23,18 @@ const setData = ({
 	_loadLoaderOrders = loadLoaderOrders
 }
 
-const start = async () => {
-	if (!(await StorageService.refresherRunning.get())) {
-		await StorageService.refresherRunning.set(true)
-		refresh()
-	}
+const start = () => {
+	StorageService.refresherRunning.get().then(val => {
+		if (!val) {
+			StorageService.refresherRunning.set(true)
+			refresh()
+		}
+	})
 }
 
 const stop = () => {
 	_stop = true
+	StorageService.refresherRunning.set(false)
 }
 
 const refresh = () => {
@@ -47,7 +51,6 @@ const refresh = () => {
 	) {
 		//Loader
 		if (_loadLoaderOrders) {
-			console.warn('here')
 			_loadLoaderOrders()
 		}
 	}

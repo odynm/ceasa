@@ -20,6 +20,7 @@ import ScreenHeader from 'src/components/fw/screen-header'
 
 const LoaderTeams = ({
 	loader,
+	setLoader,
 	setUserId,
 	navigation,
 	loaderTeams,
@@ -54,6 +55,7 @@ const LoaderTeams = ({
 							style={styles.editButton}
 							label={translate('loaderTeams.logout')}
 							onPress={() => {
+								setLoader({})
 								navigation.navigate(screens.loginSelect)
 							}}
 						/>
@@ -107,6 +109,7 @@ const mapStateToProps = ({ team, loader }) => ({
 })
 
 const mapDispatchToProps = {
+	setLoader: LoaderCreators.setLoader,
 	setUserId: LoaderCreators.setUserId,
 	loadLoaderTeams: TeamCreators.loadLoaderTeams,
 }

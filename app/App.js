@@ -9,6 +9,7 @@ import MoneyService from 'src/services/moneyService'
 import ToastService from 'src/services/toastService'
 import Refresher from 'src/components/ceasa/refresher'
 import AppContainer, { navigationRef } from 'src/router'
+import StorageService from 'src/services/storageService'
 import LocationService from 'src/services/locationService'
 import InternetService from 'src/services/internetService'
 
@@ -25,6 +26,9 @@ const App = () => {
 		if (!hasInternetConnection) {
 			return
 		}
+
+		// Reset refresher
+		await StorageService.refresherRunning.set(false)
 
 		HttpService.initialize()
 		MoneyService.initialize()

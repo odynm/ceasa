@@ -22,7 +22,6 @@ const OptionsLoader = ({ navigation, setLoader, setUserId }) => {
 					label={translate('optionsLoader.logout')}
 					onPress={() => {
 						setUserId(0)
-						setLoader({})
 						navigation.navigate(screens.loaderTeams)
 					}}
 				/>
@@ -37,7 +36,6 @@ OptionsLoader.navigationOptions = () => ({
 })
 
 const mapDispatchToProps = {
-	setLoader: LoaderCreators.setLoader,
 	setUserId: LoaderCreators.setUserId,
 }
 

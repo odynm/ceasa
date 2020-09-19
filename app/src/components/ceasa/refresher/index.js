@@ -12,13 +12,9 @@ const Refresher = ({
 	loadLoaderOrders,
 }) => {
 	useEffect(() => {
-		start()
+		RefresherService.start()
 		return RefresherService.stop
 	}, [])
-
-	const start = async () => {
-		await RefresherService.start()
-	}
 
 	useEffect(() => {
 		RefresherService.setData({
