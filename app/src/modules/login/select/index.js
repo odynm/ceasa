@@ -6,7 +6,7 @@ import styles from './styles'
 import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
-import svgLogo from 'res/svgs/v5/svgLogo.svg'
+import svgLogo from 'res/svgs/v9/svgLogo.svg'
 import ScreenBase from 'src/components/fw/screen-base'
 
 const Login = ({ navigation }) => {

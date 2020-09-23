@@ -12,7 +12,7 @@ import styles from './styles'
 import Picker from '../picker'
 import Modal from 'react-native-modal'
 import KText from 'src/components/fw/ktext'
-import svgSearch from 'res/svgs/v5/svgSearch.svg'
+import svgSearch from 'res/svgs/v9/svgSearch.svg'
 import KeyboardService from 'src/services/keyboardService'
 
 const RecentRegisterPicker = ({

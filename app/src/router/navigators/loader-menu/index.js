@@ -1,15 +1,15 @@
 import React from 'react'
 import { SvgXml } from 'react-native-svg'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
-import svgHome from 'res/svgs/v5/svgHome.svg'
-import svgUser from 'res/svgs/v5/svgUser.svg'
+import svgUser from 'res/svgs/v9/svgUser.svg'
 import OrdersLoaderStack from './items/orders'
 import OptionsLoaderStack from './items/options'
-import svgOrders from 'res/svgs/v5/svgOrders.svg'
+import svgOrders from 'res/svgs/v9/svgOrders.svg'
 import CarryingLoaderStack from './items/carrying'
-import svgHomeSelected from 'res/svgs/v5/svgHomeSelected.svg'
-import svgUserSelected from 'res/svgs/v5/svgUserSelected.svg'
-import svgOrdersSelected from 'res/svgs/v5/svgOrdersSelected.svg'
+import svgCarrying from 'res/svgs/v9/svgCarrying.svg'
+import svgUserSelected from 'res/svgs/v9/svgUserSelected.svg'
+import svgOrdersSelected from 'res/svgs/v9/svgOrdersSelected.svg'
+import svgCarryingSelected from 'res/svgs/v9/svgCarryingSelected.svg'
 
 //const enabledRoutesForAnonymous = [screens.home, screens.search]
 
@@ -24,7 +24,11 @@ OrdersLoaderStack.navigationOptions = () => ({
 
 CarryingLoaderStack.navigationOptions = () => ({
 	tabBarIcon: ({ focused }) =>
-		focused ? <SvgXml xml={svgHomeSelected} /> : <SvgXml xml={svgHome} />,
+		focused ? (
+			<SvgXml xml={svgCarryingSelected} />
+		) : (
+			<SvgXml xml={svgCarrying} />
+		),
 	tabBarOptions: {
 		showLabel: false,
 		showIcon: true,

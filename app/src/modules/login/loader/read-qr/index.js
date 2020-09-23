@@ -10,7 +10,7 @@ import Loader from 'src/components/fw/loader'
 import ScreenHeader from 'src/components/fw/screen-header'
 //import { wp, hp } from 'src/utils/screen'
 //import SvgXml from 'react-native-svg'
-//import xmlQrScanBorder from 'res/svgs/v5/qr-scan-border.svg'
+//import xmlQrScanBorder from 'res/svgs/v9/qr-scan-border.svg'
 
 const ReadQr = ({ navigation, joinTeam, loadLoaderTeams }) => {
 	const [loading, setLoading] = useState(false)
