@@ -5,7 +5,7 @@ import { withNavigation } from 'react-navigation'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
 import colors from 'src/constants/colors'
-import svgBack from 'res/svgs/svgBack.svg'
+import svgBack from 'res/svgs/v5/svgBack.svg'
 
 const hitSlop = {
 	bottom: 10,

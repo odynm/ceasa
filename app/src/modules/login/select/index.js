@@ -3,10 +3,10 @@ import { SvgXml } from 'react-native-svg'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
 import styles from './styles'
-import svgLogo from 'res/svgs/svgLogo.svg'
 import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
+import svgLogo from 'res/svgs/v5/svgLogo.svg'
 import ScreenBase from 'src/components/fw/screen-base'
 
 const Login = ({ navigation }) => {

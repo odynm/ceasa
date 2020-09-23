@@ -6,10 +6,17 @@ import UserStack from './items/user'
 import SellStack from './items/sell'
 import OrdersStack from './items/orders'
 import StorageStack from './items/storage'
-import svgHome from 'res/svgs/svgHome.svg'
-import svgStorage from 'res/svgs/svgStorage.svg'
-import svgHomeSelected from 'res/svgs/svgHomeSelected.svg'
-import svgStorageSelected from 'res/svgs/svgStorageSelected.svg'
+import svgHome from 'res/svgs/v5/svgHome.svg'
+import svgUser from 'res/svgs/v5/svgUser.svg'
+import svgSell from 'res/svgs/v5/svgSell.svg'
+import svgOrders from 'res/svgs/v5/svgOrders.svg'
+import svgStorage from 'res/svgs/v5/svgStorage.svg'
+//import svgHomeSelected from '../../../../res/svgs/svgHomeSelected.svg'
+import svgHomeSelected from 'res/svgs/v5/svgHomeSelected.svg'
+import svgSellSelected from 'res/svgs/v5/svgSellSelected.svg'
+import svgUserSelected from 'res/svgs/v5/svgUserSelected.svg'
+import svgOrdersSelected from 'res/svgs/v5/svgOrdersSelected.svg'
+import svgStorageSelected from 'res/svgs/v5/svgStorageSelected.svg'
 
 //const enabledRoutesForAnonymous = [screens.home, screens.search]
 
@@ -37,7 +44,7 @@ StorageStack.navigationOptions = () => ({
 
 SellStack.navigationOptions = () => ({
 	tabBarIcon: ({ focused }) =>
-		focused ? <SvgXml xml={svgHomeSelected} /> : <SvgXml xml={svgHome} />,
+		focused ? <SvgXml xml={svgSellSelected} /> : <SvgXml xml={svgSell} />,
 	tabBarOptions: {
 		showLabel: false,
 		showIcon: true,
@@ -46,7 +53,7 @@ SellStack.navigationOptions = () => ({
 
 OrdersStack.navigationOptions = () => ({
 	tabBarIcon: ({ focused }) =>
-		focused ? <SvgXml xml={svgHomeSelected} /> : <SvgXml xml={svgHome} />,
+		focused ? <SvgXml xml={svgOrdersSelected} /> : <SvgXml xml={svgOrders} />,
 	tabBarOptions: {
 		showLabel: false,
 		showIcon: true,
@@ -55,7 +62,7 @@ OrdersStack.navigationOptions = () => ({
 
 UserStack.navigationOptions = () => ({
 	tabBarIcon: ({ focused }) =>
-		focused ? <SvgXml xml={svgHomeSelected} /> : <SvgXml xml={svgHome} />,
+		focused ? <SvgXml xml={svgUserSelected} /> : <SvgXml xml={svgUser} />,
 	tabBarOptions: {
 		showLabel: false,
 		showIcon: true,
