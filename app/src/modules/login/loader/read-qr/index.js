@@ -32,7 +32,7 @@ const ReadQr = ({ navigation, joinTeam, loadLoaderTeams }) => {
 			) : (
 				<View style={styles.container}>
 					<RNCamera
-						type={'front'}
+						type={'back'}
 						captureAudio={false}
 						style={styles.camera}
 						onGoogleVisionBarcodesDetected={handleRead}
