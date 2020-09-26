@@ -3,7 +3,7 @@ package product
 import (
 	"net/http"
 
-	"../user"
+	"ceasa/user"
 )
 
 func add(w http.ResponseWriter, r *http.Request) {

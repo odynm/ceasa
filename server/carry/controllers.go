@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"../loader"
-	"../utils"
+	"ceasa/loader"
+	"ceasa/utils"
 )
 
 func startCarrying(w http.ResponseWriter, r *http.Request) {

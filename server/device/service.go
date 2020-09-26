@@ -3,7 +3,7 @@ package device
 import (
 	"net/http"
 
-	"../utils"
+	"ceasa/utils"
 )
 
 func CreateDevice(hash string, w http.ResponseWriter) (int, bool) {

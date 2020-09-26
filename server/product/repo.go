@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"../db"
+	"ceasa/db"
 )
 
 func DbGetAll(userId int) (ProductData, bool) {

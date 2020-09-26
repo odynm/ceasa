@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"../utils"
+	"ceasa/utils"
 )
 
 func post(w http.ResponseWriter, r *http.Request) {

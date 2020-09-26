@@ -3,8 +3,8 @@ package carry
 import (
 	"net/http"
 
-	"../storage"
-	"../utils"
+	"ceasa/storage"
+	"ceasa/utils"
 )
 
 func StartCarrying(orderId int, userId int, loaderId int, w http.ResponseWriter) {

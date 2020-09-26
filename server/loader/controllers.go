@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"../utils"
+	"ceasa/utils"
 )
 
 func create(w http.ResponseWriter, r *http.Request) {

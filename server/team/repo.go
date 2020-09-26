@@ -1,6 +1,6 @@
 package team
 
-import "../db"
+import "ceasa/db"
 
 func DbGetAllTeams(loaderId int) ([]TeamFull, bool) {
 	var teams []TeamFull

@@ -5,7 +5,7 @@ import (
 
 	_ "github.com/lib/pq"
 
-	"../db"
+	"ceasa/db"
 )
 
 func DbGetId(login string) int {

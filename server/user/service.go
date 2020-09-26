@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"../utils"
+	"ceasa/utils"
 )
 
 type AuthData struct {

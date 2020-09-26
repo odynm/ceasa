@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"../utils"
+	"ceasa/utils"
 )
 
 func GetAll(userId int, w http.ResponseWriter) {

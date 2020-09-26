@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"../loader"
-	"../user"
-	"../utils"
+	"ceasa/loader"
+	"ceasa/user"
+	"ceasa/utils"
 )
 
 func getAll(w http.ResponseWriter, r *http.Request) {

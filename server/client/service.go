@@ -3,7 +3,7 @@ package client
 import (
 	"net/http"
 
-	"../utils"
+	"ceasa/utils"
 )
 
 func AddOrUpdateClient(clientDto ClientDto, userId int, w http.ResponseWriter) int {

@@ -1,6 +1,6 @@
 package device
 
-import "../db"
+import "ceasa/db"
 
 func DbGetDevice(hash string) int {
 	var id int

@@ -1,7 +1,7 @@
 package loader
 
 import (
-	"../db"
+	"ceasa/db"
 )
 
 func DbCreateLoader(loader Loader) int {

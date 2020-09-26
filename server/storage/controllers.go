@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"../user"
-	"../utils"
+	"ceasa/user"
+	"ceasa/utils"
 )
 
 func add(w http.ResponseWriter, r *http.Request) {

@@ -3,7 +3,7 @@ package order
 import (
 	"time"
 
-	"../client"
+	"ceasa/client"
 )
 
 const (

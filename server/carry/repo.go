@@ -3,8 +3,8 @@ package carry
 import (
 	"fmt"
 
-	"../db"
-	"../order"
+	"ceasa/db"
+	"ceasa/order"
 )
 
 func DbStartCarrying(orderId int, userId int, loaderId int) int {

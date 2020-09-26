@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"../db"
+	"ceasa/db"
 )
 
 func DbCreateOrUpdateClient(clientDto ClientDto, userId int) int {

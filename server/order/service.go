@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"time"
 
-	"../client"
-	"../storage"
-	"../utils"
+	"ceasa/client"
+	"ceasa/storage"
+	"ceasa/utils"
 )
 
 func Add(orderDto OrderDto, userId int, w http.ResponseWriter) int {

@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"../admin"
-	"../utils"
+	"ceasa/admin"
+	"ceasa/utils"
 )
 
 func login(w http.ResponseWriter, r *http.Request) {

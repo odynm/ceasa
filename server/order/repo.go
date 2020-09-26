@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"../db"
+	"ceasa/db"
 )
 
 func DbCreateProduct(product OrderProduct, userId int) int {

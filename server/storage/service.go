@@ -3,7 +3,7 @@ package storage
 import (
 	"net/http"
 
-	"../utils"
+	"ceasa/utils"
 )
 
 func Add(itemDto ItemDto, userId int, w http.ResponseWriter) {

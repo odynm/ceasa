@@ -5,15 +5,15 @@ import (
 	"log"
 	"net/http"
 
-	"./admin"
-	"./carry"
-	"./db"
-	"./loader"
-	"./order"
-	"./product"
-	"./storage"
-	"./team"
-	"./user"
+	"ceasa/admin"
+	"ceasa/carry"
+	"ceasa/db"
+	"ceasa/loader"
+	"ceasa/order"
+	"ceasa/product"
+	"ceasa/storage"
+	"ceasa/team"
+	"ceasa/user"
 )
 
 func homePage(w http.ResponseWriter, r *http.Request) {

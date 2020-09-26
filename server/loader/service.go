@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"time"
 
-	"../device"
-	"../utils"
+	"ceasa/device"
+	"ceasa/utils"
 )
 
 type LoaderAuthData struct {

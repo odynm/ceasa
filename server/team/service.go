@@ -3,8 +3,8 @@ package team
 import (
 	"net/http"
 
-	"../user"
-	"../utils"
+	"ceasa/user"
+	"ceasa/utils"
 )
 
 func GetAllTeams(loaderId int, w http.ResponseWriter) ([]TeamFull, bool) {

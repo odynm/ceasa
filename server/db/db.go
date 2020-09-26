@@ -9,7 +9,7 @@ import (
 
 	"io/ioutil"
 
-	"../utils"
+	"ceasa/utils"
 )
 
 const (

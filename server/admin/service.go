@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"../utils"
+	"ceasa/utils"
 )
 
 var tokens = map[string]bool{}

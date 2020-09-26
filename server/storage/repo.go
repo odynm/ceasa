@@ -4,11 +4,11 @@ import (
 	"database/sql"
 	"fmt"
 
-	"../db"
+	"ceasa/db"
 
 	"strings"
 
-	"../utils"
+	"ceasa/utils"
 )
 
 func DbIncreaseAmount(id int, increaseAmount int, userId int) bool {
