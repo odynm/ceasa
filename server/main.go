@@ -36,17 +36,17 @@ func handleRequest() {
 func runPreBuild() {
 	// Só rodará se o exe estiver dentro do bin/
 	path := utils.GetPath()
-	strings.Replace(path, "/bin", "", -1)
-	fmt.Printf("Trying with %s", path)
+	path = strings.Replace(path, "/bin", "", -1)
+	fmt.Printf("Trying with %s\n", path)
 	if _, err := os.Stat("../pre-build.sh"); err == nil {
 		cmd, err := exec.Command("/bin/sh", "../pre-build.sh").Output()
 		if err != nil {
-			fmt.Printf("ERROR ON PRE BUILD SCRIPT: %s", err)
+			fmt.Printf("ERROR ON PRE BUILD SCRIPT: %s\n", err)
 		}
 		output := string(cmd)
-		fmt.Printf(output)
+		fmt.Println(output)
 	} else {
-		fmt.Printf("Pre-build not found/needed")
+		fmt.Println("Pre-build not found/needed")
 	}
 }
 
