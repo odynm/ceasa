@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/exec"
 
 	"ceasa/admin"
 	"ceasa/carry"
@@ -29,7 +31,20 @@ func handleRequest() {
 	http.HandleFunc("/", homePage)
 }
 
+func runPreBuild() {
+	// Só rodará se estiver dentro do bin/
+	if _, err := os.Stat("../pre-build.sh"); err == nil {
+		cmd, err := exec.Command("/bin/sh", "../pre-build.sh").Output()
+		if err != nil {
+			fmt.Printf("ERROR ON PRE BUILD SCRIPT: %s", err)
+		}
+		output := string(cmd)
+		fmt.Printf(output)
+	}
+}
+
 func main() {
+	runPreBuild()
 	db.InitDb()
 	db.RunMigrationsPublic()
 	db.RunMigrationsUsers()
