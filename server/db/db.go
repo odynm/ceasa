@@ -13,16 +13,11 @@ import (
 )
 
 const (
-	// host     = "localhost"
-	// port     = 5432
-	// user     = "postgres"
-	// password = "BasketCase94"
-	// dbname   = "ceasa"
-	host     = "ec2-35-172-73-125.compute-1.amazonaws.com"
+	host     = "localhost"
 	port     = 5432
-	user     = "tyzbtjggpgfchi"
-	password = "bff6e921a73d4023ce6875f99d50ad7f5667d7f9d6f1d03c4acc5a80eeba4f81"
-	dbname   = "d97jk9l4tj4a7a"
+	user     = "postgres"
+	password = "BasketCase94"
+	dbname   = "ceasa"
 
 	ctxPublic = 0
 	cxtUser   = 1
@@ -35,10 +30,13 @@ type Intc struct {
 var Instance Intc
 
 func InitDb() {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-	sqlDb, err := sql.Open("postgres", psqlInfo)
+	// psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+	// 	"password=%s dbname=%s sslmode=disable",
+	// 	host, port, user, password, dbname)
+	//sqlDb, err := sql.Open("postgres", psqlInfo)
+
+	sqlDb, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+
 	Instance = Intc{Db: sqlDb}
 	utils.CrashOnError(err)
 	if Instance.Db != nil {
