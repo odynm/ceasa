@@ -36,8 +36,10 @@ func InitDb() {
 	//sqlDb, err := sql.Open("postgres", psqlInfo)
 
 	//DEBUG
-	fmt.Println(os.Getenv("DATABASE_URL"))
-	sqlDb, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	databaseUrl := os.Getenv("DATABASE_URL")
+	databaseUrl = databaseUrl + "?sslmode=disable"
+	fmt.Println(os.Getenv(databaseUrl))
+	sqlDb, err := sql.Open("postgres", databaseUrl)
 
 	Instance = Intc{Db: sqlDb}
 	utils.CrashOnError(err)
