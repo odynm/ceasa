@@ -13,11 +13,16 @@ import (
 )
 
 const (
-	host     = "localhost"
+	// host     = "localhost"
+	// port     = 5432
+	// user     = "postgres"
+	// password = "BasketCase94"
+	// dbname   = "ceasa"
+	host     = "ec2-35-172-73-125.compute-1.amazonaws.com"
 	port     = 5432
-	user     = "postgres"
-	password = "BasketCase94"
-	dbname   = "ceasa"
+	user     = "tyzbtjggpgfchi"
+	password = "bff6e921a73d4023ce6875f99d50ad7f5667d7f9d6f1d03c4acc5a80eeba4f81"
+	dbname   = "d97jk9l4tj4a7a"
 
 	ctxPublic = 0
 	cxtUser   = 1
