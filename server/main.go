@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"ceasa/admin"
 	"ceasa/carry"
@@ -45,5 +46,12 @@ func main() {
 	loader.HandleRequest()
 	team.HandleRequest()
 	carry.HandleRequest()
-	log.Fatal(http.ListenAndServe(":10000", nil))
+
+	portOS := os.Getenv("PORT")
+	port := ":10000"
+	if portOS != "" {
+		port = portOS
+	}
+
+	log.Fatal(http.ListenAndServe(port, nil))
 }

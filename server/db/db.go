@@ -35,7 +35,7 @@ func InitDb() {
 	// 	host, port, user, password, dbname)
 	// sqlDb, err := sql.Open("postgres", psqlInfo)
 
-	//DEBUG
+	// Take from OS vars
 	databaseUrl := os.Getenv("DATABASE_URL")
 	sqlDb, err := sql.Open("postgres", databaseUrl)
 
