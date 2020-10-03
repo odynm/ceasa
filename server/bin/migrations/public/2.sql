@@ -6,7 +6,6 @@ CREATE SEQUENCE public.device_id_seq
     MAXVALUE 9223372036854775807
     START 1
     CACHE 1;
-ALTER TABLE public.device_id_seq;
 
 CREATE TABLE public.device
 (
@@ -17,7 +16,6 @@ CREATE TABLE public.device
 WITH (
     OIDS=FALSE
 );
-ALTER TABLE public.device;
 
 /* LOADER_INFO */
 
@@ -27,7 +25,6 @@ CREATE SEQUENCE public.loader_info_id_seq
     MAXVALUE 9223372036854775807
     START 1
     CACHE 1;
-ALTER TABLE public.loader_info_id_seq;
 
 CREATE TABLE public.loader_info
 (
@@ -43,7 +40,6 @@ CREATE TABLE public.loader_info
 WITH (
     OIDS=FALSE
 );
-ALTER TABLE public.loader_info;
 
 /* TEAMS */
 
@@ -53,7 +49,6 @@ CREATE SEQUENCE public.team_info_id_seq
     MAXVALUE 9223372036854775807
     START 1
     CACHE 1;
-ALTER TABLE public.team_info_id_seq;
 
 CREATE TABLE public.team_info
 (
@@ -71,4 +66,3 @@ CREATE TABLE public.team_info
 WITH (
     OIDS=FALSE
 );
-ALTER TABLE public.team_info;

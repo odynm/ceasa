@@ -6,7 +6,6 @@ CREATE SEQUENCE _user_.order_client_id_seq
     MAXVALUE 9223372036854775807
     START 1
     CACHE 1;
-ALTER TABLE _user_.order_client_id_seq;
 
 CREATE TABLE _user_.order_client
 (
@@ -19,7 +18,6 @@ CREATE TABLE _user_.order_client
 WITH (
     OIDS=FALSE
 );
-ALTER TABLE _user_.order_client;
 
 /* ORDER_ORDER */
 
@@ -29,7 +27,6 @@ CREATE SEQUENCE _user_.order_order_id_seq
     MAXVALUE 9223372036854775807
     START 1
     CACHE 1;
-ALTER TABLE _user_.order_order_id_seq;
 
 CREATE TABLE _user_.order_order
 (
@@ -52,7 +49,6 @@ CREATE TABLE _user_.order_order
 WITH (
     OIDS=FALSE
 );
-ALTER TABLE _user_.order_order;
 
 /* ORDER_PRODUCT */
 
@@ -62,7 +58,6 @@ CREATE SEQUENCE _user_.order_product_id_seq
     MAXVALUE 9223372036854775807
     START 1
     CACHE 1;
-ALTER TABLE _user_.order_product_id_seq;
 
 CREATE TABLE _user_.order_product
 (
@@ -83,4 +78,3 @@ CREATE TABLE _user_.order_product
 WITH (
     OIDS=FALSE
 );
-ALTER TABLE _user_.order_product;

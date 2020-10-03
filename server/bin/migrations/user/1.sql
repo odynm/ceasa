@@ -6,7 +6,6 @@ CREATE SEQUENCE _user_.storage_item_description_id_seq
     MAXVALUE 9223372036854775807
     START 1
     CACHE 1;
-ALTER TABLE _user_.storage_item_description_id_seq;
 
 CREATE TABLE _user_.storage_item_description
 (
@@ -17,7 +16,6 @@ CREATE TABLE _user_.storage_item_description
 WITH (
     OIDS=FALSE
 );
-ALTER TABLE _user_.storage_item_description;
 
 /* STORAGE_ITEM */
 
@@ -27,7 +25,6 @@ CREATE SEQUENCE _user_.storage_item_id_seq
     MAXVALUE 9223372036854775807
     START 1
     CACHE 1;
-ALTER TABLE _user_.storage_item_id_seq;
 
 CREATE TABLE _user_.storage_item
 (
@@ -50,4 +47,3 @@ CREATE TABLE _user_.storage_item
 WITH (
     OIDS=FALSE
 );
-ALTER TABLE _user_.storage_item;

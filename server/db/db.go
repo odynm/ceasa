@@ -33,13 +33,11 @@ func InitDb() {
 	// psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 	// 	"password=%s dbname=%s sslmode=disable",
 	// 	host, port, user, password, dbname)
-	//sqlDb, err := sql.Open("postgres", psqlInfo)
+	// sqlDb, err := sql.Open("postgres", psqlInfo)
 
 	//DEBUG
 	databaseUrl := os.Getenv("DATABASE_URL")
-	databaseUrlNoSSL := databaseUrl + "?sslmode=disable"
-	fmt.Println(databaseUrlNoSSL)
-	sqlDb, err := sql.Open("postgres", databaseUrlNoSSL)
+	sqlDb, err := sql.Open("postgres", databaseUrl)
 
 	Instance = Intc{Db: sqlDb}
 	utils.CrashOnError(err)
