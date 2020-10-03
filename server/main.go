@@ -4,9 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"os/exec"
-	"strings"
 
 	"ceasa/admin"
 	"ceasa/carry"
@@ -17,7 +14,6 @@ import (
 	"ceasa/storage"
 	"ceasa/team"
 	"ceasa/user"
-	"ceasa/utils"
 )
 
 func homePage(w http.ResponseWriter, r *http.Request) {
@@ -33,25 +29,7 @@ func handleRequest() {
 	http.HandleFunc("/", homePage)
 }
 
-func runPreBuild() {
-	// Só rodará se o exe estiver dentro do bin/
-	path := utils.GetPath()
-	path = strings.Replace(path, "/bin", "", -1)
-	fmt.Printf("Trying with %s\n", path)
-	if _, err := os.Stat("../pre-build.sh"); err == nil {
-		cmd, err := exec.Command("/bin/sh", "../pre-build.sh").Output()
-		if err != nil {
-			fmt.Printf("ERROR ON PRE BUILD SCRIPT: %s\n", err)
-		}
-		output := string(cmd)
-		fmt.Println(output)
-	} else {
-		fmt.Println("Pre-build not found/needed")
-	}
-}
-
 func main() {
-	runPreBuild()
 	db.InitDb()
 	db.RunMigrationsPublic()
 	db.RunMigrationsUsers()
