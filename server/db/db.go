@@ -64,6 +64,7 @@ func updateMigrations(curLastRunned int, contextId int) {
 }
 
 func RunMigrationsPublic() {
+	fmt.Println(utils.GetPath())
 	dir := utils.GetPath() + "/migrations/public"
 	_, err := os.Stat(dir)
 	utils.CrashOnError(err)
