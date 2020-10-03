@@ -110,6 +110,12 @@ func RunMigrationsPublic() {
 func RunMigrationsUsers() {
 	dir := utils.GetPath() + "/migrations/user"
 	_, err := os.Stat(dir)
+	//DEBUG
+	if err != nil {
+		fmt.Println("Stat")
+		//DEBUG
+		fmt.Println(err)
+	}
 	utils.CrashOnError(err)
 
 	statement := "SELECT last_id_runned FROM public.migration WHERE context = $1"
