@@ -6,7 +6,7 @@ CREATE SEQUENCE public.user_info_id_seq
     MAXVALUE 9223372036854775807
     START 1
     CACHE 1;
-ALTER TABLE public.user_info_id_seq
+ALTER TABLE public.user_info_id_seq;
 
 
 CREATE TABLE public.user_info
