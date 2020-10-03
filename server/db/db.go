@@ -35,6 +35,8 @@ func InitDb() {
 	// 	host, port, user, password, dbname)
 	//sqlDb, err := sql.Open("postgres", psqlInfo)
 
+	//DEBUG
+	fmt.Println(os.Getenv("DATABASE_URL"))
 	sqlDb, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
 
 	Instance = Intc{Db: sqlDb}
@@ -119,10 +121,22 @@ func RunMigrationsUsers() {
 	for i := int(lastIdRunned); i < len(files); i++ {
 		path := fmt.Sprint(utils.GetPath(), "/migrations/user/", i+1, ".sql")
 		file, err := os.Open(path)
+		//DEBUG
+		if err != nil {
+			fmt.Println("Open")
+			//DEBUG
+			fmt.Println(err)
+		}
 		utils.CrashOnError(err)
 
 		data := make([]byte, 1024*10)
 		file.Read(data)
+		//DEBUG
+		if err != nil {
+			fmt.Println("Read")
+			//DEBUG
+			fmt.Println(err)
+		}
 		utils.CrashOnError(err)
 
 		requests := strings.Split(string(data), ";")
