@@ -50,8 +50,8 @@ func main() {
 	portOS := os.Getenv("PORT")
 	port := ":10000"
 	if portOS != "" {
-		port = portOS
+		port = ":" + portOS
 	}
-
+	fmt.Printf("port === ", port)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
