@@ -6,8 +6,7 @@ CREATE SEQUENCE public.user_info_id_seq
     MAXVALUE 9223372036854775807
     START 1
     CACHE 1;
-ALTER TABLE public.user_info_id_seq
-    OWNER TO postgres;
+ALTER TABLE public.user_info_id_seq;
 
 
 CREATE TABLE public.user_info
@@ -27,8 +26,7 @@ CREATE TABLE public.user_info
 WITH (
     OIDS=FALSE
 );
-ALTER TABLE public.user_info
-    OWNER TO postgres;
+ALTER TABLE public.user_info;
 
 /* ADMIN_INFO */
 
@@ -38,8 +36,7 @@ CREATE SEQUENCE public.admin_info_id_seq
     MAXVALUE 9223372036854775807
     START 1
     CACHE 1;
-ALTER TABLE public.admin_info_id_seq
-    OWNER TO postgres;
+ALTER TABLE public.admin_info_id_seq;
 
 CREATE TABLE public.admin_info
 (
@@ -54,8 +51,7 @@ CREATE TABLE public.admin_info
 WITH (
     OIDS=FALSE
 );
-ALTER TABLE public.admin_info
-    OWNER TO postgres;
+ALTER TABLE public.admin_info;
 
 /* PRODUCTS_PRODUCT */
 
@@ -65,8 +61,7 @@ CREATE SEQUENCE public.products_product_id_seq
     MAXVALUE 9223372036854775807
     START 2
     CACHE 1;
-ALTER TABLE public.products_product_id_seq
-    OWNER TO postgres;
+ALTER TABLE public.products_product_id_seq;
 
 CREATE TABLE public.products_product
 (
@@ -81,8 +76,7 @@ CREATE TABLE public.products_product
 WITH (
     OIDS=FALSE
 );
-ALTER TABLE public.products_product
-    OWNER TO postgres;
+ALTER TABLE public.products_product;
 
 /* PRODUCTS_PRODUCT_TYPE */
 
@@ -92,8 +86,7 @@ CREATE SEQUENCE public.products_product_type_id_seq
     MAXVALUE 9223372036854775807
     START 2
     CACHE 1;
-ALTER TABLE public.products_product_type_id_seq
-    OWNER TO postgres;
+ALTER TABLE public.products_product_type_id_seq;
 
 CREATE TABLE public.products_product_type
 (
@@ -112,8 +105,7 @@ CREATE TABLE public.products_product_type
 WITH (
     OIDS=FALSE
 );
-ALTER TABLE public.products_product_type
-    OWNER TO postgres;
+ALTER TABLE public.products_product_type;
 
 /* MIGRATIONS */
 
@@ -123,8 +115,7 @@ CREATE SEQUENCE public.migration_id_seq
     MAXVALUE 9223372036854775807
     START 1
     CACHE 1;
-    ALTER TABLE public.migration_id_seq
-    OWNER TO postgres;
+    ALTER TABLE public.migration_id_seq;
 
 
 CREATE TABLE public.migration
@@ -138,5 +129,4 @@ CREATE TABLE public.migration
 WITH (
     OIDS=FALSE
 );
-ALTER TABLE public.migration
-    OWNER TO postgres;
+ALTER TABLE public.migration;
