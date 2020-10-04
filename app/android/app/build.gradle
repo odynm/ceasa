@@ -147,10 +147,10 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
+            storeFile file('ceasaestoque.keystore')
+            storePassword 'BasketCase94'
+            keyAlias 'ceasa'
+            keyPassword 'BasketCase94'
         }
     }
     buildTypes {
