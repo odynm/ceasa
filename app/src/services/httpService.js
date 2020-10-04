@@ -31,10 +31,12 @@ const requestInterceptor = requestConfig => {
 		requestConfig.headers.User = userId
 	}
 	//config.headers['accept-language'] = i18n.locale
+	console.warn(requestConfig)
 	return requestConfig
 }
 
 const responseErrorInterceptor = async error => {
+	console.warn(error)
 	const netInfo = await NetInfo.fetch()
 	if (!netInfo.isInternetReachable) {
 		Keyboard.dismiss()

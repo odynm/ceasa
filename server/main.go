@@ -52,6 +52,6 @@ func main() {
 	if portOS != "" {
 		port = ":" + portOS
 	}
-	fmt.Printf("port === ", port)
+
 	log.Fatal(http.ListenAndServe(port, nil))
 }

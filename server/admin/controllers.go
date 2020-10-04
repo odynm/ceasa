@@ -15,6 +15,10 @@ func post(w http.ResponseWriter, r *http.Request) {
 		utils.BadRequest(w, "")
 		return
 	}
+	if len(adminLogin.Pass) < 1 {
+		utils.Failed(w, -1)
+		return
+	}
 
 	CreateAdmin(adminLogin, w)
 }
@@ -24,6 +28,10 @@ func login(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&adminLogin)
 	if err != nil {
 		utils.BadRequest(w, "")
+		return
+	}
+	if len(adminLogin.Pass) < 1 {
+		utils.Failed(w, -1)
 		return
 	}
 

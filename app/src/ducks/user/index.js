@@ -15,6 +15,8 @@ const login = (user, password) => async dispatch => {
 		login: user,
 		password,
 	})
+	console.warn(success)
+	console.warn(data)
 	if (success) {
 		await dispatch(setUser(data))
 	}

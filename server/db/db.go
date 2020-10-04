@@ -110,12 +110,6 @@ func RunMigrationsPublic() {
 func RunMigrationsUsers() {
 	dir := utils.GetPath() + "/migrations/user"
 	_, err := os.Stat(dir)
-	//DEBUG
-	if err != nil {
-		fmt.Println("Stat")
-		//DEBUG
-		fmt.Println(err)
-	}
 	utils.CrashOnError(err)
 
 	statement := "SELECT last_id_runned FROM public.migration WHERE context = $1"
@@ -127,22 +121,10 @@ func RunMigrationsUsers() {
 	for i := int(lastIdRunned); i < len(files); i++ {
 		path := fmt.Sprint(utils.GetPath(), "/migrations/user/", i+1, ".sql")
 		file, err := os.Open(path)
-		//DEBUG
-		if err != nil {
-			fmt.Println("Open")
-			//DEBUG
-			fmt.Println(err)
-		}
 		utils.CrashOnError(err)
 
 		data := make([]byte, 1024*10)
 		file.Read(data)
-		//DEBUG
-		if err != nil {
-			fmt.Println("Read")
-			//DEBUG
-			fmt.Println(err)
-		}
 		utils.CrashOnError(err)
 
 		requests := strings.Split(string(data), ";")

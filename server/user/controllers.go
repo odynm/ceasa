@@ -13,7 +13,7 @@ import (
 func login(w http.ResponseWriter, r *http.Request) {
 	var userDto UserDto
 	err := json.NewDecoder(r.Body).Decode(&userDto)
-	if err != nil || userDto.Login == "" {
+	if err != nil || userDto.Login == "" || len(userDto.Pass) < 1 {
 		utils.NoAuth(w)
 	}
 	LoginUser(userDto, w)
@@ -31,6 +31,10 @@ func refresh(w http.ResponseWriter, r *http.Request) {
 func post(w http.ResponseWriter, r *http.Request) {
 	var userDto UserDto
 	err := json.NewDecoder(r.Body).Decode(&userDto)
+	if len(userDto.Pass) < 1 {
+		utils.Failed(w, -1)
+		return
+	}
 	auth := r.Header.Get("Auth")
 	if err != nil {
 		utils.NoAuth(w)
