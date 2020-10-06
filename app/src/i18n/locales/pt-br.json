@@ -29,7 +29,8 @@
 		"logout": "Sair",
 		"none": "Você não está em nenhuma equipe ainda",
 		"registeredTeams": "Equipes registradas:",
-		"read": "Ler Código"
+		"read": "Ler Código",
+		"readFail": "Falha ao ler o QR Code"
 	},
 	"menus": {
 		"storage": "Cadastrar",
@@ -71,7 +72,7 @@
 		"amount": "Qtde.",
 		"inStock": "Em estoque",
 		"emptyStorage": "O estoque está vazio",
-		"noItemsAdded": "Nenhum produto adicionado",
+		"noItemsAdded": "Adicione um produto para começar uma venda.",
 		"sellProduct": "Vender produto",
 		"sellAvailable": "Disponível",
 		"sellAmount": "Quantidade venda",
@@ -83,6 +84,7 @@
 		"exceededWarning": "Excede estoque",
 		"add": "Adicionar",
 		"edit": "Editar",
+		"delete": "Excluir",
 		"continue": "Continuar",
 		"addSell": "Adicionar Venda",
 		"added": "Venda adicionada!",
@@ -90,6 +92,10 @@
 			"finishSell": "Finalizar venda",
 			"areYouSure": "Você quer confirmar a venda?",
 			"dontHaveInStorage": "Falta no estoque:"
+		},
+		"modalDelete": {
+			"header": "Confirmar exclusão",
+			"content": "Quer excluir esse item?"
 		},
 		"errors": {
 			"priceRequired": "Digite o preço",

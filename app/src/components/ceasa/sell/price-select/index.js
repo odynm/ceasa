@@ -9,6 +9,7 @@ const PriceSelect = ({
 	open,
 	onClose,
 	addProduct,
+	removeProduct,
 	initialValues,
 	selectedProduct,
 }) => {
@@ -77,6 +78,10 @@ const PriceSelect = ({
 		}
 	}
 
+	const handleDelete = () => {
+		removeProduct(selectedProduct)
+	}
+
 	const handleCloseExceededStorage = () => {
 		setModalExceededStorageOpen(false)
 	}
@@ -92,6 +97,7 @@ const PriceSelect = ({
 				onClose={onClose}
 				handleAdd={handleAdd}
 				setAmount={setAmount}
+				handleDelete={handleDelete}
 				selectedProduct={selectedProduct}
 				handlePriceChange={handlePriceChange}
 			/>

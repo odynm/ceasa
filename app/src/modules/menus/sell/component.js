@@ -29,6 +29,7 @@ const SellComponent = ({
 	handleClear,
 	openAddMenu,
 	generateLoad,
+	removeProduct,
 	setOpenAddMenu,
 	setGenerateLoad,
 	setReleasedStatus,
@@ -103,6 +104,7 @@ const SellComponent = ({
 				open={openAddMenu}
 				addProduct={addProduct}
 				setOpen={setOpenAddMenu}
+				removeProduct={removeProduct}
 				storageItems={storedItemsOrderAware}
 			/>
 		</ScreenBase>

@@ -56,16 +56,18 @@ const setAmountDelivered = ({ carryItemId, itemId, amountDelivered }) => (
 
 const loadOrders = () => async dispatch => {
 	const { data, success } = await HttpService.get('order/loader')
-	const mappedData = data.map(item => ({
-		...item,
-		createdAt: new Date(item.createdAt),
-		releasedAt: new Date(item.releasedAt),
-	}))
-	const orderedData = mappedData.sort((a, b) => {
-		return sort(a, b)
-	})
 	if (success && data) {
-		await dispatch(setOrderList(orderedData))
+		const mappedData = data.map(item => ({
+			...item,
+			createdAt: new Date(item.createdAt),
+			releasedAt: new Date(item.releasedAt),
+		}))
+		const orderedData = mappedData.sort((a, b) => {
+			return sort(a, b)
+		})
+		if (success && data) {
+			await dispatch(setOrderList(orderedData))
+		}
 	}
 
 	return success

@@ -73,7 +73,7 @@ const add = item => async (dispatch, getStore) => {
 			description: item.description,
 			amount: item.amount,
 		}
-		if (item.id === 0) {
+		if (!item.id) {
 			const current =
 				storedItems && storedItems.length > 0 ? storedItems : []
 			const newStoredItems = [...current, mappedItemView]

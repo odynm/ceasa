@@ -59,6 +59,12 @@ const Sell = ({
 		decreaseItemsOrder({ id: product.id, amount: product.amount })
 	}
 
+	//TODO NEXT
+	const removeProduct = async product => {
+		await removeOrderItem(product)
+		increaseItemsOrder({ id: product.id, amount: product.amount })
+	}
+
 	const handleClear = () => {
 		setOpenAddMenu(false)
 		setTotalPrice({
@@ -114,6 +120,7 @@ const Sell = ({
 			handlePress={handlePress}
 			handleClear={handleClear}
 			generateLoad={generateLoad}
+			removeProduct={removeProduct}
 			setOpenAddMenu={setOpenAddMenu}
 			setGenerateLoad={setGenerateLoad}
 			setReleasedStatus={setReleasedStatus}

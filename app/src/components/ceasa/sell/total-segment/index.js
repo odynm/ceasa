@@ -2,6 +2,7 @@ import React from 'react'
 import { hp } from 'src/utils/screen'
 import { translate } from 'src/i18n/translate'
 import { View, TouchableOpacity, StyleSheet } from 'react-native'
+import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
 import MoneyService from 'src/services/moneyService'
 
@@ -25,7 +26,7 @@ const TotalSegment = ({ setOpenAddMenu, totalPrice }) => (
 			<TouchableOpacity
 				onPress={() => setOpenAddMenu(true)}
 				style={styles.addButton}>
-				<KText fontSize={24} text={'+'} />
+				<KText fontSize={24} style={styles.addText} text={'+'} />
 			</TouchableOpacity>
 		)}
 	</View>
@@ -50,6 +51,8 @@ const styles = StyleSheet.create({
 		marginRight: 'auto',
 	},
 	addButton: {
+		backgroundColor: colors.primary,
+		borderColor: colors.gray,
 		alignItems: 'center',
 		borderRadius: hp(25),
 		borderWidth: 1,
@@ -58,6 +61,9 @@ const styles = StyleSheet.create({
 		marginLeft: 'auto',
 		marginRight: 0,
 		width: hp(50),
+	},
+	addText: {
+		color: 'white',
 	},
 })
 

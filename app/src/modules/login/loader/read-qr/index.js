@@ -7,22 +7,36 @@ import { withNavigation } from 'react-navigation'
 import { Creators as TeamCreators } from 'src/ducks/team'
 import styles from './styles'
 import Loader from 'src/components/fw/loader'
+import ToastService from 'src/services/toastService'
 import ScreenHeader from 'src/components/fw/screen-header'
 //import { wp, hp } from 'src/utils/screen'
 //import SvgXml from 'react-native-svg'
 //import xmlQrScanBorder from 'res/svgs/v9/qr-scan-border.svg'
 
 const ReadQr = ({ navigation, joinTeam, loadLoaderTeams }) => {
+	const [handling, setHandling] = useState(false)
 	const [loading, setLoading] = useState(false)
 
 	const handleRead = async e => {
-		const code = e.data
-		setLoading(true)
-		await joinTeam(code)
-		setLoading(false)
+		if (handling) {
+			return
+		}
+		setHandling(true)
+		const code = e.barcodes[0].data
+		if (code && code.length > 1) {
+			setLoading(true)
+			await joinTeam(code)
+			setLoading(false)
 
-		loadLoaderTeams()
-		navigation.goBack(null)
+			loadLoaderTeams()
+			navigation.goBack(null)
+		} else {
+			ToastService.show({
+				message: translate('loaderTeams.readFail'),
+				duration: 2000,
+			})
+		}
+		setHandling(false)
 	}
 
 	return (

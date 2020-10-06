@@ -24,20 +24,22 @@ const OrdersLoader = ({
 			useScroll={true}
 			useKeyboardAvoid={false}
 			useKeyboardClose={false}>
-			{orderList.map((item, index) => (
-				<OrderCard
-					key={index}
-					urgent={item.urgent}
-					loader={item.loader}
-					status={item.status}
-					clientKey={item.client.key}
-					onPress={() => {
-						setSelectedOrderId(item.id)
-						navigation.navigate(screens.loaderOrderInfo)
-					}}
-					releasedHour={item.releasedAt && toHour(item.releasedAt)}
-				/>
-			))}
+			{orderList &&
+				orderList.length > 0 &&
+				orderList.map((item, index) => (
+					<OrderCard
+						key={index}
+						urgent={item.urgent}
+						loader={item.loader}
+						status={item.status}
+						clientKey={item.client.key}
+						onPress={() => {
+							setSelectedOrderId(item.id)
+							navigation.navigate(screens.loaderOrderInfo)
+						}}
+						releasedHour={item.releasedAt && toHour(item.releasedAt)}
+					/>
+				))}
 		</ScreenBase>
 	)
 }

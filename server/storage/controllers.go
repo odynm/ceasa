@@ -49,6 +49,7 @@ func delete(w http.ResponseWriter, r *http.Request) {
 				utils.Failed(w, -1)
 			} else {
 				DeleteStorage(userId, int(storageId), w)
+				utils.Success(w, storageId)
 			}
 		} else {
 			utils.Failed(w, -1)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { hp } from 'src/utils/screen'
 import { translate } from 'src/i18n/translate'
 import { View, StyleSheet } from 'react-native'
@@ -10,6 +10,7 @@ import Button from 'src/components/fw/button'
 import Amount from 'src/components/fw/amount'
 import MoneyService from 'src/services/moneyService'
 import MoneyInput from 'src/components/fw/money-input'
+import ConfirmationModal from 'src/components/fw/confirmation-modal'
 import CloseKeyboardView from 'src/components/fw/screen-base/close-keyboard-view'
 
 const ModalPrice = ({
@@ -22,88 +23,121 @@ const ModalPrice = ({
 	onClose,
 	setAmount,
 	handleAdd,
+	handleDelete,
 	selectedProduct,
 	handlePriceChange,
 }) => {
+	const [modalAccepDelete, setModalAccepDelete] = useState(false)
+
 	const colorStyle =
 		amount > selectedProduct.amount ? { color: colors.red } : {}
 
 	return (
-		<KModal
-			size={400}
-			open={open}
-			onClose={onClose}
-			header={translate('sell.sellProduct')}>
-			<KText
-				bold
-				fontSize={24}
-				text={`${selectedProduct.productName} ${
-					selectedProduct.productTypeName
-				}`}
-			/>
-			<CloseKeyboardView style={styles.closeKeyboardView}>
-				<KText text={selectedProduct.description} />
-				<View style={styles.row}>
-					<KText bold text={translate('sell.sellAvailable')} />
-					<KText
-						bold
-						style={[styles.right, colorStyle]}
-						text={selectedProduct.amount}
-					/>
-				</View>
-				<Space size2 />
-				<View style={styles.row}>
-					<Amount
-						value={amount}
-						setValue={setAmount}
-						style={styles.right}
-						label={translate('sell.sellAmount')}
-					/>
-				</View>
-				<Space />
-				<View style={styles.row}>
-					<MoneyInput
-						max={9999}
-						value={price}
-						style={styles.right}
-						setValue={handlePriceChange}
-						errorMessage={errors.price}
-						label={translate('sell.sellUnitPrice')}
-					/>
-				</View>
-				<Space />
-				<View style={styles.row}>
-					<KText bold text={translate('sell.sellTotal')} />
-					<KText
-						bold
-						style={styles.right}
-						text={`${MoneyService.getCurrency().text} ${total.text}`}
-					/>
-				</View>
-				<Space />
-				<View style={styles.warning}>
-					{amount > selectedProduct.amount && (
+		<>
+			<KModal
+				size={400}
+				open={open}
+				onClose={onClose}
+				header={translate('sell.sellProduct')}>
+				<KText
+					bold
+					fontSize={24}
+					text={`${selectedProduct.productName} ${
+						selectedProduct.productTypeName
+					}`}
+				/>
+				<CloseKeyboardView style={styles.closeKeyboardView}>
+					<KText text={selectedProduct.description} />
+					<View style={styles.row}>
+						<KText bold text={translate('sell.sellAvailable')} />
 						<KText
 							bold
-							style={colorStyle}
-							text={translate('sell.exceededWarning')}
+							style={[styles.right, colorStyle]}
+							text={selectedProduct.amount}
+						/>
+					</View>
+					<Space size2 />
+					<View style={styles.row}>
+						<Amount
+							value={amount}
+							setValue={setAmount}
+							style={styles.right}
+							label={translate('sell.sellAmount')}
+						/>
+					</View>
+					<Space />
+					<View style={styles.row}>
+						<MoneyInput
+							max={9999}
+							value={price}
+							style={styles.right}
+							setValue={handlePriceChange}
+							errorMessage={errors.price}
+							label={translate('sell.sellUnitPrice')}
+						/>
+					</View>
+					<Space />
+					<View style={styles.row}>
+						<KText bold text={translate('sell.sellTotal')} />
+						<KText
+							bold
+							style={styles.right}
+							text={`${MoneyService.getCurrency().text} ${total.text}`}
+						/>
+					</View>
+					<Space />
+					<View style={styles.warning}>
+						{amount > selectedProduct.amount && (
+							<KText
+								bold
+								style={colorStyle}
+								text={translate('sell.exceededWarning')}
+							/>
+						)}
+					</View>
+					{edit ? (
+						<View style={styles.spacedRow}>
+							<Button
+								tiny
+								style={styles.button}
+								label={translate('sell.delete')}
+								onPress={() => setModalAccepDelete(true)}
+							/>
+							<Button
+								tiny
+								style={styles.button}
+								onPress={handleAdd}
+								label={translate('sell.edit')}
+							/>
+						</View>
+					) : (
+						<Button
+							small
+							style={styles.button}
+							onPress={handleAdd}
+							label={translate('sell.add')}
 						/>
 					)}
-				</View>
-				<Button
-					small
-					style={styles.button}
-					onPress={handleAdd}
-					label={edit ? translate('sell.edit') : translate('sell.add')}
-				/>
-			</CloseKeyboardView>
-		</KModal>
+				</CloseKeyboardView>
+			</KModal>
+			<ConfirmationModal
+				open={modalAccepDelete}
+				onAccept={handleDelete}
+				onClose={() => setModalAccepDelete(false)}
+				header={translate('sell.modalDelete.header')}
+				content={translate('sell.modalDelete.content')}
+			/>
+		</>
 	)
 }
 
 const styles = StyleSheet.create({
 	row: {
 		flexDirection: 'row',
+	},
+	spacedRow: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
 	},
 	right: {
 		marginLeft: 'auto',
