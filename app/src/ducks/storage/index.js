@@ -1,6 +1,8 @@
 import rfdc from 'rfdc'
 import HttpService from 'src/services/httpService'
 
+export { Selectors } from './selectors'
+
 const prefix = 'storage/'
 const Types = {
 	SET_LOADING: prefix + 'SET_LOADING',
@@ -34,6 +36,30 @@ const resetStorageOrder = () => (dispatch, getState) => {
 	dispatch(setStoredItemsOrderAware(rfdc()(storedItems)))
 	dispatch(setLoading(false))
 	dispatch(setWorking(false))
+}
+
+const setItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
+	const { storedItemsOrderAware } = getStore().storage
+	const index = storedItemsOrderAware.findIndex(x => x.id === id)
+	const item = storedItemsOrderAware[index]
+	const newAmount = amount
+	const newStoredItemsOrderAware = [...storedItemsOrderAware]
+	if (item) {
+		newStoredItemsOrderAware[index].amount = newAmount
+		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
+	}
+}
+
+const increaseItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
+	const { storedItemsOrderAware } = getStore().storage
+	const index = storedItemsOrderAware.findIndex(x => x.id === id)
+	const item = storedItemsOrderAware[index]
+	const newAmount = item.amount + amount
+	const newStoredItemsOrderAware = [...storedItemsOrderAware]
+	if (item) {
+		newStoredItemsOrderAware[index].amount = newAmount
+		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
+	}
 }
 
 const decreaseItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
@@ -140,8 +166,10 @@ export const Creators = {
 	get,
 	deleteItem,
 	setWorking,
+	setItemsOrder,
 	resetStorageOrder,
 	decreaseItemsOrder,
+	increaseItemsOrder,
 }
 
 export default function reducer(state = initialState, action) {

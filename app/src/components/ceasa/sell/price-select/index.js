@@ -8,6 +8,7 @@ const PriceSelect = ({
 	edit,
 	open,
 	onClose,
+	available,
 	addProduct,
 	removeProduct,
 	initialValues,
@@ -48,16 +49,7 @@ const PriceSelect = ({
 		updateTotal()
 	}
 
-	const addItem = () => {
-		addProduct({
-			amount: amount,
-			id: selectedProduct.id,
-			total: { text: total.text, value: total.value }, // to pass by value
-			unitPrice: { text: price.text, value: price.value }, // to pass by value
-			description: selectedProduct.description,
-			productName: selectedProduct.productName,
-			productTypeName: selectedProduct.productTypeName,
-		})
+	const cleanup = () => {
 		setAmount(1)
 		setPrice({ text: '', value: 0.0 })
 		setTotal({ text: '0,00', value: 0.0 })
@@ -66,20 +58,43 @@ const PriceSelect = ({
 		onClose()
 	}
 
+	const addItem = ({ storageAmount }) => {
+		addProduct({
+			amount: amount,
+			id: selectedProduct.id,
+			storageAmount: storageAmount,
+			total: { text: total.text, value: total.value }, // to pass by value
+			unitPrice: { text: price.text, value: price.value }, // to pass by value
+			description: selectedProduct.description,
+			productName: selectedProduct.productName,
+			productTypeName: selectedProduct.productTypeName,
+		})
+		cleanup()
+	}
+
 	const handleAdd = () => {
 		if (price.value > 0.0) {
-			if (amount > selectedProduct.amount) {
+			if (amount > available) {
 				setModalExceededStorageOpen(true)
 			} else {
-				addItem()
+				addItem({
+					storageAmount: amount,
+				})
 			}
 		} else {
 			setErrors({ ...errors, price: translate('sell.errors.priceRequired') })
 		}
 	}
 
+	const addItemExceeded = () => {
+		addItem({
+			storageAmount: amount > available ? available : amount,
+		})
+	}
+
 	const handleDelete = () => {
 		removeProduct(selectedProduct)
+		cleanup()
 	}
 
 	const handleCloseExceededStorage = () => {
@@ -97,13 +112,14 @@ const PriceSelect = ({
 				onClose={onClose}
 				handleAdd={handleAdd}
 				setAmount={setAmount}
+				available={available}
 				handleDelete={handleDelete}
 				selectedProduct={selectedProduct}
 				handlePriceChange={handlePriceChange}
 			/>
 			<ModalExceededStorage
 				amount={amount}
-				addItem={addItem}
+				addItem={addItemExceeded}
 				open={modalExceededStorageOpen}
 				selectedProduct={selectedProduct}
 				handleCloseExceededStorage={handleCloseExceededStorage}

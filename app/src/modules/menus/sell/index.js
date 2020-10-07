@@ -4,6 +4,7 @@ import { translate } from 'src/i18n/translate'
 import { Creators as OrderCreators } from 'src/ducks/order'
 import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as ProductCreators } from 'src/ducks/products'
+import { Selectors as StorageSelectors } from 'src/ducks/storage'
 import { validateCreate } from 'src/ducks/order/validations/create'
 import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
 import SellComponent from './component'
@@ -26,10 +27,14 @@ const Sell = ({
 	loadProducts,
 	addOrderItem,
 	generateLoad,
+	storageItems,
+	setItemsOrder,
 	setClientStep,
+	removeOrderItem,
 	setGenerateLoad,
 	resetStorageOrder,
 	decreaseItemsOrder,
+	increaseItemsOrder,
 	storedItemsOrderAware,
 }) => {
 	const [working, setWorking] = useState(false)
@@ -46,23 +51,39 @@ const Sell = ({
 	}, [])
 
 	useEffect(() => {
+		updatePrice()
+	}, [orderItems])
+
+	const updatePrice = () => {
 		setTotalPrice(
 			orderItems.reduce((prev, cur) => MoneyService.add(prev, cur.total), {
 				text: '0,00',
 				value: 0.0,
 			}),
 		)
-	}, [orderItems])
+	}
 
 	const addProduct = async product => {
 		await addOrderItem(product)
-		decreaseItemsOrder({ id: product.id, amount: product.amount })
+		decreaseItemsOrder({ id: product.id, amount: product.storageAmount })
 	}
 
-	//TODO NEXT
+	const editProduct = async product => {
+		// The add already has an edit built-in
+		await addOrderItem(product)
+
+		const available = StorageSelectors.getAvailable({
+			storageItems: storageItems,
+			id: product.id,
+		})
+		const difference = available - product.storageAmount
+		setItemsOrder({ id: product.id, amount: difference })
+		updatePrice()
+	}
+
 	const removeProduct = async product => {
 		await removeOrderItem(product)
-		increaseItemsOrder({ id: product.id, amount: product.amount })
+		increaseItemsOrder({ id: product.id, amount: product.storageAmount })
 	}
 
 	const handleClear = () => {
@@ -116,9 +137,11 @@ const Sell = ({
 			totalPrice={totalPrice}
 			orderItems={orderItems}
 			clientStep={clientStep}
+			editProduct={editProduct}
 			openAddMenu={openAddMenu}
 			handlePress={handlePress}
 			handleClear={handleClear}
+			storageItems={storageItems}
 			generateLoad={generateLoad}
 			removeProduct={removeProduct}
 			setOpenAddMenu={setOpenAddMenu}
@@ -140,6 +163,7 @@ const mapStateToProps = ({ storage, order }) => ({
 	clientStep: order.clientStep,
 	orderItems: order.orderItems,
 	generateLoad: order.generateLoad,
+	storageItems: storage.storedItems,
 	storedItemsOrderAware: storage.storedItemsOrderAware,
 })
 
@@ -153,9 +177,12 @@ const mapDispatchToProps = {
 	loadProducts: ProductCreators.loadProducts,
 	setClientStep: OrderCreators.setClientStep,
 	loadOrders: OrdersVendorCreators.loadOrders,
+	setItemsOrder: StorageCreators.setItemsOrder,
+	removeOrderItem: OrderCreators.removeOrderItem,
 	setGenerateLoad: OrderCreators.setGenerateLoad,
 	resetStorageOrder: StorageCreators.resetStorageOrder,
 	decreaseItemsOrder: StorageCreators.decreaseItemsOrder,
+	increaseItemsOrder: StorageCreators.increaseItemsOrder,
 }
 
 export default connect(

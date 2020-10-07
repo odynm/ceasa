@@ -37,12 +37,19 @@ function common(types, duck) {
 		if (orderItem === undefined) return
 		const { orderItems } = getState()[duck]
 		const index = orderItems.findIndex(x => x.id === orderItem.id)
-		if (index > 0) {
+		if (index >= 0) {
 			orderItems[index] = orderItem
 			dispatch(this.setOrderItems(orderItems))
 		} else {
 			dispatch(this.setOrderItems([...orderItems, orderItem]))
 		}
+	}
+
+	this.removeOrderItem = orderItem => (dispatch, getState) => {
+		if (orderItem === undefined) return
+		const { orderItems } = getState()[duck]
+		const newOrderItems = orderItems.filter(x => x.id !== orderItem.id)
+		dispatch(this.setOrderItems(newOrderItems))
 	}
 
 	this.sendOrder = () => async (_, getState) => {

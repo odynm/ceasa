@@ -28,6 +28,8 @@ const SellComponent = ({
 	handlePress,
 	handleClear,
 	openAddMenu,
+	editProduct,
+	storageItems,
 	generateLoad,
 	removeProduct,
 	setOpenAddMenu,
@@ -54,7 +56,13 @@ const SellComponent = ({
 					/>
 				</CloseKeyboardView>
 			) : (
-				<ProductListSegment style={styles.items} orderItems={orderItems} />
+				<ProductListSegment
+					style={styles.items}
+					orderItems={orderItems}
+					editProduct={editProduct}
+					storageItems={storageItems}
+					removeProduct={removeProduct}
+				/>
 			)}
 			<View style={styles.footer}>
 				<TotalSegment
@@ -106,6 +114,7 @@ const SellComponent = ({
 				setOpen={setOpenAddMenu}
 				removeProduct={removeProduct}
 				storageItems={storedItemsOrderAware}
+				alreadyAddedProducts={orderItems}
 			/>
 		</ScreenBase>
 	)

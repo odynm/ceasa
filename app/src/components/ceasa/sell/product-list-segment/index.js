@@ -1,11 +1,18 @@
 import React, { useState } from 'react'
 import { translate } from 'src/i18n/translate'
 import { ScrollView, StyleSheet } from 'react-native'
+import { Selectors as StorageSelectors } from 'src/ducks/storage'
 import PriceSelect from '../price-select'
 import KText from 'src/components/fw/ktext'
 import ItemCard from 'src/components/ceasa/sell/item-card'
 
-const ProductListSegment = ({ style, orderItems, editProduct }) => {
+const ProductListSegment = ({
+	style,
+	orderItems,
+	editProduct,
+	storageItems,
+	removeProduct,
+}) => {
 	const [product, setProduct] = useState({})
 	const [modalOpen, setModalOpen] = useState(false)
 
@@ -41,12 +48,17 @@ const ProductListSegment = ({ style, orderItems, editProduct }) => {
 				edit
 				open={modalOpen}
 				addProduct={editProduct}
+				removeProduct={removeProduct}
 				selectedProduct={product}
 				onClose={() => setModalOpen(false)}
 				initialValues={{
 					amount: product.amount,
 					price: product.unitPrice,
 				}}
+				available={StorageSelectors.getAvailable({
+					storageItems: storageItems,
+					id: product.id,
+				})}
 			/>
 		</>
 	)

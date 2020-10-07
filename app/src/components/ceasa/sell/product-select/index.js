@@ -5,22 +5,32 @@ import KText from 'src/components/fw/ktext'
 import KModal from 'src/components/fw/kmodal'
 import StoredItemCard from 'src/components/ceasa/stored-item-card'
 
-const ProductSelect = ({ onClose, open, storageItems, selectProduct }) => {
+const ProductSelect = ({
+	open,
+	onClose,
+	storageItems,
+	selectProduct,
+	alreadyAddedProducts,
+}) => {
 	return (
 		<KModal open={open} onClose={onClose} header={translate('sell.inStock')}>
 			<ScrollView onStartShouldSetResponder={() => true}>
 				<View onStartShouldSetResponder={() => true}>
 					{storageItems && storageItems.length > 0 ? (
-						storageItems.map((item, index) => (
-							<StoredItemCard
-								key={index}
-								amount={item.amount}
-								product={item.productName}
-								description={item.description}
-								productType={item.productTypeName}
-								onPress={() => selectProduct(item)}
-							/>
-						))
+						storageItems
+							.filter(x =>
+								alreadyAddedProducts.every(y => y.id !== x.id),
+							)
+							.map((item, index) => (
+								<StoredItemCard
+									key={index}
+									amount={item.amount}
+									product={item.productName}
+									description={item.description}
+									productType={item.productTypeName}
+									onPress={() => selectProduct(item)}
+								/>
+							))
 					) : (
 						<View>
 							<KText

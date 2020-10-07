@@ -27,6 +27,7 @@ export const Creators = {
 	resetOrder: common.resetOrder,
 	addOrderItem: common.addOrderItem,
 	setClientStep: common.setClientStep,
+	removeOrderItem: common.removeOrderItem,
 	setGenerateLoad: common.setGenerateLoad,
 }
 

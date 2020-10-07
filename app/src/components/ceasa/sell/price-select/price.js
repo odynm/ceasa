@@ -23,14 +23,14 @@ const ModalPrice = ({
 	onClose,
 	setAmount,
 	handleAdd,
+	available,
 	handleDelete,
 	selectedProduct,
 	handlePriceChange,
 }) => {
 	const [modalAccepDelete, setModalAccepDelete] = useState(false)
 
-	const colorStyle =
-		amount > selectedProduct.amount ? { color: colors.red } : {}
+	const colorStyle = amount > available ? { color: colors.red } : {}
 
 	return (
 		<>
@@ -53,7 +53,7 @@ const ModalPrice = ({
 						<KText
 							bold
 							style={[styles.right, colorStyle]}
-							text={selectedProduct.amount}
+							text={available}
 						/>
 					</View>
 					<Space size2 />
@@ -87,7 +87,7 @@ const ModalPrice = ({
 					</View>
 					<Space />
 					<View style={styles.warning}>
-						{amount > selectedProduct.amount && (
+						{amount > available && (
 							<KText
 								bold
 								style={colorStyle}

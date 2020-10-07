@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Selectors as StorageSelectors } from 'src/ducks/storage'
 import PriceSelect from '../price-select'
 import ProductSelect from '../product-select'
 
@@ -8,6 +9,7 @@ const AddProduct = ({
 	addProduct,
 	storageItems,
 	removeProduct,
+	alreadyAddedProducts,
 }) => {
 	const [sellModalOpen, setSellModalOpen] = useState(false)
 	const [selectedProduct, setSelectedProduct] = useState({})
@@ -31,6 +33,7 @@ const AddProduct = ({
 						storageItems={storageItems}
 						open={open && !sellModalOpen}
 						selectProduct={selectProduct}
+						alreadyAddedProducts={alreadyAddedProducts}
 					/>
 					<PriceSelect
 						onClose={onClose}
@@ -38,6 +41,10 @@ const AddProduct = ({
 						open={open && sellModalOpen}
 						removeProduct={removeProduct}
 						selectedProduct={selectedProduct}
+						available={StorageSelectors.getAvailable({
+							storageItems: storageItems,
+							id: selectedProduct.id,
+						})}
 					/>
 				</>
 			) : null}

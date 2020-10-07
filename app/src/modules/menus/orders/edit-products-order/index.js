@@ -55,6 +55,7 @@ const EditProductsOrder = ({
 				style={styles.items}
 				orderItems={orderItems}
 				editProduct={editProduct}
+				storageItems={storedItemsOrderAware}
 			/>
 			<View style={styles.footer}>
 				<TotalSegment
