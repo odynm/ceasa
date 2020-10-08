@@ -38,7 +38,7 @@
 		"sell": "Vender",
 		"orders": "Pedidos",
 		"user": "Usuário",
-		"editOrder": "Alterar Pedido",
+		"editOrder": "Ver Pedido",
 		"editStorage": "Alterar Estoque",
 		"editProductsOrder": "Alterar Produtos do Pedido"
 	},
@@ -115,8 +115,11 @@
 	"editOrder": {
 		"delete": "Excluir Pedido",
 		"editProducts": "Alterar lista de produtos",
+		"seeProducts": "Ver lista de produtos",
 		"released": "Carregamento liberado",
 		"urgent": "Definir como urgente",
+		"loader": "Sendo carregado por",
+		"done": "terminou essa entrega em",
 		"edit": "Editar",
 		"deleteModal": {
 			"header": "Deletar Pedido",

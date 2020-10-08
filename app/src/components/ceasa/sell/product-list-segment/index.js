@@ -4,10 +4,12 @@ import { ScrollView, StyleSheet } from 'react-native'
 import { Selectors as StorageSelectors } from 'src/ducks/storage'
 import PriceSelect from '../price-select'
 import KText from 'src/components/fw/ktext'
+import ToastService from 'src/services/toastService'
 import ItemCard from 'src/components/ceasa/sell/item-card'
 
 const ProductListSegment = ({
 	style,
+	cantEdit,
 	orderItems,
 	editProduct,
 	storageItems,
@@ -17,8 +19,14 @@ const ProductListSegment = ({
 	const [modalOpen, setModalOpen] = useState(false)
 
 	const handlePress = item => {
-		setProduct(item)
-		setModalOpen(true)
+		if (cantEdit) {
+			ToastService.show({
+				message: translate('orders.errors.cantEditAnymore'),
+			})
+		} else {
+			setProduct(item)
+			setModalOpen(true)
+		}
 	}
 
 	return (

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
+import { toHour } from 'src/utils/date'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
 import { Creators as AppCreators } from 'src/ducks/app'
@@ -26,11 +27,13 @@ const EditOrder = ({
 	client,
 	status,
 	urgent,
+	loader,
 	setClient,
 	setUrgent,
 	sendOrder,
 	navigation,
 	loadOrders,
+	completedAt,
 	deleteOrder,
 	setAppLoader,
 	confirmDelete,
@@ -61,7 +64,7 @@ const EditOrder = ({
 	}
 
 	const handleEditProducts = () => {
-		navigation.navigate(screens.editProductsOrder)
+		navigation.navigate(screens.editProductsOrder, { status })
 	}
 
 	const setOrderStatus = checked => {
@@ -103,12 +106,31 @@ const EditOrder = ({
 					small
 					onPress={handleEditProducts}
 					style={styles.editProductView}
-					label={translate('editOrder.editProducts')}
+					label={
+						status === orderStatus.blocked ||
+						status === orderStatus.released
+							? translate('editOrder.editProducts')
+							: translate('editOrder.seeProducts')
+					}
 				/>
 				{status === orderStatus.carrying ? (
-					undefined // TODO add info about carrier
+					<>
+						<Space />
+						<KText
+							bold
+							text={`${translate('editOrder.loader')}: ${loader}`}
+						/>
+					</>
 				) : status === orderStatus.done ? (
-					undefined // TODO add info about done order
+					<>
+						<Space />
+						<KText
+							bold
+							text={`${loader} ${translate('editOrder.done')} ${toHour(
+								completedAt,
+							)}`}
+						/>
+					</>
 				) : (
 					<View style={styles.footer}>
 						{status === orderStatus.blocked && (
@@ -178,6 +200,8 @@ const mapStateToProps = ({ editOrder }) => ({
 	status: editOrder.status,
 	client: editOrder.client,
 	urgent: editOrder.urgent,
+	loader: editOrder.loader,
+	completedAt: editOrder.completedAt,
 	confirmDelete: editOrder.confirmDelete,
 })
 

@@ -49,6 +49,9 @@ const initialState = {
 	confirmDelete: false,
 	productListIsDirty: false,
 	client: { key: '', place: '', vehicle: '' },
+	loader: '',
+	completedAt: '',
+	createdAt: '',
 }
 
 export const Creators = {
@@ -75,6 +78,8 @@ export default function reducer(state = initialState, action) {
 				urgent: action.payload.order.urgent,
 				client: action.payload.order.client,
 				id: action.payload.order.id,
+				loader: action.payload.order.loader,
+				completedAt: new Date(action.payload.order.completedAt),
 			}
 		case Types.SET_STATUS:
 			return {

@@ -6,7 +6,9 @@ import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
 import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
+import orderStatus from 'src/enums/order'
 import MoneyService from 'src/services/moneyService'
+import ToastService from 'src/services/toastService'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
 import AddProduct from 'src/components/ceasa/sell/add-product'
@@ -14,12 +16,14 @@ import TotalSegment from 'src/components/ceasa/sell/total-segment'
 import ProductListSegment from 'src/components/ceasa/sell/product-list-segment'
 
 const EditProductsOrder = ({
+	navigation,
 	orderItems,
 	addOrderItem,
 	decreaseItemsOrder,
 	storedItemsOrderAware,
 	setProductListIsDirty,
 }) => {
+	const [cantEdit, setCantEdit] = useState(false)
 	const [totalPrice, setTotalPrice] = useState({
 		text: '0,00',
 		value: 0.0,
@@ -27,13 +31,43 @@ const EditProductsOrder = ({
 	const [openAddMenu, setOpenAddMenu] = useState(false)
 
 	useEffect(() => {
+		if (navigation.state?.params?.status) {
+			const status = navigation.state.params.status
+			if (
+				status !== orderStatus.blocked &&
+				status !== orderStatus.released
+			) {
+				setCantEdit(true)
+			} else {
+				setCantEdit(false)
+			}
+		} else {
+			setCantEdit(false)
+		}
+	}, [])
+
+	useEffect(() => {
+		updatePrice()
+	}, [orderItems])
+
+	const updatePrice = () => {
 		setTotalPrice(
 			orderItems.reduce((prev, cur) => MoneyService.add(prev, cur.total), {
 				text: '0,00',
 				value: 0.0,
 			}),
 		)
-	}, [orderItems])
+	}
+
+	const handleOpenAddMenu = () => {
+		if (cantEdit) {
+			ToastService.show({
+				message: translate('orders.errors.cantEditAnymore'),
+			})
+		} else {
+			setOpenAddMenu(true)
+		}
+	}
 
 	const addProduct = product => {
 		setProductListIsDirty(true)
@@ -44,6 +78,7 @@ const EditProductsOrder = ({
 	const editProduct = product => {
 		setProductListIsDirty(true)
 		addOrderItem(product)
+		updatePrice()
 	}
 
 	return (
@@ -52,6 +87,7 @@ const EditProductsOrder = ({
 			useKeyboardAvoid={false}
 			useKeyboardClose={false}>
 			<ProductListSegment
+				cantEdit={cantEdit}
 				style={styles.items}
 				orderItems={orderItems}
 				editProduct={editProduct}
@@ -60,7 +96,7 @@ const EditProductsOrder = ({
 			<View style={styles.footer}>
 				<TotalSegment
 					totalPrice={totalPrice}
-					setOpenAddMenu={setOpenAddMenu}
+					setOpenAddMenu={handleOpenAddMenu}
 				/>
 			</View>
 			<AddProduct
