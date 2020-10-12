@@ -69,7 +69,7 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 		Status:   orderDto.Status,
 	}
 	if orderDto.Status == S_Released {
-		order.ReleasedAt = order.CreatedAt
+		order.ReleasedAt = time.Now()
 	}
 	orderId = DbEditOrder(order, orderDto.Id, userId)
 	if orderId == 0 {
