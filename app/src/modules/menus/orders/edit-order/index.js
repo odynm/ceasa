@@ -38,6 +38,7 @@ const EditOrder = ({
 	setAppLoader,
 	confirmDelete,
 	setConfirmDelete,
+	setDucksOrderStatus,
 }) => {
 	const [internalStatus, setInternalStatus] = useState(status)
 
@@ -49,6 +50,7 @@ const EditOrder = ({
 
 	const handleEdit = async () => {
 		setAppLoader(true)
+		await setDucksOrderStatus(internalStatus)
 		const data = await sendOrder()
 		if (data.success) {
 			navigation.navigate(screens.orders)
@@ -64,6 +66,7 @@ const EditOrder = ({
 	}
 
 	const handleEditProducts = () => {
+		console.warn(status)
 		navigation.navigate(screens.editProductsOrder, { status })
 	}
 
@@ -192,6 +195,7 @@ const mapDispatchToProps = {
 	sendOrder: EditOrderCreators.sendOrder,
 	deleteOrder: EditOrderCreators.deleteOrder,
 	loadOrders: OrdersVendorCreators.loadOrders,
+	setDucksOrderStatus: EditOrderCreators.setStatus,
 	setConfirmDelete: EditOrderCreators.setConfirmDelete,
 }
 

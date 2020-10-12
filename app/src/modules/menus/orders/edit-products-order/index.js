@@ -33,13 +33,10 @@ const EditProductsOrder = ({
 	useEffect(() => {
 		if (navigation.state?.params?.status) {
 			const status = navigation.state.params.status
-			if (
-				status !== orderStatus.blocked &&
-				status !== orderStatus.released
-			) {
-				setCantEdit(true)
-			} else {
+			if (status === orderStatus.blocked) {
 				setCantEdit(false)
+			} else {
+				setCantEdit(true)
 			}
 		} else {
 			setCantEdit(false)

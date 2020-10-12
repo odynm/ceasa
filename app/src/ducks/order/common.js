@@ -73,6 +73,7 @@ function common(types, duck) {
 				amount: x.amount,
 			})),
 		}
+		console.warn(postData)
 		const data = await HttpService.post('order', postData)
 		return data
 	}
