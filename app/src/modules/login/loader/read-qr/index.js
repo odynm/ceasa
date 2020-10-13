@@ -22,19 +22,22 @@ const ReadQr = ({ navigation, joinTeam, loadLoaderTeams }) => {
 			return
 		}
 		setHandling(true)
-		const code = e.barcodes[0].data
-		if (code && code.length > 1) {
-			setLoading(true)
-			await joinTeam(code)
-			setLoading(false)
+		const validBarcodes = e.barcodes.filter(x => x.type === 'QR_CODE')
+		if (validBarcodes.length > 0) {
+			const code = validBarcodes[0].data
+			if (code && code.length > 1) {
+				setLoading(true)
+				await joinTeam(code)
+				setLoading(false)
 
-			loadLoaderTeams()
-			navigation.goBack(null)
-		} else {
-			ToastService.show({
-				message: translate('loaderTeams.readFail'),
-				duration: 2000,
-			})
+				await loadLoaderTeams()
+				navigation.goBack(null)
+			} else {
+				ToastService.show({
+					message: translate('loaderTeams.readFail'),
+					duration: 2000,
+				})
+			}
 		}
 		setHandling(false)
 	}

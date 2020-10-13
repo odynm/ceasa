@@ -26,7 +26,7 @@ const setUserId = userId => ({
 const login = () => async dispatch => {
 	dispatch(setLoading(true))
 	const { success, data } = await HttpService.post('loader/login', {
-		device: DeviceInfo.getDeviceId(),
+		device: DeviceInfo.getAndroidIdSync(),
 	})
 	if (success) {
 		dispatch(setLoader(data))
@@ -38,7 +38,7 @@ const login = () => async dispatch => {
 const create = name => async dispatch => {
 	dispatch(setLoading(true))
 	const { success, data } = await HttpService.post('loader', {
-		device: DeviceInfo.getDeviceId(),
+		device: DeviceInfo.getAndroidIdSync(),
 		name: name,
 	})
 	if (success) {

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import { View } from 'react-native'
+import { hp } from 'src/utils/screen'
+import { StyleSheet, View } from 'react-native'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { Creators as TeamCreators } from 'src/ducks/team'
@@ -12,7 +13,7 @@ const AddTeam = ({ teamCode, loading, loadTeamCode }) => {
 	}, [])
 
 	return (
-		<View>
+		<View style={styles.qrCodeBounds}>
 			{teamCode && teamCode.length > 0 ? (
 				<QRCode value={teamCode} size={300} />
 			) : (
@@ -21,6 +22,14 @@ const AddTeam = ({ teamCode, loading, loadTeamCode }) => {
 		</View>
 	)
 }
+
+const styles = StyleSheet.create({
+	qrCodeBounds: {
+		marginLeft: 'auto',
+		marginRight: 'auto',
+		marginVertical: hp(20),
+	},
+})
 
 AddTeam.navigationOptions = () => ({
 	title: translate('menus.user'),
