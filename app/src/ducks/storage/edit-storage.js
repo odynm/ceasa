@@ -1,6 +1,7 @@
 const prefix = 'edit-storage/'
 const Types = {
 	SET_AMOUNT: prefix + 'SET_AMOUNT',
+	SET_COST_PRICE: prefix + 'SET_COST_PRICE',
 	SET_DESCRIPTION: prefix + 'SET_DESCRIPTION',
 	SET_STORAGE_ITEM: prefix + 'SET_STORAGE_ITEM',
 	SET_CONFIRM_DELETE: prefix + 'SET_CONFIRM_DELETE',
@@ -16,6 +17,11 @@ const setAmount = amount => ({
 	type: Types.SET_AMOUNT,
 })
 
+const setCostPrice = costPrice => ({
+	payload: { costPrice },
+	type: Types.SET_COST_PRICE,
+})
+
 const setDescription = description => ({
 	payload: { description },
 	type: Types.SET_DESCRIPTION,
@@ -28,6 +34,7 @@ const setConfirmDelete = confirmDelete => ({
 
 export const Creators = {
 	setAmount,
+	setCostPrice,
 	setStorageItem,
 	setDescription,
 	setConfirmDelete,
@@ -39,6 +46,7 @@ const initialState = {
 		id: 0,
 		amount: 0,
 		description: '',
+		costPrice: '0,00',
 	},
 }
 
@@ -50,6 +58,14 @@ export default function reducer(state = initialState, action) {
 				storageItem: {
 					...state.storageItem,
 					amount: action.payload.amount,
+				},
+			}
+		case Types.SET_COST_PRICE:
+			return {
+				...state,
+				storageItem: {
+					...state.storageItem,
+					costPrice: action.payload.costPrice,
 				},
 			}
 		case Types.SET_DESCRIPTION:

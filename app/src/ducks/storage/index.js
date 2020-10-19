@@ -1,5 +1,6 @@
 import rfdc from 'rfdc'
 import HttpService from 'src/services/httpService'
+import MoneyService from 'src/services/moneyService'
 
 export { Selectors } from './selectors'
 
@@ -84,6 +85,7 @@ const add = item => async (dispatch, getStore) => {
 		product: item.productId,
 		description: item.description,
 		productType: item.productTypeId,
+		costPrice: Math.round(item.costPrice.value * 100),
 	}
 
 	const { success, data } = await HttpService.post('storage', mappedItemServer)
@@ -98,6 +100,7 @@ const add = item => async (dispatch, getStore) => {
 					: '',
 			description: item.description,
 			amount: item.amount,
+			costPrice: rfdc()(item.costPrice),
 		}
 		if (!item.id) {
 			const current =
@@ -115,7 +118,12 @@ const add = item => async (dispatch, getStore) => {
 			const index = storedItems.findIndex(x => x.id === item.id)
 			const newStoredItems = storedItems.map((x, i) =>
 				i === index
-					? { ...x, amount: item.amount, description: item.description }
+					? {
+							...x,
+							amount: item.amount,
+							costPrice: rfdc()(item.costPrice),
+							description: item.description,
+					  }
 					: x,
 			)
 			dispatch(setStoredItems(newStoredItems))
@@ -125,7 +133,12 @@ const add = item => async (dispatch, getStore) => {
 			)
 			const newStoredItemsOrderAware = storedItemsOrderAware.map((x, i) =>
 				i === indexOrderAware
-					? { ...x, amount: item.amount, description: item.description }
+					? {
+							...x,
+							amount: item.amount,
+							costPrice: rfdc()(item.costPrice),
+							description: item.description,
+					  }
 					: x,
 			)
 			dispatch(setStoredItems(newStoredItemsOrderAware))
@@ -144,11 +157,15 @@ const get = () => async (dispatch, getStore) => {
 	dispatch(setLoading(true))
 	const { data, success } = await HttpService.get('storage')
 	if (success) {
-		dispatch(setStoredItems(data))
+		const mappedItems = data.map(x => ({
+			...x,
+			costPrice: MoneyService.toMoney(x.costPrice / 100),
+		}))
+		dispatch(setStoredItems(mappedItems))
 
 		const { orderItems } = getStore().order
 		if (orderItems || orderItems.length === 0) {
-			dispatch(setStoredItemsOrderAware(rfdc()(data)))
+			dispatch(setStoredItemsOrderAware(rfdc()(mappedItems)))
 		}
 	}
 	dispatch(setLoading(false))
@@ -179,7 +196,7 @@ export default function reducer(state = initialState, action) {
 		case Types.SET_WORKING:
 			return { ...state, loading: action.payload.working }
 		case Types.SET_STORED_ITEMS:
-			return { ...state, storedItems: action.payload.storedItems }
+			return { ...state, storedItems: rfdc()(action.payload.storedItems) }
 		case Types.SET_STORED_ITEMS_ORDER_AWARE:
 			return {
 				...state,

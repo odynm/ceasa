@@ -90,8 +90,16 @@ const get = (url, configs) =>
 // 	return await HttpService.instance.post(url, data, configs)
 // }
 
-const post = (url, data, configs) =>
-	HttpService.instance.post(url, data, configs).then(({ data }) => data)
+const post = (url, data, reject) =>
+	HttpService.instance.post(url, data, undefined).then(
+		({ data: response }) => response,
+		err => {
+			if (reject) {
+				reject(err)
+			}
+			return { success: false }
+		},
+	)
 
 const deleteRequest = (url, configs) =>
 	HttpService.instance.delete(url, configs).then(({ data }) => data)

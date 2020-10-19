@@ -13,12 +13,13 @@ import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
 import svgLogo from 'res/svgs/v9/svgLogo.svg'
 import svgBack from 'res/svgs/v9/svgBack.svg'
+import Loader from 'src/components/fw/loader'
 import ToastService from 'src/services/toastService'
 import TextInput from 'src/components/fw/text-input'
 import ScreenBase from 'src/components/fw/screen-base'
 import StorageService from 'src/services/storageService'
 
-const Login = ({ login, navigation, userId, accessToken }) => {
+const Login = ({ login, navigation, userId, accessToken, loading }) => {
 	const [userText, setUserText] = useState('')
 	const [passwordText, setPasswordText] = useState('')
 
@@ -64,13 +65,18 @@ const Login = ({ login, navigation, userId, accessToken }) => {
 				label={translate('login.password')}
 			/>
 			<Space size2 />
-			<Button onPress={handleLogin} label={translate('login.login')} />
+			{loading ? (
+				<Loader style={styles.loader} />
+			) : (
+				<Button onPress={handleLogin} label={translate('login.login')} />
+			)}
 		</ScreenBase>
 	)
 }
 
 const mapStateToProps = ({ user }) => ({
 	userId: user.id,
+	loading: user.loading,
 	accessToken: user.accessToken,
 })
 

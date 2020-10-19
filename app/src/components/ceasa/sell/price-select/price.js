@@ -32,6 +32,10 @@ const ModalPrice = ({
 
 	const colorStyle = amount > available ? { color: colors.red } : {}
 
+	const handleSetPrice = value => {
+		handlePriceChange(MoneyService.textToMoney(value))
+	}
+
 	return (
 		<>
 			<KModal
@@ -68,10 +72,9 @@ const ModalPrice = ({
 					<Space />
 					<View style={styles.row}>
 						<MoneyInput
-							max={9999}
-							value={price}
+							value={price.text}
 							style={styles.right}
-							setValue={handlePriceChange}
+							setValue={handleSetPrice}
 							errorMessage={errors.price}
 							label={translate('sell.sellUnitPrice')}
 						/>

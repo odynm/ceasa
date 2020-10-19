@@ -12,7 +12,10 @@
 		"login": "Login",
 		"user": "Usuário",
 		"password": "Senha",
-		"error": "Usuário ou senha incorretos"
+		"error": "Usuário ou senha incorretos",
+		"errors": {
+			"connection": "Erro de conexão"
+		}
 	},
 	"loaderLogin": {
 		"login": "Login",
@@ -57,6 +60,7 @@
 		"registerNotListedProductType": "Cadastrar tipo não listado...",
 		"additionalDescription": "Descrição adicional (opcional)",
 		"amount": "Quantidade",
+		"costPrice":"Preço de Custo (unidade)",
 		"add": "Adicionar",
 		"errors": {
 			"noProduct": "Selecione o produto",

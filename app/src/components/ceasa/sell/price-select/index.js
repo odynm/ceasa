@@ -16,7 +16,7 @@ const PriceSelect = ({
 }) => {
 	const [errors, setErrors] = useState({})
 	const [amount, setAmount] = useState(1)
-	const [price, setPrice] = useState({ text: '', value: 0.0 })
+	const [price, setPrice] = useState({ text: '0,00', value: 0.0 })
 	const [total, setTotal] = useState({ text: '0,00', value: 0.0 })
 	const [modalExceededStorageOpen, setModalExceededStorageOpen] = useState(
 		false,
@@ -46,7 +46,7 @@ const PriceSelect = ({
 
 	const handlePriceChange = value => {
 		setPrice(value)
-		updateTotal()
+		setTimeout(updateTotal, 500)
 	}
 
 	const cleanup = () => {
@@ -110,6 +110,7 @@ const PriceSelect = ({
 				errors={errors}
 				amount={amount}
 				onClose={onClose}
+				setPrice={setPrice}
 				handleAdd={handleAdd}
 				setAmount={setAmount}
 				available={available}

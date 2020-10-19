@@ -224,6 +224,7 @@ func DbGetOrderProductsFull(userId int, orderId int) ([]OrderListItemProduct, bo
 		pt.id as "product_type_id",
 		pt.name as "product_type_name",
 		sid.description as "description",
+		si.cost_price,
 		op.unit_price,
 		op.amount,
 		op.storage_amount
@@ -250,6 +251,7 @@ func DbGetOrderProductsFull(userId int, orderId int) ([]OrderListItemProduct, bo
 			&productTypeIdNullable,
 			&productTypeNameNullable,
 			&orderProduct.Description,
+			&orderProduct.CostPrice,
 			&orderProduct.UnitPrice,
 			&orderProduct.Amount,
 			&orderProduct.StorageAmount)

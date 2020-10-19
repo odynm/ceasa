@@ -49,6 +49,9 @@ func DbGetByLogin(login string) UserDb {
 		SELECT id, login, hash, Permissions FROM "user_info" 
 		WHERE login = $1 AND active = true`
 	var userDb UserDb
-	db.Instance.Db.QueryRow(statement, login).Scan(&userDb.Id, &userDb.Login, &userDb.Hash, &userDb.Permissions)
+	err := db.Instance.Db.QueryRow(statement, login).Scan(&userDb.Id, &userDb.Login, &userDb.Hash, &userDb.Permissions)
+	if err != nil {
+		fmt.Println(err)
+	}
 	return userDb
 }

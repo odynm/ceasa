@@ -6,16 +6,18 @@ import { Creators as AppCreators } from 'src/ducks/app'
 import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as EditStorageCreators } from 'src/ducks/storage/edit-storage'
 import styles from './styles'
+import KText from 'src/components/fw/ktext'
 import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import Amount from 'src/components/fw/amount'
 import Button from 'src/components/fw/button'
+import ScreenHeaderDeleteStorage from './header'
+import MoneyService from 'src/services/moneyService'
 import TextInput from 'src/components/fw/text-input'
+import MoneyInput from 'src/components/fw/money-input'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
-import ScreenHeaderDeleteStorage from './header'
 import ConfirmationModal from 'src/components/fw/confirmation-modal'
-import KText from 'src/components/fw/ktext'
 
 const EditStorage = ({
 	add,
@@ -24,6 +26,7 @@ const EditStorage = ({
 	navigation,
 	loadStorage,
 	storageItem,
+	setCostPrice,
 	setAppLoader,
 	confirmDelete,
 	setDescription,
@@ -71,6 +74,13 @@ const EditStorage = ({
 					value={storageItem.amount}
 					label={translate('storage.amount')}
 				/>
+				<MoneyInput
+					setValue={value => {
+						setCostPrice(MoneyService.textToMoney(value))
+					}}
+					value={storageItem.costPrice.text}
+					label={translate('storage.costPrice')}
+				/>
 				<Button
 					onPress={handleEdit}
 					style={styles.button}
@@ -100,6 +110,7 @@ const mapDispatchToProps = {
 	deleteItem: StorageCreators.deleteItem,
 	setAppLoader: AppCreators.setAppLoader,
 	setAmount: EditStorageCreators.setAmount,
+	setCostPrice: EditStorageCreators.setCostPrice,
 	setDescription: EditStorageCreators.setDescription,
 	setStorageItem: EditStorageCreators.setStorageItem,
 	setConfirmDelete: EditStorageCreators.setConfirmDelete,

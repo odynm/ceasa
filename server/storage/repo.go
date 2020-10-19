@@ -63,11 +63,11 @@ func DbCreateStorageItem(itemDto ItemDto, userId int) int {
 	}
 
 	statement = fmt.Sprintf(`
-		INSERT INTO %v."storage_item" (product_id, product_type_id, description_id, amount)
-		VALUES ($1, $2, $3, $4)
+		INSERT INTO %v."storage_item" (product_id, product_type_id, description_id, cost_price, amount)
+		VALUES ($1, $2, $3, $4, $5)
 		RETURNING id`, schema)
 	err = db.Instance.Db.
-		QueryRow(statement, itemDto.Product, utils.NullIfZero(itemDto.ProductType), descriptionId, itemDto.Amount).
+		QueryRow(statement, itemDto.Product, utils.NullIfZero(itemDto.ProductType), descriptionId, itemDto.CostPrice, itemDto.Amount).
 		Scan(&itemId)
 	if err != nil {
 		goto Error
@@ -106,11 +106,12 @@ func DbUpdateStorageItem(itemDto ItemDto, userId int) int {
 			product_id = $1, 
 			product_type_id = $2, 
 			description_id = $3, 
-			amount = $4
-		WHERE id = $5
+			cost_price = $4,
+			amount = $5
+		WHERE id = $6
 		RETURNING id`, schema)
 	err = db.Instance.Db.
-		QueryRow(statement, itemDto.Product, utils.NullIfZero(itemDto.ProductType), descriptionId, itemDto.Amount, itemDto.Id).
+		QueryRow(statement, itemDto.Product, utils.NullIfZero(itemDto.ProductType), descriptionId, itemDto.CostPrice, itemDto.Amount, itemDto.Id).
 		Scan(&itemId)
 	if err != nil {
 		goto Error
@@ -132,13 +133,14 @@ func DbGetById(storageId int, userId int) StorageItem {
 			product_id,
 			product_type_id,
 			description_id,
-			amount
+			amount,
+			cost_price
 		FROM %v.storage_item
 		WHERE id = $1`, schema)
 
 	db.Instance.Db.
 		QueryRow(statement, storageId).
-		Scan(&storageItem.Id, &storageItem.ProductId, &storageItem.ProductTypeId, &storageItem.DescriptionId, &storageItem.Amount)
+		Scan(&storageItem.Id, &storageItem.ProductId, &storageItem.ProductTypeId, &storageItem.DescriptionId, &storageItem.Amount, &storageItem.CostPrice)
 
 	return storageItem
 }
@@ -156,7 +158,8 @@ func DbGetAllFull(userId int) []StorageItemFull {
 		pt.id as "product_type_id",
 		pt.name as "product_type_name",
 		sid.description as "description",
-		amount
+		amount,
+		cost_price
 	FROM %v.storage_item si
 	INNER JOIN public.products_product pp ON pp.id = si.product_id
 	LEFT JOIN public.products_product_type pt ON pt.id = si.product_type_id
@@ -180,7 +183,8 @@ func DbGetAllFull(userId int) []StorageItemFull {
 			&productTypeId,
 			&productTypeName,
 			&description,
-			&storageItem.Amount)
+			&storageItem.Amount,
+			&storageItem.CostPrice)
 
 		if err != nil {
 			goto Error
@@ -215,6 +219,7 @@ func DbGetAll(userId int) []StorageItem {
 		product_id,
 		product_type_id,
 		description_id,
+		cost_price,
 		amount
 	FROM %v.storage_item`, schema)
 
@@ -231,6 +236,7 @@ func DbGetAll(userId int) []StorageItem {
 			&storageItem.ProductId,
 			&storageItem.ProductTypeId,
 			&storageItem.DescriptionId,
+			&storageItem.CostPrice,
 			&storageItem.Amount)
 
 		if err != nil {

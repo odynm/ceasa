@@ -69,7 +69,7 @@ function common(types, duck) {
 			generateLoad: generateLoad,
 			products: orderItems.map(x => ({
 				storageItem: x.id,
-				unitPrice: x.unitPrice.value * 100,
+				unitPrice: Math.round(x.unitPrice.value * 100),
 				amount: x.amount,
 			})),
 		}

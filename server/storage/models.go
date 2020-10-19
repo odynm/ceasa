@@ -7,6 +7,7 @@ type ItemDto struct {
 	Product     int    `json:"product"`
 	ProductType int    `json:"productType"`
 	Description string `json:"description"`
+	CostPrice   int    `json:"costPrice"`
 	Amount      int    `json:"amount"`
 }
 
@@ -17,6 +18,7 @@ type StorageItemFull struct {
 	ProductTypeId   int    `json:"productTypeId"`
 	ProductTypeName string `json:"productTypeName"`
 	Description     string `json:"description"`
+	CostPrice       int    `json:"costPrice"`
 	Amount          int    `json:"amount"`
 }
 
@@ -26,4 +28,5 @@ type StorageItem struct {
 	ProductTypeId sql.NullInt32 `json:"productTypeId"`
 	DescriptionId sql.NullInt32 `json:"description"`
 	Amount        int           `json:"amount"`
+	CostPrice     int           `json:"costPrice"`
 }

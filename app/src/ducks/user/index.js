@@ -1,5 +1,7 @@
+import { translate } from 'src/i18n/translate'
 import HttpService from 'src/services/httpService'
 import StorageService from 'src/services/storageService'
+import ToastService from 'src/services/toastService'
 
 const prefix = 'user/'
 const Types = {
@@ -11,18 +13,22 @@ const Types = {
 
 const login = (user, password) => async dispatch => {
 	await dispatch(setLoading(true))
-	const { data, success } = await HttpService.post('login', {
-		login: user,
-		password,
-	})
-	console.warn(success)
-	console.warn(data)
-	if (success) {
-		await dispatch(setUser(data))
+	const response = await HttpService.post(
+		'login',
+		{
+			login: user,
+			password,
+		},
+		_ => {
+			ToastService.show({ message: translate('login.errors.connection') })
+		},
+	)
+	if (response.success) {
+		await dispatch(setUser(response.data))
 	}
 	await dispatch(setLoading(false))
 
-	return success
+	return response.success
 }
 
 const updateToken = authToken => async dispatch => {
@@ -65,7 +71,7 @@ const initialState = {
 		refreshToken: '',
 		creationDate: null,
 	},
-	loading: true,
+	loading: false,
 }
 
 export const Creators = {

@@ -1,46 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { hp, fv, wp } from 'src/utils/screen'
-import { View, StyleSheet, TextInput as RNTextInput } from 'react-native'
+import { View, StyleSheet } from 'react-native'
+import { TextInputMask } from 'react-native-masked-text'
 import KText from '../ktext'
 import colors from 'src/constants/colors'
 import Error from 'src/components/fw/error'
-import MoneyService, { defaultMoney } from 'src/services/moneyService'
+import MoneyService from 'src/services/moneyService'
 
-//Dirty trick :(
-let reseting = false
-
-const MoneyInput = ({ max, label, value, setValue, errorMessage }) => {
-	const [inputText, setInputText] = useState(value.text)
-
+const MoneyInput = ({ label, value, setValue, errorMessage }) => {
 	useEffect(() => {
 		return () => {
-			reseting = true
-			setInputText('')
-			setValue(defaultMoney)
+			setValue('0,00')
 		}
 	}, [])
-
-	useEffect(() => {
-		if (reseting) {
-			reseting = false
-		} else {
-			handleChange(value.text)
-		}
-	}, [value])
-
-	const handleChange = text => {
-		if (text === undefined || text.length > value.raw + 1) {
-			setValue(defaultMoney)
-			return
-		}
-		if (text.length > ('' + max).length + 3) {
-			return
-		}
-		const money = MoneyService.textToMoney(text)
-
-		setInputText(money.text)
-		setValue(money)
-	}
 
 	return (
 		<View>
@@ -49,11 +21,19 @@ const MoneyInput = ({ max, label, value, setValue, errorMessage }) => {
 				<View style={styles.right}>
 					<KText bold text={MoneyService.getCurrency().text} />
 					<View style={styles.inputContainer}>
-						<RNTextInput
-							keyboardType={'number-pad'}
-							value={inputText}
+						<TextInputMask
+							maxLength={8}
+							value={value}
+							type={'money'}
+							onChangeText={setValue}
 							style={styles.textInput}
-							onChangeText={handleChange}
+							options={{
+								precision: 2,
+								separator: ',',
+								delimiter: '.',
+								unit: '',
+								suffixUnit: '',
+							}}
 						/>
 					</View>
 				</View>

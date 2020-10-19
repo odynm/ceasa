@@ -13,8 +13,10 @@ import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
 import Loader from 'src/components/fw/loader'
 import Amount from 'src/components/fw/amount'
+import MoneyService from 'src/services/moneyService'
 import ToastService from 'src/services/toastService'
 import TextInput from 'src/components/fw/text-input'
+import MoneyInput from 'src/components/fw/money-input'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
 import StoredItemCard from 'src/components/ceasa/stored-item-card'
@@ -41,6 +43,7 @@ const Storage = ({
 	const [productTypesFiltered, setProductTypesFiltered] = useState([])
 	const [description, setDescription] = useState('')
 	const [amount, setAmount] = useState(1)
+	const [costPrice, setCostPrice] = useState('0,00')
 	const [errors, setErrors] = useState({})
 
 	const scrollViewRef = useRef()
@@ -62,6 +65,7 @@ const Storage = ({
 			productId,
 			description,
 			productTypeId,
+			costPrice: MoneyService.textToMoney(costPrice),
 		}
 
 		if (validateCreate(data, setErrors)) {
@@ -72,6 +76,7 @@ const Storage = ({
 				setProductId(0)
 				setDescription('')
 				setProductTypeId(0)
+				setCostPrice('0,00')
 				scrollViewRef.current.scrollToEnd()
 			} else {
 				ToastService.serverError()
@@ -130,6 +135,11 @@ const Storage = ({
 					value={amount}
 					setValue={setAmount}
 					label={translate('storage.amount')}
+				/>
+				<MoneyInput
+					value={costPrice}
+					setValue={setCostPrice}
+					label={translate('storage.costPrice')}
 				/>
 				<Space size2 />
 				{working ? (

@@ -55,6 +55,7 @@ type OrderListItemProduct struct {
 	ProductTypeId   int    `json:"productTypeId"`
 	ProductTypeName string `json:"productTypeName"`
 	Description     string `json:"description"`
+	CostPrice       int    `json:"costPrice"`
 	UnitPrice       int    `json:"unitPrice"`
 	Amount          int    `json:"amount"`
 	StorageAmount   int    `json:"storageAmount"`

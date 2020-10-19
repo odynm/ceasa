@@ -7,6 +7,9 @@ const styles = StyleSheet.create({
 		marginBottom: hp(70),
 		marginTop: hp(80),
 	},
+	loader: {
+		bottom: hp(25),
+	},
 })
 
 export default styles

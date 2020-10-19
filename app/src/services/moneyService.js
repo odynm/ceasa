@@ -46,7 +46,7 @@ const formatMoneyText = (text, separator) => {
 }
 
 const textToMoney = text => {
-	return formatMoneyText(text, currency.separator)
+	return formatMoneyText(text.replace('.', ''), currency.separator)
 }
 
 const toMoney = number => {
