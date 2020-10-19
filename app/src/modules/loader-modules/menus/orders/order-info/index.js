@@ -7,6 +7,7 @@ import { Creators as OrdersLoaderCreators } from 'src/ducks/orders-loader'
 import { Selectors as OrdersLoaderSelectors } from 'src/ducks/orders-loader'
 import ItemCard from './card'
 import styles from './styles'
+import orderStatus from 'src/enums/order'
 import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import KText from 'src/components/fw/ktext'
@@ -53,13 +54,17 @@ const LoaderOrderInfo = ({
 						))}
 					</ScrollView>
 					<View style={styles.footer}>
-						{false ? (
-							<Loader />
+						{order.status === orderStatus.released ? (
+							false ? (
+								<Loader />
+							) : (
+								<Button
+									label={translate('loaderOrderInfo.begin')}
+									onPress={startJob}
+								/>
+							)
 						) : (
-							<Button
-								label={translate('loaderOrderInfo.begin')}
-								onPress={startJob}
-							/>
+							undefined
 						)}
 					</View>
 				</ScreenBase>

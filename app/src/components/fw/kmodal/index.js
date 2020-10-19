@@ -1,5 +1,5 @@
 import React from 'react'
-import { wp, hp, getWidth } from 'src/utils/screen'
+import { wp, hp, getWidth, getWorkableArea } from 'src/utils/screen'
 import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
@@ -7,7 +7,13 @@ import KText from 'src/components/fw/ktext'
 const KModal = ({ children, onClose, open, size, header }) => {
 	const containerStyle =
 		size > 0
-			? [styles.container, { height: hp(size), marginBottom: hp(size) / 2 }]
+			? [
+					styles.container,
+					{
+						height: hp(size),
+						marginBottom: getWorkableArea() - hp(size) - hp(50),
+					},
+			  ]
 			: styles.container
 
 	return (

@@ -33,8 +33,15 @@ const PriceSelect = ({
 		updateTotal()
 	}, [amount])
 
-	const updateTotal = () => {
-		if (price.value) {
+	const updateTotal = value => {
+		if (value) {
+			setTotal(
+				MoneyService.toMoney(
+					amount * value,
+					MoneyService.getCurrency().text,
+				),
+			)
+		} else if (price.value) {
 			setTotal(
 				MoneyService.toMoney(
 					amount * price.value,
@@ -46,7 +53,7 @@ const PriceSelect = ({
 
 	const handlePriceChange = value => {
 		setPrice(value)
-		setTimeout(updateTotal, 500)
+		updateTotal(value.value)
 	}
 
 	const cleanup = () => {

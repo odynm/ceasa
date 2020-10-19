@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"ceasa/loader"
+	"ceasa/order"
 	"ceasa/utils"
 )
 
@@ -16,7 +17,18 @@ func startCarrying(w http.ResponseWriter, r *http.Request) {
 			var orderCarry OrderCarry
 			err := json.NewDecoder(r.Body).Decode(&orderCarry)
 			if err == nil {
-				StartCarrying(orderCarry.Id, userId, loaderId, w)
+				curStatus := order.DbGetOrderStatus(userId, orderCarry.Id)
+				if curStatus == order.S_Carrying {
+					utils.Failed(w, -1)
+				} else if curStatus == order.S_Blocked {
+					utils.Failed(w, -1)
+				} else if curStatus == order.S_Deleted {
+					utils.Failed(w, -1)
+				} else if curStatus == order.S_Done {
+					utils.Failed(w, -1)
+				} else {
+					StartCarrying(orderCarry.Id, userId, loaderId, w)
+				}
 			} else {
 				utils.Failed(w, -1)
 			}

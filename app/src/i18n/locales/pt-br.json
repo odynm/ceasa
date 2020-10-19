@@ -80,6 +80,7 @@
 		"sellProduct": "Vender produto",
 		"sellAvailable": "Disponível",
 		"sellAmount": "Quantidade venda",
+		"costPrice": "Preço de Custo (unidade)",
 		"sellUnitPrice": "Preço (unidade)",
 		"sellTotal": "Total",
 		"clientKey": "Nome/Placa/Box",

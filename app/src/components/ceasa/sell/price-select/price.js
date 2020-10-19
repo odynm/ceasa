@@ -39,7 +39,7 @@ const ModalPrice = ({
 	return (
 		<>
 			<KModal
-				size={400}
+				size={450}
 				open={open}
 				onClose={onClose}
 				header={translate('sell.sellProduct')}>
@@ -67,6 +67,15 @@ const ModalPrice = ({
 							setValue={setAmount}
 							style={styles.right}
 							label={translate('sell.sellAmount')}
+						/>
+					</View>
+					<Space />
+					<View style={styles.row}>
+						<KText bold text={translate('sell.costPrice')} />
+						<KText
+							bold
+							text={`R$ ${selectedProduct?.costPrice?.text}`}
+							style={styles.right}
 						/>
 					</View>
 					<Space />

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { connect } from 'react-redux'
+import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
 import { Creators as OrdersLoaderCreators } from 'src/ducks/orders-loader'
 import RefresherService from 'src/services/refresherService'
@@ -7,6 +8,7 @@ import RefresherService from 'src/services/refresherService'
 const Refresher = ({
 	user,
 	loader,
+	getStorage,
 	loaderUserId,
 	loadVendorOrders,
 	loadLoaderOrders,
@@ -23,6 +25,7 @@ const Refresher = ({
 			loaderUserId,
 			loadVendorOrders,
 			loadLoaderOrders,
+			getStorage,
 		})
 	}, [loader, user, loaderUserId])
 
@@ -36,6 +39,7 @@ const mapStateToProps = ({ user, loader }) => ({
 })
 
 const mapDispatchToProps = {
+	getStorage: StorageCreators.get,
 	loadVendorOrders: OrdersVendorCreators.loadOrders,
 	loadLoaderOrders: OrdersLoaderCreators.loadOrders,
 }

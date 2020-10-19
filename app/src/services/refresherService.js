@@ -8,6 +8,7 @@ let _loader
 let _loaderUserId
 let _loadVendorOrders
 let _loadLoaderOrders
+let _getStorage
 
 const setData = ({
 	user,
@@ -15,12 +16,14 @@ const setData = ({
 	loaderUserId,
 	loadVendorOrders,
 	loadLoaderOrders,
+	getStorage,
 }) => {
 	_user = user
 	_loader = loader
 	_loaderUserId = loaderUserId
 	_loadVendorOrders = loadVendorOrders
 	_loadLoaderOrders = loadLoaderOrders
+	_getStorage = getStorage
 }
 
 const start = () => {
@@ -42,6 +45,8 @@ const refresh = () => {
 		// Vendor
 		if (_loadVendorOrders) {
 			_loadVendorOrders()
+			// Storage
+			_getStorage()
 		}
 	} else if (
 		_loader &&
