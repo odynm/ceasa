@@ -22,7 +22,7 @@ func Add(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	order = OrderCreation{
 		ClientId:  clientId,
 		Urgent:    orderDto.Urgent,
-		CreatedAt: time.Now(),
+		CreatedAt: time.Now().UTC(),
 		Status:    orderDto.Status,
 	}
 	if orderDto.Status == S_Released {
@@ -69,7 +69,7 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 		Status:   orderDto.Status,
 	}
 	if orderDto.Status == S_Released {
-		order.ReleasedAt = time.Now()
+		order.ReleasedAt = time.Now().UTC()
 	}
 	orderId = DbEditOrder(order, orderDto.Id, userId)
 	if orderId == 0 {

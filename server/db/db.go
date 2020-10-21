@@ -55,11 +55,11 @@ func updateMigrations(curLastRunned int, contextId int) {
 
 	if id > 0 {
 		statement = "UPDATE public.migration SET last_id_runned = $1, run_date = $2 WHERE context = $3"
-		_, err = Instance.Db.Exec(statement, curLastRunned, time.Now(), contextId)
+		_, err = Instance.Db.Exec(statement, curLastRunned, time.Now().UTC(), contextId)
 
 	} else {
 		statement = "INSERT INTO public.migration (last_id_runned, context, run_date) VALUES($1, $2, $3)"
-		_, err = Instance.Db.Exec(statement, curLastRunned, contextId, time.Now())
+		_, err = Instance.Db.Exec(statement, curLastRunned, contextId, time.Now().UTC())
 	}
 
 	if err != nil {

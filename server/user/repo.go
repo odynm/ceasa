@@ -2,6 +2,7 @@ package user
 
 import (
 	"fmt"
+	"time"
 
 	_ "github.com/lib/pq"
 
@@ -54,4 +55,18 @@ func DbGetByLogin(login string) UserDb {
 		fmt.Println(err)
 	}
 	return userDb
+}
+
+func DbSetLogin(id int, refreshToken string) bool {
+	statement := `
+		UPDATE "user_info" SET  
+			refresh_token = $1,
+			refresh_token_expiration = $2,
+			last_logged = $3
+		WHERE id=$4`
+	_, err := db.Instance.Db.Exec(statement, refreshToken, time.Now().UTC().Add(time.Hour*24), time.Now().UTC(), id)
+	if err != nil {
+		return true
+	}
+	return false
 }

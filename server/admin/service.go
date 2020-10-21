@@ -24,7 +24,7 @@ func LoginAdmin(adminLogin AdminLoginDto, w http.ResponseWriter) {
 	hash := utils.GetHash(adminLogin.Login + "@" + adminLogin.Pass)
 	adminDb := DbGetByLogin(adminLogin.Login)
 	if adminDb.Hash == hash {
-		token := utils.GetHash(adminLogin.Login + "15" + hash + "R" + time.Now().String())
+		token := utils.GetHash(adminLogin.Login + "15" + hash + "R" + time.Now().UTC().String())
 		tokens[token] = true
 		io.WriteString(w, token)
 	} else {

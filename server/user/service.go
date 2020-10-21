@@ -14,6 +14,7 @@ type AuthData struct {
 	Token        string
 	LoaderToken  string
 	CreationDate time.Time
+	RefreshToken string
 }
 
 var tokens = map[int]AuthData{}
@@ -35,15 +36,20 @@ func LoginUser(userLogin UserDto, w http.ResponseWriter) {
 	hash := utils.GetHash(login + "@" + userLogin.Pass)
 	dbUser := DbGetByLogin(login)
 	if dbUser.Hash == hash {
-		token := utils.GetHash(login + "17" + hash + "F" + time.Now().String())
+		refreshToken := utils.GetHash(login + "RR" + hash + "Fresh" + time.Now().UTC().String())
+		DbSetLogin(dbUser.Id, refreshToken)
+		token := utils.GetHash(login + "17" + hash + "F" + time.Now().UTC().String())
+		// Big note: REFRESH TOKEN is not being used right now
 		tokens[dbUser.Id] = AuthData{
 			Token:        token,
-			LoaderToken:  utils.GetHash("L" + time.Now().String()),
-			CreationDate: time.Now(),
+			LoaderToken:  utils.GetHash("L" + time.Now().UTC().String()),
+			CreationDate: time.Now().UTC(),
+			RefreshToken: refreshToken,
 		}
 		response := UserResponse{
-			Id:    dbUser.Id,
-			Token: token,
+			Id:           dbUser.Id,
+			Token:        token,
+			RefreshToken: refreshToken,
 		}
 		utils.Success(w, response)
 	} else {
@@ -54,11 +60,11 @@ func LoginUser(userLogin UserDto, w http.ResponseWriter) {
 func RefreshTokenUser(refresh UserDto, w http.ResponseWriter) {
 	// dbUser := DbGetRefresh(refresh.Token)
 	// if dbUser.RefreshToken == refresh.Token {
-	// 	token := utils.GetHash(adminLogin.Login + "17" + hash + "F" + time.Now().String())
+	// 	token := utils.GetHash(adminLogin.Login + "17" + hash + "F" + time.Now().UTC().String())
 	// 	tokens[dbUser.Id] = AuthData{
 	// 		token:        token,
-	// 		loaderToken:  utils.GetHash("L" + time.Now().String()),
-	// 		creationDate: time.Now(),
+	// 		loaderToken:  utils.GetHash("L" + time.Now().UTC().String()),
+	// 		creationDate: time.Now().UTC(),
 	// 	}
 	// 	response := UserResponse{
 	// 		Id:    dbUser.Id,
@@ -77,7 +83,7 @@ func IsLogged(id int, auth string, w http.ResponseWriter) bool {
 		utils.NoAuth(w)
 		return false
 	} else {
-		today := time.Now()
+		today := time.Now().UTC()
 		if tokens[id].CreationDate.Year() != today.Year() ||
 			tokens[id].CreationDate.YearDay() != today.YearDay() {
 			utils.NoAuth(w)

@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { Provider } from 'react-redux'
+import { NavigationActions } from 'react-navigation'
 import { onNavigationStateChange } from 'src/plugins/analytics'
 import i18n from 'i18n-js'
 import store from 'src/ducks'
@@ -31,7 +32,7 @@ const App = () => {
 		// Reset refresher
 		await StorageService.refresherRunning.set(false)
 
-		HttpService.initialize()
+		HttpService.initialize(navigationRef, NavigationActions)
 		MoneyService.initialize()
 		ToastService.initialize(toastRef)
 

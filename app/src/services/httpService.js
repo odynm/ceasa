@@ -1,14 +1,14 @@
 // import qs from 'qs'
 // import i18n from 'i18n-js'
+import { Keyboard } from 'react-native'
+import { Creators as UserCreators } from 'src/ducks/user'
 import axios from 'axios'
 import store from 'src/ducks'
 import config from 'src/config'
 import NetInfo from '@react-native-community/netinfo'
-import ToastService from './toastService'
-import { Keyboard } from 'react-native'
-import { Creators as UserCreators } from 'src/ducks/user'
 // import { Creators as ModalCreators } from '../ducks/modal'
 import * as retryAxios from 'retry-axios'
+import screens from 'src/constants/screens'
 
 // NetInfo.addEventListener(state => {
 // 	if (state.type === 'none') {
@@ -17,6 +17,9 @@ import * as retryAxios from 'retry-axios'
 // 		store.dispatch(ModalCreators.setModal(false))
 // 	}
 // })
+
+let navigation = {}
+let navigationActions = {}
 
 const requestInterceptor = requestConfig => {
 	const { user } = store.getState().user
@@ -46,6 +49,11 @@ const responseErrorInterceptor = async error => {
 	if (status == 401) {
 		try {
 			await store.dispatch(UserCreators.logout())
+			if (navigation.current) {
+				navigation.current.dispatch(
+					navigationActions.navigate({ routeName: screens.loginSelect }),
+				)
+			}
 			// TODO refresh token
 			// const action = UserCreators.updateToken(data)
 			// const { accessToken } = await store.dispatch(action)
@@ -64,7 +72,9 @@ const responseErrorInterceptor = async error => {
 	return Promise.reject(error)
 }
 
-const initialize = () => {
+const initialize = (navigationRef, navActions) => {
+	navigationActions = navActions
+	navigation = navigationRef
 	const instance = axios.create({ baseURL: config.API_URL })
 	instance.defaults.raxConfig = { instance }
 	retryAxios.attach(instance)
