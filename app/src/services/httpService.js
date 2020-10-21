@@ -51,7 +51,7 @@ const responseErrorInterceptor = async error => {
 			await store.dispatch(UserCreators.logout())
 			if (navigation.current) {
 				navigation.current.dispatch(
-					navigationActions.navigate({ routeName: screens.loginSelect }),
+					navigationActions.navigate({ routeName: screens.login }),
 				)
 			}
 			// TODO refresh token

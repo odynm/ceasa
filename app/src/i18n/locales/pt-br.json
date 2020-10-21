@@ -12,6 +12,7 @@
 		"login": "Login",
 		"user": "Usuário",
 		"password": "Senha",
+		"rememberMe": "Lembrar meu usuário e senha",
 		"error": "Usuário ou senha incorretos",
 		"errors": {
 			"connection": "Erro de conexão"

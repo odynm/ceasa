@@ -34,6 +34,7 @@ const removeItem = key => async () => {
 const keys = {
 	user: 'user',
 	loginType: 'loginType',
+	rememberMe: 'rememberMe',
 	introduction: 'introduction',
 	refresherRunning: 'refresherRunning',
 }
@@ -53,6 +54,11 @@ const StorageService = {
 		get: getItem(keys.loginType),
 		set: setItem(keys.loginType),
 		remove: removeItem(keys.loginType),
+	},
+	rememberMe: {
+		get: getItem(keys.rememberMe),
+		set: setItem(keys.rememberMe),
+		remove: removeItem(keys.rememberMe),
 	},
 	refresherRunning: {
 		get: getItem(keys.refresherRunning),
