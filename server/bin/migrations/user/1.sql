@@ -33,6 +33,7 @@ CREATE TABLE _user_.storage_item
     product_type_id int,
     description_id int,
     amount integer NOT NULL,
+    deleted boolean DEFAULT false,
     CONSTRAINT storage_item_pkey PRIMARY KEY (id),
     CONSTRAINT fk_itemdescription_storage FOREIGN KEY (description_id)
         REFERENCES _user_.storage_item_description (id)

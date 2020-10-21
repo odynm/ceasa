@@ -298,8 +298,8 @@ func DbDeleteOrder(userId int, orderId int) bool {
 	schema := fmt.Sprint("u", userId)
 
 	statement := fmt.Sprintf(`
-					DELETE FROM %v.order_order WHERE id = $1`, schema)
-	_, err := db.Instance.Db.Exec(statement, orderId)
+					UPDATE %v.order_order SET status = $1 WHERE id = $2`, schema)
+	_, err := db.Instance.Db.Exec(statement, S_Deleted, orderId)
 	if err != nil {
 		goto Error
 	}

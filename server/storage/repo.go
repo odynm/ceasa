@@ -163,7 +163,8 @@ func DbGetAllFull(userId int) []StorageItemFull {
 	FROM %v.storage_item si
 	INNER JOIN public.products_product pp ON pp.id = si.product_id
 	LEFT JOIN public.products_product_type pt ON pt.id = si.product_type_id
-	INNER JOIN %v.storage_item_description sid ON sid.id = si.description_id`, schema, schema)
+	INNER JOIN %v.storage_item_description sid ON sid.id = si.description_id
+	WHERE si.deleted = false`, schema, schema)
 
 	rows, err := db.Instance.Db.Query(statement)
 
@@ -221,7 +222,8 @@ func DbGetAll(userId int) []StorageItem {
 		description_id,
 		cost_price,
 		amount
-	FROM %v.storage_item`, schema)
+	FROM %v.storage_item si
+	WHERE si.deleted = false`, schema)
 
 	rows, err := db.Instance.Db.Query(statement)
 
@@ -255,7 +257,7 @@ func DbDeleteStorage(userId int, storageId int) bool {
 	schema := fmt.Sprint("u", userId)
 
 	statement := fmt.Sprintf(`
-					DELETE FROM %v.storage_item WHERE id = $1`, schema)
+					UPDATE %v.storage_item SET deleted = true WHERE id = $1`, schema)
 	_, err := db.Instance.Db.Exec(statement, storageId)
 	if err != nil {
 		goto Error

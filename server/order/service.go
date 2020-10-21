@@ -177,12 +177,20 @@ func DeleteOrder(userId int, orderId int, w http.ResponseWriter) {
 		for _, dbStoredProduct := range dbStoredProducts {
 			storage.DbIncreaseAmount(dbStoredProduct.StorageItemId, dbStoredProduct.Amount, userId)
 		}
-		utils.Success(w, orderId)
+		ok = DbDeleteOrder(userId, orderId)
+		if ok {
+			utils.Success(w, orderId)
+		} else {
+			utils.Failed(w, -1)
+		}
 	} else {
 		utils.Failed(w, -1)
 	}
 	if ok {
-		ok = DbDeleteProductsFromOrderId(userId, orderId)
+		//
+		// For now, we will maintain the products instead of deleting them
+		//
+		/*ok = DbDeleteProductsFromOrderId(userId, orderId)
 		if ok {
 			DbDeleteOrder(userId, orderId)
 			if !ok {
@@ -190,7 +198,7 @@ func DeleteOrder(userId int, orderId int, w http.ResponseWriter) {
 			}
 		} else {
 			utils.Failed(w, -1)
-		}
+		}*/
 	} else {
 		utils.Failed(w, -1)
 	}
