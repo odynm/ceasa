@@ -159,6 +159,14 @@
 			"content": "Você quer confirmar este carregamento?"
 		}
 	},
+	"home": {
+		"costPrice": "Preço de Custo (unidade)",
+		"startingTotal": "Total inicial",
+		"sold": "Vendidos",
+		"inStorage": "Em estoque",
+		"netTotal": "Ganho Bruto",
+		"profit": "Lucro"
+	},
 	"optionsLoader": {
 		"logout": "Sair"
 	},

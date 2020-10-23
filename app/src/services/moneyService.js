@@ -50,7 +50,13 @@ const textToMoney = text => {
 }
 
 const toMoney = number => {
-	if (number && typeof number === 'number') {
+	if (number !== undefined && typeof number === 'number') {
+		if (number === 0) {
+			return {
+				text: '0,00',
+				value: number,
+			}
+		}
 		switch (currency.name) {
 			case 'BRL':
 				return {
