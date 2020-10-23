@@ -8,37 +8,44 @@ import ScreenHeader from 'src/components/fw/screen-header'
 import styles from './styles'
 import ItemCardHome from './item-card-home'
 import ScreenBase from 'src/components/fw/screen-base'
+import Loader from 'src/components/fw/loader'
 
-const Home = ({ overview, loadHome }) => {
+const Home = ({ overview, loadHome, loading }) => {
 	useEffect(() => {
 		loadHome()
 	}, [])
 
 	return (
-		<ScreenBase
-			useScroll={false}
-			useKeyboardAvoid={false}
-			useKeyboardClose={false}>
-			<ScrollView style={styles.container}>
-				{overview && overview.length > 0
-					? overview.map(item => (
-							<View key={item.id}>
-								<ItemCardHome
-									sold={item.sold}
-									amount={item.amount}
-									product={item.productName}
-									costPrice={item.costPrice}
-									description={item.description}
-									totalEarned={item.totalEarned}
-									liquidEarned={item.liquidEarned}
-									productType={item.productTypeName}
-									startingTotalItems={item.startingTotalItems}
-								/>
-							</View>
-					  ))
-					: undefined}
-			</ScrollView>
-		</ScreenBase>
+		<>
+			{loading && (!overview || overview.length === 0) ? (
+				<Loader fullScreen />
+			) : (
+				<ScreenBase
+					useScroll={false}
+					useKeyboardAvoid={false}
+					useKeyboardClose={false}>
+					<ScrollView style={styles.container}>
+						{overview && overview.length > 0
+							? overview.map(item => (
+									<View key={item.id}>
+										<ItemCardHome
+											sold={item.sold}
+											amount={item.amount}
+											product={item.productName}
+											costPrice={item.costPrice}
+											description={item.description}
+											totalEarned={item.totalEarned}
+											liquidEarned={item.liquidEarned}
+											productType={item.productTypeName}
+											startingTotalItems={item.startingTotalItems}
+										/>
+									</View>
+							  ))
+							: undefined}
+					</ScrollView>
+				</ScreenBase>
+			)}
+		</>
 	)
 }
 
@@ -52,6 +59,7 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = ({ home }) => ({
+	loading: home.loading,
 	overview: home.overview,
 })
 

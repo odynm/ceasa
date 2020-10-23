@@ -1,4 +1,3 @@
-import { AppState } from 'react-native'
 import config from 'src/config'
 import StorageService from './storageService'
 
@@ -9,6 +8,7 @@ let _loaderUserId
 let _loadVendorOrders
 let _loadLoaderOrders
 let _getStorage
+let _getHome
 
 const setData = ({
 	user,
@@ -17,6 +17,7 @@ const setData = ({
 	loadVendorOrders,
 	loadLoaderOrders,
 	getStorage,
+	getHome,
 }) => {
 	_user = user
 	_loader = loader
@@ -24,6 +25,7 @@ const setData = ({
 	_loadVendorOrders = loadVendorOrders
 	_loadLoaderOrders = loadLoaderOrders
 	_getStorage = getStorage
+	_getHome = getHome
 }
 
 const start = () => {
@@ -47,6 +49,8 @@ const refresh = () => {
 			_loadVendorOrders()
 			// Storage
 			_getStorage()
+			// Home
+			_getHome()
 		}
 	} else if (
 		_loader &&
