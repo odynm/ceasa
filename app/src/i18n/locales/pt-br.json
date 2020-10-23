@@ -168,6 +168,23 @@
 		"netTotal": "Ganho Bruto",
 		"profit": "Lucro"
 	},
+	"user" : {
+		"logout": "Sair",
+		"loadersTeam": {
+			"title": "Meus Carregadores",
+			"noLoaders": "Você ainda não tem nenhum carregador."
+		},
+		"addLoader": {
+			"title": "Adicionar Carregador",
+			"instructions": {
+				"1":"* Peça para o seu carregador baixar o aplicativo ",
+				"2": "Ceasa Estoque",
+				"3": ".\n",
+				"4": "* Ele deve clicar em \"entrar como carregador\"\n",
+				"5": "* Tudo que ele precisa fazer agora é ler o QR Code abaixo"
+			}
+		}
+	},
 	"optionsLoader": {
 		"logout": "Sair"
 	},

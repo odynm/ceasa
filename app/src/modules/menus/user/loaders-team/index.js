@@ -3,49 +3,39 @@ import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
-import { Creators as UserCreators } from 'src/ducks/user'
 import screens from 'src/constants/screens'
-import Space from 'src/components/fw/space'
+import KText from 'src/components/fw/ktext'
 import Button from 'src/components/fw/button'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
 
-const User = ({ logout, navigation }) => {
+const LoadersTeam = ({ navigation }) => {
 	return (
 		<ScreenBase
 			useScroll={false}
 			useKeyboardAvoid={false}
 			useKeyboardClose={false}>
-			<View>
+			<View style={{ alignItems: 'center' }}>
+				<KText text={translate('user.loadersTeam.noLoaders')} />
 				<Button
 					onPress={() => {
-						navigation.navigate(screens.loadersTeam)
+						navigation.navigate(screens.addLoader)
 					}}
-					label={translate('user.loadersTeam.title')}
-				/>
-				<Space size4 />
-				<Button
-					onPress={() => {
-						logout()
-						navigation.navigate(screens.login)
-					}}
-					label={translate('user.logout')}
+					label={translate('user.addLoader.title')}
 				/>
 			</View>
 		</ScreenBase>
 	)
 }
 
-User.navigationOptions = () => ({
-	title: translate('menus.user'),
-	headerLeft: props => <ScreenHeader noBack {...props} />,
+LoadersTeam.navigationOptions = () => ({
+	title: translate('user.loadersTeam.title'),
+	headerLeft: props => <ScreenHeader {...props} />,
 })
 
-const mapDispatchToProps = {
-	logout: UserCreators.logout,
-}
+const mapDispatchToProps = {}
 
 export default connect(
 	null,
 	mapDispatchToProps,
-)(withNavigation(User))
+)(withNavigation(LoadersTeam))

@@ -15,6 +15,8 @@ const screens = {
 	editProductsOrder: 'EditProductsOrder',
 	loaderOrderInfo: 'LoaderOrderInfo',
 	loaderCarryingOrders: 'CarryingLoader',
+	loadersTeam: 'LoadersTeam',
+	addLoader: 'AddLoader',
 }
 
 export default screens
