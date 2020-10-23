@@ -55,6 +55,15 @@ const loadVendorTeams = () => async dispatch => {
 	dispatch(setLoading(false))
 }
 
+const deleteTeam = teamId => async dispatch => {
+	dispatch(setLoading(true))
+	const { success } = await HttpService.delete(`team/delete?id=${teamId}`)
+	if (!success) {
+		// erro
+	}
+	dispatch(setLoading(false))
+}
+
 const joinTeam = code => async dispatch => {
 	dispatch(setLoading(true))
 	const { success, data } = await HttpService.post('team/join', {
@@ -69,6 +78,7 @@ const joinTeam = code => async dispatch => {
 
 export const Creators = {
 	joinTeam,
+	deleteTeam,
 	loadTeamCode,
 	loadLoaderTeams,
 	loadVendorTeams,

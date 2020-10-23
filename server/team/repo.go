@@ -62,3 +62,13 @@ func DbCreateTeam(loaderId int, userId int) int {
 	}
 	return id
 }
+
+func DbDeleteTeam(teamId int) bool {
+	statement := `
+		DELETE FROM "team_info" WHERE id = $1`
+	err := db.Instance.Db.QueryRow(statement, teamId)
+	if err != nil {
+		return false
+	}
+	return true
+}

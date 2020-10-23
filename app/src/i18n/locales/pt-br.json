@@ -173,7 +173,11 @@
 		"loadersTeam": {
 			"title": "Meus Carregadores",
 			"noLoaders": "Você ainda não tem nenhum carregador.",
-			"delete": "Excluir"
+			"delete": "Excluir",
+			"modalDelete": {
+				"header": "Confirmar exclusão",
+				"content": "Deseja excluir {0} da sua lista de carregadores?"
+			}
 		},
 		"addLoader": {
 			"title": "Adicionar Carregador",

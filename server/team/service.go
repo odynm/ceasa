@@ -53,3 +53,8 @@ func AddToTeam(loaderId int, token string, w http.ResponseWriter) {
 		utils.Failed(w, -1)
 	}
 }
+
+func DeleteTeam(teamId int, w http.ResponseWriter) bool {
+	ok := DbDeleteTeam(teamId)
+	return ok
+}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { hp, wp } from 'src/utils/screen'
 import { translate } from 'src/i18n/translate'
@@ -13,48 +13,80 @@ import Button from 'src/components/fw/button'
 import Loader from 'src/components/fw/loader'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
+import ConfirmationModal from 'src/components/fw/confirmation-modal'
 
-const LoadersTeam = ({ navigation, vendorTeams, loading, loadVendorTeams }) => {
+const LoadersTeam = ({
+	loading,
+	navigation,
+	deleteTeam,
+	vendorTeams,
+	loadVendorTeams,
+}) => {
+	const [modalAcceptDelete, setModalAcceptDelete] = useState(false)
+	const [selectedId, setSelectedId] = useState(0)
+	const [selectedName, setSelectedName] = useState('')
+
 	useEffect(() => {
 		loadVendorTeams()
 	}, [])
 
+	const handleDelete = async () => {
+		await deleteTeam(selectedId)
+		await loadVendorTeams()
+	}
+
 	return (
-		<ScreenBase
-			useScroll={false}
-			useKeyboardAvoid={false}
-			useKeyboardClose={false}>
-			<View style={styles.container}>
-				{loading ? (
-					<Loader />
-				) : (
-					<ScrollView style={styles.scrollView}>
-						{vendorTeams && vendorTeams.length > 0 ? (
-							vendorTeams.map(item => (
-								<>
-									<TeamCard
-										name={item.loaderName}
-										onDelete={() => {}}
-									/>
-									<Space />
-								</>
-							))
-						) : (
-							<KText text={translate('user.loadersTeam.noLoaders')} />
-						)}
-					</ScrollView>
-				)}
-				<Space size2 />
-				<View style={styles.footer}>
-					<Button
-						onPress={() => {
-							navigation.navigate(screens.addLoader)
-						}}
-						label={translate('user.addLoader.title')}
-					/>
+		<>
+			<ScreenBase
+				useScroll={false}
+				useKeyboardAvoid={false}
+				useKeyboardClose={false}>
+				<View style={styles.container}>
+					{loading ? (
+						<Loader />
+					) : (
+						<ScrollView style={styles.scrollView}>
+							{vendorTeams && vendorTeams.length > 0 ? (
+								vendorTeams.map(item => (
+									<View key={item.id}>
+										<TeamCard
+											name={item.loaderName}
+											onDelete={() => {
+												setSelectedId(item.id)
+												setSelectedName(item.loaderName)
+												setModalAcceptDelete(true)
+											}}
+										/>
+										<Space />
+									</View>
+								))
+							) : (
+								<KText text={translate('user.loadersTeam.noLoaders')} />
+							)}
+						</ScrollView>
+					)}
+					<Space size2 />
+					<View style={styles.footer}>
+						<Button
+							onPress={() => {
+								navigation.navigate(screens.addLoader)
+							}}
+							label={translate('user.addLoader.title')}
+						/>
+					</View>
 				</View>
-			</View>
-		</ScreenBase>
+			</ScreenBase>
+			<ConfirmationModal
+				open={modalAcceptDelete}
+				onAccept={handleDelete}
+				onClose={() => setModalAcceptDelete(false)}
+				header={translate('user.loadersTeam.modalDelete.header')}
+				content={translate('user.loadersTeam.modalDelete.content').replace(
+					'{0}',
+					selectedName,
+				)}
+			/>
+		</>
 	)
 }
 
@@ -83,6 +115,7 @@ const mapStateToProps = ({ team }) => ({
 })
 
 const mapDispatchToProps = {
+	deleteTeam: TeamCreators.deleteTeam,
 	loadVendorTeams: TeamCreators.loadVendorTeams,
 }
 

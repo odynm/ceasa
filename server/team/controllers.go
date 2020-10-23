@@ -3,6 +3,7 @@ package team
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"ceasa/loader"
 	"ceasa/user"
@@ -63,6 +64,24 @@ func join(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func delete(w http.ResponseWriter, r *http.Request) {
+	userId := user.CheckLogin(w, r)
+	if userId > 0 {
+		teamIdStr, ok := r.URL.Query()["id"]
+		if ok {
+			teamId, err := strconv.ParseInt(teamIdStr[0], 10, 32)
+			if err != nil || teamId != 0 {
+				DeleteTeam(int(teamId), w)
+				utils.Success(w, nil)
+			} else {
+				utils.Failed(w, -1)
+			}
+		}
+	} else {
+		utils.NoAuth(w)
+	}
+}
+
 func teamLoaderRouter(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
@@ -99,9 +118,19 @@ func teamJoinRouter(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func teamDeleteRouter(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodDelete:
+		delete(w, r)
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
 func HandleRequest() {
 	http.HandleFunc("/team/vendor", teamVendorRouter)
 	http.HandleFunc("/team/loader", teamLoaderRouter)
 	http.HandleFunc("/team/code", teamCodeRouter)
 	http.HandleFunc("/team/join", teamJoinRouter)
+	http.HandleFunc("/team/delete", teamDeleteRouter)
 }

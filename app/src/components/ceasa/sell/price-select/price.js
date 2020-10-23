@@ -28,7 +28,7 @@ const ModalPrice = ({
 	selectedProduct,
 	handlePriceChange,
 }) => {
-	const [modalAccepDelete, setModalAccepDelete] = useState(false)
+	const [modalAcceptDelete, setmodalAcceptDelete] = useState(false)
 
 	const colorStyle = amount > available ? { color: colors.red } : {}
 
@@ -113,7 +113,7 @@ const ModalPrice = ({
 								tiny
 								style={styles.button}
 								label={translate('sell.delete')}
-								onPress={() => setModalAccepDelete(true)}
+								onPress={() => setmodalAcceptDelete(true)}
 							/>
 							<Button
 								tiny
@@ -133,9 +133,9 @@ const ModalPrice = ({
 				</CloseKeyboardView>
 			</KModal>
 			<ConfirmationModal
-				open={modalAccepDelete}
+				open={modalAcceptDelete}
 				onAccept={handleDelete}
-				onClose={() => setModalAccepDelete(false)}
+				onClose={() => setmodalAcceptDelete(false)}
 				header={translate('sell.modalDelete.header')}
 				content={translate('sell.modalDelete.content')}
 			/>
