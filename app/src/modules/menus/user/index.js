@@ -7,20 +7,26 @@ import { Creators as UserCreators } from 'src/ducks/user'
 import AddTeam from './add-team'
 import screens from 'src/constants/screens'
 import Button from 'src/components/fw/button'
+import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
 
 const User = ({ logout, navigation }) => {
 	return (
-		<View>
-			<AddTeam />
-			<Button
-				onPress={() => {
-					logout()
-					navigation.navigate(screens.login)
-				}}
-				label={'Sair'}
-			/>
-		</View>
+		<ScreenBase
+			useScroll={false}
+			useKeyboardAvoid={false}
+			useKeyboardClose={false}>
+			<View>
+				<AddTeam />
+				<Button
+					onPress={() => {
+						logout()
+						navigation.navigate(screens.login)
+					}}
+					label={'Sair'}
+				/>
+			</View>
+		</ScreenBase>
 	)
 }
 

@@ -2,7 +2,8 @@
 	"app": {
 		"no": "Não",
 		"yes": "Sim",
-		"delete": "Excluir"
+		"delete": "Excluir",
+		"noConnection": "Sem conexão com o sistema"
 	},
 	"loginSelect": {
 		"vendor": "Entrar como vendedor",

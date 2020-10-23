@@ -7,6 +7,7 @@ import { Creators as HomeCreators } from 'src/ducks/home'
 import ScreenHeader from 'src/components/fw/screen-header'
 import styles from './styles'
 import ItemCardHome from './item-card-home'
+import ScreenBase from 'src/components/fw/screen-base'
 
 const Home = ({ overview, loadHome }) => {
 	useEffect(() => {
@@ -14,25 +15,30 @@ const Home = ({ overview, loadHome }) => {
 	}, [])
 
 	return (
-		<ScrollView style={styles.container}>
-			{overview && overview.length > 0
-				? overview.map(item => (
-						<View key={item.id}>
-							<ItemCardHome
-								sold={item.sold}
-								amount={item.amount}
-								product={item.productName}
-								costPrice={item.costPrice}
-								description={item.description}
-								totalEarned={item.totalEarned}
-								liquidEarned={item.liquidEarned}
-								productType={item.productTypeName}
-								startingTotalItems={item.startingTotalItems}
-							/>
-						</View>
-				  ))
-				: undefined}
-		</ScrollView>
+		<ScreenBase
+			useScroll={false}
+			useKeyboardAvoid={false}
+			useKeyboardClose={false}>
+			<ScrollView style={styles.container}>
+				{overview && overview.length > 0
+					? overview.map(item => (
+							<View key={item.id}>
+								<ItemCardHome
+									sold={item.sold}
+									amount={item.amount}
+									product={item.productName}
+									costPrice={item.costPrice}
+									description={item.description}
+									totalEarned={item.totalEarned}
+									liquidEarned={item.liquidEarned}
+									productType={item.productTypeName}
+									startingTotalItems={item.startingTotalItems}
+								/>
+							</View>
+					  ))
+					: undefined}
+			</ScrollView>
+		</ScreenBase>
 	)
 }
 

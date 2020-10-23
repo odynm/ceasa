@@ -9,6 +9,7 @@ import NetInfo from '@react-native-community/netinfo'
 // import { Creators as ModalCreators } from '../ducks/modal'
 import * as retryAxios from 'retry-axios'
 import screens from 'src/constants/screens'
+import { Creators as AppCreators } from 'src/ducks/app'
 
 // NetInfo.addEventListener(state => {
 // 	if (state.type === 'none') {
@@ -42,6 +43,8 @@ const responseErrorInterceptor = async error => {
 	if (!netInfo.isInternetReachable) {
 		Keyboard.dismiss()
 		console.warn('net not reachable')
+		store.dispatch(AppCreators.setNoConnection(true))
+		return Promise.reject(error)
 		//ToastService.show({ message: translate('app.noInternet') })
 	}
 
@@ -66,6 +69,7 @@ const responseErrorInterceptor = async error => {
 	} else if (status != null) {
 		console.warn('Return status', status, JSON.stringify(error))
 	} else {
+		store.dispatch(AppCreators.setNoConnection(true))
 		console.warn('server down')
 	}
 
@@ -79,10 +83,10 @@ const initialize = (navigationRef, navActions) => {
 	instance.defaults.raxConfig = { instance }
 	retryAxios.attach(instance)
 	instance.interceptors.request.use(requestInterceptor)
-	instance.interceptors.response.use(
-		response => response,
-		responseErrorInterceptor,
-	)
+	instance.interceptors.response.use(response => {
+		store.dispatch(AppCreators.setNoConnection(false))
+		return response
+	}, responseErrorInterceptor)
 	HttpService.instance = instance
 }
 

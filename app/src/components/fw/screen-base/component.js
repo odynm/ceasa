@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, ScrollView, StyleSheet } from 'react-native'
 import { wp, hp, widthPercentageToDP, getWorkableArea } from 'src/utils/screen'
+import NoInternetFlag from './no-internet-flag'
 import CloseKeyboardView from './close-keyboard-view'
 
 const ScreenBaseComponent = ({
@@ -28,15 +29,21 @@ const ScreenBaseComponent = ({
 	) : (
 		<View style={heightStyle}>
 			{useScroll ? (
-				<ScrollView style={styles.scrollView}>
+				<>
+					<ScrollView style={styles.scrollView}>
+						<View style={[styles.containerView, style]} {...props}>
+							{children}
+						</View>
+					</ScrollView>
+					<NoInternetFlag />
+				</>
+			) : (
+				<>
 					<View style={[styles.containerView, style]} {...props}>
 						{children}
 					</View>
-				</ScrollView>
-			) : (
-				<View style={[styles.containerView, style]} {...props}>
-					{children}
-				</View>
+					<NoInternetFlag />
+				</>
 			)}
 		</View>
 	)
