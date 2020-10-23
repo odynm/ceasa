@@ -24,11 +24,11 @@ const Refresher = ({
 		RefresherService.setData({
 			user,
 			loader,
+			getHome,
+			getStorage,
 			loaderUserId,
 			loadVendorOrders,
 			loadLoaderOrders,
-			getStorage,
-			getHome,
 		})
 	}, [loader, user, loaderUserId])
 

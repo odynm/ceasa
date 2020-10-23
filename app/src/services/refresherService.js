@@ -4,28 +4,28 @@ import StorageService from './storageService'
 let _stop = false
 let _user
 let _loader
+let _getHome
+let _getStorage
 let _loaderUserId
 let _loadVendorOrders
 let _loadLoaderOrders
-let _getStorage
-let _getHome
 
 const setData = ({
 	user,
 	loader,
+	getHome,
+	getStorage,
 	loaderUserId,
 	loadVendorOrders,
 	loadLoaderOrders,
-	getStorage,
-	getHome,
 }) => {
 	_user = user
 	_loader = loader
+	_getHome = getHome
+	_getStorage = getStorage
 	_loaderUserId = loaderUserId
 	_loadVendorOrders = loadVendorOrders
 	_loadLoaderOrders = loadLoaderOrders
-	_getStorage = getStorage
-	_getHome = getHome
 }
 
 const start = () => {
