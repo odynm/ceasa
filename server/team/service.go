@@ -7,8 +7,16 @@ import (
 	"ceasa/utils"
 )
 
-func GetAllTeams(loaderId int, w http.ResponseWriter) ([]TeamFull, bool) {
-	teams, ok := DbGetAllTeams(loaderId)
+func GetAllTeamsFromLoader(loaderId int, w http.ResponseWriter) ([]TeamFull, bool) {
+	teams, ok := DbGetAllTeams(loaderId, "loader_id")
+	if !ok {
+		utils.Failed(w, -1)
+	}
+	return teams, ok
+}
+
+func GetAllTeamsFromVendor(userId int, w http.ResponseWriter) ([]TeamFull, bool) {
+	teams, ok := DbGetAllTeams(userId, "user_id")
 	if !ok {
 		utils.Failed(w, -1)
 	}

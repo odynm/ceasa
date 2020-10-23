@@ -5,6 +5,7 @@ const Types = {
 	SET_LOADING: prefix + 'SET_LOADING',
 	SET_TEAM_CODE: prefix + 'SET_TEAM_CODE',
 	SET_LOADER_TEAMS: prefix + 'SET_LOADER_TEAMS',
+	SET_VENDOR_TEAMS: prefix + 'SET_VENDOR_TEAMS',
 }
 
 const setLoading = loading => ({
@@ -22,6 +23,11 @@ const setLoaderTeams = loaderTeams => ({
 	type: Types.SET_LOADER_TEAMS,
 })
 
+const setVendorTeams = vendorTeams => ({
+	payload: { vendorTeams },
+	type: Types.SET_VENDOR_TEAMS,
+})
+
 const loadTeamCode = () => async dispatch => {
 	dispatch(setLoading(true))
 	const { success, data } = await HttpService.get('team/code')
@@ -33,9 +39,18 @@ const loadTeamCode = () => async dispatch => {
 
 const loadLoaderTeams = () => async dispatch => {
 	dispatch(setLoading(true))
-	const { success, data } = await HttpService.get('team')
+	const { success, data } = await HttpService.get('team/loader')
 	if (success) {
 		dispatch(setLoaderTeams(data))
+	}
+	dispatch(setLoading(false))
+}
+
+const loadVendorTeams = () => async dispatch => {
+	dispatch(setLoading(true))
+	const { success, data } = await HttpService.get('team/vendor')
+	if (success) {
+		dispatch(setVendorTeams(data))
 	}
 	dispatch(setLoading(false))
 }
@@ -56,12 +71,14 @@ export const Creators = {
 	joinTeam,
 	loadTeamCode,
 	loadLoaderTeams,
+	loadVendorTeams,
 }
 
 const initialState = {
 	teamCode: '',
 	loading: false,
 	loaderTeams: [],
+	vendorTeams: [],
 }
 
 export default function reducer(state = initialState, action) {
@@ -72,6 +89,8 @@ export default function reducer(state = initialState, action) {
 			return { ...state, teamCode: action.payload.teamCode }
 		case Types.SET_LOADER_TEAMS:
 			return { ...state, loaderTeams: action.payload.loaderTeams }
+		case Types.SET_VENDOR_TEAMS:
+			return { ...state, vendorTeams: action.payload.vendorTeams }
 		default:
 			return state
 	}

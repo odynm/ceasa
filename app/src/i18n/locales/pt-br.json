@@ -172,7 +172,8 @@
 		"logout": "Sair",
 		"loadersTeam": {
 			"title": "Meus Carregadores",
-			"noLoaders": "Você ainda não tem nenhum carregador."
+			"noLoaders": "Você ainda não tem nenhum carregador.",
+			"delete": "Excluir"
 		},
 		"addLoader": {
 			"title": "Adicionar Carregador",

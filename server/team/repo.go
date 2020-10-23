@@ -1,16 +1,20 @@
 package team
 
-import "ceasa/db"
+import (
+	"ceasa/db"
+	"fmt"
+)
 
-func DbGetAllTeams(loaderId int) ([]TeamFull, bool) {
+func DbGetAllTeams(personId int, personType string) ([]TeamFull, bool) {
 	var teams []TeamFull
-	statement := `
+	statement := fmt.Sprintf(`
 		SELECT t.id, t.loader_id, t.user_id, l.name, u.login
 		FROM "team_info" t
 		INNER JOIN "loader_info" l ON l.id = loader_id
 		INNER JOIN "user_info" u ON u.id = user_id
-		WHERE loader_id = $1`
-	rows, err := db.Instance.Db.Query(statement, loaderId)
+		WHERE %v = $1`, personType)
+
+	rows, err := db.Instance.Db.Query(statement, personId)
 
 	if err != nil {
 		goto Error

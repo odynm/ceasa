@@ -1,20 +1,12 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { hp } from 'src/utils/screen'
-import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { StyleSheet, View } from 'react-native'
-import { Creators as TeamCreators } from 'src/ducks/team'
-import Loader from 'src/components/fw/loader'
 import QRCode from 'react-native-qrcode-svg'
+import Loader from 'src/components/fw/loader'
 import ScreenHeader from 'src/components/fw/screen-header'
 
-const AddTeam = ({ teamCode, loading, loadTeamCode, noConnection }) => {
-	useEffect(() => {
-		if (!noConnection) {
-			loadTeamCode()
-		}
-	}, [noConnection])
-
+const AddTeam = ({ teamCode, loading }) => {
 	return (
 		<View style={styles.qrCodeBounds}>
 			{loading ? (
@@ -41,16 +33,4 @@ AddTeam.navigationOptions = () => ({
 	headerLeft: props => <ScreenHeader noBack {...props} />,
 })
 
-const mapStateToProps = ({ app, team }) => ({
-	teamCode: team.teamCode,
-	noConnection: app.noConnection,
-})
-
-const mapDispatchToProps = {
-	loadTeamCode: TeamCreators.loadTeamCode,
-}
-
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(AddTeam)
+export default AddTeam

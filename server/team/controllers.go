@@ -9,10 +9,22 @@ import (
 	"ceasa/utils"
 )
 
-func getAll(w http.ResponseWriter, r *http.Request) {
+func getAllLoader(w http.ResponseWriter, r *http.Request) {
 	loaderId := loader.CheckLogin(w, r)
 	if loaderId > 0 {
-		teams, ok := GetAllTeams(loaderId, w)
+		teams, ok := GetAllTeamsFromLoader(loaderId, w)
+		if ok {
+			utils.Success(w, teams)
+		}
+	} else {
+		utils.NoAuth(w)
+	}
+}
+
+func getAllVendor(w http.ResponseWriter, r *http.Request) {
+	userId := user.CheckLogin(w, r)
+	if userId > 0 {
+		teams, ok := GetAllTeamsFromVendor(userId, w)
 		if ok {
 			utils.Success(w, teams)
 		}
@@ -51,10 +63,19 @@ func join(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func teamRouter(w http.ResponseWriter, r *http.Request) {
+func teamLoaderRouter(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		getAll(w, r)
+		getAllLoader(w, r)
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+func teamVendorRouter(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		getAllVendor(w, r)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
@@ -79,7 +100,8 @@ func teamJoinRouter(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleRequest() {
-	http.HandleFunc("/team", teamRouter)
+	http.HandleFunc("/team/vendor", teamVendorRouter)
+	http.HandleFunc("/team/loader", teamLoaderRouter)
 	http.HandleFunc("/team/code", teamCodeRouter)
 	http.HandleFunc("/team/join", teamJoinRouter)
 }

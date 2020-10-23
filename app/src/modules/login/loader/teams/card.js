@@ -1,15 +1,15 @@
 import React from 'react'
 import { hp, wp } from 'src/utils/screen'
-import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
 
 const TeamCard = ({ name, onPress }) => (
-	<TouchableWithoutFeedback onPress={onPress}>
+	<TouchableOpacity onPress={onPress}>
 		<View style={styles.card}>
 			<KText bold text={name} />
 		</View>
-	</TouchableWithoutFeedback>
+	</TouchableOpacity>
 )
 
 const styles = StyleSheet.create({

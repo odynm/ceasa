@@ -1,7 +1,7 @@
 import React from 'react'
 import { wp, hp } from 'src/utils/screen'
 import { translate } from 'src/i18n/translate'
-import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import orderStatus from 'src/enums/order'
 import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
@@ -28,7 +28,7 @@ const OrderCard = ({
 	]
 
 	return (
-		<TouchableWithoutFeedback onPress={onPress}>
+		<TouchableOpacity onPress={onPress}>
 			<View style={style}>
 				<View style={styles.card}>
 					<View style={styles.row}>
@@ -80,7 +80,7 @@ const OrderCard = ({
 					/>
 				)}
 			</View>
-		</TouchableWithoutFeedback>
+		</TouchableOpacity>
 	)
 }
 
