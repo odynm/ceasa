@@ -3,7 +3,8 @@
 		"no": "Não",
 		"yes": "Sim",
 		"delete": "Excluir",
-		"noConnection": "Sem conexão com o sistema"
+		"noConnection": "Sem conexão com o sistema",
+		"noConnectionError": "Essa opção está desabilitada enquanto você estiver sem conexão."
 	},
 	"loginSelect": {
 		"vendor": "Entrar como vendedor",

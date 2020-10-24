@@ -14,6 +14,7 @@ import Button from 'src/components/fw/button'
 import ScreenHeaderDeleteStorage from './header'
 import MoneyService from 'src/services/moneyService'
 import TextInput from 'src/components/fw/text-input'
+import ToastService from 'src/services/toastService'
 import MoneyInput from 'src/components/fw/money-input'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
@@ -26,6 +27,7 @@ const EditStorage = ({
 	navigation,
 	loadStorage,
 	storageItem,
+	noConnection,
 	setCostPrice,
 	setAppLoader,
 	confirmDelete,
@@ -43,10 +45,14 @@ const EditStorage = ({
 	}
 
 	const handleEdit = async () => {
-		setAppLoader(true)
-		await add(storageItem)
-		setAppLoader(false)
-		navigation.navigate(screens.storage)
+		if (noConnection) {
+			ToastService.show({ message: translate('app.noConnectionError') })
+		} else {
+			setAppLoader(true)
+			await add(storageItem)
+			setAppLoader(false)
+			navigation.navigate(screens.storage)
+		}
 	}
 
 	return (
@@ -99,7 +105,7 @@ const EditStorage = ({
 }
 
 EditStorage.navigationOptions = () => ({
-	title: translate('menus.editOrder'),
+	title: translate('menus.editStorage'),
 	headerLeft: props => <ScreenHeader {...props} />,
 	headerRight: props => <ScreenHeaderDeleteStorage {...props} />,
 })
@@ -116,7 +122,8 @@ const mapDispatchToProps = {
 	setConfirmDelete: EditStorageCreators.setConfirmDelete,
 }
 
-const mapStateToProps = ({ editStorage }) => ({
+const mapStateToProps = ({ app, editStorage }) => ({
+	noConnection: app.noConnection,
 	storageItem: editStorage.storageItem,
 	confirmDelete: editStorage.confirmDelete,
 })

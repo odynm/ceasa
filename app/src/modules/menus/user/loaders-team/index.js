@@ -11,6 +11,7 @@ import KText from 'src/components/fw/ktext'
 import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
 import Loader from 'src/components/fw/loader'
+import ToastService from 'src/services/toastService'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
 import ConfirmationModal from 'src/components/fw/confirmation-modal'
@@ -20,6 +21,7 @@ const LoadersTeam = ({
 	navigation,
 	deleteTeam,
 	vendorTeams,
+	noConnection,
 	loadVendorTeams,
 }) => {
 	const [modalAcceptDelete, setModalAcceptDelete] = useState(false)
@@ -52,9 +54,17 @@ const LoadersTeam = ({
 										<TeamCard
 											name={item.loaderName}
 											onDelete={() => {
-												setSelectedId(item.id)
-												setSelectedName(item.loaderName)
-												setModalAcceptDelete(true)
+												if (noConnection) {
+													ToastService.show({
+														message: translate(
+															'app.noConnectionError',
+														),
+													})
+												} else {
+													setSelectedId(item.id)
+													setSelectedName(item.loaderName)
+													setModalAcceptDelete(true)
+												}
 											}}
 										/>
 										<Space />
@@ -69,7 +79,13 @@ const LoadersTeam = ({
 					<View style={styles.footer}>
 						<Button
 							onPress={() => {
-								navigation.navigate(screens.addLoader)
+								if (noConnection) {
+									ToastService.show({
+										message: translate('app.noConnectionError'),
+									})
+								} else {
+									navigation.navigate(screens.addLoader)
+								}
 							}}
 							label={translate('user.addLoader.title')}
 						/>
@@ -109,9 +125,10 @@ LoadersTeam.navigationOptions = () => ({
 	headerLeft: props => <ScreenHeader {...props} />,
 })
 
-const mapStateToProps = ({ team }) => ({
+const mapStateToProps = ({ app, team }) => ({
 	loading: team.loading,
 	vendorTeams: team.vendorTeams,
+	noConnection: app.noConnection,
 })
 
 const mapDispatchToProps = {

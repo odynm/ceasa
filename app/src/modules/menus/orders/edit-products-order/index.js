@@ -18,6 +18,7 @@ import ProductListSegment from 'src/components/ceasa/sell/product-list-segment'
 const EditProductsOrder = ({
 	navigation,
 	orderItems,
+	noConnection,
 	addOrderItem,
 	decreaseItemsOrder,
 	storedItemsOrderAware,
@@ -57,7 +58,10 @@ const EditProductsOrder = ({
 	}
 
 	const handleOpenAddMenu = () => {
-		if (cantEdit) {
+		if (noConnection) {
+			ToastService.show({ message: translate('app.noConnectionError') })
+			return
+		} else if (cantEdit) {
 			ToastService.show({
 				message: translate('orders.errors.cantEditAnymore'),
 			})
@@ -110,7 +114,8 @@ EditProductsOrder.navigationOptions = () => ({
 	headerLeft: props => <ScreenHeader {...props} />,
 })
 
-const mapStateToProps = ({ storage, editOrder }) => ({
+const mapStateToProps = ({ app, storage, editOrder }) => ({
+	noConnection: app.noConnection,
 	orderItems: editOrder.orderItems,
 	storedItemsOrderAware: storage.storedItemsOrderAware,
 })

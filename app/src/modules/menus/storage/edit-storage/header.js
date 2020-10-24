@@ -1,19 +1,27 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { translate } from 'src/i18n/translate'
 import { Creators as EditStorage } from 'src/ducks/storage/edit-storage'
+import ToastService from 'src/services/toastService'
 import ScreenHeaderDelete from 'src/components/fw/screen-header-delete'
 
-const ScreenHeaderDeleteStorage = ({ setConfirmDelete }) => {
+const ScreenHeaderDeleteStorage = ({ noConnection, setConfirmDelete }) => {
 	return (
 		<ScreenHeaderDelete
 			customFunction={() => {
-				setConfirmDelete(true)
+				if (noConnection) {
+					ToastService.show({
+						message: translate('app.noConnectionError'),
+					})
+				} else {
+					setConfirmDelete(true)
+				}
 			}}
 		/>
 	)
 }
 
-const mapStateToProps = ({}) => ({})
+const mapStateToProps = ({ app }) => ({ noConnection: app.noConnection })
 
 const mapDispatchToProps = {
 	setConfirmDelete: EditStorage.setConfirmDelete,

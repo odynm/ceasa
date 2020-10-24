@@ -35,6 +35,7 @@ const EditOrder = ({
 	loadOrders,
 	completedAt,
 	deleteOrder,
+	noConnection,
 	setAppLoader,
 	confirmDelete,
 	setConfirmDelete,
@@ -43,31 +44,42 @@ const EditOrder = ({
 	const [internalStatus, setInternalStatus] = useState(status)
 
 	const handleDelete = async () => {
-		await deleteOrder(id)
-		await loadOrders()
-		navigation.navigate(screens.orders)
+		if (noConnection) {
+			ToastService.show({ message: translate('app.noConnectionError') })
+		} else {
+			await deleteOrder(id)
+			await loadOrders()
+			navigation.navigate(screens.orders)
+		}
 	}
 
 	const handleEdit = async () => {
-		setAppLoader(true)
-		await setDucksOrderStatus(internalStatus)
-		const data = await sendOrder()
-		if (data.success) {
-			navigation.navigate(screens.orders)
+		if (noConnection) {
+			ToastService.show({ message: translate('app.noConnectionError') })
 		} else {
-			if (data.data.errorCode === errors.ORDER_CANT_EDIT) {
-				ToastService.show({
-					message: translate('orders.errors.cantEditAnymore'),
-				})
+			setAppLoader(true)
+			await setDucksOrderStatus(internalStatus)
+			const data = await sendOrder()
+			if (data.success) {
+				navigation.navigate(screens.orders)
+			} else {
+				if (data.data.errorCode === errors.ORDER_CANT_EDIT) {
+					ToastService.show({
+						message: translate('orders.errors.cantEditAnymore'),
+					})
+				}
 			}
+			await loadOrders()
+			setAppLoader(false)
 		}
-		await loadOrders()
-		setAppLoader(false)
 	}
 
 	const handleEditProducts = () => {
-		console.warn(status)
-		navigation.navigate(screens.editProductsOrder, { status })
+		if (noConnection) {
+			ToastService.show({ message: translate('app.noConnectionError') })
+		} else {
+			navigation.navigate(screens.editProductsOrder, { status })
+		}
 	}
 
 	const setOrderStatus = checked => {
@@ -199,12 +211,13 @@ const mapDispatchToProps = {
 	setConfirmDelete: EditOrderCreators.setConfirmDelete,
 }
 
-const mapStateToProps = ({ editOrder }) => ({
+const mapStateToProps = ({ app, editOrder }) => ({
 	id: editOrder.id,
 	status: editOrder.status,
 	client: editOrder.client,
 	urgent: editOrder.urgent,
 	loader: editOrder.loader,
+	noConnection: app.noConnection,
 	completedAt: editOrder.completedAt,
 	confirmDelete: editOrder.confirmDelete,
 })

@@ -32,6 +32,7 @@ const Storage = ({
 	addStorage,
 	getStorage,
 	storedItems,
+	noConnection,
 	loadProducts,
 	productTypes,
 	recentProducts,
@@ -60,38 +61,46 @@ const Storage = ({
 	}, [productId])
 
 	const handleAdd = async () => {
-		const data = {
-			amount,
-			productId,
-			description,
-			productTypeId,
-			costPrice: MoneyService.textToMoney(costPrice),
-		}
-
-		if (validateCreate(data, setErrors)) {
-			setWorking(true)
-			const success = await addStorage(data)
-			if (success) {
-				setAmount(1)
-				setProductId(0)
-				setDescription('')
-				setProductTypeId(0)
-				setCostPrice('0,00')
-				scrollViewRef.current.scrollToEnd()
-			} else {
-				ToastService.serverError()
+		if (noConnection) {
+			ToastService.show({ message: translate('app.noConnectionError') })
+		} else {
+			const data = {
+				amount,
+				productId,
+				description,
+				productTypeId,
+				costPrice: MoneyService.textToMoney(costPrice),
 			}
-			setWorking(false)
+
+			if (validateCreate(data, setErrors)) {
+				setWorking(true)
+				const success = await addStorage(data)
+				if (success) {
+					setAmount(1)
+					setProductId(0)
+					setDescription('')
+					setProductTypeId(0)
+					setCostPrice('0,00')
+					scrollViewRef.current.scrollToEnd()
+				} else {
+					ToastService.serverError()
+				}
+				setWorking(false)
+			}
 		}
 	}
 
 	const handleEdit = id => {
-		if (orderItems && orderItems.length > 0) {
-			ToastService.show({ message: translate('storage.errors.cantEdit') })
+		if (noConnection) {
+			ToastService.show({ message: translate('app.noConnectionError') })
 		} else {
-			const storedItem = storedItems.find(x => x.id === id)
-			setStorageItemEdit(storedItem)
-			navigation.navigate(screens.editStorage)
+			if (orderItems && orderItems.length > 0) {
+				ToastService.show({ message: translate('storage.errors.cantEdit') })
+			} else {
+				const storedItem = storedItems.find(x => x.id === id)
+				setStorageItemEdit(storedItem)
+				navigation.navigate(screens.editStorage)
+			}
 		}
 	}
 
@@ -189,10 +198,11 @@ const mapDispatchToProps = {
 	setStorageItemEdit: EditStorageCreators.setStorageItem,
 }
 
-const mapStateToProps = ({ products, storage, order }) => ({
+const mapStateToProps = ({ products, storage, order, app }) => ({
 	working: storage.working,
 	products: products.products,
 	orderItems: order.orderItems,
+	noConnection: app.noConnection,
 	storedItems: storage.storedItems,
 	productTypes: products.productTypes,
 	recentProducts: products.recentProducts,
