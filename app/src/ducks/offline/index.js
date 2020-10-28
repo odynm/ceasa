@@ -1,3 +1,4 @@
+import { Creators as AppCreators } from 'src/ducks/app'
 import { Creators as OrderCreators } from 'src/ducks/order'
 
 const prefix = 'offline/'
@@ -50,6 +51,7 @@ const executeQueue = () => async (dispatch, getState) => {
 	if (executingQueue) {
 		return
 	}
+	dispatch(AppCreators.setAppLoader(true))
 	dispatch(setExecutingQueue(true))
 	dispatch(setErrors([]))
 	const { queue } = getState().offline
@@ -66,6 +68,7 @@ const executeQueue = () => async (dispatch, getState) => {
 	dispatch(setQueue([]))
 	dispatch(setExecutingQueue(false))
 	dispatch(setInUse(false))
+	dispatch(AppCreators.setAppLoader(false))
 }
 
 export const Creators = {
