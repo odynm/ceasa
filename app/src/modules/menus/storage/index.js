@@ -81,7 +81,7 @@ const Storage = ({
 					setDescription('')
 					setProductTypeId(0)
 					setCostPrice('0,00')
-					scrollViewRef.current.scrollToEnd()
+					// scrollViewRef.current.scrollToEnd()
 				} else {
 					ToastService.serverError()
 				}
