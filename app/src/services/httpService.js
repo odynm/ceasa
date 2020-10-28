@@ -44,7 +44,7 @@ const responseErrorInterceptor = async error => {
 		Keyboard.dismiss()
 		console.warn('net not reachable')
 		store.dispatch(AppCreators.setNoConnection(true))
-		return Promise.reject(error)
+		return Promise.resolve(error)
 		//ToastService.show({ message: translate('app.noInternet') })
 	}
 

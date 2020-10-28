@@ -3,33 +3,39 @@ import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { Creators as OrderCreators } from 'src/ducks/order'
 import { Creators as StorageCreators } from 'src/ducks/storage'
+import { Creators as OfflineCreators } from 'src/ducks/offline'
 import { Creators as ProductCreators } from 'src/ducks/products'
 import { Selectors as StorageSelectors } from 'src/ducks/storage'
 import { validateCreate } from 'src/ducks/order/validations/create'
 import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
+import rfdc from 'rfdc'
 import SellComponent from './component'
 import orderStatus from 'src/enums/order'
 import SellHeader from './components/header'
 import MoneyService from 'src/services/moneyService'
 import ToastService from 'src/services/toastService'
+import NetInfo from '@react-native-community/netinfo'
 
 const Sell = ({
 	client,
 	status,
 	setStatus,
-	clientStep,
 	setClient,
 	sendOrder,
 	resetOrder,
 	orderItems,
 	getStorage,
 	loadOrders,
+	clientStep,
+	addToQueue,
+	noConnection,
 	loadProducts,
 	addOrderItem,
 	generateLoad,
 	storageItems,
 	setItemsOrder,
 	setClientStep,
+	setStoredItems,
 	removeOrderItem,
 	setGenerateLoad,
 	resetStorageOrder,
@@ -108,14 +114,23 @@ const Sell = ({
 		if (clientStep) {
 			if (validateCreate(client, setErrors)) {
 				setWorking(true)
-				const success = await sendOrder()
-				if (success) {
-					ToastService.show({ message: translate('sell.added') })
+				// Ensure that we don't try to send if we are offline
+				if (noConnection || !(await NetInfo.fetch()).isInternetReachable) {
+					addToQueue()
+					setStoredItems(rfdc()(storedItemsOrderAware))
+					handleClear()
+					ToastService.show({ message: translate('sell.addedOffline') })
+					setWorking(false)
+				} else {
+					const success = await sendOrder()
+					if (success) {
+						ToastService.show({ message: translate('sell.added') })
+					}
+					handleClear()
+					setWorking(false)
+					await getStorage()
+					await loadOrders()
 				}
-				handleClear()
-				setWorking(false)
-				await getStorage()
-				await loadOrders()
 			}
 		} else {
 			if (orderItems && orderItems.length > 0) {
@@ -157,11 +172,12 @@ Sell.navigationOptions = () => ({
 	headerLeft: props => <SellHeader {...props} />,
 })
 
-const mapStateToProps = ({ storage, order }) => ({
+const mapStateToProps = ({ app, storage, order }) => ({
 	client: order.client,
 	status: order.status,
 	clientStep: order.clientStep,
 	orderItems: order.orderItems,
+	noConnection: app.noConnection,
 	generateLoad: order.generateLoad,
 	storageItems: storage.storedItems,
 	storedItemsOrderAware: storage.storedItemsOrderAware,
@@ -173,11 +189,13 @@ const mapDispatchToProps = {
 	setClient: OrderCreators.setClient,
 	sendOrder: OrderCreators.sendOrder,
 	resetOrder: OrderCreators.resetOrder,
+	addToQueue: OfflineCreators.addToQueue,
 	addOrderItem: OrderCreators.addOrderItem,
 	loadProducts: ProductCreators.loadProducts,
 	setClientStep: OrderCreators.setClientStep,
 	loadOrders: OrdersVendorCreators.loadOrders,
 	setItemsOrder: StorageCreators.setItemsOrder,
+	setStoredItems: StorageCreators.setStoredItems,
 	removeOrderItem: OrderCreators.removeOrderItem,
 	setGenerateLoad: OrderCreators.setGenerateLoad,
 	resetStorageOrder: StorageCreators.resetStorageOrder,

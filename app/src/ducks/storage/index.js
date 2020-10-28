@@ -148,27 +148,37 @@ const add = item => async (dispatch, getStore) => {
 	return success
 }
 
-const deleteItem = item => async () => {
-	const { success } = await HttpService.delete(`storage?id=${item.id}`)
-	return success
+const deleteItem = item => async (_, getStore) => {
+	const { inUse } = getStore().offline
+	// At least for now, don't touch the storage on offline mode
+	if (!inUse) {
+		const { success } = await HttpService.delete(`storage?id=${item.id}`)
+		return success
+	} else {
+		return false
+	}
 }
 
 const get = () => async (dispatch, getStore) => {
-	dispatch(setLoading(true))
-	const { data, success } = await HttpService.get('storage')
-	if (success) {
-		const mappedItems = data.map(x => ({
-			...x,
-			costPrice: MoneyService.toMoney(x.costPrice / 100),
-		}))
-		dispatch(setStoredItems(mappedItems))
+	const { inUse } = getStore().offline
+	// At least for now, don't touch the storage on offline mode
+	if (!inUse) {
+		dispatch(setLoading(true))
+		const { data, success } = await HttpService.get('storage')
+		if (success) {
+			const mappedItems = data.map(x => ({
+				...x,
+				costPrice: MoneyService.toMoney(x.costPrice / 100),
+			}))
+			dispatch(setStoredItems(mappedItems))
 
-		const { orderItems } = getStore().order
-		if (orderItems || orderItems.length === 0) {
-			dispatch(setStoredItemsOrderAware(rfdc()(mappedItems)))
+			const { orderItems } = getStore().order
+			if (orderItems === undefined || orderItems.length === 0) {
+				dispatch(setStoredItemsOrderAware(rfdc()(mappedItems)))
+			}
 		}
+		dispatch(setLoading(false))
 	}
-	dispatch(setLoading(false))
 }
 
 const initialState = {
@@ -184,6 +194,7 @@ export const Creators = {
 	deleteItem,
 	setWorking,
 	setItemsOrder,
+	setStoredItems,
 	resetStorageOrder,
 	decreaseItemsOrder,
 	increaseItemsOrder,

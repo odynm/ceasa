@@ -52,15 +52,9 @@ function common(types, duck) {
 		dispatch(this.setOrderItems(newOrderItems))
 	}
 
-	this.sendOrder = () => async (_, getState) => {
-		const {
-			id,
-			status,
-			client,
-			urgent,
-			orderItems,
-			generateLoad,
-		} = getState()[duck]
+	this.sendOrder = ({ useParam, order }) => async (_, getState) => {
+		const source = useParam ? order : getState()[duck]
+		const { id, status, client, urgent, orderItems, generateLoad } = source
 		const postData = {
 			id,
 			client,

@@ -96,6 +96,7 @@
 		"continue": "Continuar",
 		"addSell": "Adicionar Venda",
 		"added": "Venda adicionada!",
+		"addedOffline": "A venda será adicionada quando voltar a conexão",
 		"modal": {
 			"finishSell": "Finalizar venda",
 			"areYouSure": "Você quer confirmar a venda?",
