@@ -70,7 +70,17 @@ const PriceSelect = ({
 			amount: amount,
 			id: selectedProduct.id,
 			storageAmount: storageAmount,
+			// This is clunky, but its correct because of the way we treat products:
+			// * sometimes we use storedItems, which only have an "id" prop
+			// * sometimes we use orderITems, which have an "storageId" prop
+			storageId: selectedProduct.storageId
+				? selectedProduct.storageId
+				: selectedProduct.id,
 			total: { text: total.text, value: total.value }, // to pass by value
+			costPrice: {
+				text: selectedProduct.costPrice.text,
+				costPrice: selectedProduct.costPrice.value,
+			}, // to pass by value
 			unitPrice: { text: price.text, value: price.value }, // to pass by value
 			description: selectedProduct.description,
 			productName: selectedProduct.productName,

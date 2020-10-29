@@ -227,7 +227,8 @@ func DbGetOrderProductsFull(userId int, orderId int) ([]OrderListItemProduct, bo
 		si.cost_price,
 		op.unit_price,
 		op.amount,
-		op.storage_amount
+		op.storage_amount,
+		op.storage_id
 	FROM %v.order_product op
 	INNER JOIN %v.storage_item si ON si.id = op.storage_id
 	INNER JOIN public.products_product pp ON pp.id = si.product_id
@@ -254,7 +255,8 @@ func DbGetOrderProductsFull(userId int, orderId int) ([]OrderListItemProduct, bo
 			&orderProduct.CostPrice,
 			&orderProduct.UnitPrice,
 			&orderProduct.Amount,
-			&orderProduct.StorageAmount)
+			&orderProduct.StorageAmount,
+			&orderProduct.StorageId)
 
 		if productTypeIdNullable.Valid {
 			orderProduct.ProductTypeId = int(productTypeIdNullable.Int32)

@@ -10,6 +10,8 @@ const Types = {
 	SET_WORKING: prefix + 'SET_WORKING',
 	SET_STORED_ITEMS: prefix + 'SET_STORED_ITEMS',
 	SET_STORED_ITEMS_ORDER_AWARE: prefix + 'SET_STORED_ITEMS_ORDER_AWARE',
+	SET_STORED_ITEMS_ORDER_AWARE_EDIT:
+		prefix + 'SET_STORED_ITEMS_ORDER_AWARE_EDIT',
 }
 
 const setLoading = loading => ({
@@ -30,6 +32,11 @@ const setStoredItems = storedItems => ({
 const setStoredItemsOrderAware = storedItemsOrderAware => ({
 	payload: { storedItemsOrderAware },
 	type: Types.SET_STORED_ITEMS_ORDER_AWARE,
+})
+
+const setStoredItemsOrderAwareEdit = storedItemsOrderAwareEdit => ({
+	payload: { storedItemsOrderAwareEdit },
+	type: Types.SET_STORED_ITEMS_ORDER_AWARE_EDIT,
 })
 
 const resetStorageOrder = () => (dispatch, getState) => {
@@ -72,6 +79,18 @@ const decreaseItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
 	if (item) {
 		newStoredItemsOrderAware[index].amount = newAmount
 		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
+	}
+}
+
+const decreaseItemsOrderEdit = ({ id, amount }) => (dispatch, getStore) => {
+	const { storedItemsOrderAwareEdit } = getStore().storage
+	const index = storedItemsOrderAwareEdit.findIndex(x => x.id === id)
+	const item = storedItemsOrderAwareEdit[index]
+	const newAmount = item.amount - amount >= 0 ? item.amount - amount : 0
+	const newStoredItemsOrderAwareEdit = [...storedItemsOrderAwareEdit]
+	if (item) {
+		newStoredItemsOrderAwareEdit[index].amount = newAmount
+		dispatch(setStoredItemsOrderAwareEdit(newStoredItemsOrderAwareEdit))
 	}
 }
 
@@ -165,16 +184,22 @@ const get = () => async (dispatch, getStore) => {
 	if (!inUse) {
 		dispatch(setLoading(true))
 		const { data, success } = await HttpService.get('storage')
-		if (success) {
+		if (success && data && data.length > 0) {
 			const mappedItems = data.map(x => ({
 				...x,
 				costPrice: MoneyService.toMoney(x.costPrice / 100),
 			}))
 			dispatch(setStoredItems(mappedItems))
 
+			// sell items
 			const { orderItems } = getStore().order
 			if (orderItems === undefined || orderItems.length === 0) {
 				dispatch(setStoredItemsOrderAware(rfdc()(mappedItems)))
+			}
+			// edit items
+			const { orderItems: orderItemsEdit } = getStore().editOrder
+			if (orderItemsEdit.id === undefined || orderItemsEdit.id === 0) {
+				dispatch(setStoredItemsOrderAwareEdit(rfdc()(mappedItems)))
 			}
 		}
 		dispatch(setLoading(false))
@@ -185,7 +210,8 @@ const initialState = {
 	loading: false,
 	working: false,
 	storedItems: [],
-	storedItemsOrderAware: [],
+	storedItemsOrderAware: [], // on create order
+	storedItemsOrderAwareEdit: [], // on edit order
 }
 
 export const Creators = {
@@ -198,6 +224,7 @@ export const Creators = {
 	resetStorageOrder,
 	decreaseItemsOrder,
 	increaseItemsOrder,
+	decreaseItemsOrderEdit,
 }
 
 export default function reducer(state = initialState, action) {
@@ -212,6 +239,11 @@ export default function reducer(state = initialState, action) {
 			return {
 				...state,
 				storedItemsOrderAware: action.payload.storedItemsOrderAware,
+			}
+		case Types.SET_STORED_ITEMS_ORDER_AWARE_EDIT:
+			return {
+				...state,
+				storedItemsOrderAwareEdit: action.payload.storedItemsOrderAwareEdit,
 			}
 		default:
 			return state

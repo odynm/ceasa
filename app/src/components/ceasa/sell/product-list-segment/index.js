@@ -9,6 +9,7 @@ import ItemCard from 'src/components/ceasa/sell/item-card'
 
 const ProductListSegment = ({
 	style,
+	editMode,
 	cantEdit,
 	orderItems,
 	editProduct,
@@ -63,10 +64,18 @@ const ProductListSegment = ({
 					amount: product.amount,
 					price: product.unitPrice,
 				}}
-				available={StorageSelectors.getAvailable({
-					storageItems: storageItems,
-					id: product.id,
-				})}
+				available={
+					// On edit mode, use our already corrected storage, that contains
+					// (storageAmount + editedOrderAmount)
+					// In other cases, use the selector to check the ducks storage.storedItems actual content
+					editMode
+						? storageItems.find(x => x.id === product.storageId)
+								?.amount || 0
+						: StorageSelectors.getAvailable({
+								storageItems: storageItems,
+								id: product.storageId,
+						  })
+				}
 			/>
 		</>
 	)

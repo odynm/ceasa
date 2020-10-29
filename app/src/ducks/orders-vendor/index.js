@@ -13,7 +13,7 @@ const setOrderList = orderList => ({
 
 const loadOrders = () => async dispatch => {
 	const { data, success } = await HttpService.get('order')
-	if (success && data) {
+	if (success && data && data.length > 0) {
 		const mappedData = data.map(item => ({
 			...item,
 			createdAt: new Date(item.createdAt),

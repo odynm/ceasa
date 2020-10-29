@@ -52,9 +52,17 @@ function common(types, duck) {
 		dispatch(this.setOrderItems(newOrderItems))
 	}
 
-	this.sendOrder = ({ useParam, order }) => async (_, getState) => {
+	this.sendOrder = ({ useParam, order } = {}) => async (_, getState) => {
 		const source = useParam ? order : getState()[duck]
-		const { id, status, client, urgent, orderItems, generateLoad } = source
+		const {
+			id,
+			status,
+			client,
+			urgent,
+			orderItems,
+			generateLoad,
+			productListIsDirty = false,
+		} = source
 		const postData = {
 			id,
 			client,
@@ -62,10 +70,11 @@ function common(types, duck) {
 			urgent,
 			generateLoad: generateLoad,
 			products: orderItems.map(x => ({
-				storageItem: x.id,
+				storageItem: x.storageId,
 				unitPrice: Math.round(x.unitPrice.value * 100),
 				amount: x.amount,
 			})),
+			productListIsDirty,
 		}
 		console.warn(postData)
 		const data = await HttpService.post('order', postData)

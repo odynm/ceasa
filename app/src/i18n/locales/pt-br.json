@@ -129,10 +129,14 @@
 		"urgent": "Definir como urgente",
 		"loader": "Sendo carregado por",
 		"done": "terminou essa entrega em",
-		"edit": "Editar",
+		"edit": "Salvar",
 		"deleteModal": {
 			"header": "Deletar Pedido",
 			"content": "Tem certeza que quer deletar esse pedido?"
+		},
+		"editModal": {
+			"header": "Editar Pedido",
+			"content": "Esse pedido já foi liberado e pode estar sendo carregado. Editar mesmo assim?"
 		}
 	},
 	"editStorage": {
@@ -168,7 +172,8 @@
 		"sold": "Vendidos",
 		"inStorage": "Em estoque",
 		"netTotal": "Ganho Bruto",
-		"profit": "Lucro"
+		"profit": "Lucro",
+		"empty": "Nada no estoque. Adicione produtos para começar."
 	},
 	"user" : {
 		"logout": "Sair",

@@ -5,6 +5,7 @@ import { toHour } from 'src/utils/date'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
 import { Creators as AppCreators } from 'src/ducks/app'
+import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
 import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
 import styles from './styles'
@@ -33,6 +34,7 @@ const EditOrder = ({
 	sendOrder,
 	navigation,
 	loadOrders,
+	loadStorage,
 	completedAt,
 	deleteOrder,
 	noConnection,
@@ -41,6 +43,7 @@ const EditOrder = ({
 	setConfirmDelete,
 	setDucksOrderStatus,
 }) => {
+	const [modalConfirmEdit, setModalConfirmEdit] = useState(false)
 	const [internalStatus, setInternalStatus] = useState(status)
 
 	const handleDelete = async () => {
@@ -70,6 +73,7 @@ const EditOrder = ({
 				}
 			}
 			await loadOrders()
+			await loadStorage()
 			setAppLoader(false)
 		}
 	}
@@ -122,8 +126,7 @@ const EditOrder = ({
 					onPress={handleEditProducts}
 					style={styles.editProductView}
 					label={
-						status === orderStatus.blocked ||
-						status === orderStatus.released
+						status !== orderStatus.done && status !== orderStatus.deleted
 							? translate('editOrder.editProducts')
 							: translate('editOrder.seeProducts')
 					}
@@ -136,51 +139,58 @@ const EditOrder = ({
 							text={`${translate('editOrder.loader')}: ${loader}`}
 						/>
 					</>
-				) : status === orderStatus.done ? (
-					<>
-						<Space />
-						<KText
-							bold
-							text={`${loader} ${translate('editOrder.done')} ${toHour(
-								completedAt,
-							)}`}
-						/>
-					</>
 				) : (
-					<View style={styles.footer}>
-						{status === orderStatus.blocked && (
-							<View style={styles.row}>
-								<KText
-									bold
-									style={styles.rowAlignText}
-									text={translate('editOrder.released')}
-								/>
-								<CheckBox
-									value={internalStatus === orderStatus.released}
-									style={styles.checkbox}
-									onValueChange={checked => setOrderStatus(checked)}
-								/>
-							</View>
-						)}
+					status === orderStatus.done && (
+						<>
+							<Space />
+							<KText
+								bold
+								text={`${loader} ${translate(
+									'editOrder.done',
+								)} ${toHour(completedAt)}`}
+							/>
+						</>
+					)
+				)}
+				<View style={styles.footer}>
+					{status === orderStatus.blocked && (
 						<View style={styles.row}>
 							<KText
 								bold
 								style={styles.rowAlignText}
-								text={translate('editOrder.urgent')}
+								text={translate('editOrder.released')}
 							/>
 							<CheckBox
-								value={urgent}
+								value={internalStatus === orderStatus.released}
 								style={styles.checkbox}
-								onValueChange={checked => setUrgent(checked)}
+								onValueChange={checked => setOrderStatus(checked)}
 							/>
-							<Space size2 />
 						</View>
-						<Button
-							onPress={handleEdit}
-							label={translate('editOrder.edit')}
+					)}
+					<View style={styles.row}>
+						<KText
+							bold
+							style={styles.rowAlignText}
+							text={translate('editOrder.urgent')}
 						/>
+						<CheckBox
+							value={urgent}
+							style={styles.checkbox}
+							onValueChange={checked => setUrgent(checked)}
+						/>
+						<Space size2 />
 					</View>
-				)}
+					<Button
+						onPress={() => {
+							if (orderStatus.released || orderStatus.carrying) {
+								setModalConfirmEdit(true)
+							} else {
+								handleEdit()
+							}
+						}}
+						label={translate('editOrder.edit')}
+					/>
+				</View>
 			</ScreenBase>
 			<ConfirmationModal
 				open={confirmDelete}
@@ -188,6 +198,13 @@ const EditOrder = ({
 				onClose={() => setConfirmDelete(false)}
 				header={translate('editOrder.deleteModal.header')}
 				content={translate('editOrder.deleteModal.content')}
+			/>
+			<ConfirmationModal
+				open={modalConfirmEdit}
+				onAccept={handleEdit}
+				onClose={() => setModalConfirmEdit(false)}
+				header={translate('editOrder.editModal.header')}
+				content={translate('editOrder.editModal.content')}
 			/>
 		</>
 	)
@@ -200,6 +217,7 @@ EditOrder.navigationOptions = () => ({
 })
 
 const mapDispatchToProps = {
+	loadStorage: StorageCreators.get,
 	setAppLoader: AppCreators.setAppLoader,
 	setClient: EditOrderCreators.setClient,
 	setUrgent: EditOrderCreators.setUrgent,

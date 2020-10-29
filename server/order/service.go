@@ -52,7 +52,7 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 
 	orderStatus := DbGetOrderStatus(userId, orderDto.Id)
 
-	if orderStatus == S_Carrying || orderStatus == S_Done || orderStatus == S_Deleted {
+	if orderStatus == S_Done || orderStatus == S_Deleted {
 		utils.Failed(w, utils.ORDER_CANT_EDIT)
 		goto Error
 	}
@@ -135,6 +135,10 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 			utils.Failed(w, utils.ORDER_GENERIC)
 			goto Error
 		}
+	}
+
+	if orderStatus == S_Carrying {
+		//TODO send push notification
 	}
 
 	return orderId

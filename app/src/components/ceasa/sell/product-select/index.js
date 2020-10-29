@@ -19,7 +19,9 @@ const ProductSelect = ({
 					{storageItems && storageItems.length > 0 ? (
 						storageItems
 							.filter(x =>
-								alreadyAddedProducts.every(y => y.id !== x.id),
+								alreadyAddedProducts && alreadyAddedProducts.length > 0
+									? alreadyAddedProducts.every(y => y.id !== x.id)
+									: true,
 							)
 							.map((item, index) => (
 								<StoredItemCard

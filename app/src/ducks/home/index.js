@@ -20,7 +20,7 @@ const setOverview = overview => ({
 const loadHome = () => async dispatch => {
 	dispatch(setLoading(true))
 	const { data, success } = await HttpService.get('home')
-	if (success) {
+	if (success && data && data.length > 0) {
 		const mappedItems = data.map(x => ({
 			...x,
 			costPrice: MoneyService.toMoney(x.costPrice / 100),

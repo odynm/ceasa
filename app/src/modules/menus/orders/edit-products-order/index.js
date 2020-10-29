@@ -21,8 +21,8 @@ const EditProductsOrder = ({
 	noConnection,
 	addOrderItem,
 	decreaseItemsOrder,
-	storedItemsOrderAware,
 	setProductListIsDirty,
+	storedItemsOrderAwareEdit,
 }) => {
 	const [cantEdit, setCantEdit] = useState(false)
 	const [totalPrice, setTotalPrice] = useState({
@@ -30,14 +30,18 @@ const EditProductsOrder = ({
 		value: 0.0,
 	})
 	const [openAddMenu, setOpenAddMenu] = useState(false)
+	const [
+		storedItemsOrderAwareEditNormalized,
+		setStoredItemsOrderAwareEditNormalized,
+	] = useState([])
 
 	useEffect(() => {
 		if (navigation.state?.params?.status) {
 			const status = navigation.state.params.status
-			if (status === orderStatus.blocked) {
-				setCantEdit(false)
-			} else {
+			if (status === orderStatus.deleted || status === orderStatus.done) {
 				setCantEdit(true)
+			} else {
+				setCantEdit(false)
 			}
 		} else {
 			setCantEdit(false)
@@ -47,6 +51,19 @@ const EditProductsOrder = ({
 	useEffect(() => {
 		updatePrice()
 	}, [orderItems])
+
+	useEffect(() => {
+		if (storedItemsOrderAwareEdit && storedItemsOrderAwareEdit.length > 0) {
+			const normalized = storedItemsOrderAwareEdit.map(x => ({
+				...x,
+				amount:
+					x.amount +
+						orderItems.find(oi => oi.storageId === x.id)?.storageAmount ||
+					0,
+			}))
+			setStoredItemsOrderAwareEditNormalized(normalized)
+		}
+	}, [storedItemsOrderAwareEdit])
 
 	const updatePrice = () => {
 		setTotalPrice(
@@ -88,11 +105,12 @@ const EditProductsOrder = ({
 			useKeyboardAvoid={false}
 			useKeyboardClose={false}>
 			<ProductListSegment
+				editMode
 				cantEdit={cantEdit}
 				style={styles.items}
 				orderItems={orderItems}
 				editProduct={editProduct}
-				storageItems={storedItemsOrderAware}
+				storageItems={storedItemsOrderAwareEditNormalized}
 			/>
 			<View style={styles.footer}>
 				<TotalSegment
@@ -104,7 +122,7 @@ const EditProductsOrder = ({
 				open={openAddMenu}
 				addProduct={addProduct}
 				setOpen={setOpenAddMenu}
-				storageItems={storedItemsOrderAware}
+				storageItems={storedItemsOrderAwareEditNormalized}
 			/>
 		</ScreenBase>
 	)
@@ -117,12 +135,12 @@ EditProductsOrder.navigationOptions = () => ({
 const mapStateToProps = ({ app, storage, editOrder }) => ({
 	noConnection: app.noConnection,
 	orderItems: editOrder.orderItems,
-	storedItemsOrderAware: storage.storedItemsOrderAware,
+	storedItemsOrderAwareEdit: storage.storedItemsOrderAwareEdit,
 })
 
 const mapDispatchToProps = {
 	addOrderItem: EditOrderCreators.addOrderItem,
-	decreaseItemsOrder: StorageCreators.decreaseItemsOrder,
+	decreaseItemsOrderEdit: StorageCreators.decreaseItemsOrderEdit,
 	setProductListIsDirty: EditOrderCreators.setProductListIsDirty,
 }
 

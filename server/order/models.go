@@ -59,6 +59,7 @@ type OrderListItemProduct struct {
 	UnitPrice       int    `json:"unitPrice"`
 	Amount          int    `json:"amount"`
 	StorageAmount   int    `json:"storageAmount"`
+	StorageId       int    `json:"storageId"`
 }
 
 type OrderListItem struct {

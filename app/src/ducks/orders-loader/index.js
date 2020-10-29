@@ -56,7 +56,7 @@ const setAmountDelivered = ({ carryItemId, itemId, amountDelivered }) => (
 
 const loadOrders = () => async dispatch => {
 	const { data, success } = await HttpService.get('order/loader')
-	if (success && data) {
+	if (success && data && data.length > 0) {
 		const mappedData = data.map(item => ({
 			...item,
 			createdAt: new Date(item.createdAt),
@@ -79,7 +79,7 @@ const loadCarryingOrders = () => async (dispatch, getState) => {
 	const { data, success } = await HttpService.get('carry')
 	// Because the partial state of the carry array will be stored locally, we
 	// need to filter the array for items that have been loaded already
-	if (success && data) {
+	if (success && data && data.length > 0) {
 		const filteredData = data.filter(
 			item => !carryingList.some(x => x.id === item.id),
 		)
@@ -113,7 +113,6 @@ const finishCarrying = ({ orderId, products }) => async (
 	dispatch,
 	getState,
 ) => {
-	console.warn(products)
 	const { success } = await HttpService.post('carry/finish', {
 		orderId,
 		products,
