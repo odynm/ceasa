@@ -35,7 +35,7 @@ const setProductListIsDirty = productListIsDirty => ({
 	type: Types.SET_PRODUCT_LIST_IS_DIRTY,
 })
 
-const deleteOrder = async orderId => {
+const deleteOrder = orderId => async () => {
 	const { success } = await HttpService.delete(`order?id=${orderId}`)
 	console.warn(success)
 }
