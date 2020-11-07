@@ -14,6 +14,7 @@ const Refresher = ({
 	loaderUserId,
 	loadVendorOrders,
 	loadLoaderOrders,
+	loadCarryingOrders,
 }) => {
 	useEffect(() => {
 		RefresherService.start()
@@ -29,6 +30,7 @@ const Refresher = ({
 			loaderUserId,
 			loadVendorOrders,
 			loadLoaderOrders,
+			loadCarryingOrders,
 		})
 	}, [loader, user, loaderUserId])
 
@@ -46,6 +48,7 @@ const mapDispatchToProps = {
 	getStorage: StorageCreators.get,
 	loadVendorOrders: OrdersVendorCreators.loadOrders,
 	loadLoaderOrders: OrdersLoaderCreators.loadOrders,
+	loadCarryingOrders: OrdersLoaderCreators.loadCarryingOrders,
 }
 
 export default connect(

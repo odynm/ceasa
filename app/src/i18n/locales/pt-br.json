@@ -119,7 +119,8 @@
 		"none": "Ainda não há nenhum pedido cadastrado.",
 		"errors": {
 			"cantEditAnymore": "Você não pode mais editar esse pedido"
-		}
+		},
+		"noOrdersYet": "Sem pedidos no momento."
 	},
 	"editOrder": {
 		"delete": "Excluir Pedido",

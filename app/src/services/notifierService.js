@@ -8,23 +8,53 @@ import messaging from '@react-native-firebase/messaging'
 const start = () => {
 	messaging().setBackgroundMessageHandler(async remoteMessage => {
 		console.warn('Message handled in the background!', remoteMessage)
-		store.dispatch(
-			NotificationsCreators.setCancelationModal({
-				open: true,
-				content: fixObject(remoteMessage)?.data?.custom?.a,
-			}),
-		)
+		const data = fixObject(remoteMessage)?.data?.custom?.a
+		switch (data?.type) {
+			case 'edit':
+				store.dispatch(
+					NotificationsCreators.setEditionModal({
+						open: true,
+						content: fixObject(remoteMessage)?.data?.custom?.a,
+					}),
+				)
+				break
+			case 'delete':
+				store.dispatch(
+					NotificationsCreators.setCancelationModal({
+						open: true,
+						content: fixObject(remoteMessage)?.data?.custom?.a,
+					}),
+				)
+				break
+			default:
+				break
+		}
 	})
 
 	messaging().onMessage(async remoteMessage => {
 		console.warn('Foreground!', remoteMessage)
 		Vibration.vibrate()
-		store.dispatch(
-			NotificationsCreators.setCancelationModal({
-				open: true,
-				content: fixObject(remoteMessage)?.data?.custom?.a,
-			}),
-		)
+		const data = fixObject(remoteMessage)?.data?.custom?.a
+		switch (data?.type) {
+			case 'edit':
+				store.dispatch(
+					NotificationsCreators.setEditionModal({
+						open: true,
+						content: fixObject(remoteMessage)?.data?.custom?.a,
+					}),
+				)
+				break
+			case 'delete':
+				store.dispatch(
+					NotificationsCreators.setCancelationModal({
+						open: true,
+						content: fixObject(remoteMessage)?.data?.custom?.a,
+					}),
+				)
+				break
+			default:
+				break
+		}
 	})
 
 	OneSignal.setLogLevel(6, 0)

@@ -149,9 +149,11 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 			"Pedido EDITADO",
 			"Um pedido foi editado pelo vendedor",
 			NotificationData{
-				orderDto.Client,
-				relatedProducts,
-			})
+				Type:     "edit",
+				Client:   orderDto.Client,
+				Products: relatedProducts,
+			},
+		)
 	}
 
 	return orderId
@@ -194,11 +196,10 @@ func DeleteOrder(userId int, orderId int, w http.ResponseWriter) {
 		for _, dbStoredProduct := range dbStoredProducts {
 			storage.DbIncreaseAmount(dbStoredProduct.StorageItemId, dbStoredProduct.Amount, userId)
 		}
+		orderStatus := DbGetOrderStatus(userId, orderId)
 		ok = DbDeleteOrder(userId, orderId)
 		if ok {
 			utils.Success(w, orderId)
-
-			orderStatus := DbGetOrderStatus(userId, orderId)
 
 			if orderStatus == S_Carrying {
 				relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
@@ -211,9 +212,11 @@ func DeleteOrder(userId int, orderId int, w http.ResponseWriter) {
 					"Pedido CANCELADO",
 					"Um pedido foi cancelado pelo vendedor",
 					NotificationData{
-						client,
-						relatedProducts,
-					})
+						Type:     "delete",
+						Client:   client,
+						Products: relatedProducts,
+					},
+				)
 			}
 		} else {
 			utils.Failed(w, -1)

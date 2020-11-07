@@ -13,6 +13,7 @@ let _getStorage
 let _loaderUserId
 let _loadVendorOrders
 let _loadLoaderOrders
+let _loadCarryingOrders
 
 const setData = ({
 	user,
@@ -22,6 +23,7 @@ const setData = ({
 	loaderUserId,
 	loadVendorOrders,
 	loadLoaderOrders,
+	loadCarryingOrders,
 }) => {
 	_user = user
 	_loader = loader
@@ -30,6 +32,7 @@ const setData = ({
 	_loaderUserId = loaderUserId
 	_loadVendorOrders = loadVendorOrders
 	_loadLoaderOrders = loadLoaderOrders
+	_loadCarryingOrders = loadCarryingOrders
 }
 
 const start = () => {
@@ -72,6 +75,7 @@ const refresh = async () => {
 					//Loader
 					if (_loadLoaderOrders) {
 						_loadLoaderOrders()
+						_loadCarryingOrders()
 					}
 				}
 			}
