@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "771831532856",
+    "firebase_url": "https://ceasa-estoque.firebaseio.com",
+    "project_id": "ceasa-estoque",
+    "storage_bucket": "ceasa-estoque.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771831532856:android:efadfb91bfc382907bc5cd",
+        "android_client_info": {
+          "package_name": "com.ceasa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771831532856-ef77h4rlglb5h7mgk0iuk2uc21h13vlg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbFKmV3tfbx6i8ptn0i8tZlR8rXsN03UM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "771831532856-ef77h4rlglb5h7mgk0iuk2uc21h13vlg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

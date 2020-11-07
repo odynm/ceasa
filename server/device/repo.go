@@ -16,6 +16,21 @@ func DbGetDevice(hash string) int {
 	return id
 }
 
+func DbGetDeviceHashFromLoaderId(loaderId int) string {
+	var hash string
+
+	statement := `
+	SELECT d.hash 
+		FROM loader_info li
+		INNER JOIN device d on d.id = li.device_id
+		WHERE li.id = $1`
+	err := db.Instance.Db.QueryRow(statement, loaderId).Scan(&hash)
+	if err != nil {
+		return ""
+	}
+	return hash
+}
+
 func DbCreateDevice(hash string) int {
 	var id int
 

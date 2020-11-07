@@ -15,6 +15,7 @@ import (
 	"ceasa/product"
 	"ceasa/storage"
 	"ceasa/team"
+	"ceasa/test"
 	"ceasa/user"
 )
 
@@ -48,6 +49,7 @@ func main() {
 	team.HandleRequest()
 	carry.HandleRequest()
 	home.HandleRequest()
+	test.HandleRequest()
 
 	portOS := os.Getenv("PORT")
 	port := ":10000"

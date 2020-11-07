@@ -203,6 +203,16 @@
 	"errors": {
 		"serverError": "Não foi possível comunicar com o servidor"
 	},
+	"notifications": {
+		"deleteOrder": {
+			"title": "Pedido CANCELADO",
+			"message": "O seguinte pedido foi cancelado e não deve mais ser entregue:"
+		},
+		"editOrder": {
+			"title": "Pedido ALTERADO",
+			"message": "Atenção: o seguinte pedido foi alterado:"
+		}
+	},
 	"fw": {
 		"recentRegisterPicker": {
 			"recents": "Recentes",

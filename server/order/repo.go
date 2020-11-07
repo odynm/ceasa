@@ -325,3 +325,21 @@ func DbDeleteProductsFromOrderId(userId int, orderId int) bool {
 Error:
 	return false
 }
+
+func DbGetLoaderId(userId int, orderId int) int {
+	schema := fmt.Sprint("u", userId)
+	var loaderId int
+
+	statement := fmt.Sprintf(`
+	SELECT loader_id 
+		FROM %v.order_order
+		WHERE id = $1`, schema)
+
+	err := db.Instance.Db.QueryRow(statement, orderId).Scan(&loaderId)
+
+	if err != nil {
+		return 0
+	}
+
+	return loaderId
+}

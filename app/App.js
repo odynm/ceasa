@@ -5,10 +5,13 @@ import { onNavigationStateChange } from 'src/plugins/analytics'
 import i18n from 'i18n-js'
 import store from 'src/ducks'
 import Toast from 'react-native-easy-toast'
+import DeviceInfo from 'react-native-device-info'
 import HttpService from 'src/services/httpService'
 import MoneyService from 'src/services/moneyService'
 import ToastService from 'src/services/toastService'
+import Notifier from 'src/components/ceasa/notifier'
 import Refresher from 'src/components/ceasa/refresher'
+import messaging from '@react-native-firebase/messaging'
 import AppContainer, { navigationRef } from 'src/router'
 import StorageService from 'src/services/storageService'
 import LocationService from 'src/services/locationService'
@@ -23,6 +26,15 @@ const App = () => {
 	}, [])
 
 	const initialize = async () => {
+		messaging()
+			.subscribeToTopic(DeviceInfo.getAndroidIdSync())
+			.then(() =>
+				console.warn(
+					'Subscribed to topic as ',
+					DeviceInfo.getAndroidIdSync(),
+				),
+			)
+
 		const hasInternetConnection = await InternetService.verifyInternet()
 		if (!hasInternetConnection) {
 			console.warn('No internet connection - no startup')
@@ -47,6 +59,7 @@ const App = () => {
 			{appLoaded && (
 				<>
 					<Refresher />
+					<Notifier />
 					<AppContainer
 						ref={navigationRef}
 						onNavigationStateChange={onNavigationStateChange}

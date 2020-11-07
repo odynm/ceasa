@@ -78,3 +78,9 @@ type OrderIds struct {
 	Id       int
 	ClientId int
 }
+
+type NotificationData struct {
+	Sound    string                 `json:"sound"`
+	Client   client.ClientDto       `json:"client"`
+	Products []OrderListItemProduct `json:"products"`
+}

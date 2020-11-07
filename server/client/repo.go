@@ -44,3 +44,23 @@ func DbCreateOrUpdateClient(clientDto ClientDto, userId int) int {
 Error:
 	return 0
 }
+
+func DbGetClientFromOrder(userId int, orderId int) ClientDto {
+	schema := fmt.Sprint("u", userId)
+	var client ClientDto
+
+	statement := fmt.Sprintf(`
+			SELECT key, place, vehicle 
+				FROM %v."order_order" o
+				INNER JOIN %v.order_client oc ON oc.id = o.client_id
+				WHERE o.id = $1`, schema, schema)
+	err := db.Instance.Db.QueryRow(statement).Scan(&client.Key, &client.Place, &client.Vehicle)
+
+	if err != nil && err != sql.ErrNoRows {
+		goto Error
+	}
+
+	return client
+Error:
+	return client
+}

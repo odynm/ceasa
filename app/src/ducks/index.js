@@ -11,6 +11,7 @@ import products from './products'
 import editOrder from './order/edit-order'
 import ordersVendor from './orders-vendor'
 import ordersLoader from './orders-loader'
+import notifications from './notifications'
 import editStorage from './storage/edit-storage'
 
 import thunk from 'redux-thunk'
@@ -32,6 +33,7 @@ const reducers = combineReducers({
 	editStorage,
 	ordersVendor,
 	ordersLoader,
+	notifications,
 })
 
 const middlewares = [thunk]
