@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"ceasa/client"
+	"ceasa/device"
+	"ceasa/notification"
 	"ceasa/storage"
 	"ceasa/utils"
 )
@@ -138,18 +140,18 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	}
 
 	if orderStatus == S_Carrying {
-		// relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
-		// loaderId := DbGetLoaderId(userId, orderId)
-		// device := device.DbGetDeviceHashFromLoaderId(loaderId)
+		relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
+		loaderId := DbGetLoaderId(userId, orderId)
+		device := device.DbGetDeviceHashFromLoaderId(loaderId)
 
-		// notification.SendNotification(
-		// 	device,
-		// 	"Pedido EDITADO",
-		// 	"Um pedido foi editado pelo vendedor",
-		// 	NotificationData{
-		// 		orderDto.Client,
-		// 		relatedProducts,
-		// 	})
+		notification.SendNotification(
+			device,
+			"Pedido EDITADO",
+			"Um pedido foi editado pelo vendedor",
+			NotificationData{
+				orderDto.Client,
+				relatedProducts,
+			})
 	}
 
 	return orderId
@@ -199,19 +201,19 @@ func DeleteOrder(userId int, orderId int, w http.ResponseWriter) {
 			orderStatus := DbGetOrderStatus(userId, orderId)
 
 			if orderStatus == S_Carrying {
-				// relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
-				// client := client.DbGetClientFromOrder(userId, orderId)
-				// loaderId := DbGetLoaderId(userId, orderId)
-				// device := device.DbGetDeviceHashFromLoaderId(loaderId)
+				relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
+				client := client.DbGetClientFromOrder(userId, orderId)
+				loaderId := DbGetLoaderId(userId, orderId)
+				device := device.DbGetDeviceHashFromLoaderId(loaderId)
 
-				// notification.SendNotification(
-				// 	device,
-				// 	"Pedido CANCELADO",
-				// 	"Um pedido foi cancelado pelo vendedor",
-				// 	NotificationData{
-				// 		client,
-				// 		relatedProducts,
-				// 	})
+				notification.SendNotification(
+					device,
+					"Pedido CANCELADO",
+					"Um pedido foi cancelado pelo vendedor",
+					NotificationData{
+						client,
+						relatedProducts,
+					})
 			}
 		} else {
 			utils.Failed(w, -1)

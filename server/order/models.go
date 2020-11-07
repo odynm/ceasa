@@ -80,7 +80,6 @@ type OrderIds struct {
 }
 
 type NotificationData struct {
-	Sound    string                 `json:"sound"`
 	Client   client.ClientDto       `json:"client"`
 	Products []OrderListItemProduct `json:"products"`
 }

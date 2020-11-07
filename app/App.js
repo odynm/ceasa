@@ -26,15 +26,6 @@ const App = () => {
 	}, [])
 
 	const initialize = async () => {
-		messaging()
-			.subscribeToTopic(DeviceInfo.getAndroidIdSync())
-			.then(() =>
-				console.warn(
-					'Subscribed to topic as ',
-					DeviceInfo.getAndroidIdSync(),
-				),
-			)
-
 		const hasInternetConnection = await InternetService.verifyInternet()
 		if (!hasInternetConnection) {
 			console.warn('No internet connection - no startup')

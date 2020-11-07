@@ -9,7 +9,6 @@ import (
 
 func test(w http.ResponseWriter, r *http.Request) {
 	data := order.NotificationData{
-		Sound: "default",
 		Client: client.ClientDto{
 			Key:     "Key",
 			Place:   "Place",

@@ -1,50 +1,67 @@
-import store from 'src/ducks'
-import messaging, { firebase } from '@react-native-firebase/messaging'
+import { Vibration } from 'react-native'
 import { Creators as NotificationsCreators } from 'src/ducks/notifications'
+import store from 'src/ducks'
+import OneSignal from 'react-native-onesignal'
+import DeviceInfo from 'react-native-device-info'
+import messaging from '@react-native-firebase/messaging'
 
 const start = () => {
-	const localNotification = new firebase.notifications.Notification({
-		show_in_foreground: true,
-		sound: 'default',
-	})
-	//.android
-	// 	.setChannelId('com.alinamed.app.default_channel_id')
-	// 	.android.setVibrate([1000, 1000])
-	// 	.android.setDefaults([firebase.notifications.Android.Defaults.Vibrate])
-	// 	.android.setPriority(firebase.notifications.Android.Priority.High)
-	// 	.android.setSmallIcon('ic_launcher')
-	// 	.android.setVibrate(1000)
-	// // .setNotificationId(message.messageId)
-	// // .setTitle(payload.sender.name)
-	// // .setSubtitle(`Belum dibaca: ${payload.unread_message_count}`)
-	// // .setBody(text)
-	// // .setData(payload)
-	// // .setSound('default')
-
-	// messaging()
-	// 	.getToken()
-	// 	.then(a => console.warn(a))
-
 	messaging().setBackgroundMessageHandler(async remoteMessage => {
 		console.warn('Message handled in the background!', remoteMessage)
 		store.dispatch(
 			NotificationsCreators.setCancelationModal({
 				open: true,
-				content: fixObject(remoteMessage.data),
+				content: fixObject(remoteMessage)?.data?.custom?.a,
 			}),
 		)
 	})
 
 	messaging().onMessage(async remoteMessage => {
 		console.warn('Foreground!', remoteMessage)
-		console.warn(remoteMessage.data)
+		Vibration.vibrate()
 		store.dispatch(
 			NotificationsCreators.setCancelationModal({
 				open: true,
-				content: fixObject(remoteMessage.data),
+				content: fixObject(remoteMessage)?.data?.custom?.a,
 			}),
 		)
 	})
+
+	OneSignal.setLogLevel(6, 0)
+
+	OneSignal.init('19e61978-2e9b-49f8-b19e-20ede4f22986', {
+		kOSSettingsKeyAutoPrompt: false,
+		kOSSettingsKeyInAppLaunchURL: false,
+		kOSSettingsKeyInFocusDisplayOption: 2,
+	})
+	OneSignal.sendTag(DeviceInfo.getAndroidIdSync(), 'true')
+	OneSignal.inFocusDisplaying(0)
+
+	// OneSignal.addEventListener('received', onReceived)
+	// OneSignal.addEventListener('opened', onOpened)
+	// OneSignal.addEventListener('ids', onIds)
+
+	// const onReceived = notification => {
+	// 	store.dispatch(
+	// 		NotificationsCreators.setCancelationModal({
+	// 			open: true,
+	// 			content: fixObject(notification.data),
+	// 		}),
+	// 	)
+	// }
+
+	// const onOpened = openResult => {
+	// 	store.dispatch(
+	// 		NotificationsCreators.setCancelationModal({
+	// 			open: true,
+	// 			content: fixObject(openResult.data),
+	// 		}),
+	// 	)
+	// }
+
+	// const onIds = device => {
+	// 	console.log('Device info: ', device)
+	// }
 }
 
 // Long story short, api returned deep objects as strings instead of objects
