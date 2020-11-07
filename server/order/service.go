@@ -138,7 +138,18 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	}
 
 	if orderStatus == S_Carrying {
-		//TODO send push notification
+		// relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
+		// loaderId := DbGetLoaderId(userId, orderId)
+		// device := device.DbGetDeviceHashFromLoaderId(loaderId)
+
+		// notification.SendNotification(
+		// 	device,
+		// 	"Pedido EDITADO",
+		// 	"Um pedido foi editado pelo vendedor",
+		// 	NotificationData{
+		// 		orderDto.Client,
+		// 		relatedProducts,
+		// 	})
 	}
 
 	return orderId
@@ -184,6 +195,24 @@ func DeleteOrder(userId int, orderId int, w http.ResponseWriter) {
 		ok = DbDeleteOrder(userId, orderId)
 		if ok {
 			utils.Success(w, orderId)
+
+			orderStatus := DbGetOrderStatus(userId, orderId)
+
+			if orderStatus == S_Carrying {
+				// relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
+				// client := client.DbGetClientFromOrder(userId, orderId)
+				// loaderId := DbGetLoaderId(userId, orderId)
+				// device := device.DbGetDeviceHashFromLoaderId(loaderId)
+
+				// notification.SendNotification(
+				// 	device,
+				// 	"Pedido CANCELADO",
+				// 	"Um pedido foi cancelado pelo vendedor",
+				// 	NotificationData{
+				// 		client,
+				// 		relatedProducts,
+				// 	})
+			}
 		} else {
 			utils.Failed(w, -1)
 		}
