@@ -37,6 +37,7 @@ type OrderDto struct {
 	Released           bool             `json:"released"`
 	ProductListIsDirty bool             `json:"productListIsDirty"`
 	Status             int              `json:"status"`
+	GenerateLoad       bool             `json:"generateLoad"`
 }
 
 type OrderCreation struct {
@@ -46,6 +47,7 @@ type OrderCreation struct {
 	Status      int
 	CreatedAt   time.Time
 	ReleasedAt  time.Time
+	CompletedAt time.Time
 }
 
 type OrderListItemProduct struct {

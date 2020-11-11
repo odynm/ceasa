@@ -23,6 +23,7 @@ const loadOrders = () => async dispatch => {
 			...item,
 			createdAt: new Date(item.createdAt),
 			releasedAt: new Date(item.releasedAt),
+			completedAt: new Date(item.completedAt),
 		}))
 		const orderedData = mappedData.sort((a, b) => {
 			return sort(a, b)

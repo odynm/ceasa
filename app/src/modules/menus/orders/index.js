@@ -70,6 +70,9 @@ const OrdersVendor = ({
 									releasedHour={
 										item.releasedAt && toHour(item.releasedAt)
 									}
+									completedHour={
+										item.completedAt && toHour(item.completedAt)
+									}
 								/>
 							))}
 						</View>

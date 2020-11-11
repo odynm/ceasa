@@ -50,7 +50,12 @@ const textToMoney = text => {
 }
 
 const toMoney = number => {
-	if (number !== undefined && typeof number === 'number') {
+	if (
+		!isNaN(number) &&
+		number !== null &&
+		number !== undefined &&
+		typeof number === 'number'
+	) {
 		if (number === 0) {
 			return {
 				text: '0,00',

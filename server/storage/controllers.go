@@ -59,6 +59,15 @@ func delete(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func reset(w http.ResponseWriter, r *http.Request) {
+	userId := user.CheckLogin(w, r)
+	if userId > 0 {
+		Reset(userId, w)
+	} else {
+		utils.NoAuth(w)
+	}
+}
+
 func storageRouter(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
@@ -72,6 +81,16 @@ func storageRouter(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func storageResetRouter(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		reset(w, r)
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
 func HandleRequest() {
 	http.HandleFunc("/storage", storageRouter)
+	http.HandleFunc("/storage/reset", storageResetRouter)
 }

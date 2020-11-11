@@ -130,6 +130,7 @@
 		"urgent": "Definir como urgente",
 		"loader": "Sendo carregado por",
 		"done": "terminou essa entrega em",
+		"doneNoCarrier": "Essa venda não gerou carregamento e foi feita às",
 		"edit": "Salvar",
 		"deleteModal": {
 			"header": "Deletar Pedido",
@@ -174,7 +175,19 @@
 		"inStorage": "Em estoque",
 		"netTotal": "Ganho Bruto",
 		"profit": "Lucro",
-		"empty": "Nada no estoque. Adicione produtos para começar."
+		"empty": "Nada no estoque. Adicione produtos para começar.",
+		"deleteStorage": "Zerar Estoque",
+		"dailyBalance": "Balanço do Dia",
+		"totalEntries": "Total Entradas",
+		"totalExpenses": "Total Despesas",
+		"totalProfit": "Lucro Total",
+		"details": "Detalhes",
+		"modalAccept":{
+			"header": "Finalizar o Dia",
+			"content": "Deseja limpar todo seu estoque do dia?",
+			"headerDelete": "Zerar Estoque",
+			"contentDelete": "Tem certeza de que deseja limpar TODO seu estoque?",
+		}
 	},
 	"user" : {
 		"logout": "Sair",

@@ -13,6 +13,7 @@ const OrderCard = ({
 	onPress,
 	clientKey,
 	releasedHour,
+	completedHour,
 }) => {
 	const style = [
 		styles.container,
@@ -67,7 +68,7 @@ const OrderCard = ({
 						<KText
 							fontSize={14}
 							style={styles.hourReleased}
-							text={`${translate('orders.doneAt')} ${releasedHour}`}
+							text={`${translate('orders.doneAt')} ${completedHour}`}
 						/>
 					)}
 				</View>

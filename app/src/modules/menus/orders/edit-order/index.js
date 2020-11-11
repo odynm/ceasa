@@ -143,12 +143,23 @@ const EditOrder = ({
 					status === orderStatus.done && (
 						<>
 							<Space />
-							<KText
-								bold
-								text={`${loader} ${translate(
-									'editOrder.done',
-								)} ${toHour(completedAt)}`}
-							/>
+							<>
+								{loader ? (
+									<KText
+										bold
+										text={`${loader} ${translate(
+											'editOrder.done',
+										)} ${toHour(completedAt)}`}
+									/>
+								) : (
+									<KText
+										bold
+										text={`${translate(
+											'editOrder.doneNoCarrier',
+										)} ${toHour(completedAt)}`}
+									/>
+								)}
+							</>
 						</>
 					)
 				)}

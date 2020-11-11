@@ -39,6 +39,7 @@ const OrdersLoader = ({
 							navigation.navigate(screens.loaderOrderInfo)
 						}}
 						releasedHour={item.releasedAt && toHour(item.releasedAt)}
+						completedHour={item.completedAt && toHour(item.completedAt)}
 					/>
 				))
 			) : (

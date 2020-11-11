@@ -30,6 +30,11 @@ func Add(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	if orderDto.Status == S_Released {
 		order.ReleasedAt = order.CreatedAt
 	}
+	if !orderDto.GenerateLoad {
+		order.CompletedAt = order.CreatedAt
+		order.ReleasedAt = order.CreatedAt
+		order.Status = S_Done
+	}
 	orderId = DbCreateOrder(order, userId)
 	if orderId == 0 {
 		goto Error

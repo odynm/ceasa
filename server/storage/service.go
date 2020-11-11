@@ -35,3 +35,10 @@ func DeleteStorage(userId int, storageId int, w http.ResponseWriter) {
 		utils.Failed(w, -1)
 	}
 }
+
+func Reset(userId int, w http.ResponseWriter) {
+	ok := DbResetStorage(userId)
+	if !ok {
+		utils.Failed(w, -1)
+	}
+}

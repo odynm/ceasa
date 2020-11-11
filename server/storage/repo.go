@@ -267,3 +267,18 @@ func DbDeleteStorage(userId int, storageId int) bool {
 Error:
 	return false
 }
+
+func DbResetStorage(userId int) bool {
+	schema := fmt.Sprint("u", userId)
+
+	statement := fmt.Sprintf(`
+					UPDATE %v.storage_item SET deleted = true`, schema)
+	_, err := db.Instance.Db.Exec(statement)
+	if err != nil {
+		goto Error
+	}
+
+	return true
+Error:
+	return false
+}

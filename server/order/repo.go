@@ -34,11 +34,11 @@ func DbCreateOrder(order OrderCreation, userId int) int {
 	var itemId int
 
 	statement := fmt.Sprintf(`
-				INSERT INTO %v."order_order" (client_id, urgent, status, created_at, released_at)
-				VALUES ($1, $2, $3, $4, $5)
+				INSERT INTO %v."order_order" (client_id, urgent, status, created_at, released_at, completed_at)
+				VALUES ($1, $2, $3, $4, $5, $6)
 				RETURNING id`, schema)
 	err := db.Instance.Db.
-		QueryRow(statement, order.ClientId, order.Urgent, order.Status, order.CreatedAt, order.ReleasedAt).
+		QueryRow(statement, order.ClientId, order.Urgent, order.Status, order.CreatedAt, order.ReleasedAt, order.CompletedAt).
 		Scan(&itemId)
 	if err != nil {
 		goto Error
@@ -122,7 +122,12 @@ func dbGetOrders(userId int, excludedStatus string) ([]OrderListItem, bool) {
 	INNER JOIN %v.order_client as "client" ON "order".client_id = "client".id
 	LEFT JOIN public.loader_info as "loader" ON "order".loader_id = "loader".id
 	WHERE "order".status NOT IN %v
-	`, schema, schema, excludedStatus)
+		AND (
+			"order".status != %v OR
+			(TIMEZONE('utc', NOW()) > "order".completed_at AND
+			TIMEZONE('utc', NOW()) < "order".completed_at + interval '1 day')
+		)
+	`, schema, schema, excludedStatus, S_Done)
 
 	fmt.Println(statement)
 	rows, err := db.Instance.Db.Query(statement)

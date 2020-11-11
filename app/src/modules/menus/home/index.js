@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { ScrollView, View } from 'react-native'
@@ -8,13 +8,22 @@ import styles from './styles'
 import KText from 'src/components/fw/ktext'
 import ItemCardHome from './item-card-home'
 import Loader from 'src/components/fw/loader'
+import Button from 'src/components/fw/button'
+import MoneyService from 'src/services/moneyService'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
+import ConfirmationModal from 'src/components/fw/confirmation-modal'
 
-const Home = ({ overview, loadHome, loading }) => {
+const Home = ({ balance, overview, loadHome, loading, resetStorage }) => {
+	const [confirmDelete, setConfirmDelete] = useState(false)
+
 	useEffect(() => {
 		loadHome()
 	}, [])
+
+	const handleDeleteStorage = async () => {
+		await resetStorage()
+	}
 
 	return (
 		<>
@@ -25,29 +34,115 @@ const Home = ({ overview, loadHome, loading }) => {
 					useScroll={false}
 					useKeyboardAvoid={false}
 					useKeyboardClose={false}>
-					<ScrollView style={styles.container}>
-						{overview && overview.length > 0 ? (
-							overview.map(item => (
-								<View key={item.id}>
-									<ItemCardHome
-										sold={item.sold}
-										amount={item.amount}
-										product={item.productName}
-										costPrice={item.costPrice}
-										description={item.description}
-										totalEarned={item.totalEarned}
-										liquidEarned={item.liquidEarned}
-										productType={item.productTypeName}
-										startingTotalItems={item.startingTotalItems}
-									/>
-								</View>
-							))
-						) : (
-							<KText text={translate('home.empty')} />
-						)}
-					</ScrollView>
+					<Button
+						small
+						label={translate('home.deleteStorage')}
+						onPress={() => setConfirmDelete(true)}
+					/>
+					<View style={styles.container}>
+						<KText
+							bold
+							fontSize={20}
+							text={translate('home.dailyBalance')}
+						/>
+						<View style={styles.row}>
+							<KText text={translate('home.totalEntries')} />
+							<KText
+								text={`${MoneyService.getCurrency().text} ${
+									MoneyService.toMoney(
+										balance.totalEarned
+											? balance.totalEarned / 100
+											: 0,
+									).text
+								}`}
+							/>
+						</View>
+						<View style={styles.row}>
+							<KText text={translate('home.totalExpenses')} />
+							<KText
+								text={`${MoneyService.getCurrency().text} ${
+									MoneyService.toMoney(
+										balance.totalCostPrice
+											? balance.totalCostPrice / 100
+											: 0,
+									).text
+								}`}
+							/>
+						</View>
+						<View style={styles.row}>
+							<KText bold text={translate('home.totalProfit')} />
+							<KText
+								bold
+								text={`${MoneyService.getCurrency().text} ${
+									MoneyService.toMoney(
+										balance.totalProfit
+											? balance.totalProfit / 100
+											: 0,
+									).text
+								}`}
+							/>
+						</View>
+						<KText
+							bold
+							style={styles.details}
+							fontSize={20}
+							text={translate('home.details')}
+						/>
+						<ScrollView style={styles.scrollView}>
+							{overview && overview.length > 0 ? (
+								overview.map(item => (
+									<View key={item.id}>
+										<ItemCardHome
+											sold={item.sold}
+											amount={item.amount}
+											product={item.productName}
+											costPrice={item.costPrice}
+											description={item.description}
+											totalEarned={item.totalEarned}
+											liquidEarned={item.liquidEarned}
+											productType={item.productTypeName}
+											startingTotalItems={item.startingTotalItems}
+										/>
+									</View>
+								))
+							) : (
+								<KText text={translate('home.empty')} />
+							)}
+						</ScrollView>
+					</View>
 				</ScreenBase>
 			)}
+			{/* <KModal
+				size={250}
+				open={showModalEndDay}
+				onClose={() => setShowModalEndDay(false)}
+				header={translate('home.modalAccept.header')}>
+				<View style={styles.flex}>
+					<KText text={translate('home.modalAccept.content')} />
+				</View>
+				<View style={styles.buttons}>
+					<Button
+						tiny
+						onPress={() => setConfirmRetain(false)}
+						label={translate('home.modalAccept.dontDeleteStorage')}
+					/>
+					<Button
+						tiny
+						onPress={() => setConfirmRetain(true)}
+						label={translate('home.modalAccept.deleteStorage')}
+					/>
+				</View>
+			</KModal> */}
+			<ConfirmationModal
+				open={confirmDelete}
+				onAccept={() => {
+					setConfirmDelete(false)
+					handleDeleteStorage(false)
+				}}
+				onClose={() => setConfirmDelete(false)}
+				header={translate('home.modalAccept.headerDelete')}
+				content={translate('home.modalAccept.contentDelete')}
+			/>
 		</>
 	)
 }
@@ -59,10 +154,12 @@ Home.navigationOptions = () => ({
 
 const mapDispatchToProps = {
 	loadHome: HomeCreators.loadHome,
+	resetStorage: HomeCreators.resetStorage,
 }
 
 const mapStateToProps = ({ home }) => ({
 	loading: home.loading,
+	balance: home.balance,
 	overview: home.overview,
 })
 

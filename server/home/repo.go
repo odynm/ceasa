@@ -14,7 +14,7 @@ func DbGetHomeItems(userId int) []HomeItem {
 	var homeItems []HomeItem
 
 	statement := fmt.Sprintf(`
-	SELECT 
+	SELECT
 		si.id,
 		pp.id as "product_id",
 		pp.name as "product_name",
@@ -30,12 +30,15 @@ func DbGetHomeItems(userId int) []HomeItem {
 	LEFT JOIN public.products_product_type pt ON pt.id = si.product_type_id
 	INNER JOIN %v.storage_item_description sid ON sid.id = si.description_id
 	LEFT JOIN LATERAL (
-		SELECT 
+		SELECT
 			SUM(op.amount) AS sold,
 			SUM(op.unit_price * op.amount) AS total_earned
 		FROM %v.order_order AS o
 		INNER JOIN %v.order_product op ON op.order_id = o.id
-		WHERE o.status = $1 AND si.id = op.storage_id
+		WHERE o.status = $1 AND 
+			si.id = op.storage_id AND 
+			TIMEZONE('utc', NOW()) > o.completed_at AND
+			TIMEZONE('utc', NOW()) < o.completed_at + interval '1 day'
 	) AS order_data ON TRUE
 	WHERE si.deleted = false`, schema, schema, schema, schema)
 

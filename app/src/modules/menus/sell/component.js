@@ -79,7 +79,12 @@ const SellComponent = ({
 					<CheckBox
 						value={generateLoad}
 						style={styles.checkbox}
-						onValueChange={checked => setGenerateLoad(checked)}
+						onValueChange={checked => {
+							setGenerateLoad(checked)
+							if (!checked) {
+								setReleasedStatus(false)
+							}
+						}}
 					/>
 				</View>
 				<View style={styles.row}>
@@ -89,6 +94,7 @@ const SellComponent = ({
 						text={translate('sell.released')}
 					/>
 					<CheckBox
+						disabled={!generateLoad}
 						style={styles.checkbox}
 						value={status === orderStatus.released}
 						onValueChange={checked => setReleasedStatus(checked)}
