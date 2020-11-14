@@ -237,7 +237,8 @@ const get = () => async (dispatch, getStore) => {
 			// edit items
 			const { orderItems: orderItemsEdit } = getStore().editOrder
 			if (orderItemsEdit.id === undefined || orderItemsEdit.id === 0) {
-				dispatch(setStoredItemsOrderAwareEdit(rfdc()(merged)))
+				// The edit needs the data without the merges
+				dispatch(setStoredItemsOrderAwareEdit(rfdc()(mappedItems)))
 			}
 		}
 		dispatch(setLoading(false))

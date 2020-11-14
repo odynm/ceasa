@@ -80,13 +80,19 @@ const EditStorage = ({
 					value={storageItem.amount}
 					label={translate('storage.amount')}
 				/>
-				<MoneyInput
-					setValue={value => {
-						setCostPrice(MoneyService.textToMoney(value))
-					}}
-					value={storageItem.costPrice.text}
-					label={translate('storage.costPrice')}
-				/>
+				<>
+					{storageItem.isMerged ? (
+						<KText text="Tem mais de um preço de custo." />
+					) : (
+						<MoneyInput
+							setValue={value => {
+								setCostPrice(MoneyService.textToMoney(value))
+							}}
+							value={storageItem.costPrice.text}
+							label={translate('storage.costPrice')}
+						/>
+					)}
+				</>
 				<Button
 					onPress={handleEdit}
 					style={styles.button}

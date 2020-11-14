@@ -78,7 +78,7 @@ function common(types, duck) {
 				for (let j = 0; j < items.length; j++) {
 					if (sent < oi.amount) {
 						const mergedItem = items[j]
-						const toSend = Math.min(mergedItem.amount, oi.amount)
+						const toSend = Math.min(mergedItem.amount, oi.amount - sent)
 						sent += toSend
 						products.push({
 							storageItem: mergedItem.storageId,
