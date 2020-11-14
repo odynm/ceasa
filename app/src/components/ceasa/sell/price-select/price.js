@@ -12,6 +12,7 @@ import MoneyService from 'src/services/moneyService'
 import MoneyInput from 'src/components/fw/money-input'
 import ConfirmationModal from 'src/components/fw/confirmation-modal'
 import CloseKeyboardView from 'src/components/fw/screen-base/close-keyboard-view'
+import MergedProductsService from 'src/services/mergedProductsService'
 
 const ModalPrice = ({
 	edit,
@@ -71,12 +72,29 @@ const ModalPrice = ({
 					</View>
 					<Space />
 					<View style={styles.row}>
-						<KText bold text={translate('sell.costPrice')} />
-						<KText
-							bold
-							text={`R$ ${selectedProduct?.costPrice?.text}`}
-							style={styles.right}
-						/>
+						{selectedProduct?.isMerged ? (
+							<>
+								<KText bold text={translate('sell.averageCostPrice')} />
+								<KText
+									bold
+									text={`R$ ${
+										MergedProductsService.calculateMergedPrice(
+											selectedProduct?.mergedData.items,
+										).text
+									}`}
+									style={styles.right}
+								/>
+							</>
+						) : (
+							<>
+								<KText bold text={translate('sell.costPrice')} />
+								<KText
+									bold
+									text={`R$ ${selectedProduct?.costPrice?.text}`}
+									style={styles.right}
+								/>
+							</>
+						)}
 					</View>
 					<Space />
 					<View style={styles.row}>

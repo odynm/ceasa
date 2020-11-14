@@ -38,8 +38,16 @@ const OrdersLoader = ({
 							setSelectedOrderId(item.id)
 							navigation.navigate(screens.loaderOrderInfo)
 						}}
-						releasedHour={item.releasedAt && toHour(item.releasedAt)}
-						completedHour={item.completedAt && toHour(item.completedAt)}
+						releasedHour={
+							item.releasedAt &&
+							typeof item.releasedAt === 'object' &&
+							toHour(item.releasedAt)
+						}
+						completedHour={
+							item.completedAt &&
+							typeof item.completedAt === 'object' &&
+							toHour(item.completedAt)
+						}
 					/>
 				))
 			) : (

@@ -1,6 +1,7 @@
 import rfdc from 'rfdc'
 import HttpService from 'src/services/httpService'
 import MoneyService from 'src/services/moneyService'
+import MergedProductsService from 'src/services/mergedProductsService'
 
 export { Selectors } from './selectors'
 
@@ -121,46 +122,81 @@ const add = item => async (dispatch, getStore) => {
 			amount: item.amount,
 			costPrice: rfdc()(item.costPrice),
 		}
-		if (!item.id) {
-			const current =
-				storedItems && storedItems.length > 0 ? storedItems : []
-			const newStoredItems = [...current, mappedItemView]
-			dispatch(setStoredItems(newStoredItems))
 
-			const currentOrderAware =
-				storedItemsOrderAware && storedItemsOrderAware.length > 0
-					? storedItemsOrderAware
-					: []
-			const newStoredItemsOrderAware = [...currentOrderAware, mappedItemView]
-			dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
+		const cur = storedItems && storedItems.length > 0 ? storedItems : []
+		const { arr, merged } = MergedProductsService.addAndMergeSimilar(
+			cur,
+			mappedItemView,
+		)
+
+		if (merged) {
+			dispatch(setStoredItems(MergedProductsService.ortProducts(arr)))
+			dispatch(
+				setStoredItemsOrderAware(
+					MergedProductsService.sortProducts([...arr]),
+				),
+			) // TODO the spread here is probably not needed. Test it
 		} else {
-			const index = storedItems.findIndex(x => x.id === item.id)
-			const newStoredItems = storedItems.map((x, i) =>
-				i === index
-					? {
-							...x,
-							amount: item.amount,
-							costPrice: rfdc()(item.costPrice),
-							description: item.description,
-					  }
-					: x,
-			)
-			dispatch(setStoredItems(newStoredItems))
+			if (!item.id) {
+				const current =
+					storedItems && storedItems.length > 0 ? storedItems : []
+				const newStoredItems = [...current, mappedItemView]
+				dispatch(
+					setStoredItems(
+						MergedProductsService.sortProducts(newStoredItems),
+					),
+				)
 
-			const indexOrderAware = storedItemsOrderAware.findIndex(
-				x => x.id === item.id,
-			)
-			const newStoredItemsOrderAware = storedItemsOrderAware.map((x, i) =>
-				i === indexOrderAware
-					? {
-							...x,
-							amount: item.amount,
-							costPrice: rfdc()(item.costPrice),
-							description: item.description,
-					  }
-					: x,
-			)
-			dispatch(setStoredItems(newStoredItemsOrderAware))
+				const currentOrderAware =
+					storedItemsOrderAware && storedItemsOrderAware.length > 0
+						? storedItemsOrderAware
+						: []
+				const newStoredItemsOrderAware = [
+					...currentOrderAware,
+					mappedItemView,
+				]
+				dispatch(
+					setStoredItemsOrderAware(
+						MergedProductsService.sortProducts(newStoredItemsOrderAware),
+					),
+				)
+			} else {
+				const index = storedItems.findIndex(x => x.id === item.id)
+				const newStoredItems = storedItems.map((x, i) =>
+					i === index
+						? {
+								...x,
+								amount: item.amount,
+								costPrice: rfdc()(item.costPrice),
+								description: item.description,
+						  }
+						: x,
+				)
+				dispatch(
+					setStoredItems(
+						MergedProductsService.sortProducts(newStoredItems),
+					),
+				)
+
+				const indexOrderAware = storedItemsOrderAware.findIndex(
+					x => x.id === item.id,
+				)
+				const newStoredItemsOrderAware = storedItemsOrderAware.map((x, i) =>
+					i === indexOrderAware
+						? {
+								...x,
+								amount: item.amount,
+								costPrice: rfdc()(item.costPrice),
+								description: item.description,
+						  }
+						: x,
+				)
+				dispatch(
+					setStoredItems(
+						MergedProductsService.sortProducts(newStoredItemsOrderAware),
+					),
+				)
+			}
 		}
 	}
 
@@ -189,17 +225,19 @@ const get = () => async (dispatch, getStore) => {
 				...x,
 				costPrice: MoneyService.toMoney(x.costPrice / 100),
 			}))
-			dispatch(setStoredItems(mappedItems))
+			const sorted = MergedProductsService.sortProducts(mappedItems)
+			const merged = MergedProductsService.mergeSimilarItems(sorted)
+			dispatch(setStoredItems(merged))
 
 			// sell items
 			const { orderItems } = getStore().order
 			if (orderItems === undefined || orderItems.length === 0) {
-				dispatch(setStoredItemsOrderAware(rfdc()(mappedItems)))
+				dispatch(setStoredItemsOrderAware(rfdc()(merged)))
 			}
 			// edit items
 			const { orderItems: orderItemsEdit } = getStore().editOrder
 			if (orderItemsEdit.id === undefined || orderItemsEdit.id === 0) {
-				dispatch(setStoredItemsOrderAwareEdit(rfdc()(mappedItems)))
+				dispatch(setStoredItemsOrderAwareEdit(rfdc()(merged)))
 			}
 		}
 		dispatch(setLoading(false))

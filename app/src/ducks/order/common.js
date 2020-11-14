@@ -37,10 +37,13 @@ function common(types, duck) {
 		if (orderItem === undefined) return
 		const { orderItems } = getState()[duck]
 		const index = orderItems.findIndex(x => x.id === orderItem.id)
+		// Edit
 		if (index >= 0) {
 			orderItems[index] = orderItem
 			dispatch(this.setOrderItems(orderItems))
-		} else {
+		}
+		// Add
+		else {
 			dispatch(this.setOrderItems([...orderItems, orderItem]))
 		}
 	}
@@ -63,20 +66,47 @@ function common(types, duck) {
 			generateLoad,
 			productListIsDirty = false,
 		} = source
+		// Since we have merged items, we need to treat them to send as different
+		// orders
+		const products = []
+
+		for (let i = 0; i < orderItems.length; i++) {
+			const oi = orderItems[i]
+			if (oi.isMerged) {
+				const items = orderItems[i].mergedData.items
+				let sent = 0
+				for (let j = 0; j < items.length; j++) {
+					if (sent < oi.amount) {
+						const mergedItem = items[j]
+						const toSend = Math.min(mergedItem.amount, oi.amount)
+						sent += toSend
+						products.push({
+							storageItem: mergedItem.storageId,
+							unitPrice: Math.round(oi.unitPrice.value * 100),
+							amount: toSend,
+						})
+					} else {
+						break
+					}
+				}
+			} else {
+				products.push({
+					storageItem: oi.storageId,
+					unitPrice: Math.round(oi.unitPrice.value * 100),
+					amount: oi.amount,
+				})
+			}
+		}
+
 		const postData = {
 			id,
 			client,
 			status,
 			urgent,
 			generateLoad: generateLoad,
-			products: orderItems.map(x => ({
-				storageItem: x.storageId,
-				unitPrice: Math.round(x.unitPrice.value * 100),
-				amount: x.amount,
-			})),
+			products: products,
 			productListIsDirty,
 		}
-		console.warn(postData)
 		const data = await HttpService.post('order', postData)
 		return data
 	}

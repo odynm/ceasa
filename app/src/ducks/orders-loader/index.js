@@ -1,5 +1,6 @@
 import sort from '../order/sort'
 import HttpService from 'src/services/httpService'
+import MergedProductsService from 'src/services/mergedProductsService'
 
 const prefix = 'orders-loader/'
 const Types = {
@@ -70,9 +71,10 @@ const loadOrders = () => async dispatch => {
 		const orderedData = mappedData.sort((a, b) => {
 			return sort(a, b)
 		})
-		if (success && data) {
-			await dispatch(setOrderList(orderedData))
-		}
+		const mergedData = MergedProductsService.ordersMergeSimilarProducts(
+			orderedData,
+		)
+		await dispatch(setOrderList(mergedData))
 	}
 
 	return success
@@ -105,7 +107,22 @@ const loadCarryingOrders = () => async (dispatch, getState) => {
 		}))
 
 		if (mappedData) {
-			await dispatch(setCarryingOrderList([...carryingList, ...mappedData]))
+			const orderedData = mappedData.sort((a, b) => {
+				return sort(a, b)
+			})
+			const mergedData = MergedProductsService.ordersMergeSimilarProducts(
+				orderedData,
+			)
+			const mergedWithDelivered = mergedData.map(item => ({
+				...item,
+				products: item.products.map(product => ({
+					...product,
+					amountDelivered: product.amount,
+				})),
+			}))
+			await dispatch(
+				setCarryingOrderList([...carryingList, ...mergedWithDelivered]),
+			)
 		}
 	}
 

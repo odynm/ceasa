@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 		marginVertical: hp(20),
 		marginHorizontal: wp(10),
 	},
@@ -15,6 +16,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	scrollView: {
+		flex: 1,
+		marginBottom: hp(30),
 		marginTop: hp(10),
 	},
 	row: {

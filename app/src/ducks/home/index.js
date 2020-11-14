@@ -1,5 +1,6 @@
 import HttpService from 'src/services/httpService'
 import MoneyService from 'src/services/moneyService'
+import MergedProductsService from 'src/services/mergedProductsService'
 
 const prefix = 'home/'
 const Types = {
@@ -37,7 +38,10 @@ const loadHome = () => async dispatch => {
 			),
 			startingTotalItems: x.sold + x.amount,
 		}))
-		dispatch(setOverview(mappedItems))
+
+		const sortedItems = MergedProductsService.sortProducts(mappedItems)
+
+		dispatch(setOverview(sortedItems))
 	}
 }
 

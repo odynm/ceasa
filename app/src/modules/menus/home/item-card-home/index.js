@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
 		borderColor: colors.primary,
 		borderRadius: wp(10),
 		borderWidth: 1,
-		marginVertical: hp(5),
+		marginBottom: hp(10),
 		paddingHorizontal: wp(10),
 		paddingVertical: hp(8),
 	},

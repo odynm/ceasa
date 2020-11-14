@@ -64,18 +64,10 @@ const ProductListSegment = ({
 					amount: product.amount,
 					price: product.unitPrice,
 				}}
-				available={
-					// On edit mode, use our already corrected storage, that contains
-					// (storageAmount + editedOrderAmount)
-					// In other cases, use the selector to check the ducks storage.storedItems actual content
-					editMode
-						? storageItems.find(x => x.id === product.storageId)
-								?.amount || 0
-						: StorageSelectors.getAvailable({
-								storageItems: storageItems,
-								id: product.storageId,
-						  })
-				}
+				available={StorageSelectors.getAvailable({
+					storageItems: storageItems,
+					id: product.storageId,
+				})}
 			/>
 		</>
 	)

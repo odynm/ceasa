@@ -21,7 +21,7 @@ const Main = ({
 	loadOrders,
 	checkTerms,
 }) => {
-	const [hasStartedRefresher, setHasStartedRefresher] = useState(false)
+	//const [hasStartedRefresher, setHasStartedRefresher] = useState(false)
 	const [hasEmailRegistered, setHasEmailRegistered] = useState(false)
 	const [hasRegistrationInProgress, setHasRegistrationInProgress] = useState(
 		false,

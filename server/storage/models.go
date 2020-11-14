@@ -17,6 +17,7 @@ type StorageItemFull struct {
 	ProductName     string `json:"productName"`
 	ProductTypeId   int    `json:"productTypeId"`
 	ProductTypeName string `json:"productTypeName"`
+	DescriptionId   int    `json:"descriptionId"`
 	Description     string `json:"description"`
 	CostPrice       int    `json:"costPrice"`
 	Amount          int    `json:"amount"`

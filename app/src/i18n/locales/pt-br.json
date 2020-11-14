@@ -84,6 +84,7 @@
 		"sellAvailable": "Disponível",
 		"sellAmount": "Quantidade venda",
 		"costPrice": "Preço de Custo (unidade)",
+		"averageCostPrice": "Preço de Custo Médio (un)",
 		"sellUnitPrice": "Preço (unidade)",
 		"sellTotal": "Total",
 		"clientKey": "Nome/Placa/Box",
@@ -186,7 +187,7 @@
 			"header": "Finalizar o Dia",
 			"content": "Deseja limpar todo seu estoque do dia?",
 			"headerDelete": "Zerar Estoque",
-			"contentDelete": "Tem certeza de que deseja limpar TODO seu estoque?",
+			"contentDelete": "Tem certeza de que deseja limpar TODO seu estoque?"
 		}
 	},
 	"user" : {

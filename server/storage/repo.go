@@ -39,34 +39,68 @@ func DbUpdateAmount(id int, amount int, userId int) bool {
 	return true
 }
 
-func DbCreateStorageItem(itemDto ItemDto, userId int) int {
+func DbGetEqualId(product int, productType int, descriptionId int, costPrice int, userId int) int {
 	schema := fmt.Sprint("u", userId)
-	itemDto.Description = strings.TrimSpace(itemDto.Description)
 
-	var descriptionId int
-	var itemId int
+	var id int
+
+	statement := fmt.Sprintf(`
+		SELECT 
+			id
+		FROM %v.storage_item
+		WHERE 
+			product_id = $1 AND
+			((product_type_id IS NULL AND $2 = 0) OR product_type_id = $2) AND
+			description_id = $3 AND
+			cost_price = $4
+		`, schema)
+
+	err := db.Instance.Db.
+		QueryRow(statement, product, productType, descriptionId, costPrice).
+		Scan(&id)
+
+	if err == nil && id > 0 {
+		return id
+	} else {
+		return 0
+	}
+}
+
+func DbCreateOrGetDescriptionId(description string, userId int) int {
+	schema := fmt.Sprint("u", userId)
+
+	var descriptionId int = 0
 
 	statement := fmt.Sprintf(`
 		SELECT id FROM %v."storage_item_description"
 		WHERE description = $1`, schema)
-	err := db.Instance.Db.QueryRow(statement, itemDto.Description).Scan(&descriptionId)
+	err := db.Instance.Db.QueryRow(statement, description).Scan(&descriptionId)
 
 	if descriptionId == 0 || err != nil {
 		statement := fmt.Sprintf(`
 			INSERT INTO %v."storage_item_description" (description)
 			VALUES ($1)
 			RETURNING id`, schema)
-		err = db.Instance.Db.QueryRow(statement, itemDto.Description).Scan(&descriptionId)
+		err = db.Instance.Db.QueryRow(statement, description).Scan(&descriptionId)
 		if err != nil {
-			goto Error
+			return 0
 		}
 	}
 
-	statement = fmt.Sprintf(`
+	return descriptionId
+}
+
+func DbCreateStorageItem(itemDto ItemDto, userId int, descriptionId int) int {
+	schema := fmt.Sprint("u", userId)
+	itemDto.Description = strings.TrimSpace(itemDto.Description)
+
+	var itemId int
+
+	statement := fmt.Sprintf(`
 		INSERT INTO %v."storage_item" (product_id, product_type_id, description_id, cost_price, amount)
 		VALUES ($1, $2, $3, $4, $5)
 		RETURNING id`, schema)
-	err = db.Instance.Db.
+	err := db.Instance.Db.
 		QueryRow(statement, itemDto.Product, utils.NullIfZero(itemDto.ProductType), descriptionId, itemDto.CostPrice, itemDto.Amount).
 		Scan(&itemId)
 	if err != nil {
@@ -78,30 +112,13 @@ Error:
 	return 0
 }
 
-func DbUpdateStorageItem(itemDto ItemDto, userId int) int {
+func DbUpdateStorageItem(itemDto ItemDto, userId int, descriptionId int) int {
 	schema := fmt.Sprint("u", userId)
 	itemDto.Description = strings.TrimSpace(itemDto.Description)
 
-	var descriptionId int
 	var itemId int
 
 	statement := fmt.Sprintf(`
-		SELECT id FROM %v."storage_item_description"
-		WHERE description = $1`, schema)
-	err := db.Instance.Db.QueryRow(statement, itemDto.Description).Scan(&descriptionId)
-
-	if descriptionId == 0 || err != nil {
-		statement := fmt.Sprintf(`
-			INSERT INTO %v."storage_item_description" (description)
-			VALUES ($1)
-			RETURNING id`, schema)
-		err = db.Instance.Db.QueryRow(statement, itemDto.Description).Scan(&descriptionId)
-		if err != nil {
-			goto Error
-		}
-	}
-
-	statement = fmt.Sprintf(`
 		UPDATE %v."storage_item" SET 
 			product_id = $1, 
 			product_type_id = $2, 
@@ -110,7 +127,7 @@ func DbUpdateStorageItem(itemDto ItemDto, userId int) int {
 			amount = $5
 		WHERE id = $6
 		RETURNING id`, schema)
-	err = db.Instance.Db.
+	err := db.Instance.Db.
 		QueryRow(statement, itemDto.Product, utils.NullIfZero(itemDto.ProductType), descriptionId, itemDto.CostPrice, itemDto.Amount, itemDto.Id).
 		Scan(&itemId)
 	if err != nil {
@@ -157,6 +174,7 @@ func DbGetAllFull(userId int) []StorageItemFull {
 		pp.name as "product_name",
 		pt.id as "product_type_id",
 		pt.name as "product_type_name",
+		sid.id as "description_id",
 		sid.description as "description",
 		amount,
 		cost_price
@@ -176,6 +194,7 @@ func DbGetAllFull(userId int) []StorageItemFull {
 		var storageItem StorageItemFull
 		var productTypeId sql.NullInt32
 		var productTypeName sql.NullString
+		var descriptionId sql.NullInt32
 		var description sql.NullString
 
 		err := rows.Scan(&storageItem.Id,
@@ -183,6 +202,7 @@ func DbGetAllFull(userId int) []StorageItemFull {
 			&storageItem.ProductName,
 			&productTypeId,
 			&productTypeName,
+			&descriptionId,
 			&description,
 			&storageItem.Amount,
 			&storageItem.CostPrice)
@@ -196,6 +216,9 @@ func DbGetAllFull(userId int) []StorageItemFull {
 		}
 		if productTypeName.Valid {
 			storageItem.ProductTypeName = string(productTypeName.String)
+		}
+		if descriptionId.Valid {
+			storageItem.DescriptionId = int(descriptionId.Int32)
 		}
 		if description.Valid {
 			storageItem.Description = string(description.String)
@@ -258,6 +281,21 @@ func DbDeleteStorage(userId int, storageId int) bool {
 
 	statement := fmt.Sprintf(`
 					UPDATE %v.storage_item SET deleted = true WHERE id = $1`, schema)
+	_, err := db.Instance.Db.Exec(statement, storageId)
+	if err != nil {
+		goto Error
+	}
+
+	return true
+Error:
+	return false
+}
+
+func DbDeleteStorageForce(userId int, storageId int) bool {
+	schema := fmt.Sprint("u", userId)
+
+	statement := fmt.Sprintf(`
+					DELETE FROM %v.storage_item WHERE id = $1`, schema)
 	_, err := db.Instance.Db.Exec(statement, storageId)
 	if err != nil {
 		goto Error

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { translate } from 'src/i18n/translate'
+import rfdc from 'rfdc'
 import ModalPrice from './price'
-import ModalExceededStorage from './exceededStorage'
 import MoneyService from 'src/services/moneyService'
+import ModalExceededStorage from './exceededStorage'
+import MergedProductsService from 'src/services/mergedProductsService'
 
 const PriceSelect = ({
 	edit,
@@ -77,14 +79,25 @@ const PriceSelect = ({
 				? selectedProduct.storageId
 				: selectedProduct.id,
 			total: { text: total.text, value: total.value }, // to pass by value
-			costPrice: {
-				text: selectedProduct.costPrice.text,
-				costPrice: selectedProduct.costPrice.value,
-			}, // to pass by value
 			unitPrice: { text: price.text, value: price.value }, // to pass by value
 			description: selectedProduct.description,
 			productName: selectedProduct.productName,
 			productTypeName: selectedProduct.productTypeName,
+
+			costPrice: selectedProduct?.isMerged
+				? MergedProductsService.calculateMergedPrice(
+						selectedProduct.mergedData.items,
+				  ).text
+				: {
+						text: selectedProduct.costPrice.text,
+						costPrice: selectedProduct.costPrice.value,
+				  },
+
+			// Very important item, changes how everything is interpreted on the system
+			isMerged: selectedProduct.isMerged,
+			mergedData: selectedProduct.isMerged
+				? rfdc()(selectedProduct.mergedData) // to pass by value
+				: undefined,
 		})
 		cleanup()
 	}
