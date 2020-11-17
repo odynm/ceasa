@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"ceasa/db"
-	"ceasa/order"
 )
 
 func DbGetHomeItems(userId int) []HomeItem {
@@ -35,14 +34,15 @@ func DbGetHomeItems(userId int) []HomeItem {
 			SUM(op.unit_price * op.amount) AS total_earned
 		FROM %v.order_order AS o
 		INNER JOIN %v.order_product op ON op.order_id = o.id
-		WHERE o.status = $1 AND 
+		WHERE 
+			(o.status IN (2,3,4) AND 
 			si.id = op.storage_id AND 
-			TIMEZONE('utc', NOW()) > o.completed_at AND
-			TIMEZONE('utc', NOW()) < o.completed_at + interval '1 day'
+			(TIMEZONE('utc', NOW()) > o.released_at AND
+			TIMEZONE('utc', NOW()) < o.released_at + interval '1 day'))
 	) AS order_data ON TRUE
 	WHERE si.deleted = false`, schema, schema, schema, schema)
 
-	rows, err := db.Instance.Db.Query(statement, order.S_Done)
+	rows, err := db.Instance.Db.Query(statement)
 
 	if err != nil {
 		goto Error
