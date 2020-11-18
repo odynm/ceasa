@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { Creators as OrderCreators } from 'src/ducks/order'
+import { Creators as ClientCreators } from 'src/ducks/client'
 import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as OfflineCreators } from 'src/ducks/offline'
 import { Creators as ProductCreators } from 'src/ducks/products'
@@ -19,6 +20,7 @@ import NetInfo from '@react-native-community/netinfo'
 const Sell = ({
 	client,
 	status,
+	clients,
 	setStatus,
 	setClient,
 	sendOrder,
@@ -28,6 +30,7 @@ const Sell = ({
 	loadOrders,
 	clientStep,
 	addToQueue,
+	loadClients,
 	noConnection,
 	loadProducts,
 	addOrderItem,
@@ -134,6 +137,8 @@ const Sell = ({
 			}
 		} else {
 			if (orderItems && orderItems.length > 0) {
+				// This may be already too late to load them
+				loadClients()
 				setClientStep(true)
 			} else {
 				ToastService.show({ message: translate('sell.errors.noItems') })
@@ -146,6 +151,7 @@ const Sell = ({
 			status={status}
 			client={client}
 			errors={errors}
+			clients={clients}
 			working={working}
 			setClient={setClient}
 			addProduct={addProduct}
@@ -172,9 +178,10 @@ Sell.navigationOptions = () => ({
 	headerLeft: props => <SellHeader {...props} />,
 })
 
-const mapStateToProps = ({ app, storage, order }) => ({
+const mapStateToProps = ({ app, storage, client, order }) => ({
 	client: order.client,
 	status: order.status,
+	clients: client.clients,
 	clientStep: order.clientStep,
 	orderItems: order.orderItems,
 	noConnection: app.noConnection,
@@ -190,6 +197,7 @@ const mapDispatchToProps = {
 	sendOrder: OrderCreators.sendOrder,
 	resetOrder: OrderCreators.resetOrder,
 	addToQueue: OfflineCreators.addToQueue,
+	loadClients: ClientCreators.loadClients,
 	addOrderItem: OrderCreators.addOrderItem,
 	loadProducts: ProductCreators.loadProducts,
 	setClientStep: OrderCreators.setClientStep,

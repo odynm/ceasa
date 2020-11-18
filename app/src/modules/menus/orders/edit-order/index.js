@@ -29,6 +29,7 @@ const EditOrder = ({
 	status,
 	urgent,
 	loader,
+	clients,
 	setClient,
 	setUrgent,
 	sendOrder,
@@ -114,6 +115,7 @@ const EditOrder = ({
 				<View style={styles.client}>
 					<ClientSegment
 						client={client}
+						clients={clients}
 						setClient={setClient}
 						editable={
 							status !== orderStatus.carrying &&
@@ -240,8 +242,9 @@ const mapDispatchToProps = {
 	setConfirmDelete: EditOrderCreators.setConfirmDelete,
 }
 
-const mapStateToProps = ({ app, editOrder }) => ({
+const mapStateToProps = ({ app, client, editOrder }) => ({
 	id: editOrder.id,
+	clients: client.clients,
 	status: editOrder.status,
 	client: editOrder.client,
 	urgent: editOrder.urgent,

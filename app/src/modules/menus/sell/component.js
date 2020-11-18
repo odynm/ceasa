@@ -18,6 +18,7 @@ import CloseKeyboardView from 'src/components/fw/screen-base/close-keyboard-view
 const SellComponent = ({
 	client,
 	errors,
+	clients,
 	working,
 	status,
 	setClient,
@@ -52,6 +53,7 @@ const SellComponent = ({
 					<ClientSegment
 						client={client}
 						errors={errors}
+						clients={clients}
 						setClient={setClient}
 					/>
 				</CloseKeyboardView>

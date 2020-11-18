@@ -8,6 +8,8 @@ import Error from 'src/components/fw/error'
 const TextInput = ({
 	label,
 	value,
+	onBlur,
+	onFocus,
 	setValue,
 	password,
 	maxLength,
@@ -19,6 +21,8 @@ const TextInput = ({
 			<KText bold text={label} />
 			<RNTextInput
 				value={value}
+				onBlur={onBlur}
+				onFocus={onFocus}
 				editable={editable}
 				maxLength={maxLength}
 				style={styles.textInput}

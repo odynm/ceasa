@@ -4,6 +4,7 @@ import home from './home'
 import team from './team'
 import order from './order'
 import terms from './terms'
+import client from './client'
 import loader from './loader'
 import offline from './offline'
 import storage from './storage'
@@ -25,6 +26,7 @@ const reducers = combineReducers({
 	team,
 	order,
 	terms,
+	client,
 	loader,
 	offline,
 	storage,
