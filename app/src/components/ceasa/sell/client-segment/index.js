@@ -11,6 +11,7 @@ import KText from 'src/components/fw/ktext'
 import TextInput from 'src/components/fw/text-input'
 
 const ClientSegment = ({ client, clients, errors, editable, setClient }) => {
+	const [keyUpper, setKeyUpper] = useState(false)
 	const [writingKey, setWritingKey] = useState(false)
 
 	return (
@@ -22,18 +23,23 @@ const ClientSegment = ({ client, clients, errors, editable, setClient }) => {
 				onBlur={() => setWritingKey(false)}
 				errorMessage={errors && errors.key}
 				label={translate('sell.clientKey')}
-				setValue={value => setClient({ ...client, key: value })}
+				setValue={value => {
+					setKeyUpper(value.toUpperCase())
+					setClient({ ...client, key: value })
+				}}
 			/>
 			{writingKey && client.key.length > 0 && clients?.length > 0 && (
 				<View style={styles.autocompleteSelector}>
 					<ScrollView keyboardShouldPersistTaps="handled">
 						{clients
-							.filter(x => x.key.startsWith(client.key))
+							.filter(x => x.key.toUpperCase().startsWith(keyUpper))
 							.map((item, i) => (
 								<TouchableWithoutFeedback
 									key={i}
 									onPress={() => {
 										setClient(item)
+										setWritingKey('')
+										setKeyUpper('')
 										Keyboard.dismiss()
 									}}>
 									<View>

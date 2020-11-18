@@ -1,6 +1,7 @@
-const subs = []
+let subs = []
 
 const subscribeHide = func => {
+	subs = subs.filter(x => x)
 	subs.push(func)
 }
 

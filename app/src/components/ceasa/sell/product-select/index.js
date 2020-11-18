@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { SvgXml } from 'react-native-svg'
 import { translate } from 'src/i18n/translate'
-import { View, ScrollView, StyleSheet } from 'react-native'
+import { View, ScrollView, TextInput as RNTextInput } from 'react-native'
+import styles from './styles'
 import KText from 'src/components/fw/ktext'
 import KModal from 'src/components/fw/kmodal'
+import svgSearch from 'res/svgs/v9/svgSearch.svg'
+import KeyboardService from 'src/services/keyboardService'
 import StoredItemCard from 'src/components/ceasa/stored-item-card'
 
 const ProductSelect = ({
@@ -12,16 +16,61 @@ const ProductSelect = ({
 	selectProduct,
 	alreadyAddedProducts,
 }) => {
+	const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+	const [searchString, setSearchString] = useState('')
+	const [searchStringUpper, setSearchStringUpper] = useState('')
+
+	useEffect(() => {
+		KeyboardService.subscribeHide(onKeyboardHide)
+	}, [])
+
+	const onKeyboardHide = () => {
+		setIsKeyboardOpen(false)
+	}
+
+	const onOpenKeyboard = () => {
+		setIsKeyboardOpen(true)
+	}
+
+	const onCloseKeyboard = () => {
+		setIsKeyboardOpen(false)
+	}
+
 	return (
-		<KModal open={open} onClose={onClose} header={translate('sell.inStock')}>
-			<ScrollView onStartShouldSetResponder={() => true}>
+		<KModal
+			open={open}
+			onClose={onClose}
+			header={translate('sell.inStock')}
+			size={isKeyboardOpen ? 330 : undefined}>
+			<View style={styles.searchView}>
+				<SvgXml style={styles.searchIcon} xml={svgSearch} />
+				<RNTextInput
+					value={searchString}
+					onChangeText={t => {
+						setSearchString(t)
+						setSearchStringUpper(t.toUpperCase())
+					}}
+					onBlur={onCloseKeyboard}
+					onFocus={onOpenKeyboard}
+					placeholder={translate('fw.recentRegisterPicker.search')}
+					style={styles.searchText}
+				/>
+			</View>
+			<ScrollView
+				keyboardShouldPersistTaps={'handled'}
+				onStartShouldSetResponder={() => true}>
 				<View onStartShouldSetResponder={() => true}>
 					{storageItems && storageItems.length > 0 ? (
 						storageItems
-							.filter(x =>
-								alreadyAddedProducts && alreadyAddedProducts.length > 0
-									? alreadyAddedProducts.every(y => y.id !== x.id)
-									: true,
+							.filter(
+								x =>
+									(x.productName + ' ' + x.productTypeName)
+										.toUpperCase()
+										.startsWith(searchStringUpper) &&
+									(alreadyAddedProducts &&
+									alreadyAddedProducts.length > 0
+										? alreadyAddedProducts.every(y => y.id !== x.id)
+										: true),
 							)
 							.map((item, index) => (
 								<StoredItemCard
@@ -46,11 +95,5 @@ const ProductSelect = ({
 		</KModal>
 	)
 }
-
-const styles = StyleSheet.create({
-	centerText: {
-		textAlign: 'center',
-	},
-})
 
 export default ProductSelect

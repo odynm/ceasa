@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import {
 	View,
-	TextInput,
 	ScrollView,
 	TouchableOpacity,
 	KeyboardAvoidingView,
+	TextInput as RNTextInput,
 } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import { translate } from 'src/i18n/translate'
@@ -28,6 +28,8 @@ const RecentRegisterPicker = ({
 	labelNotRegistered,
 }) => {
 	const [isOpen, setIsOpen] = useState(false)
+	const [searchString, setSearchString] = useState('')
+	const [searchStringUpper, setSearchStringUpper] = useState('')
 	const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
 
 	useEffect(() => {
@@ -84,7 +86,10 @@ const RecentRegisterPicker = ({
 							style={styles.labelNotRegistered}
 						/>
 					</TouchableOpacity>
-					<ScrollView style={styles.scrollView} persistentScrollbar={true}>
+					<ScrollView
+						style={styles.scrollView}
+						persistentScrollbar={true}
+						keyboardShouldPersistTaps={'handled'}>
 						{listRecent && listRecent.length > 0 && (
 							<>
 								<KText
@@ -95,7 +100,11 @@ const RecentRegisterPicker = ({
 								<View style={styles.listView}>
 									{listRecent.map(x => (
 										<TouchableOpacity
-											onPress={() => setSelected(x)}
+											onPress={() => {
+												setSelected(x)
+												setSearchString('')
+												setSearchStringUpper('')
+											}}
 											key={x.id}>
 											<View style={styles.listItemCard}>
 												<KText
@@ -114,7 +123,12 @@ const RecentRegisterPicker = ({
 						<View style={styles.line} />
 						<View style={styles.searchView}>
 							<SvgXml style={styles.searchIcon} xml={svgSearch} />
-							<TextInput
+							<RNTextInput
+								value={searchString}
+								onChangeText={t => {
+									setSearchString(t)
+									setSearchStringUpper(t.toUpperCase())
+								}}
 								onBlur={onCloseKeyboard}
 								onFocus={onOpenKeyboard}
 								placeholder={translate(
@@ -124,20 +138,45 @@ const RecentRegisterPicker = ({
 							/>
 						</View>
 						<View style={styles.listView}>
-							{list.map(x => (
-								<TouchableOpacity
-									onPress={() => setSelected(x)}
-									key={x.id}>
-									<View style={styles.listItemCard}>
-										<KText
-											key={x.id}
-											bold
-											style={styles.listItemText}
-											text={x.name}
-										/>
-									</View>
-								</TouchableOpacity>
-							))}
+							{searchString.length > 0
+								? list
+										.filter(x =>
+											x.name
+												.toUpperCase()
+												.startsWith(searchStringUpper),
+										)
+										.map(x => (
+											<TouchableOpacity
+												onPress={() => {
+													setSelected(x)
+													setSearchString('')
+													setSearchStringUpper('')
+												}}
+												key={x.id}>
+												<View style={styles.listItemCard}>
+													<KText
+														key={x.id}
+														bold
+														style={styles.listItemText}
+														text={x.name}
+													/>
+												</View>
+											</TouchableOpacity>
+										))
+								: list.map(x => (
+										<TouchableOpacity
+											onPress={() => setSelected(x)}
+											key={x.id}>
+											<View style={styles.listItemCard}>
+												<KText
+													key={x.id}
+													bold
+													style={styles.listItemText}
+													text={x.name}
+												/>
+											</View>
+										</TouchableOpacity>
+								  ))}
 						</View>
 					</ScrollView>
 				</KeyboardAvoidingView>
