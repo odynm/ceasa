@@ -1,8 +1,12 @@
 import React from 'react'
+import { hp, wp } from 'src/utils/screen'
 import { SvgXml } from 'react-native-svg'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
+import { Image, View, TouchableOpacity, Linking } from 'react-native'
 import styles from './styles'
+import pngWpp from 'res/pngs/wpp.png'
+import KText from 'src/components/fw/ktext'
 import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
@@ -30,6 +34,29 @@ const Login = ({ navigation }) => {
 				onPress={clickLoader}
 				label={translate('loginSelect.loader')}
 			/>
+			<View>
+				<TouchableOpacity
+					onPress={() => {
+						Linking.openURL(
+							'https://api.whatsapp.com/send?phone=51996582662',
+						)
+					}}>
+					<View style={styles.wppView}>
+						<View>
+							<KText text={translate('loginSelect.support')} />
+							<KText bold text={translate('loginSelect.wpp')} />
+						</View>
+						<Image
+							width={wp(20)}
+							height={hp(20)}
+							source={pngWpp}
+							resizeMode={'center'}
+							style={styles.wppLogo}
+							resizeMethod={'resize'}
+						/>
+					</View>
+				</TouchableOpacity>
+			</View>
 		</ScreenBase>
 	)
 }

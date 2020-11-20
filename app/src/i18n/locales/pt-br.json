@@ -8,7 +8,9 @@
 	},
 	"loginSelect": {
 		"vendor": "Entrar como vendedor",
-		"loader": "Entrar como carregador"
+		"loader": "Entrar como carregador",
+		"support": "Novo usuário ou dúvidas,",
+		"wpp": "contate-nos via Whatsapp"
 	},
 	"login": {
 		"login": "Login",

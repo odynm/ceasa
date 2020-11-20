@@ -4,8 +4,8 @@ import { StyleSheet } from 'react-native'
 const styles = StyleSheet.create({
 	logo: {
 		alignSelf: 'center',
-		marginBottom: hp(50),
-		marginTop: hp(60),
+		marginBottom: hp(40),
+		marginTop: hp(40),
 	},
 	loader: {
 		bottom: hp(25),
