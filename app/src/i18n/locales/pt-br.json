@@ -46,7 +46,8 @@
 		"user": "Usuário",
 		"editOrder": "Ver Pedido",
 		"editStorage": "Alterar Estoque",
-		"editProductsOrder": "Alterar Produtos do Pedido"
+		"editProductsOrder": "Alterar Produtos do Pedido",
+		"addNonExistent": "Adicionar Novo"
 	},
 	"loaderMenus": {
 		"orders": "Pedidos",
@@ -188,6 +189,17 @@
 			"content": "Deseja limpar todo seu estoque do dia?",
 			"headerDelete": "Zerar Estoque",
 			"contentDelete": "Tem certeza de que deseja limpar TODO seu estoque?"
+		}
+	},
+	"addNonExistent": {
+		"addProduct": "Adicionar Produto Não Existente",
+		"addType": "Adicionar Tipo Não Existente",
+		"description": "Nome",
+		"relatedProduct": "Relacionar ao Produto",
+		"add": "Adicionar",
+		"errors":{
+			"description": "Insira um nome válido",
+			"relatedProduct": "Escolha um produto para relacionar o tipo"
 		}
 	},
 	"user" : {

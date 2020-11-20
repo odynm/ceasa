@@ -9,6 +9,24 @@ import (
 	"ceasa/utils"
 )
 
+func AddProduct(userId int, productDto ProductDto, w http.ResponseWriter) {
+	response := DbCreateProduct(userId, productDto)
+	if response > 0 {
+		utils.Success(w, response)
+	} else {
+		utils.Failed(w, -1)
+	}
+}
+
+func AddType(userId int, typeDto TypeDto, w http.ResponseWriter) {
+	response := DbCreateType(userId, typeDto)
+	if response > 0 {
+		utils.Success(w, response)
+	} else {
+		utils.Failed(w, -1)
+	}
+}
+
 func GetAll(userId int, w http.ResponseWriter) {
 	response, ok := DbGetAll(userId)
 	if ok {

@@ -15,3 +15,12 @@ type Type struct {
 	Name      string `json:"name"`
 	ProductId int    `json:"productId"`
 }
+
+type ProductDto struct {
+	Name string `json:"name"`
+}
+
+type TypeDto struct {
+	Name      string `json:"name"`
+	ProductId int    `json:"relatedProductId"`
+}

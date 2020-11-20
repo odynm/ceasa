@@ -7,6 +7,44 @@ import (
 	"ceasa/db"
 )
 
+func DbCreateProduct(userId int, productDto ProductDto) int {
+	var id int
+
+	statement := `
+		INSERT INTO public."products_product" (name, user_id)
+		VALUES ($1, $2)
+		RETURNING id`
+	err := db.Instance.Db.
+		QueryRow(statement, productDto.Name, userId).
+		Scan(&id)
+	if err != nil {
+		goto Error
+	}
+
+	return id
+Error:
+	return 0
+}
+
+func DbCreateType(userId int, typeDto TypeDto) int {
+	var id int
+
+	statement := `
+		INSERT INTO public."products_product_type" (name, product_id, user_id)
+		VALUES ($1, $2, $3)
+		RETURNING id`
+	err := db.Instance.Db.
+		QueryRow(statement, typeDto.Name, typeDto.ProductId, userId).
+		Scan(&id)
+	if err != nil {
+		goto Error
+	}
+
+	return id
+Error:
+	return 0
+}
+
 func DbGetAll(userId int) (ProductData, bool) {
 	var productData ProductData
 	var products, ok1 = dbGetProducts(userId)

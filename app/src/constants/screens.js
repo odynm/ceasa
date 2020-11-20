@@ -17,6 +17,7 @@ const screens = {
 	loaderCarryingOrders: 'CarryingLoader',
 	loadersTeam: 'LoadersTeam',
 	addLoader: 'AddLoader',
+	addNonExistent: 'AddNonExistent',
 }
 
 export default screens

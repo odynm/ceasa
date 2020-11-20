@@ -58,7 +58,7 @@ const Storage = ({
 		setProductTypesFiltered(
 			productTypes.filter(x => x.productId === productId),
 		)
-	}, [productId])
+	}, [productId, productTypes])
 
 	const handleAdd = async () => {
 		if (noConnection) {
@@ -117,6 +117,11 @@ const Storage = ({
 					setSelectedId={setProductId}
 					errorMessage={errors.productId}
 					label={translate('storage.product')}
+					notRegisteredPress={() => {
+						navigation.navigate(screens.addNonExistent, {
+							nonExistentType: 'product',
+						})
+					}}
 					listLabel={translate('storage.products')}
 					loading={!products || products.length === 0}
 					labelNotRegistered={translate(
@@ -124,10 +129,16 @@ const Storage = ({
 					)}
 				/>
 				<RecentRegisterPicker
+					disabled={!productId}
 					selectedId={productTypeId}
 					list={productTypesFiltered}
 					listRecent={recentProductTypes}
 					setSelectedId={setProductTypeId}
+					notRegisteredPress={() => {
+						navigation.navigate(screens.addNonExistent, {
+							nonExistentType: 'type',
+						})
+					}}
 					label={translate('storage.productType')}
 					listLabel={translate('storage.productTypes')}
 					loading={!productTypes || productTypes.length === 0}

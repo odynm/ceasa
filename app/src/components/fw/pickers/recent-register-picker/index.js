@@ -26,6 +26,7 @@ const RecentRegisterPicker = ({
 	errorMessage,
 	setSelectedId,
 	labelNotRegistered,
+	notRegisteredPress,
 }) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [searchString, setSearchString] = useState('')
@@ -77,15 +78,20 @@ const RecentRegisterPicker = ({
 							  }
 							: styles.openContainer
 					}>
-					<TouchableOpacity>
-						{/* TODO: make this button work*/}
-						<KText
-							bold
-							link
-							text={labelNotRegistered}
-							style={styles.labelNotRegistered}
-						/>
-					</TouchableOpacity>
+					{labelNotRegistered?.length > 0 && (
+						<TouchableOpacity
+							onPress={() => {
+								setIsOpen(false)
+								notRegisteredPress()
+							}}>
+							<KText
+								bold
+								link
+								text={labelNotRegistered}
+								style={styles.labelNotRegistered}
+							/>
+						</TouchableOpacity>
+					)}
 					<ScrollView
 						style={styles.scrollView}
 						persistentScrollbar={true}
