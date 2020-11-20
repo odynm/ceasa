@@ -39,14 +39,14 @@ const OrdersLoader = ({
 							navigation.navigate(screens.loaderOrderInfo)
 						}}
 						releasedHour={
-							item.releasedAt &&
-							typeof item.releasedAt === 'object' &&
-							toHour(item.releasedAt)
+							item.releasedAt && typeof item.releasedAt === 'object'
+								? toHour(item.releasedAt)
+								: undefined
 						}
 						completedHour={
-							item.completedAt &&
-							typeof item.completedAt === 'object' &&
-							toHour(item.completedAt)
+							item.completedAt && typeof item.completedAt === 'object'
+								? toHour(item.completedAt)
+								: undefined
 						}
 					/>
 				))

@@ -17,7 +17,7 @@ const OrderCard = ({
 }) => {
 	const style = [
 		styles.container,
-		urgent
+		urgent && !(status === orderStatus.done)
 			? styles.red
 			: status === orderStatus.blocked
 			? styles.white

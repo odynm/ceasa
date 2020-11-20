@@ -225,7 +225,7 @@
 		}
 	},
 	"optionsLoader": {
-		"logout": "Sair"
+		"logout": "Voltar Para Lista de Equipes"
 	},
 	"errors": {
 		"serverError": "Não foi possível comunicar com o servidor"

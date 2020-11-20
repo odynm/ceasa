@@ -1,22 +1,24 @@
 import orderStatus from 'src/enums/order'
 
 const sort = (a, b) => {
-	const getIndex = status => {
-		return status === orderStatus.carrying
+	const getIndex = item => {
+		return item.status === orderStatus.carrying && item.urgent
 			? 1
-			: status === orderStatus.urgent
+			: item.status === orderStatus.carrying
 			? 2
-			: status === orderStatus.released
+			: !(item.status === orderStatus.done) && item.urgent
 			? 3
-			: status === orderStatus.blocked
+			: item.status === orderStatus.released
 			? 4
-			: status === orderStatus.done
+			: item.status === orderStatus.blocked
 			? 5
-			: 6
+			: item.status === orderStatus.done
+			? 6
+			: 7
 	}
 
-	const aIndex = getIndex(a.status)
-	const bIndex = getIndex(b.status)
+	const aIndex = getIndex(a)
+	const bIndex = getIndex(b)
 	const indexResult = aIndex - bIndex
 
 	return indexResult === 0 ? a.releasedAt - b.releasedAt : indexResult
