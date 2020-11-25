@@ -139,7 +139,7 @@ const Carrying = ({
 				products={
 					carryingOrder && carryingOrder.products
 						? carryingOrder.products.filter(
-								x => x.amount === x.amountDelivered,
+								x => x.amount !== x.amountDelivered,
 						  )
 						: []
 				}

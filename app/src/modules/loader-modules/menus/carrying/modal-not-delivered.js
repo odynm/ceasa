@@ -16,7 +16,7 @@ const ModalNotDelivered = ({
 }) => {
 	return (
 		<KModal
-			size={250}
+			size={400}
 			open={open}
 			onClose={handleCloseNo}
 			header={translate('loaderCarrying.modal.finishCarry')}>
