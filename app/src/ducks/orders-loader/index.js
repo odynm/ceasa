@@ -7,6 +7,7 @@ const Types = {
 	SET_ORDER_LIST: prefix + 'SET_ORDER_LIST',
 	SET_CARRYING_LIST: prefix + 'SET_CARRYING_LIST',
 	SET_SELECTED_ORDER_ID: prefix + 'SET_SELECTED_ORDER_ID',
+	SET_SELECT_CARRYING_ITEM_ID: prefix + 'SET_SELECT_CARRYING_ITEM_ID',
 	SET_SELECTED_CARRYING_ORDER_ID: prefix + 'SET_SELECTED_CARRYING_ORDER_ID',
 }
 
@@ -23,6 +24,11 @@ const setCarryingOrderList = carryingList => ({
 const setSelectedOrderId = selectedOrderId => ({
 	payload: { selectedOrderId },
 	type: Types.SET_SELECTED_ORDER_ID,
+})
+
+const setSelectCarryingItemId = selectCarryingItemId => ({
+	payload: { selectCarryingItemId },
+	type: Types.SET_SELECT_CARRYING_ITEM_ID,
 })
 
 const setSelectedCarryingOrderId = selectedCarryingOrderId => ({
@@ -82,8 +88,6 @@ const loadOrders = () => async dispatch => {
 }
 
 const loadCarryingOrders = () => async (dispatch, getState) => {
-	const { carryingList } = getState().ordersLoader
-
 	const { data, success } = await HttpService.get('carry')
 	// Because the partial state of the carry array will be stored locally, we
 	// need to filter the array for items that have been loaded already
@@ -93,9 +97,32 @@ const loadCarryingOrders = () => async (dispatch, getState) => {
 			return
 		}
 
-		const filteredData = data.filter(
-			item => !carryingList.some(x => x.id === item.id),
-		)
+		const { carryingList } = getState().ordersLoader
+
+		// Add non existent ones AND edited ones
+		const filteredData = data.filter(item => {
+			if (!carryingList.some(x => x.id === item.id)) {
+				return true
+			} else {
+				const order = carryingList.find(o => o.id === item.id)
+				for (let i = 0; i < order.products.length; i++) {
+					const product = order.products[i]
+					const orderProduct = item.products.filter(
+						x =>
+							x.productId === product.productId &&
+							x.productTypeId === product.productTypeId,
+					)
+					const orderProductAmount = orderProduct.reduce(
+						(prev, cur) => (prev += cur.amount),
+						0,
+					)
+					if (orderProductAmount !== product.amount) {
+						return true
+					}
+				}
+				return false
+			}
+		})
 
 		const mappedData = filteredData.map(item => ({
 			...item,
@@ -107,7 +134,7 @@ const loadCarryingOrders = () => async (dispatch, getState) => {
 			releasedAt: new Date(item.releasedAt),
 		}))
 
-		if (mappedData) {
+		if (mappedData?.length > 0) {
 			const orderedData = mappedData.sort((a, b) => {
 				return sort(a, b)
 			})
@@ -122,8 +149,20 @@ const loadCarryingOrders = () => async (dispatch, getState) => {
 				})),
 			}))
 			await dispatch(
-				setCarryingOrderList([...carryingList, ...mergedWithDelivered]),
+				setCarryingOrderList([
+					...carryingList.filter(
+						item => !mergedWithDelivered.some(x => x.id === item.id),
+					), // filter the ones that already are on merged
+					...mergedWithDelivered,
+				]),
 			)
+			if (mergedWithDelivered?.length > 0) {
+				await dispatch(
+					setSelectCarryingItemId(
+						mergedWithDelivered[mergedWithDelivered.length - 1].id,
+					),
+				)
+			}
 		}
 	}
 
@@ -161,6 +200,7 @@ const initialState = {
 	orderList: [],
 	carryingList: [],
 	selectedOrderId: 0,
+	selectCarryingItemId: 0,
 	selectedCarryingOrderId: 0,
 }
 
@@ -192,6 +232,11 @@ export default function reducer(state = initialState, action) {
 			return {
 				...state,
 				selectedOrderId: action.payload.selectedOrderId,
+			}
+		case Types.SET_SELECT_CARRYING_ITEM_ID:
+			return {
+				...state,
+				selectCarryingItemId: action.payload.selectCarryingItemId,
 			}
 		case Types.SET_SELECTED_CARRYING_ORDER_ID:
 			return {

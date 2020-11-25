@@ -28,7 +28,7 @@ const ClientSegment = ({ client, clients, errors, editable, setClient }) => {
 					setClient({ ...client, key: value })
 				}}
 			/>
-			{writingKey && client.key.length > 0 && clients?.length > 0 && (
+			{writingKey && client.key.length > 0 && clients?.length > 0 ? (
 				<View style={styles.autocompleteSelector}>
 					<ScrollView keyboardShouldPersistTaps="handled">
 						{clients
@@ -52,6 +52,8 @@ const ClientSegment = ({ client, clients, errors, editable, setClient }) => {
 							))}
 					</ScrollView>
 				</View>
+			) : (
+				undefined
 			)}
 			<TextInput
 				editable={editable}

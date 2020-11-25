@@ -6,5 +6,6 @@ module.exports = {
 		eqeqeq: [0, 'smart'],
 		'jsx-quotes': [2, 'prefer-double'],
 		'react-hooks/exhaustive-deps': 'off',
+		'no-labels': 0,
 	},
 }

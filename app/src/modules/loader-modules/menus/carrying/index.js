@@ -28,6 +28,7 @@ const Carrying = ({
 	finishCarrying,
 	loadCarryingOrders,
 	setAmountDelivered,
+	selectCarryingItemId,
 	selectedCarryingOrderId,
 	setSelectedCarryingOrderId,
 }) => {
@@ -45,10 +46,10 @@ const Carrying = ({
 	}, [])
 
 	useEffect(() => {
-		if (carryingList && carryingList.length > 0) {
-			setSelectedCarryingOrderId(carryingList[0].id)
+		if (selectCarryingItemId && carryingList?.length > 0) {
+			setSelectedCarryingOrderId(selectCarryingItemId)
 		}
-	}, [carryingList])
+	}, [selectCarryingItemId])
 
 	const handleFinish = async () => {
 		setAppLoader(true)
@@ -174,6 +175,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = ({ ordersLoader }) => ({
 	carryingList: ordersLoader.carryingList,
+	selectCarryingItemId: ordersLoader.selectCarryingItemId,
 	selectedCarryingOrderId: ordersLoader.selectedCarryingOrderId,
 	carryingOrder: OrdersLoaderSelectors.getOrderCarrying(ordersLoader),
 })
