@@ -39,11 +39,12 @@ func DbUpdateAmount(id int, amount int, userId int) bool {
 	return true
 }
 
-func DbGetEqualId(product int, productType int, descriptionId int, costPrice int, userId int) int {
+func DbGetEqualId(idCurrent int, product int, productType int, descriptionId int, costPrice int, userId int) int {
 	schema := fmt.Sprint("u", userId)
 
 	var id int
 
+	// Equal that is NOT itself
 	statement := fmt.Sprintf(`
 		SELECT 
 			id
@@ -52,11 +53,12 @@ func DbGetEqualId(product int, productType int, descriptionId int, costPrice int
 			product_id = $1 AND
 			((product_type_id IS NULL AND $2 = 0) OR product_type_id = $2) AND
 			description_id = $3 AND
-			cost_price = $4
+			cost_price = $4 AND
+			id != $5
 		`, schema)
 
 	err := db.Instance.Db.
-		QueryRow(statement, product, productType, descriptionId, costPrice).
+		QueryRow(statement, product, productType, descriptionId, costPrice, idCurrent).
 		Scan(&id)
 
 	if err == nil && id > 0 {

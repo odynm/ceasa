@@ -9,7 +9,6 @@ import { validateCreate } from 'src/ducks/storage/validations/create'
 import { Creators as EditStorageCreators } from 'src/ducks/storage/edit-storage'
 import styles from './styles'
 import screens from 'src/constants/screens'
-import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
 import Loader from 'src/components/fw/loader'
 import Amount from 'src/components/fw/amount'
@@ -20,6 +19,7 @@ import MoneyInput from 'src/components/fw/money-input'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
 import StoredItemCard from 'src/components/ceasa/stored-item-card'
+import MergedProductsService from 'src/services/mergedProductsService'
 import CloseKeyboardView from 'src/components/fw/screen-base/close-keyboard-view'
 import RecentRegisterPicker from 'src/components/fw/pickers/recent-register-picker'
 
@@ -104,6 +104,14 @@ const Storage = ({
 		}
 	}
 
+	const handleMergedView = item => {
+		console.warn(item)
+		navigation.navigate(screens.listMergedStorage, {
+			mergedStorageItems: item.mergedData.items,
+			item: item,
+		})
+	}
+
 	return (
 		<ScreenBase
 			useScroll={false}
@@ -161,7 +169,6 @@ const Storage = ({
 					setValue={setCostPrice}
 					label={translate('storage.costPrice')}
 				/>
-				<Space size2 />
 				{working ? (
 					<Loader />
 				) : (
@@ -183,8 +190,20 @@ const Storage = ({
 										product={item.productName}
 										description={item.description}
 										productType={item.productTypeName}
+										costPrice={
+											item.isMerged
+												? MergedProductsService.calculateMergedPrice(
+														item.mergedData.items,
+												  )
+												: item.costPrice
+										}
+										isMerged={item.isMerged}
 										onPress={() => {
-											handleEdit(item.id)
+											if (item.isMerged) {
+												handleMergedView(item)
+											} else {
+												handleEdit(item.id)
+											}
 										}}
 									/>
 								)

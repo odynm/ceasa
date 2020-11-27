@@ -1,5 +1,6 @@
 import React from 'react'
 import { wp, hp } from 'src/utils/screen'
+import { translate } from 'src/i18n/translate'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
@@ -8,6 +9,8 @@ const StoredItemCard = ({
 	amount,
 	product,
 	onPress,
+	isMerged,
+	costPrice,
 	productType,
 	description,
 }) => {
@@ -19,6 +22,23 @@ const StoredItemCard = ({
 					<KText bold style={styles.amount} text={amount} />
 				</View>
 				<KText text={description} />
+				{costPrice.value > 0 ? (
+					isMerged ? (
+						<View style={styles.row}>
+							<KText
+								text={`${translate('storage.costPriceMerged')}: `}
+							/>
+							<KText text={costPrice.text} />
+						</View>
+					) : (
+						<View style={styles.row}>
+							<KText text={`${translate('storage.costPriceShort')}: `} />
+							<KText text={costPrice.text} />
+						</View>
+					)
+				) : (
+					undefined
+				)}
 			</View>
 		</TouchableOpacity>
 	)

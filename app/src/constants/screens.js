@@ -10,6 +10,7 @@ const screens = {
 	sell: 'Sell',
 	orders: 'Orders',
 	storage: 'Storage',
+	listMergedStorage: 'ListMergedStorage',
 	editOrder: 'EditOrder',
 	editStorage: 'EditStorage',
 	editProductsOrder: 'EditProductsOrder',

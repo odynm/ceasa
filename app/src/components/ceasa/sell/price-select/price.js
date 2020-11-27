@@ -11,8 +11,8 @@ import Amount from 'src/components/fw/amount'
 import MoneyService from 'src/services/moneyService'
 import MoneyInput from 'src/components/fw/money-input'
 import ConfirmationModal from 'src/components/fw/confirmation-modal'
-import CloseKeyboardView from 'src/components/fw/screen-base/close-keyboard-view'
 import MergedProductsService from 'src/services/mergedProductsService'
+import CloseKeyboardView from 'src/components/fw/screen-base/close-keyboard-view'
 
 const ModalPrice = ({
 	edit,

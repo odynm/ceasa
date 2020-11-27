@@ -43,7 +43,7 @@ const mergeSimilarItems = storageItems => {
 						amount: a.amount + b.amount,
 						mergedData: {
 							items: a.mergedData?.items
-								? [...a.mergedData, getItem(b)]
+								? [...a.mergedData.items, getItem(b)]
 								: [getItem(a), getItem(b)],
 						},
 					}

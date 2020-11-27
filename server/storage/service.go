@@ -10,7 +10,7 @@ func Add(itemDto ItemDto, userId int, w http.ResponseWriter) {
 	var result int
 
 	descriptionId := DbCreateOrGetDescriptionId(itemDto.Description, userId)
-	equalId := DbGetEqualId(itemDto.Product, itemDto.ProductType, descriptionId, itemDto.CostPrice, userId)
+	equalId := DbGetEqualId(itemDto.Id, itemDto.Product, itemDto.ProductType, descriptionId, itemDto.CostPrice, userId)
 	if equalId > 0 {
 		DbIncreaseAmount(equalId, itemDto.Amount, userId)
 		utils.Success(w, result)
@@ -28,7 +28,7 @@ func Edit(itemDto ItemDto, userId int, w http.ResponseWriter) {
 	var result int
 
 	descriptionId := DbCreateOrGetDescriptionId(itemDto.Description, userId)
-	equalId := DbGetEqualId(itemDto.Product, itemDto.ProductType, descriptionId, itemDto.CostPrice, userId)
+	equalId := DbGetEqualId(itemDto.Id, itemDto.Product, itemDto.ProductType, descriptionId, itemDto.CostPrice, userId)
 
 	if equalId > 0 {
 		DbDeleteStorageForce(userId, itemDto.Id)

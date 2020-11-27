@@ -67,6 +67,8 @@
 		"additionalDescription": "Descrição adicional (opcional)",
 		"amount": "Quantidade",
 		"costPrice":"Preço de Custo (unidade)",
+		"costPriceShort": "Preço Custo",
+		"costPriceMerged": "Média Preço Custo",
 		"add": "Adicionar",
 		"errors": {
 			"noProduct": "Selecione o produto",

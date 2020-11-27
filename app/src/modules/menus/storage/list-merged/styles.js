@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
 	storedContainer: {
-		height: hp(200),
+		height: hp(580),
 	},
 	stored: {
 		marginVertical: hp(10),

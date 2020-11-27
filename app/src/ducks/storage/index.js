@@ -130,7 +130,7 @@ const add = item => async (dispatch, getStore) => {
 		)
 
 		if (merged) {
-			dispatch(setStoredItems(MergedProductsService.ortProducts(arr)))
+			dispatch(setStoredItems(MergedProductsService.sortProducts(arr)))
 			dispatch(
 				setStoredItemsOrderAware(
 					MergedProductsService.sortProducts([...arr]),

@@ -74,6 +74,20 @@ Error:
 	return 0
 }
 
+func DbDecreaseAmountOfProduct(orderId int, storageId int, increaseAmount int, userId int) bool {
+	schema := fmt.Sprint("u", userId)
+
+	statement := fmt.Sprintf(`
+		UPDATE %v."order_product"
+		SET amount = amount - $1
+		WHERE order_id = $2 AND storage_id = $3`, schema)
+	_, err := db.Instance.Db.Exec(statement, increaseAmount, orderId, storageId)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func DbGetOrdersVendor(userId int) ([]OrderListItem, bool) {
 	return dbGetOrders(userId, "(0)")
 }
