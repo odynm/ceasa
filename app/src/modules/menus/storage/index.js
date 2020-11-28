@@ -105,7 +105,6 @@ const Storage = ({
 	}
 
 	const handleMergedView = item => {
-		console.warn(item)
 		navigation.navigate(screens.listMergedStorage, {
 			mergedStorageItems: item.mergedData.items,
 			item: item,
