@@ -95,6 +95,15 @@ const decreaseItemsOrderEdit = ({ id, amount }) => (dispatch, getStore) => {
 	}
 }
 
+// This is a tricky method
+// It needs to not only add items, but also detect when a edit is needed and to a edit instead
+// It can add in three ways:
+//     1. try to fully merge (edit the amount) of an existing item
+//     2. merge with an item with different cost price
+//     3. simply adding to the list if there's nothing similar to relate to
+// It can also edit in a couple of ways:
+//     1. try to find a simple item (not merged) and edit
+//     2. find a merged item and edit it
 const add = item => async (dispatch, getStore) => {
 	const { storedItems, storedItemsOrderAware } = getStore().storage
 	const { products, productTypes } = getStore().products
@@ -111,6 +120,7 @@ const add = item => async (dispatch, getStore) => {
 	const { success, data } = await HttpService.post('storage', mappedItemServer)
 
 	if (success) {
+		// Map item to be added/edited
 		const mappedItemView = {
 			id: data,
 			productName: products.find(x => x.id === item.productId).name,
@@ -123,21 +133,27 @@ const add = item => async (dispatch, getStore) => {
 			costPrice: rfdc()(item.costPrice),
 		}
 
-		const cur = storedItems && storedItems.length > 0 ? storedItems : []
-		const { arr, merged } = MergedProductsService.addAndMergeSimilar(
-			cur,
-			mappedItemView,
-		)
+		// Is adding?
+		if (!item.id) {
+			// Try to fully merge items (aka edit amount) or do a simple add
+			const cur = storedItems && storedItems.length > 0 ? storedItems : []
+			const { arr, merged } = MergedProductsService.addAndMergeSimilar(
+				cur,
+				mappedItemView,
+			)
 
-		if (merged) {
-			dispatch(setStoredItems(MergedProductsService.sortProducts(arr)))
-			dispatch(
-				setStoredItemsOrderAware(
-					MergedProductsService.sortProducts([...arr]),
-				),
-			) // TODO the spread here is probably not needed. Test it
-		} else {
-			if (!item.id) {
+			// if succeeded in fully merging (aka edit amount) or adding
+			if (merged) {
+				dispatch(setStoredItems(MergedProductsService.sortProducts(arr)))
+				dispatch(
+					setStoredItemsOrderAware(
+						MergedProductsService.sortProducts([...arr]),
+					),
+				) // TODO the spread here is probably not needed. Test it
+			}
+			// if NOT succeeded in a full merge (aka edit amount)
+			else {
+				// Sort
 				const current =
 					storedItems && storedItems.length > 0 ? storedItems : []
 				const newStoredItems = [...current, mappedItemView]
@@ -147,6 +163,7 @@ const add = item => async (dispatch, getStore) => {
 					),
 				)
 
+				// Add item
 				const currentOrderAware =
 					storedItemsOrderAware && storedItemsOrderAware.length > 0
 						? storedItemsOrderAware
@@ -160,40 +177,114 @@ const add = item => async (dispatch, getStore) => {
 						MergedProductsService.sortProducts(newStoredItemsOrderAware),
 					),
 				)
-			} else {
-				const index = storedItems.findIndex(x => x.id === item.id)
-				const newStoredItems = storedItems.map((x, i) =>
-					i === index
-						? {
-								...x,
-								amount: item.amount,
-								costPrice: rfdc()(item.costPrice),
-								description: item.description,
-						  }
-						: x,
+			}
+		}
+		// is editing
+		else {
+			// If able, try to edit a simple (not merged) item first
+			const indexStored = storedItems.findIndex(
+				x => x.id === item.id && !x.isMerged,
+			)
+
+			if (indexStored >= 0) {
+				const simpleEdit = (stored, index) => {
+					return stored.map((x, i) =>
+						i === index && !x.isMerged
+							? {
+									...x,
+									amount: item.amount,
+									costPrice: rfdc()(item.costPrice),
+									description: item.description,
+							  }
+							: x,
+					)
+				}
+
+				const newStoredItems = simpleEdit(storedItems, indexStored)
+
+				const indexOrderAware = storedItemsOrderAware.findIndex(
+					x => x.id === item.id,
 				)
+				const newOrderAware = simpleEdit(
+					storedItemsOrderAware,
+					indexOrderAware,
+				)
+
 				dispatch(
 					setStoredItems(
 						MergedProductsService.sortProducts(newStoredItems),
 					),
 				)
 
-				const indexOrderAware = storedItemsOrderAware.findIndex(
-					x => x.id === item.id,
+				dispatch(
+					setStoredItemsOrderAware(
+						MergedProductsService.sortProducts(newOrderAware),
+					),
 				)
-				const newStoredItemsOrderAware = storedItemsOrderAware.map((x, i) =>
-					i === indexOrderAware
-						? {
-								...x,
-								amount: item.amount,
-								costPrice: rfdc()(item.costPrice),
-								description: item.description,
-						  }
-						: x,
-				)
+			}
+			// If not, edit the merged item
+			else {
+				const editMerged = stored => {
+					return stored.map(storedItem => {
+						if (storedItem.isMerged) {
+							return {
+								...storedItem,
+								mergedData: {
+									...storedItem.mergedData,
+									items: storedItem.mergedData.items.map(
+										mergedItem => {
+											if (mergedItem.id === item.id) {
+												return {
+													...mergedItem,
+													amount: item.amount,
+													costPrice: rfdc()(item.costPrice),
+													description: item.description,
+												}
+											} else {
+												return mergedItem
+											}
+										},
+									),
+								},
+							}
+						} else {
+							return storedItem
+						}
+					})
+				}
+
+				const newStoredItems = editMerged(storedItems)
+				const newStoredItemsOrderAware = editMerged(storedItemsOrderAware)
+
+				const updateAmounts = list => {
+					return list.map(storedItem => {
+						if (storedItem.isMerged) {
+							return {
+								...storedItem,
+								amount: storedItem.mergedData.items.reduce(
+									(prev, cur) => prev + cur.amount,
+									0,
+								),
+							}
+						} else {
+							return storedItem
+						}
+					})
+				}
+
+				// We changed only the amounts inside the mergedData, now we need to update the outside sum of amounts
+				const updatedOrders = updateAmounts(newStoredItems)
+				const updatedOrderAware = updateAmounts(newStoredItemsOrderAware)
+
 				dispatch(
 					setStoredItems(
-						MergedProductsService.sortProducts(newStoredItemsOrderAware),
+						MergedProductsService.sortProducts(updatedOrders),
+					),
+				)
+
+				dispatch(
+					setStoredItemsOrderAware(
+						MergedProductsService.sortProducts(updatedOrderAware),
 					),
 				)
 			}
@@ -203,6 +294,7 @@ const add = item => async (dispatch, getStore) => {
 	return success
 }
 
+// TODO: this item currently only workd with the server online
 const deleteItem = item => async (_, getStore) => {
 	const { inUse } = getStore().offline
 	// At least for now, don't touch the storage on offline mode

@@ -93,6 +93,7 @@ const addAndMergeSimilar = (cur, item) => {
 			x.description === item.description,
 	)
 
+	// Merge full
 	if (equalItemIndex >= 0) {
 		return {
 			arr: cur.map((x, i) =>
@@ -108,8 +109,39 @@ const addAndMergeSimilar = (cur, item) => {
 			),
 			merged: true,
 		}
-	} else {
-		return { merged: false }
+	}
+	// Try merge all but price (isMerged = true)
+	else {
+		const mergeItemIndex = cur.findIndex(
+			x =>
+				x.productName === item.productName &&
+				x.productTypeName === item.productTypeName &&
+				x.description === item.description,
+		)
+		if (mergeItemIndex >= 0) {
+			return {
+				arr: cur.map((x, i) =>
+					i === mergeItemIndex
+						? {
+								...x,
+								id: x.id,
+								amount: x.amount + item.amount,
+								isMerged: true,
+								mergedData: {
+									items: x.isMerged
+										? [...x.mergedData.items, item]
+										: [x, item],
+								},
+						  }
+						: x.id !== item.id
+						? x
+						: undefined,
+				),
+				merged: true,
+			}
+		} else {
+			return { merged: false }
+		}
 	}
 }
 

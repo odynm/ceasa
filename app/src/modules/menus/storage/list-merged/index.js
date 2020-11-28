@@ -39,6 +39,7 @@ const ListMergedStorage = ({
 				const storedItem = mergedStorageItems.find(x => x.id === id)
 				setStorageItemEdit({
 					...storedItem,
+					id: id,
 					productName: itemDetails.productName,
 					productTypeName: itemDetails.productTypeName,
 					description: itemDetails.description,
