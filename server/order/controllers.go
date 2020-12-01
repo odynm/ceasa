@@ -42,7 +42,12 @@ func add(w http.ResponseWriter, r *http.Request) {
 func get(w http.ResponseWriter, r *http.Request) {
 	userId := user.CheckLogin(w, r)
 	if userId > 0 {
-		GetForVendor(userId, w)
+		timezone := r.Header.Get("Timezone")
+		if len(timezone) > 0 {
+			GetForVendor(userId, timezone, w)
+		} else {
+			utils.Failed(w, -1)
+		}
 	} else {
 		utils.NoAuth(w)
 	}
@@ -53,7 +58,12 @@ func getLoader(w http.ResponseWriter, r *http.Request) {
 	if loaderId > 0 {
 		userId := loader.GetLoaderUserId(w, r)
 		if userId > 0 {
-			GetForLoader(userId, w)
+			timezone := r.Header.Get("Timezone")
+			if len(timezone) > 0 {
+				GetForLoader(userId, timezone, w)
+			} else {
+				utils.Failed(w, -1)
+			}
 		} else {
 			utils.NoAuth(w)
 		}

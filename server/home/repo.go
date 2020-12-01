@@ -7,7 +7,7 @@ import (
 	"ceasa/db"
 )
 
-func DbGetHomeItems(userId int) []HomeItem {
+func DbGetHomeItems(userId int, timezone string) []HomeItem {
 	schema := fmt.Sprint("u", userId)
 
 	var homeItems []HomeItem
@@ -37,12 +37,14 @@ func DbGetHomeItems(userId int) []HomeItem {
 		WHERE 
 			(o.status IN (2,3,4) AND 
 			si.id = op.storage_id AND 
-			(TIMEZONE('utc', NOW()) > o.released_at AND
-			TIMEZONE('utc', NOW()) < o.released_at + interval '1 day'))
+			(
+				date_trunc('day', TIMEZONE($1, NOW()) + interval '1 day') < o.released_at AND
+				date_trunc('day', TIMEZONE($1, NOW())) > o.released_at)
+			)
 	) AS order_data ON TRUE
 	WHERE si.deleted = false`, schema, schema, schema, schema)
 
-	rows, err := db.Instance.Db.Query(statement)
+	rows, err := db.Instance.Db.Query(statement, timezone)
 
 	if err != nil {
 		goto Error

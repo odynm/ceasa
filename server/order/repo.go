@@ -88,12 +88,12 @@ func DbDecreaseAmountOfProduct(orderId int, storageId int, increaseAmount int, u
 	return true
 }
 
-func DbGetOrdersVendor(userId int) ([]OrderListItem, bool) {
-	return dbGetOrders(userId, "(0)")
+func DbGetOrdersVendor(userId int, timezone string) ([]OrderListItem, bool) {
+	return dbGetOrders(userId, "(0)", timezone)
 }
 
-func DbGetOrdersLoader(userId int) ([]OrderListItem, bool) {
-	return dbGetOrders(userId, "(0, 1)")
+func DbGetOrdersLoader(userId int, timezone string) ([]OrderListItem, bool) {
+	return dbGetOrders(userId, "(0, 1)", timezone)
 }
 
 func DbGetOrderStatus(userId int, orderId int) int {
@@ -115,7 +115,7 @@ func DbGetOrderStatus(userId int, orderId int) int {
 	return status
 }
 
-func dbGetOrders(userId int, excludedStatus string) ([]OrderListItem, bool) {
+func dbGetOrders(userId int, excludedStatus string, timezone string) ([]OrderListItem, bool) {
 	schema := fmt.Sprint("u", userId)
 
 	var orderList []OrderListItem
@@ -138,13 +138,15 @@ func dbGetOrders(userId int, excludedStatus string) ([]OrderListItem, bool) {
 	WHERE "order".status NOT IN %v
 		AND (
 			"order".status != %v OR
-			(TIMEZONE('utc', NOW()) > "order".completed_at AND
-			TIMEZONE('utc', NOW()) < "order".completed_at + interval '1 day')
+			(
+				date_trunc('day', TIMEZONE($1, NOW()) + interval '1 day') < "order".released_at AND
+				date_trunc('day', TIMEZONE($1, NOW())) > "order".released_at
+			)
 		)
 	`, schema, schema, excludedStatus, S_Done)
 
 	fmt.Println(statement)
-	rows, err := db.Instance.Db.Query(statement)
+	rows, err := db.Instance.Db.Query(statement, timezone)
 
 	if err != nil {
 		goto Error

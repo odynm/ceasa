@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { View, Keyboard } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import { userRoles } from 'src/constants/user-role'
+import { Creators as AppCreators } from 'src/ducks/app'
 import { Creators as UserCreators } from 'src/ducks/user'
 import { Creators as TermsCreators } from 'src/ducks/terms'
 import stacks from 'src/constants/stacks'
@@ -13,10 +14,12 @@ import KeyboardService from 'src/services/keyboardService'
 import ToastService from 'src/services/toastService'
 import rfdc from 'rfdc'
 import { loginType } from 'src/constants/login-type'
+import RNLocalize from 'react-native-localize'
 
 const Main = ({
 	logout,
 	navigation,
+	setTimezone,
 	loadLoggedUser,
 	loadOrders,
 	checkTerms,
@@ -30,6 +33,8 @@ const Main = ({
 	// TODO do we need that executeActionBasedOnUrl that was here?
 	const initialize = async () => {
 		Keyboard.addListener('keyboardDidHide', KeyboardService.keyboardHide)
+
+		setTimezone(RNLocalize.getTimeZone())
 
 		// // TODO consider login
 		// if (false /* has already logged as seller */) {
@@ -114,7 +119,7 @@ const Main = ({
 
 const mapDispatchToProps = {
 	logout: UserCreators.logout,
-	checkTerms: TermsCreators.check,
+	setTimezone: AppCreators.setTimezone,
 	loadLoggedUser: UserCreators.loadLoggedUser,
 }
 

@@ -177,8 +177,8 @@ func GetIds(userId int, id int, w http.ResponseWriter) (OrderIds, bool) {
 	}
 }
 
-func GetForVendor(userId int, w http.ResponseWriter) {
-	response, ok := DbGetOrdersVendor(userId)
+func GetForVendor(userId int, timezone string, w http.ResponseWriter) {
+	response, ok := DbGetOrdersVendor(userId, timezone)
 	if ok {
 		utils.Success(w, response)
 	} else {
@@ -186,8 +186,8 @@ func GetForVendor(userId int, w http.ResponseWriter) {
 	}
 }
 
-func GetForLoader(userId int, w http.ResponseWriter) {
-	response, ok := DbGetOrdersLoader(userId)
+func GetForLoader(userId int, timezone string, w http.ResponseWriter) {
+	response, ok := DbGetOrdersLoader(userId, timezone)
 	if ok {
 		utils.Success(w, response)
 	} else {

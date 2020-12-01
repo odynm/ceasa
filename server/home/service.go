@@ -6,8 +6,8 @@ import (
 	"ceasa/utils"
 )
 
-func Get(userId int, w http.ResponseWriter) {
-	homeList := DbGetHomeItems(userId)
+func Get(userId int, timezone string, w http.ResponseWriter) {
+	homeList := DbGetHomeItems(userId, timezone)
 
 	dailyBalance := calculateDailyBalance(homeList)
 

@@ -10,7 +10,12 @@ import (
 func get(w http.ResponseWriter, r *http.Request) {
 	userId := user.CheckLogin(w, r)
 	if userId > 0 {
-		Get(userId, w)
+		timezone := r.Header.Get("Timezone")
+		if len(timezone) > 0 {
+			Get(userId, timezone, w)
+		} else {
+			utils.Failed(w, -1)
+		}
 	} else {
 		utils.NoAuth(w)
 	}

@@ -25,14 +25,17 @@ let navigationActions = {}
 const requestInterceptor = requestConfig => {
 	const { user } = store.getState().user
 	const { loader } = store.getState().loader
+	const { timezone } = store.getState().app
 	if (user.accessToken && user.id) {
 		requestConfig.headers.Auth = user.accessToken
 		requestConfig.headers.User = user.id
+		requestConfig.headers.Timezone = timezone
 	} else if (loader.accessToken && loader.id) {
 		const { userId } = store.getState().loader
 		requestConfig.headers.Auth = loader.accessToken
 		requestConfig.headers.Loader = loader.id
 		requestConfig.headers.User = userId
+		requestConfig.headers.Timezone = timezone
 	}
 	//config.headers['accept-language'] = i18n.locale
 	return requestConfig
