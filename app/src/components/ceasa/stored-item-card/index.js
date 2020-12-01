@@ -15,32 +15,40 @@ const StoredItemCard = ({
 	description,
 }) => {
 	return (
-		<TouchableOpacity onPress={onPress}>
-			<View style={styles.container}>
-				<View style={styles.row}>
-					<KText bold text={`${product} ${productType}`} />
-					<KText bold style={styles.amount} text={amount} />
-				</View>
-				<KText text={description} />
-				{costPrice.value > 0 ? (
-					isMerged ? (
+		<>
+			{amount > 0 ? (
+				<TouchableOpacity onPress={onPress}>
+					<View style={styles.container}>
 						<View style={styles.row}>
-							<KText
-								text={`${translate('storage.costPriceMerged')}: `}
-							/>
-							<KText text={costPrice.text} />
+							<KText bold text={`${product} ${productType}`} />
+							<KText bold style={styles.amount} text={amount} />
 						</View>
-					) : (
-						<View style={styles.row}>
-							<KText text={`${translate('storage.costPriceShort')}: `} />
-							<KText text={costPrice.text} />
-						</View>
-					)
-				) : (
-					undefined
-				)}
-			</View>
-		</TouchableOpacity>
+						<KText text={description} />
+						{costPrice.value > 0 ? (
+							isMerged ? (
+								<View style={styles.row}>
+									<KText
+										text={`${translate('storage.costPriceMerged')}: `}
+									/>
+									<KText text={costPrice.text} />
+								</View>
+							) : (
+								<View style={styles.row}>
+									<KText
+										text={`${translate('storage.costPriceShort')}: `}
+									/>
+									<KText text={costPrice.text} />
+								</View>
+							)
+						) : (
+							undefined
+						)}
+					</View>
+				</TouchableOpacity>
+			) : (
+				undefined
+			)}
+		</>
 	)
 }
 

@@ -8,6 +8,7 @@ import KModal from 'src/components/fw/kmodal'
 import svgSearch from 'res/svgs/v9/svgSearch.svg'
 import KeyboardService from 'src/services/keyboardService'
 import StoredItemCard from 'src/components/ceasa/stored-item-card'
+import MergedProductsService from 'src/services/mergedProductsService'
 
 const ProductSelect = ({
 	open,
@@ -76,6 +77,14 @@ const ProductSelect = ({
 								<StoredItemCard
 									key={index}
 									amount={item.amount}
+									isMerged={item.isMerged}
+									costPrice={
+										item.isMerged
+											? MergedProductsService.calculateMergedPrice(
+													item.mergedData.items,
+											  )
+											: item.costPrice
+									}
 									product={item.productName}
 									description={item.description}
 									productType={item.productTypeName}
