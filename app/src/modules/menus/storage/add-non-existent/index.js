@@ -77,6 +77,7 @@ const AddNonExistent = ({
 			/>
 			<Space />
 			<TextInput
+				maxLength={50}
 				value={description}
 				editable={!loading}
 				errorMessage={errors && errors.description}

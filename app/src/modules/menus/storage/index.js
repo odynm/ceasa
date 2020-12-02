@@ -154,6 +154,7 @@ const Storage = ({
 					)}
 				/>
 				<TextInput
+					maxLength={50}
 					value={description}
 					setValue={setDescription}
 					label={translate('storage.additionalDescription')}

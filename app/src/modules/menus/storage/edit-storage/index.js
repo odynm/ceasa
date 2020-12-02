@@ -70,6 +70,7 @@ const EditStorage = ({
 				/>
 				<Space />
 				<TextInput
+					maxLength={50}
 					setValue={setDescription}
 					value={storageItem.description}
 					label={translate('storage.additionalDescription')}

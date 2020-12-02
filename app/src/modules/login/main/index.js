@@ -76,6 +76,7 @@ const Login = ({ login, navigation, userId, accessToken, loading }) => {
 			</TouchableOpacity>
 			<SvgXml style={styles.logo} xml={svgLogo} />
 			<TextInput
+				maxLength={50}
 				value={userText}
 				setValue={setUserText}
 				label={translate('login.user')}
@@ -83,6 +84,7 @@ const Login = ({ login, navigation, userId, accessToken, loading }) => {
 			<Space />
 			<TextInput
 				password
+				maxLength={50}
 				value={passwordText}
 				setValue={setPasswordText}
 				label={translate('login.password')}

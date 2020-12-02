@@ -30,6 +30,7 @@ const Amount = ({ label, value, setValue }) => {
 					</View>
 				</TouchableOpacity>
 				<TextInput
+					maxLength={4}
 					value={value > 0 ? '' + value : ''}
 					onChangeText={setAmountText}
 					style={styles.text}

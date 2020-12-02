@@ -17,6 +17,7 @@ const ClientSegment = ({ client, clients, errors, editable, setClient }) => {
 	return (
 		<View>
 			<TextInput
+				maxLength={50}
 				value={client.key}
 				editable={editable}
 				onFocus={() => setWritingKey(true)}
@@ -56,12 +57,14 @@ const ClientSegment = ({ client, clients, errors, editable, setClient }) => {
 				undefined
 			)}
 			<TextInput
+				maxLength={50}
 				editable={editable}
 				value={client.place}
 				label={translate('sell.clientPlace')}
 				setValue={value => setClient({ ...client, place: value })}
 			/>
 			<TextInput
+				maxLength={50}
 				editable={editable}
 				value={client.vehicle}
 				label={translate('sell.clientVehicle')}
