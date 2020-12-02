@@ -42,7 +42,15 @@ func InitDb() {
 	Instance = Intc{Db: sqlDb}
 	utils.CrashOnError(err)
 	if Instance.Db != nil {
-		fmt.Println("Db instance inited")
+		statement := "SET TIME ZONE 'UTC';"
+		_, err := Instance.Db.Exec(statement)
+		if err == nil {
+			statement := "ALTER DATABASE postgres SET timezone TO 'UTC'; SELECT pg_reload_conf();"
+			_, err = Instance.Db.Exec(statement)
+			if err == nil {
+				fmt.Println("Db instance inited")
+			}
+		}
 	}
 }
 
