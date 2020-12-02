@@ -15,8 +15,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&userDto)
 	if err != nil || userDto.Login == "" || len(userDto.Pass) < 1 {
 		utils.NoAuth(w)
+	} else {
+		LoginUser(userDto, w)
 	}
-	LoginUser(userDto, w)
 }
 
 func refresh(w http.ResponseWriter, r *http.Request) {
@@ -24,8 +25,9 @@ func refresh(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&userDto)
 	if err != nil || userDto.Login == "" {
 		utils.NoAuth(w)
+	} else {
+		RefreshTokenUser(userDto, w)
 	}
-	RefreshTokenUser(userDto, w)
 }
 
 func post(w http.ResponseWriter, r *http.Request) {
@@ -38,10 +40,11 @@ func post(w http.ResponseWriter, r *http.Request) {
 	auth := r.Header.Get("Auth")
 	if err != nil {
 		utils.NoAuth(w)
-	}
-	ok := admin.IsAdminLogged(auth, w)
-	if ok {
-		CreateUser(userDto, w)
+	} else {
+		ok := admin.IsAdminLogged(auth, w)
+		if ok {
+			CreateUser(userDto, w)
+		}
 	}
 }
 
