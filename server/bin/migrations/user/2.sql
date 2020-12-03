@@ -13,6 +13,8 @@ CREATE TABLE _user_.order_client
     key character varying(50) NOT NULL,
     place character varying(50),
     vehicle character varying(50),
+    buys_count int,
+    last_buy timestamp,
     CONSTRAINT order_client_pkey PRIMARY KEY (id)
 )
 WITH (
