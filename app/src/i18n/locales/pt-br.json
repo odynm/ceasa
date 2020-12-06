@@ -184,8 +184,8 @@
 		"empty": "Nada no estoque. Adicione produtos para começar.",
 		"deleteStorage": "Zerar Estoque",
 		"dailyBalance": "Balanço do Dia",
-		"totalEntries": "Total Entradas",
-		"totalExpenses": "Total Despesas",
+		"totalEntries": "Total Vendas",
+		"totalExpenses": "Total Custos",
 		"totalProfit": "Lucro Total",
 		"details": "Detalhes",
 		"modalAccept":{
