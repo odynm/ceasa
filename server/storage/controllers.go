@@ -45,7 +45,7 @@ func delete(w http.ResponseWriter, r *http.Request) {
 		storageStr, ok := r.URL.Query()["id"]
 		if ok {
 			storageId, err := strconv.ParseInt(storageStr[0], 10, 32)
-			if err != nil && storageId == 0 {
+			if err != nil || storageId == 0 {
 				utils.Failed(w, -1)
 			} else {
 				DeleteStorage(userId, int(storageId), w)

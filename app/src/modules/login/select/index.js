@@ -38,7 +38,7 @@ const Login = ({ navigation }) => {
 				<TouchableOpacity
 					onPress={() => {
 						Linking.openURL(
-							'https://api.whatsapp.com/send?phone=51996582662',
+							'https://api.whatsapp.com/send?phone=5551996582662',
 						)
 					}}>
 					<View style={styles.wppView}>

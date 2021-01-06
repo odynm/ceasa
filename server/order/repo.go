@@ -139,8 +139,10 @@ func dbGetOrders(userId int, excludedStatus string, timezone string) ([]OrderLis
 		AND (
 			"order".status != %v OR
 			(
-				date_trunc('day', TIMEZONE($1, NOW()) + interval '1 day') < "order".released_at AND
-				date_trunc('day', TIMEZONE($1, NOW())) > "order".released_at
+				date_trunc('day', TIMEZONE($1, NOW()) + interval '1 day') > 
+					"order".released_at AT TIME ZONE 'UTC' AT TIME ZONE $1 AND
+				date_trunc('day', TIMEZONE($1, NOW())) <
+					"order".released_at AT TIME ZONE 'UTC' AT TIME ZONE $1
 			)
 		)
 	`, schema, schema, excludedStatus, S_Done)

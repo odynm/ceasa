@@ -38,8 +38,10 @@ func DbGetHomeItems(userId int, timezone string) []HomeItem {
 			(o.status IN (2,3,4) AND 
 			si.id = op.storage_id AND 
 			(
-				date_trunc('day', TIMEZONE($1, NOW()) + interval '1 day') < o.released_at AND
-				date_trunc('day', TIMEZONE($1, NOW())) > o.released_at)
+				date_trunc('day', TIMEZONE($1, NOW()) + interval '1 day') > 
+					o.released_at AT TIME ZONE 'UTC' AT TIME ZONE $1 AND
+				date_trunc('day', TIMEZONE($1, NOW())) <
+					o.released_at AT TIME ZONE 'UTC' AT TIME ZONE $1)
 			)
 	) AS order_data ON TRUE
 	WHERE si.deleted = false`, schema, schema, schema, schema)

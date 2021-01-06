@@ -50,6 +50,7 @@ func DbGetEqualId(idCurrent int, product int, productType int, descriptionId int
 			id
 		FROM %v.storage_item
 		WHERE 
+			deleted = false AND
 			product_id = $1 AND
 			((product_type_id IS NULL AND $2 = 0) OR product_type_id = $2) AND
 			description_id = $3 AND
@@ -293,7 +294,7 @@ Error:
 	return false
 }
 
-func DbDeleteStorageForce(userId int, storageId int) bool {
+func DbDeleteStorageDeFacto(userId int, storageId int) bool {
 	schema := fmt.Sprint("u", userId)
 
 	statement := fmt.Sprintf(`

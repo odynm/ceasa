@@ -31,7 +31,7 @@ func Edit(itemDto ItemDto, userId int, w http.ResponseWriter) {
 	equalId := DbGetEqualId(itemDto.Id, itemDto.Product, itemDto.ProductType, descriptionId, itemDto.CostPrice, userId)
 
 	if equalId > 0 {
-		DbDeleteStorageForce(userId, itemDto.Id)
+		DbDeleteStorageDeFacto(userId, itemDto.Id)
 		DbIncreaseAmount(equalId, itemDto.Amount, userId)
 		utils.Success(w, result)
 	} else {

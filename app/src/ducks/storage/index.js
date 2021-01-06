@@ -312,7 +312,7 @@ const get = () => async (dispatch, getStore) => {
 	if (!inUse) {
 		dispatch(setLoading(true))
 		const { data, success } = await HttpService.get('storage')
-		if (success && data && data.length > 0) {
+		if (success && data?.length > 0) {
 			const mappedItems = data.map(x => ({
 				...x,
 				costPrice: MoneyService.toMoney(x.costPrice / 100),
@@ -332,6 +332,13 @@ const get = () => async (dispatch, getStore) => {
 				// The edit needs the data without the merges
 				dispatch(setStoredItemsOrderAwareEdit(rfdc()(mappedItems)))
 			}
+		} else if (
+			success &&
+			getStore().storage.storedItems?.length &&
+			!data?.length
+		) {
+			dispatch(setStoredItems([]))
+			dispatch(setStoredItemsOrderAware([]))
 		}
 		dispatch(setLoading(false))
 	}

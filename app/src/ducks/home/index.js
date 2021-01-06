@@ -24,9 +24,9 @@ const setBalance = balance => ({
 	type: Types.SET_BALANCE,
 })
 
-const loadHome = () => async dispatch => {
+const loadHome = () => async (dispatch, getStore) => {
 	const { data, success } = await HttpService.get('home')
-	if (success && data && data?.list?.length > 0) {
+	if (success && data?.list?.length > 0) {
 		dispatch(setBalance(data.balance))
 
 		const mappedItems = data.list.map(x => ({
@@ -42,6 +42,13 @@ const loadHome = () => async dispatch => {
 		const sortedItems = MergedProductsService.sortProducts(mappedItems)
 
 		dispatch(setOverview(sortedItems))
+	} else if (
+		success &&
+		getStore().home.overview?.length &&
+		!data?.list?.length
+	) {
+		// If there's already items on overview but none on the comming request, we need to nulify them
+		dispatch(setOverview([]))
 	}
 }
 
