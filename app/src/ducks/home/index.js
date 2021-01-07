@@ -49,6 +49,7 @@ const loadHome = () => async (dispatch, getStore) => {
 	) {
 		// If there's already items on overview but none on the comming request, we need to nulify them
 		dispatch(setOverview([]))
+		dispatch(setBalance(data.balance))
 	}
 }
 
