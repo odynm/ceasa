@@ -36,7 +36,6 @@ const SellComponent = ({
 	setOpenAddMenu,
 	setGenerateLoad,
 	setReleasedStatus,
-	storedItemsOrderAware,
 }) => {
 	return (
 		<ScreenBase
@@ -121,7 +120,7 @@ const SellComponent = ({
 				addProduct={addProduct}
 				setOpen={setOpenAddMenu}
 				removeProduct={removeProduct}
-				storageItems={storedItemsOrderAware}
+				storageItems={storageItems}
 				alreadyAddedProducts={orderItems}
 			/>
 		</ScreenBase>

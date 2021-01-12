@@ -36,15 +36,10 @@ const Sell = ({
 	addOrderItem,
 	generateLoad,
 	storageItems,
-	setItemsOrder,
 	setClientStep,
 	setStoredItems,
 	removeOrderItem,
 	setGenerateLoad,
-	resetStorageOrder,
-	decreaseItemsOrder,
-	increaseItemsOrder,
-	storedItemsOrderAware,
 }) => {
 	const [working, setWorking] = useState(false)
 	const [errors, setErrors] = useState({})
@@ -74,7 +69,6 @@ const Sell = ({
 
 	const addProduct = async product => {
 		await addOrderItem(product)
-		decreaseItemsOrder({ id: product.id, amount: product.storageAmount })
 	}
 
 	const editProduct = async product => {
@@ -86,13 +80,12 @@ const Sell = ({
 			id: product.id,
 		})
 		const difference = available - product.storageAmount
-		setItemsOrder({ id: product.id, amount: difference })
+		//setItemsOrder({ id: product.id, amount: difference })
 		updatePrice()
 	}
 
 	const removeProduct = async product => {
 		await removeOrderItem(product)
-		increaseItemsOrder({ id: product.id, amount: product.storageAmount })
 	}
 
 	const handleClear = () => {
@@ -102,7 +95,6 @@ const Sell = ({
 			value: 0.0,
 		})
 		resetOrder()
-		resetStorageOrder()
 	}
 
 	const setReleasedStatus = checked => {
@@ -120,7 +112,7 @@ const Sell = ({
 				// Ensure that we don't try to send if we are offline
 				if (noConnection || !(await NetInfo.fetch()).isInternetReachable) {
 					addToQueue()
-					setStoredItems(rfdc()(storedItemsOrderAware))
+					//setStoredItems(rfdc()(storedItemsOrderAware))
 					handleClear()
 					ToastService.show({ message: translate('sell.addedOffline') })
 					setWorking(false)
@@ -168,7 +160,6 @@ const Sell = ({
 			setOpenAddMenu={setOpenAddMenu}
 			setGenerateLoad={setGenerateLoad}
 			setReleasedStatus={setReleasedStatus}
-			storedItemsOrderAware={storedItemsOrderAware}
 		/>
 	)
 }
@@ -187,7 +178,6 @@ const mapStateToProps = ({ app, storage, client, order }) => ({
 	noConnection: app.noConnection,
 	generateLoad: order.generateLoad,
 	storageItems: storage.storedItems,
-	storedItemsOrderAware: storage.storedItemsOrderAware,
 })
 
 const mapDispatchToProps = {
@@ -202,13 +192,10 @@ const mapDispatchToProps = {
 	loadProducts: ProductCreators.loadProducts,
 	setClientStep: OrderCreators.setClientStep,
 	loadOrders: OrdersVendorCreators.loadOrders,
-	setItemsOrder: StorageCreators.setItemsOrder,
 	setStoredItems: StorageCreators.setStoredItems,
 	removeOrderItem: OrderCreators.removeOrderItem,
 	setGenerateLoad: OrderCreators.setGenerateLoad,
 	resetStorageOrder: StorageCreators.resetStorageOrder,
-	decreaseItemsOrder: StorageCreators.decreaseItemsOrder,
-	increaseItemsOrder: StorageCreators.increaseItemsOrder,
 }
 
 export default connect(

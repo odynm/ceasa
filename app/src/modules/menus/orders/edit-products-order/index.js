@@ -20,9 +20,8 @@ const EditProductsOrder = ({
 	orderItems,
 	noConnection,
 	addOrderItem,
-	decreaseItemsOrder,
 	setProductListIsDirty,
-	storedItemsOrderAwareEdit,
+	storedItems,
 }) => {
 	const [cantEdit, setCantEdit] = useState(false)
 	const [totalPrice, setTotalPrice] = useState({
@@ -30,10 +29,6 @@ const EditProductsOrder = ({
 		value: 0.0,
 	})
 	const [openAddMenu, setOpenAddMenu] = useState(false)
-	const [
-		storedItemsOrderAwareEditNormalized,
-		setStoredItemsOrderAwareEditNormalized,
-	] = useState([])
 
 	useEffect(() => {
 		if (navigation.state?.params?.status) {
@@ -51,19 +46,6 @@ const EditProductsOrder = ({
 	useEffect(() => {
 		updatePrice()
 	}, [orderItems])
-
-	useEffect(() => {
-		if (storedItemsOrderAwareEdit && storedItemsOrderAwareEdit.length > 0) {
-			const normalized = storedItemsOrderAwareEdit.map(x => ({
-				...x,
-				amount:
-					x.amount +
-						orderItems.find(oi => oi.storageId === x.id)?.storageAmount ||
-					0,
-			}))
-			setStoredItemsOrderAwareEditNormalized(normalized)
-		}
-	}, [storedItemsOrderAwareEdit])
 
 	const updatePrice = () => {
 		setTotalPrice(
@@ -90,7 +72,6 @@ const EditProductsOrder = ({
 	const addProduct = product => {
 		setProductListIsDirty(true)
 		addOrderItem(product)
-		decreaseItemsOrder({ id: product.id, amount: product.amount })
 	}
 
 	const editProduct = product => {
@@ -111,7 +92,7 @@ const EditProductsOrder = ({
 				style={styles.items}
 				orderItems={orderItems}
 				editProduct={editProduct}
-				storageItems={storedItemsOrderAwareEditNormalized}
+				storageItems={storedItems}
 			/>
 			<View style={styles.footer}>
 				<TotalSegment
@@ -123,7 +104,7 @@ const EditProductsOrder = ({
 				open={openAddMenu}
 				addProduct={addProduct}
 				setOpen={setOpenAddMenu}
-				storageItems={storedItemsOrderAwareEditNormalized}
+				storageItems={storedItems}
 			/>
 		</ScreenBase>
 	)
@@ -136,12 +117,11 @@ EditProductsOrder.navigationOptions = () => ({
 const mapStateToProps = ({ app, storage, editOrder }) => ({
 	noConnection: app.noConnection,
 	orderItems: editOrder.orderItems,
-	storedItemsOrderAwareEdit: storage.storedItemsOrderAwareEdit,
+	storedItems: storage.storedItems,
 })
 
 const mapDispatchToProps = {
 	addOrderItem: EditOrderCreators.addOrderItem,
-	decreaseItemsOrderEdit: StorageCreators.decreaseItemsOrderEdit,
 	setProductListIsDirty: EditOrderCreators.setProductListIsDirty,
 }
 

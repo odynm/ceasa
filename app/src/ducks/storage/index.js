@@ -10,9 +10,6 @@ const Types = {
 	SET_LOADING: prefix + 'SET_LOADING',
 	SET_WORKING: prefix + 'SET_WORKING',
 	SET_STORED_ITEMS: prefix + 'SET_STORED_ITEMS',
-	SET_STORED_ITEMS_ORDER_AWARE: prefix + 'SET_STORED_ITEMS_ORDER_AWARE',
-	SET_STORED_ITEMS_ORDER_AWARE_EDIT:
-		prefix + 'SET_STORED_ITEMS_ORDER_AWARE_EDIT',
 }
 
 const setLoading = loading => ({
@@ -30,70 +27,59 @@ const setStoredItems = storedItems => ({
 	type: Types.SET_STORED_ITEMS,
 })
 
-const setStoredItemsOrderAware = storedItemsOrderAware => ({
-	payload: { storedItemsOrderAware },
-	type: Types.SET_STORED_ITEMS_ORDER_AWARE,
-})
-
-const setStoredItemsOrderAwareEdit = storedItemsOrderAwareEdit => ({
-	payload: { storedItemsOrderAwareEdit },
-	type: Types.SET_STORED_ITEMS_ORDER_AWARE_EDIT,
-})
-
 const resetStorageOrder = () => (dispatch, getState) => {
 	const { storedItems } = getState().storage
-	dispatch(setStoredItemsOrderAware(rfdc()(storedItems)))
 	dispatch(setLoading(false))
 	dispatch(setWorking(false))
 }
 
-const setItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
-	const { storedItemsOrderAware } = getStore().storage
-	const index = storedItemsOrderAware.findIndex(x => x.id === id)
-	const item = storedItemsOrderAware[index]
-	const newAmount = amount
-	const newStoredItemsOrderAware = [...storedItemsOrderAware]
-	if (item) {
-		newStoredItemsOrderAware[index].amount = newAmount
-		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
-	}
-}
+// const setItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
+// 	const { storedItemsOrderAware } = getStore().storage
+// 	const index = storedItemsOrderAware.findIndex(x => x.id === id)
+// 	const item = storedItemsOrderAware[index]
+// 	const newAmount = amount
+// 	const newStoredItemsOrderAware = [...storedItemsOrderAware]
+// 	if (item) {
+// 		newStoredItemsOrderAware[index].amount = newAmount
+// 		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
+// 	}
+// }
 
-const increaseItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
-	const { storedItemsOrderAware } = getStore().storage
-	const index = storedItemsOrderAware.findIndex(x => x.id === id)
-	const item = storedItemsOrderAware[index]
-	const newAmount = item.amount + amount
-	const newStoredItemsOrderAware = [...storedItemsOrderAware]
-	if (item) {
-		newStoredItemsOrderAware[index].amount = newAmount
-		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
-	}
-}
+// const increaseItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
+// 	const { storedItemsOrderAware } = getStore().storage
+// 	const index = storedItemsOrderAware.findIndex(x => x.id === id)
+// 	const item = storedItemsOrderAware[index]
+// 	const newAmount = item.amount + amount
+// 	const newStoredItemsOrderAware = [...storedItemsOrderAware]
+// 	if (item) {
+// 		newStoredItemsOrderAware[index].amount = newAmount
+// 		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
+// 	}
+// }
 
-const decreaseItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
-	const { storedItemsOrderAware } = getStore().storage
-	const index = storedItemsOrderAware.findIndex(x => x.id === id)
-	const item = storedItemsOrderAware[index]
-	const newAmount = item.amount - amount >= 0 ? item.amount - amount : 0
-	const newStoredItemsOrderAware = [...storedItemsOrderAware]
-	if (item) {
-		newStoredItemsOrderAware[index].amount = newAmount
-		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
-	}
-}
+// const decreaseItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
+// 	const { storedItemsOrderAware } = getStore().storage
+// 	const index = storedItemsOrderAware.findIndex(x => x.id === id)
+// 	const item = storedItemsOrderAware[index]
+// 	const newAmount = item.amount - amount >= 0 ? item.amount - amount : 0
+// 	const newStoredItemsOrderAware = [...storedItemsOrderAware]
+// 	if (item) {
+// 		newStoredItemsOrderAware[index].amount = newAmount
+// 		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
+// 	}
+// }
 
-const decreaseItemsOrderEdit = ({ id, amount }) => (dispatch, getStore) => {
-	const { storedItemsOrderAwareEdit } = getStore().storage
-	const index = storedItemsOrderAwareEdit.findIndex(x => x.id === id)
-	const item = storedItemsOrderAwareEdit[index]
-	const newAmount = item.amount - amount >= 0 ? item.amount - amount : 0
-	const newStoredItemsOrderAwareEdit = [...storedItemsOrderAwareEdit]
-	if (item) {
-		newStoredItemsOrderAwareEdit[index].amount = newAmount
-		dispatch(setStoredItemsOrderAwareEdit(newStoredItemsOrderAwareEdit))
-	}
-}
+// const decreaseItemsOrderEdit = ({ id, amount }) => (dispatch, getStore) => {
+// 	const { storedItemsOrderAwareEdit } = getStore().storage
+// 	const index = storedItemsOrderAwareEdit.findIndex(x => x.id === id)
+// 	const item = storedItemsOrderAwareEdit[index]
+// 	const newAmount = item.amount - amount >= 0 ? item.amount - amount : 0
+// 	const newStoredItemsOrderAwareEdit = [...storedItemsOrderAwareEdit]
+// 	if (item) {
+// 		newStoredItemsOrderAwareEdit[index].amount = newAmount
+// 		dispatch(setStoredItemsOrderAwareEdit(newStoredItemsOrderAwareEdit))
+// 	}
+// }
 
 // This is a tricky method
 // It needs to not only add items, but also detect when a edit is needed and to a edit instead
@@ -145,11 +131,6 @@ const add = item => async (dispatch, getStore) => {
 			// if succeeded in fully merging (aka edit amount) or adding
 			if (merged) {
 				dispatch(setStoredItems(MergedProductsService.sortProducts(arr)))
-				dispatch(
-					setStoredItemsOrderAware(
-						MergedProductsService.sortProducts([...arr]),
-					),
-				) // TODO the spread here is probably not needed. Test it
 			}
 			// if NOT succeeded in a full merge (aka edit amount)
 			else {
@@ -160,21 +141,6 @@ const add = item => async (dispatch, getStore) => {
 				dispatch(
 					setStoredItems(
 						MergedProductsService.sortProducts(newStoredItems),
-					),
-				)
-
-				// Add item
-				const currentOrderAware =
-					storedItemsOrderAware && storedItemsOrderAware.length > 0
-						? storedItemsOrderAware
-						: []
-				const newStoredItemsOrderAware = [
-					...currentOrderAware,
-					mappedItemView,
-				]
-				dispatch(
-					setStoredItemsOrderAware(
-						MergedProductsService.sortProducts(newStoredItemsOrderAware),
 					),
 				)
 			}
@@ -202,23 +168,9 @@ const add = item => async (dispatch, getStore) => {
 
 				const newStoredItems = simpleEdit(storedItems, indexStored)
 
-				const indexOrderAware = storedItemsOrderAware.findIndex(
-					x => x.id === item.id,
-				)
-				const newOrderAware = simpleEdit(
-					storedItemsOrderAware,
-					indexOrderAware,
-				)
-
 				dispatch(
 					setStoredItems(
 						MergedProductsService.sortProducts(newStoredItems),
-					),
-				)
-
-				dispatch(
-					setStoredItemsOrderAware(
-						MergedProductsService.sortProducts(newOrderAware),
 					),
 				)
 			}
@@ -274,17 +226,10 @@ const add = item => async (dispatch, getStore) => {
 
 				// We changed only the amounts inside the mergedData, now we need to update the outside sum of amounts
 				const updatedOrders = updateAmounts(newStoredItems)
-				const updatedOrderAware = updateAmounts(newStoredItemsOrderAware)
 
 				dispatch(
 					setStoredItems(
 						MergedProductsService.sortProducts(updatedOrders),
-					),
-				)
-
-				dispatch(
-					setStoredItemsOrderAware(
-						MergedProductsService.sortProducts(updatedOrderAware),
 					),
 				)
 			}
@@ -320,25 +265,12 @@ const get = () => async (dispatch, getStore) => {
 			const sorted = MergedProductsService.sortProducts(mappedItems)
 			const merged = MergedProductsService.mergeSimilarItems(sorted)
 			dispatch(setStoredItems(merged))
-
-			// sell items
-			const { orderItems } = getStore().order
-			if (orderItems === undefined || orderItems.length === 0) {
-				dispatch(setStoredItemsOrderAware(rfdc()(merged)))
-			}
-			// edit items
-			const { orderItems: orderItemsEdit } = getStore().editOrder
-			if (orderItemsEdit.id === undefined || orderItemsEdit.id === 0) {
-				// The edit needs the data without the merges
-				dispatch(setStoredItemsOrderAwareEdit(rfdc()(mappedItems)))
-			}
 		} else if (
 			success &&
 			getStore().storage.storedItems?.length &&
 			!data?.length
 		) {
 			dispatch(setStoredItems([]))
-			dispatch(setStoredItemsOrderAware([]))
 		}
 		dispatch(setLoading(false))
 	}
@@ -348,8 +280,6 @@ const initialState = {
 	loading: false,
 	working: false,
 	storedItems: [],
-	storedItemsOrderAware: [], // on create order
-	storedItemsOrderAwareEdit: [], // on edit order
 }
 
 export const Creators = {
@@ -357,12 +287,8 @@ export const Creators = {
 	get,
 	deleteItem,
 	setWorking,
-	setItemsOrder,
 	setStoredItems,
 	resetStorageOrder,
-	decreaseItemsOrder,
-	increaseItemsOrder,
-	decreaseItemsOrderEdit,
 }
 
 export default function reducer(state = initialState, action) {
@@ -373,16 +299,6 @@ export default function reducer(state = initialState, action) {
 			return { ...state, loading: action.payload.working }
 		case Types.SET_STORED_ITEMS:
 			return { ...state, storedItems: rfdc()(action.payload.storedItems) }
-		case Types.SET_STORED_ITEMS_ORDER_AWARE:
-			return {
-				...state,
-				storedItemsOrderAware: action.payload.storedItemsOrderAware,
-			}
-		case Types.SET_STORED_ITEMS_ORDER_AWARE_EDIT:
-			return {
-				...state,
-				storedItemsOrderAwareEdit: action.payload.storedItemsOrderAwareEdit,
-			}
 		default:
 			return state
 	}
