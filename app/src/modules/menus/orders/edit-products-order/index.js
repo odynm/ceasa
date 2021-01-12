@@ -96,6 +96,7 @@ const EditProductsOrder = ({
 	const editProduct = product => {
 		setProductListIsDirty(true)
 		addOrderItem(product)
+		// TODO why we decrease items order in addProduct(above) and not here?
 		updatePrice()
 	}
 
