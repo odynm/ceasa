@@ -29,6 +29,9 @@ const EditProductsOrder = ({
 		value: 0.0,
 	})
 	const [openAddMenu, setOpenAddMenu] = useState(false)
+	const [storedItemsEditNormalized, setStoredItemsEditNormalized] = useState(
+		[],
+	)
 
 	useEffect(() => {
 		if (navigation.state?.params?.status) {
@@ -46,6 +49,19 @@ const EditProductsOrder = ({
 	useEffect(() => {
 		updatePrice()
 	}, [orderItems])
+
+	useEffect(() => {
+		if (storedItems && storedItems.length > 0) {
+			const normalized = storedItems.map(x => ({
+				...x,
+				amount:
+					x.amount +
+						orderItems.find(oi => oi.storageId === x.id)?.storageAmount ||
+					0,
+			}))
+			setStoredItemsEditNormalized(normalized)
+		}
+	}, [storedItems])
 
 	const updatePrice = () => {
 		setTotalPrice(
@@ -72,6 +88,7 @@ const EditProductsOrder = ({
 	const addProduct = product => {
 		setProductListIsDirty(true)
 		addOrderItem(product)
+		decreaseItemsOrder({ id: product.id, amount: product.amount })
 	}
 
 	const editProduct = product => {
@@ -92,7 +109,7 @@ const EditProductsOrder = ({
 				style={styles.items}
 				orderItems={orderItems}
 				editProduct={editProduct}
-				storageItems={storedItems}
+				storageItems={storedItemsEditNormalized}
 			/>
 			<View style={styles.footer}>
 				<TotalSegment
@@ -104,7 +121,7 @@ const EditProductsOrder = ({
 				open={openAddMenu}
 				addProduct={addProduct}
 				setOpen={setOpenAddMenu}
-				storageItems={storedItems}
+				storageItems={storedItemsEditNormalized}
 			/>
 		</ScreenBase>
 	)
@@ -117,7 +134,7 @@ EditProductsOrder.navigationOptions = () => ({
 const mapStateToProps = ({ app, storage, editOrder }) => ({
 	noConnection: app.noConnection,
 	orderItems: editOrder.orderItems,
-	storedItems: storage.storedItems,
+	storedItemsOrderAwareEdit: storage.storedItemsOrderAwareEdit,
 })
 
 const mapDispatchToProps = {
