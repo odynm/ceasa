@@ -66,6 +66,7 @@ export const Creators = {
 	setConfirmDelete: setConfirmDelete,
 	setClientStep: common.setClientStep,
 	setOrderItems: common.setOrderItems,
+	removeOrderItem: common.removeOrderItem,
 	setProductListIsDirty: setProductListIsDirty,
 }
 

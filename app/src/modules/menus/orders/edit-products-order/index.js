@@ -18,10 +18,11 @@ import ProductListSegment from 'src/components/ceasa/sell/product-list-segment'
 const EditProductsOrder = ({
 	navigation,
 	orderItems,
+	storedItems,
 	noConnection,
 	addOrderItem,
+	removeOrderItem,
 	setProductListIsDirty,
-	storedItems,
 }) => {
 	const [cantEdit, setCantEdit] = useState(false)
 	const [totalPrice, setTotalPrice] = useState({
@@ -97,6 +98,10 @@ const EditProductsOrder = ({
 		updatePrice()
 	}
 
+	const removeProduct = async product => {
+		await removeOrderItem(product)
+	}
+
 	return (
 		<ScreenBase
 			useScroll={false}
@@ -120,7 +125,8 @@ const EditProductsOrder = ({
 				open={openAddMenu}
 				addProduct={addProduct}
 				setOpen={setOpenAddMenu}
-				storageItems={storedItemsEditNormalized}
+				storageItems={storedItems}
+				removeProduct={removeProduct}
 			/>
 		</ScreenBase>
 	)
@@ -138,6 +144,7 @@ const mapStateToProps = ({ app, storage, editOrder }) => ({
 
 const mapDispatchToProps = {
 	addOrderItem: EditOrderCreators.addOrderItem,
+	removeOrderItem: EditOrderCreators.removeOrderItem,
 	setProductListIsDirty: EditOrderCreators.setProductListIsDirty,
 }
 
