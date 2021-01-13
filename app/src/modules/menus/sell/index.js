@@ -112,7 +112,8 @@ const Sell = ({
 				// Ensure that we don't try to send if we are offline
 				if (noConnection || !(await NetInfo.fetch()).isInternetReachable) {
 					addToQueue()
-					//setStoredItems(rfdc()(storedItemsOrderAware))
+					// TODO While offline, update the storage with the sold items decreased
+					// setStoredItems(itemsAfterSell)
 					handleClear()
 					ToastService.show({ message: translate('sell.addedOffline') })
 					setWorking(false)
@@ -195,7 +196,6 @@ const mapDispatchToProps = {
 	setStoredItems: StorageCreators.setStoredItems,
 	removeOrderItem: OrderCreators.removeOrderItem,
 	setGenerateLoad: OrderCreators.setGenerateLoad,
-	resetStorageOrder: StorageCreators.resetStorageOrder,
 }
 
 export default connect(

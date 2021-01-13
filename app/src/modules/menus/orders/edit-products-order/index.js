@@ -88,7 +88,6 @@ const EditProductsOrder = ({
 	const addProduct = product => {
 		setProductListIsDirty(true)
 		addOrderItem(product)
-		decreaseItemsOrder({ id: product.id, amount: product.amount })
 	}
 
 	const editProduct = product => {
@@ -134,7 +133,7 @@ EditProductsOrder.navigationOptions = () => ({
 const mapStateToProps = ({ app, storage, editOrder }) => ({
 	noConnection: app.noConnection,
 	orderItems: editOrder.orderItems,
-	storedItemsOrderAwareEdit: storage.storedItemsOrderAwareEdit,
+	storedItems: storage.storedItems,
 })
 
 const mapDispatchToProps = {

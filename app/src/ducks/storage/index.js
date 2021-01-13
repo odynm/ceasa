@@ -27,71 +27,8 @@ const setStoredItems = storedItems => ({
 	type: Types.SET_STORED_ITEMS,
 })
 
-const resetStorageOrder = () => (dispatch, getState) => {
-	const { storedItems } = getState().storage
-	dispatch(setLoading(false))
-	dispatch(setWorking(false))
-}
-
-// const setItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
-// 	const { storedItemsOrderAware } = getStore().storage
-// 	const index = storedItemsOrderAware.findIndex(x => x.id === id)
-// 	const item = storedItemsOrderAware[index]
-// 	const newAmount = amount
-// 	const newStoredItemsOrderAware = [...storedItemsOrderAware]
-// 	if (item) {
-// 		newStoredItemsOrderAware[index].amount = newAmount
-// 		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
-// 	}
-// }
-
-// const increaseItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
-// 	const { storedItemsOrderAware } = getStore().storage
-// 	const index = storedItemsOrderAware.findIndex(x => x.id === id)
-// 	const item = storedItemsOrderAware[index]
-// 	const newAmount = item.amount + amount
-// 	const newStoredItemsOrderAware = [...storedItemsOrderAware]
-// 	if (item) {
-// 		newStoredItemsOrderAware[index].amount = newAmount
-// 		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
-// 	}
-// }
-
-// const decreaseItemsOrder = ({ id, amount }) => (dispatch, getStore) => {
-// 	const { storedItemsOrderAware } = getStore().storage
-// 	const index = storedItemsOrderAware.findIndex(x => x.id === id)
-// 	const item = storedItemsOrderAware[index]
-// 	const newAmount = item.amount - amount >= 0 ? item.amount - amount : 0
-// 	const newStoredItemsOrderAware = [...storedItemsOrderAware]
-// 	if (item) {
-// 		newStoredItemsOrderAware[index].amount = newAmount
-// 		dispatch(setStoredItemsOrderAware(newStoredItemsOrderAware))
-// 	}
-// }
-
-// const decreaseItemsOrderEdit = ({ id, amount }) => (dispatch, getStore) => {
-// 	const { storedItemsOrderAwareEdit } = getStore().storage
-// 	const index = storedItemsOrderAwareEdit.findIndex(x => x.id === id)
-// 	const item = storedItemsOrderAwareEdit[index]
-// 	const newAmount = item.amount - amount >= 0 ? item.amount - amount : 0
-// 	const newStoredItemsOrderAwareEdit = [...storedItemsOrderAwareEdit]
-// 	if (item) {
-// 		newStoredItemsOrderAwareEdit[index].amount = newAmount
-// 		dispatch(setStoredItemsOrderAwareEdit(newStoredItemsOrderAwareEdit))
-// 	}
-// }
-
-// This is a tricky method
-// It needs to not only add items, but also detect when a edit is needed and to a edit instead
-// It can add in three ways:
-//     1. try to fully merge (edit the amount) of an existing item
-//     2. merge with an item with different cost price
-//     3. simply adding to the list if there's nothing similar to relate to
-// It can also edit in a couple of ways:
-//     1. try to find a simple item (not merged) and edit
-//     2. find a merged item and edit it
 const add = item => async (dispatch, getStore) => {
-	const { storedItems, storedItemsOrderAware } = getStore().storage
+	const { storedItems } = getStore().storage
 	const { products, productTypes } = getStore().products
 
 	const mappedItemServer = {
@@ -206,7 +143,6 @@ const add = item => async (dispatch, getStore) => {
 				}
 
 				const newStoredItems = editMerged(storedItems)
-				const newStoredItemsOrderAware = editMerged(storedItemsOrderAware)
 
 				const updateAmounts = list => {
 					return list.map(storedItem => {
@@ -288,7 +224,6 @@ export const Creators = {
 	deleteItem,
 	setWorking,
 	setStoredItems,
-	resetStorageOrder,
 }
 
 export default function reducer(state = initialState, action) {
