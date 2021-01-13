@@ -67,6 +67,7 @@ const initialState = {
 	user: {
 		id: '',
 		username: '',
+		parentUser: '', // used for users that user someone else's storage
 		accessToken: '',
 		refreshToken: '',
 		creationDate: null,

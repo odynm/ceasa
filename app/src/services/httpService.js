@@ -28,8 +28,13 @@ const requestInterceptor = requestConfig => {
 	const { timezone } = store.getState().app
 	if (user.accessToken && user.id) {
 		requestConfig.headers.Auth = user.accessToken
-		requestConfig.headers.User = user.id
 		requestConfig.headers.Timezone = timezone
+		if (user.parentUser && user.parentUser > 0) {
+			requestConfig.headers.User = user.parentUser
+			requestConfig.headers.ChildUser = user.id
+		} else {
+			requestConfig.headers.User = user.id
+		}
 	} else if (loader.accessToken && loader.id) {
 		const { userId } = store.getState().loader
 		requestConfig.headers.Auth = loader.accessToken

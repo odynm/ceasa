@@ -15,6 +15,7 @@ type AuthData struct {
 	LoaderToken  string
 	CreationDate time.Time
 	RefreshToken string
+	ParentUser   int
 }
 
 var tokens = map[int]AuthData{}
@@ -25,7 +26,7 @@ func CreateUser(userDto UserDto, w http.ResponseWriter) {
 		login := strings.ToUpper(userDto.Login)
 		hash := utils.GetHash(login + "@" + userDto.Pass)
 		permissions := int(1) // Padrão vendedor
-		DbCreateUser(login, hash, permissions)
+		DbCreateUser(login, hash, userDto.ParentUser, permissions)
 	} else {
 		utils.InsertError(w, "User já existente")
 	}
@@ -35,21 +36,31 @@ func LoginUser(userLogin UserDto, w http.ResponseWriter) {
 	login := strings.ToUpper(userLogin.Login)
 	hash := utils.GetHash(login + "@" + userLogin.Pass)
 	dbUser := DbGetByLogin(login)
+
 	if dbUser.Hash == hash {
 		refreshToken := utils.GetHash(login + "RR" + hash + "Fresh" + time.Now().UTC().String())
 		DbSetLogin(dbUser.Id, refreshToken)
 		token := utils.GetHash(login + "17" + hash + "F" + time.Now().UTC().String())
 		// Big note: REFRESH TOKEN is not being used right now
+
+		var parentUser int
+		if dbUser.ParentUser.Valid {
+			parentUser = int(dbUser.ParentUser.Int32)
+		} else {
+			parentUser = 0
+		}
 		tokens[dbUser.Id] = AuthData{
 			Token:        token,
 			LoaderToken:  utils.GetHash("L" + time.Now().UTC().String()),
 			CreationDate: time.Now().UTC(),
 			RefreshToken: refreshToken,
+			ParentUser:   parentUser,
 		}
 		response := UserResponse{
 			Id:           dbUser.Id,
 			Token:        token,
 			RefreshToken: refreshToken,
+			ParentUser:   parentUser,
 		}
 		utils.Success(w, response)
 	} else {
@@ -96,15 +107,41 @@ func IsLogged(id int, auth string, w http.ResponseWriter) bool {
 }
 
 func CheckLogin(w http.ResponseWriter, r *http.Request) int {
+	// ChildUsers are users that doesn't have storage, but use someone else's one
+	// If there's no child element, it is a main user
+	// Those are used for login then, but the User is always the returned one
+	// to ensure correct access to storage
+
+	var userToLoginId int
+
+	childUserStr := r.Header.Get("ChildUser")
 	userStr := r.Header.Get("User")
-	userId, err := strconv.ParseInt(userStr, 10, 32)
 	auth := r.Header.Get("Auth")
-	if err != nil || len(auth) == 0 || userId == 0 || tokens[int(userId)].Token != auth {
-		utils.NoAuth(w)
-		return 0
-	} else {
-		return int(userId)
+	userId, err := strconv.ParseInt(userStr, 10, 32)
+
+	if err != nil {
+		goto Error
 	}
+
+	if len(childUserStr) > 0 {
+		childUserId, err2 := strconv.ParseInt(childUserStr, 10, 32)
+		userToLoginId = int(childUserId)
+		if err2 != nil || tokens[userToLoginId].ParentUser != int(userId) {
+			// Check if error and if this user has access to this storage (parentUser)
+			goto Error
+		}
+	} else {
+		userToLoginId = int(userId)
+	}
+	if len(auth) > 0 && userToLoginId > 0 && tokens[userToLoginId].Token == auth {
+		return int(userId) // Always return userId, because that's the user's storage
+	} else {
+		goto Error
+	}
+
+Error:
+	utils.NoAuth(w)
+	return 0
 }
 
 func GetUserIdAuthData(userId int, w http.ResponseWriter) (AuthData, bool) {
