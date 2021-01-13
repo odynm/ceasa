@@ -113,6 +113,8 @@ const Sell = ({
 				if (noConnection || !(await NetInfo.fetch()).isInternetReachable) {
 					addToQueue()
 					// TODO While offline, update the storage with the sold items decreased
+					// We can probably use the decrease function we had before, just rememeber
+					// that we have the thing of the merged to watch out for
 					// setStoredItems(itemsAfterSell)
 					handleClear()
 					ToastService.show({ message: translate('sell.addedOffline') })
