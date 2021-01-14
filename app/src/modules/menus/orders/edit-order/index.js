@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { toHour } from 'src/utils/date'
@@ -34,6 +34,7 @@ const EditOrder = ({
 	setUrgent,
 	sendOrder,
 	navigation,
+	orderItems,
 	loadOrders,
 	loadStorage,
 	completedAt,
@@ -44,8 +45,13 @@ const EditOrder = ({
 	setConfirmDelete,
 	setDucksOrderStatus,
 }) => {
-	const [modalConfirmEdit, setModalConfirmEdit] = useState(false)
+	const [currentOrder, setCurrentOrder] = useState([])
 	const [internalStatus, setInternalStatus] = useState(status)
+	const [modalConfirmEdit, setModalConfirmEdit] = useState(false)
+
+	useEffect(() => {
+		setCurrentOrder([...orderItems])
+	}, [id])
 
 	const handleDelete = async () => {
 		if (noConnection) {
@@ -83,7 +89,10 @@ const EditOrder = ({
 		if (noConnection) {
 			ToastService.show({ message: translate('app.noConnectionError') })
 		} else {
-			navigation.navigate(screens.editProductsOrder, { status })
+			navigation.navigate(screens.editProductsOrder, {
+				status,
+				currentOrder,
+			})
 		}
 	}
 
@@ -250,6 +259,7 @@ const mapStateToProps = ({ app, client, editOrder }) => ({
 	urgent: editOrder.urgent,
 	loader: editOrder.loader,
 	noConnection: app.noConnection,
+	orderItems: editOrder.orderItems,
 	completedAt: editOrder.completedAt,
 	confirmDelete: editOrder.confirmDelete,
 })

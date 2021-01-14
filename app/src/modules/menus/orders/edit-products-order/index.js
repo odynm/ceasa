@@ -30,6 +30,7 @@ const EditProductsOrder = ({
 		value: 0.0,
 	})
 	const [openAddMenu, setOpenAddMenu] = useState(false)
+	const [currentOrder, setCurrentOrder] = useState([])
 	const [storedItemsEditNormalized, setStoredItemsEditNormalized] = useState(
 		[],
 	)
@@ -45,6 +46,10 @@ const EditProductsOrder = ({
 		} else {
 			setCantEdit(false)
 		}
+
+		if (navigation.state?.params?.currentOrder) {
+			setCurrentOrder(navigation.state.params.currentOrder)
+		}
 	}, [])
 
 	useEffect(() => {
@@ -52,17 +57,21 @@ const EditProductsOrder = ({
 	}, [orderItems])
 
 	useEffect(() => {
+		updateNormalizedStorage()
+	}, [storedItems])
+
+	const updateNormalizedStorage = () => {
 		if (storedItems && storedItems.length > 0) {
 			const normalized = storedItems.map(x => ({
 				...x,
 				amount:
 					x.amount +
-						orderItems.find(oi => oi.storageId === x.id)?.storageAmount ||
-					0,
+						currentOrder.find(oi => oi.storageId === x.id)
+							?.storageAmount || 0,
 			}))
 			setStoredItemsEditNormalized(normalized)
 		}
-	}, [storedItems])
+	}
 
 	const updatePrice = () => {
 		setTotalPrice(
@@ -96,6 +105,7 @@ const EditProductsOrder = ({
 		addOrderItem(product)
 		// TODO why we decrease items order in addProduct(above) and not here?
 		updatePrice()
+		updateNormalizedStorage()
 	}
 
 	const removeProduct = async product => {
