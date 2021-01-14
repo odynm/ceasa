@@ -149,8 +149,8 @@ const PriceSelect = ({
 				handlePriceChange={handlePriceChange}
 			/>
 			<ModalExceededStorage
-				amount={amount}
 				addItem={addItemExceeded}
+				exceeded={amount - available}
 				open={modalExceededStorageOpen}
 				selectedProduct={selectedProduct}
 				handleCloseExceededStorage={handleCloseExceededStorage}

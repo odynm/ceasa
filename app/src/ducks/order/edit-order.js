@@ -7,6 +7,7 @@ const Types = {
 	SET_URGENT: prefix + 'SET_URGENT',
 	SET_STATUS: prefix + 'SET_STATUS',
 	SET_CLIENT: prefix + 'SET_CLIENT',
+	SET_IS_EDITING: prefix + 'SET_IS_EDITING',
 	SET_ORDER_ITEMS: prefix + 'SET_ORDER_ITEMS',
 	SET_CLIENT_STEP: prefix + 'SET_CLIENT_STEP',
 	SET_CONFIRM_DELETE: prefix + 'SET_CONFIRM_DELETE',
@@ -14,6 +15,11 @@ const Types = {
 }
 
 const common = new commonObj(Types, 'editOrder')
+
+const setIsEditing = isEditing => ({
+	payload: { isEditing },
+	type: Types.SET_IS_EDITING,
+})
 
 const setUrgent = urgent => ({
 	payload: { urgent },
@@ -45,6 +51,7 @@ const initialState = {
 	status: 0,
 	urgent: false,
 	orderItems: [],
+	isEditing: false,
 	clientStep: false,
 	confirmDelete: false,
 	productListIsDirty: false,
@@ -58,6 +65,7 @@ export const Creators = {
 	setOrder: setOrder,
 	setUrgent: setUrgent,
 	deleteOrder: deleteOrder,
+	setIsEditing: setIsEditing,
 	setStatus: common.setStatus,
 	setClient: common.setClient,
 	sendOrder: common.sendOrder,
@@ -96,6 +104,11 @@ export default function reducer(state = initialState, action) {
 			return {
 				...state,
 				urgent: action.payload.urgent,
+			}
+		case Types.SET_IS_EDITING:
+			return {
+				...state,
+				isEditing: action.payload.isEditing,
 			}
 		case Types.SET_ORDER_ITEMS:
 			return {

@@ -50,6 +50,8 @@ const EditProductsOrder = ({
 		if (navigation.state?.params?.currentOrder) {
 			setCurrentOrder(navigation.state.params.currentOrder)
 		}
+
+		updateNormalizedStorage()
 	}, [])
 
 	useEffect(() => {
@@ -123,6 +125,7 @@ const EditProductsOrder = ({
 				style={styles.items}
 				orderItems={orderItems}
 				editProduct={editProduct}
+				removeProduct={removeProduct}
 				storageItems={storedItemsEditNormalized}
 			/>
 			<View style={styles.footer}>

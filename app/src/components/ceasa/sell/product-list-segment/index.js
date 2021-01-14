@@ -16,6 +16,7 @@ const ProductListSegment = ({
 	storageItems,
 	removeProduct,
 }) => {
+	const [initialValues, setInitialValues] = useState({})
 	const [product, setProduct] = useState({})
 	const [modalOpen, setModalOpen] = useState(false)
 
@@ -27,6 +28,12 @@ const ProductListSegment = ({
 		} else {
 			setProduct(item)
 			setModalOpen(true)
+			// This was done to avoid refreshing the initial values when the
+			// storage changed
+			setInitialValues({
+				amount: item.amount,
+				price: item.unitPrice,
+			})
 		}
 	}
 
@@ -59,11 +66,8 @@ const ProductListSegment = ({
 				addProduct={editProduct}
 				removeProduct={removeProduct}
 				selectedProduct={product}
+				initialValues={initialValues}
 				onClose={() => setModalOpen(false)}
-				initialValues={{
-					amount: product.amount,
-					price: product.unitPrice,
-				}}
 				available={StorageSelectors.getAvailable({
 					storageItems: storageItems,
 					id: product.storageId,

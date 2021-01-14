@@ -10,7 +10,7 @@ import Button from 'src/components/fw/button'
 
 const ModalExceededStorage = ({
 	open,
-	amount,
+	exceeded,
 	addItem,
 	selectedProduct,
 	handleCloseExceededStorage,
@@ -31,11 +31,7 @@ const ModalExceededStorage = ({
 						selectedProduct.productTypeName
 					}`}
 				/>
-				<KText
-					bold
-					style={styles.right}
-					text={amount - selectedProduct.amount}
-				/>
+				<KText bold style={styles.right} text={exceeded} />
 			</View>
 			<View style={styles.rowButtons}>
 				<Button
