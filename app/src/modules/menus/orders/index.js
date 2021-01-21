@@ -52,6 +52,8 @@ const OrdersVendor = ({
 					...mergedItem,
 					mergedData: { ...mergedItem.mergedData, items: converted },
 				}
+			} else {
+				return mergedItem
 			}
 		})
 
