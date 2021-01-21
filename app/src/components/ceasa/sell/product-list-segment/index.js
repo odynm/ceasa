@@ -70,7 +70,7 @@ const ProductListSegment = ({
 				onClose={() => setModalOpen(false)}
 				available={StorageSelectors.getAvailable({
 					storageItems: storageItems,
-					id: product.storageId,
+					product: product,
 				})}
 			/>
 		</>

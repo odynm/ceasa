@@ -23,18 +23,23 @@ func add(w http.ResponseWriter, r *http.Request) {
 		}
 
 		var result int
+		// This is the only error we have for now, but if we have more in the future, make
+		// add and edit return a struct or something
+		var failedData []OrderFulfillmentError
 
 		if orderDto.Id > 0 {
 			_, ok := GetIds(userId, orderDto.Id, w) //TODO não preciso do client id na edição
 			if ok {
-				result = Edit(orderDto, userId, w)
+				result, failedData = Edit(orderDto, userId, w)
 			}
 		} else {
-			result = Add(orderDto, userId, w)
+			result, failedData = Add(orderDto, userId, w)
 		}
 
 		if result > 0 {
 			utils.Success(w, result)
+		} else {
+			utils.FailedWithObj(w, -1, failedData)
 		}
 	}
 }

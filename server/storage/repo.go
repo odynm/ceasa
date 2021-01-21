@@ -142,27 +142,48 @@ Error:
 	return 0
 }
 
-func DbGetById(storageId int, userId int) StorageItem {
+func DbGetAllByProductId(productId int, productTypeId int, descriptionId int, userId int) []StorageItem {
 	schema := fmt.Sprint("u", userId)
 
-	var storageItem StorageItem
+	var storageItems []StorageItem
 
 	statement := fmt.Sprintf(`
 		SELECT 
 			id,
 			product_id,
 			product_type_id,
-			description_id,
 			amount,
 			cost_price
 		FROM %v.storage_item
-		WHERE id = $1`, schema)
+		WHERE 
+			deleted = false AND
+			product_id = $1 AND
+			((product_type_id IS NULL AND $2 = 0) OR product_type_id = $2) AND
+			description_id = $3`, schema)
 
-	db.Instance.Db.
-		QueryRow(statement, storageId).
-		Scan(&storageItem.Id, &storageItem.ProductId, &storageItem.ProductTypeId, &storageItem.DescriptionId, &storageItem.Amount, &storageItem.CostPrice)
+	rows, err := db.Instance.Db.
+		Query(statement, productId, productTypeId, descriptionId)
 
-	return storageItem
+	if err != nil {
+		goto Error
+	}
+
+	for rows.Next() {
+		var storageItem StorageItem
+
+		err := rows.Scan(&storageItem.Id, &storageItem.ProductId, &storageItem.ProductTypeId, &storageItem.Amount, &storageItem.CostPrice)
+
+		if err != nil {
+			goto Error
+		}
+
+		storageItems = append(storageItems, storageItem)
+	}
+
+	return storageItems
+
+Error:
+	return nil
 }
 
 func DbGetAllFull(userId int) []StorageItemFull {
@@ -322,4 +343,30 @@ func DbResetStorage(userId int) bool {
 	return true
 Error:
 	return false
+}
+
+func DbGetProductAmount(userId int, productId int, productTypeId int, descriptionId int) int {
+	var amount int
+	schema := fmt.Sprint("u", userId)
+
+	statement := fmt.Sprintf(`
+	SELECT SUM(amount)
+		FROM %v.storage_item 
+		WHERE 
+			deleted = false AND
+			product_id = $1 AND
+			((product_type_id IS NULL AND $2 = 0) OR product_type_id = $2) AND
+			description_id = $3`, schema)
+
+	err := db.Instance.Db.
+		QueryRow(statement, productId, productTypeId, descriptionId).
+		Scan(&amount)
+
+	if err != nil {
+		goto Error
+	}
+
+	return amount
+Error:
+	return 0
 }

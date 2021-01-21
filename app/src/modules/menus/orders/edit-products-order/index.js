@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { StyleSheet, View } from 'react-native'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
-import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
 import orderStatus from 'src/enums/order'
 import MoneyService from 'src/services/moneyService'
@@ -13,6 +12,7 @@ import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
 import AddProduct from 'src/components/ceasa/sell/add-product'
 import TotalSegment from 'src/components/ceasa/sell/total-segment'
+import MergedProductsService from 'src/services/mergedProductsService'
 import ProductListSegment from 'src/components/ceasa/sell/product-list-segment'
 
 const EditProductsOrder = ({
@@ -30,7 +30,7 @@ const EditProductsOrder = ({
 		value: 0.0,
 	})
 	const [openAddMenu, setOpenAddMenu] = useState(false)
-	const [currentOrder, setCurrentOrder] = useState([])
+	const [orderItemsMerged, setOrderItemsMerged] = useState([])
 	const [storedItemsEditNormalized, setStoredItemsEditNormalized] = useState(
 		[],
 	)
@@ -47,10 +47,6 @@ const EditProductsOrder = ({
 			setCantEdit(false)
 		}
 
-		if (navigation.state?.params?.currentOrder) {
-			setCurrentOrder(navigation.state.params.currentOrder)
-		}
-
 		updateNormalizedStorage()
 	}, [])
 
@@ -63,15 +59,27 @@ const EditProductsOrder = ({
 	}, [storedItems])
 
 	const updateNormalizedStorage = () => {
+		setOrderItemsMerged(
+			MergedProductsService.mergeSimilarProducts(orderItems),
+		)
+
 		if (storedItems && storedItems.length > 0) {
 			const normalized = storedItems.map(x => ({
 				...x,
 				amount:
 					x.amount +
-						currentOrder.find(oi => oi.storageId === x.id)
-							?.storageAmount || 0,
+						// I can't use storageId because it can be any of the many storage ids
+						// when the item is merged, so we use productId, productTypeId and descriptionId
+						orderItemsMerged.find(
+							oi =>
+								oi.productId === x.productId &&
+								oi.productTypeId === x.productTypeId &&
+								oi.descriptionId === x.descriptionId,
+						)?.storageAmount || 0,
 			}))
+
 			setStoredItemsEditNormalized(normalized)
+			updatePrice()
 		}
 	}
 
@@ -123,8 +131,8 @@ const EditProductsOrder = ({
 				editMode
 				cantEdit={cantEdit}
 				style={styles.items}
-				orderItems={orderItems}
 				editProduct={editProduct}
+				orderItems={orderItemsMerged}
 				removeProduct={removeProduct}
 				storageItems={storedItemsEditNormalized}
 			/>

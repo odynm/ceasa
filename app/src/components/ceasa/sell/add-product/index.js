@@ -43,7 +43,7 @@ const AddProduct = ({
 						selectedProduct={selectedProduct}
 						available={StorageSelectors.getAvailable({
 							storageItems: storageItems,
-							id: selectedProduct.id,
+							product: selectedProduct,
 						})}
 					/>
 				</>

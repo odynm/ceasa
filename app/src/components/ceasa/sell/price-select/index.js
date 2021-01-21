@@ -81,8 +81,11 @@ const PriceSelect = ({
 			total: { text: total.text, value: total.value }, // to pass by value
 			unitPrice: { text: price.text, value: price.value }, // to pass by value
 			description: selectedProduct.description,
+			descriptionId: selectedProduct.descriptionId,
 			productName: selectedProduct.productName,
+			productId: selectedProduct.productId,
 			productTypeName: selectedProduct.productTypeName,
+			productTypeId: selectedProduct.productTypeId,
 
 			costPrice: selectedProduct?.isMerged
 				? MergedProductsService.calculateMergedPrice(

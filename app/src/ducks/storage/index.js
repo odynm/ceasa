@@ -177,9 +177,9 @@ const add = item => async (dispatch, getStore) => {
 
 // TODO: this item currently only workd with the server online
 const deleteItem = item => async (_, getStore) => {
-	const { inUse } = getStore().offline
+	const { noConnection } = getStore().app
 	// At least for now, don't touch the storage on offline mode
-	if (!inUse) {
+	if (!noConnection) {
 		const { success } = await HttpService.delete(`storage?id=${item.id}`)
 		return success
 	} else {
@@ -188,9 +188,9 @@ const deleteItem = item => async (_, getStore) => {
 }
 
 const get = () => async (dispatch, getStore) => {
-	const { inUse } = getStore().offline
+	const { noConnection } = getStore().app
 	// At least for now, don't touch the storage on offline mode
-	if (!inUse) {
+	if (!noConnection) {
 		dispatch(setLoading(true))
 		const { data, success } = await HttpService.get('storage')
 		if (success && data?.length > 0) {

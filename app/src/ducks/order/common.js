@@ -56,6 +56,7 @@ function common(types, duck) {
 	}
 
 	this.sendOrder = ({ useParam, order } = {}) => async (_, getState) => {
+		// Can come from parameter in the case of offline mode
 		const source = useParam ? order : getState()[duck]
 		const {
 			id,
@@ -66,36 +67,22 @@ function common(types, duck) {
 			generateLoad,
 			productListIsDirty = false,
 		} = source
-		// Since we have merged items, we need to treat them to send as different
-		// orders
+
 		const products = []
+		console.warn(orderItems)
 
 		for (let i = 0; i < orderItems.length; i++) {
 			const oi = orderItems[i]
-			if (oi.isMerged) {
-				const items = orderItems[i].mergedData.items
-				let sent = 0
-				for (let j = 0; j < items.length; j++) {
-					if (sent < oi.amount) {
-						const mergedItem = items[j]
-						const toSend = Math.min(mergedItem.amount, oi.amount - sent)
-						sent += toSend
-						products.push({
-							storageItem: mergedItem.storageId,
-							unitPrice: Math.round(oi.unitPrice.value * 100),
-							amount: toSend,
-						})
-					} else {
-						break
-					}
-				}
-			} else {
-				products.push({
-					storageItem: oi.storageId,
-					unitPrice: Math.round(oi.unitPrice.value * 100),
-					amount: oi.amount,
-				})
-			}
+			// We don't make discrimination between merged items and not-merged ones, because
+			// this difference will be solved on the backend
+			products.push({
+				productId: oi.productId,
+				productTypeId: oi.productTypeId,
+				descriptionId: oi.descriptionId,
+				unitPrice: Math.round(oi.unitPrice.value * 100),
+				amount: oi.amount,
+				storageAmount: oi.storageAmount,
+			})
 		}
 
 		const postData = {

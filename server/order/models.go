@@ -15,9 +15,12 @@ const (
 )
 
 type ProductDto struct {
-	StorageItemId int `json:"storageItem"`
+	ProductId     int `json:"productId"`
+	ProductTypeId int `json:"productTypeId"`
+	DescriptionId int `json:"descriptionId"`
 	UnitPrice     int `json:"unitPrice"`
 	Amount        int `json:"amount"`
+	StorageAmount int `json:"storageAmount"`
 }
 
 type OrderProduct struct {
@@ -56,6 +59,7 @@ type OrderListItemProduct struct {
 	ProductName     string `json:"productName"`
 	ProductTypeId   int    `json:"productTypeId"`
 	ProductTypeName string `json:"productTypeName"`
+	DescriptionId   int    `json:"descriptionId"`
 	Description     string `json:"description"`
 	CostPrice       int    `json:"costPrice"`
 	UnitPrice       int    `json:"unitPrice"`
@@ -85,4 +89,10 @@ type NotificationData struct {
 	Type     string                 `json:"type"`
 	Client   client.ClientDto       `json:"client"`
 	Products []OrderListItemProduct `json:"products"`
+}
+
+type OrderFulfillmentError struct {
+	ProductId     int `json:"productId"`
+	ProductTypeId int `json:"productTypeId"`
+	MissingAmount int `json:"missingAmount"`
 }

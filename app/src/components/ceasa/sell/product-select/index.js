@@ -37,8 +37,6 @@ const ProductSelect = ({
 		setIsKeyboardOpen(false)
 	}
 
-	console.warn(storageItems)
-
 	return (
 		<KModal
 			open={open}

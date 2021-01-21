@@ -10,6 +10,7 @@ const mergeSimilarItems = storageItems => {
 	const getItem = obj => {
 		return {
 			amount: obj.amount,
+			storageAmount: obj.storageAmount, // sometimes is undefined
 			id: obj.id,
 			// This is clunky, but its correct because of the way we treat products:
 			// * sometimes we use storedItems, which only have an "id" prop
@@ -41,6 +42,7 @@ const mergeSimilarItems = storageItems => {
 						...a,
 						costPrice: undefined, // merged doesn't have
 						amount: a.amount + b.amount,
+						storageAmount: a.storageAmount + b.storageAmount, //not always used, but sometimes useful
 						mergedData: {
 							items: a.mergedData?.items
 								? [...a.mergedData.items, getItem(b)]
@@ -151,11 +153,16 @@ const ordersMergeSimilarProducts = orders => {
 	for (let i = 0; i < orders.length; i++) {
 		const order = orders[i]
 		const products = orders[i].products
-		const orderedProducts = sortProducts(products)
-		const mergedProducts = mergeSimilarItems(orderedProducts)
+		const mergedProducts = mergeSimilarProducts(products)
 		mergedOrders.push({ ...order, products: mergedProducts })
 	}
 	return mergedOrders
+}
+
+const mergeSimilarProducts = products => {
+	const orderedProducts = sortProducts(products)
+	const mergedProducts = mergeSimilarItems(orderedProducts)
+	return mergedProducts
 }
 
 const MergedProductsService = {
@@ -163,6 +170,7 @@ const MergedProductsService = {
 	mergeSimilarItems,
 	addAndMergeSimilar,
 	calculateMergedPrice,
+	mergeSimilarProducts,
 	ordersMergeSimilarProducts,
 }
 

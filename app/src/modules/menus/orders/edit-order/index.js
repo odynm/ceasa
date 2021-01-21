@@ -91,7 +91,6 @@ const EditOrder = ({
 		} else {
 			navigation.navigate(screens.editProductsOrder, {
 				status,
-				currentOrder,
 			})
 		}
 	}

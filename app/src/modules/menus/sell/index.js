@@ -75,9 +75,10 @@ const Sell = ({
 		// The add already has an edit built-in
 		await addOrderItem(product)
 
+		// TODO maybe not needed
 		const available = StorageSelectors.getAvailable({
 			storageItems: storageItems,
-			id: product.id,
+			product: product,
 		})
 		const difference = available - product.storageAmount
 		//setItemsOrder({ id: product.id, amount: difference })
@@ -112,7 +113,9 @@ const Sell = ({
 				// Ensure that we don't try to send if we are offline
 				if (noConnection || !(await NetInfo.fetch()).isInternetReachable) {
 					addToQueue()
-					// TODO While offline, update the storage with the sold items decreased
+					// TODO While offline, update the storage with the sold items decreased,
+					// and also do some logic to create the merged order pretty much like we do
+					// in the backend, using productId and productTypeId
 					// We can probably use the decrease function we had before, just rememeber
 					// that we have the thing of the merged to watch out for
 					// setStoredItems(itemsAfterSell)
@@ -120,9 +123,12 @@ const Sell = ({
 					ToastService.show({ message: translate('sell.addedOffline') })
 					setWorking(false)
 				} else {
-					const success = await sendOrder()
+					const { success, data } = await sendOrder()
 					if (success) {
 						ToastService.show({ message: translate('sell.added') })
+					} else {
+						console.warn(data)
+						return
 					}
 					handleClear()
 					setWorking(false)

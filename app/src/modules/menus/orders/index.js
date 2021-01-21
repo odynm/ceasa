@@ -14,6 +14,7 @@ import MoneyService from 'src/services/moneyService'
 import ScreenBase from 'src/components/fw/screen-base'
 import OrderCard from 'src/components/ceasa/order/card'
 import ScreenHeader from 'src/components/fw/screen-header'
+import MergedProductsService from 'src/services/mergedProductsService'
 
 const OrdersVendor = ({
 	setOrder,
@@ -35,16 +36,34 @@ const OrdersVendor = ({
 	}
 
 	const editOrder = ({ item }) => {
-		setOrder(item)
-
-		setOrderItems(
-			item.products.map(x => ({
-				...x,
-				costPrice: MoneyService.toMoney(x.costPrice / 100),
-				unitPrice: MoneyService.toMoney(x.unitPrice / 100),
-				total: MoneyService.toMoney(x.amount * (x.unitPrice / 100)),
-			})),
+		const orderItemsMerged = MergedProductsService.mergeSimilarProducts(
+			item.products,
 		)
+
+		// Update the costPrice for the merged items
+		const orderItemsMergedWithCostPrice = orderItemsMerged.map(mergedItem => {
+			if (mergedItem.isMerged) {
+				const converted = mergedItem.mergedData.items.map(x => ({
+					...x,
+					costPrice: MoneyService.toMoney(x.costPrice / 100),
+				}))
+
+				return {
+					...mergedItem,
+					mergedData: { ...mergedItem.mergedData, items: converted },
+				}
+			}
+		})
+
+		const orderItems = orderItemsMergedWithCostPrice.map(x => ({
+			...x,
+			costPrice: MoneyService.toMoney(x.costPrice / 100),
+			unitPrice: MoneyService.toMoney(x.unitPrice / 100),
+			total: MoneyService.toMoney(x.amount * (x.unitPrice / 100)),
+		}))
+
+		setOrder(item)
+		setOrderItems(orderItems)
 		navigation.navigate(screens.editOrder)
 	}
 
