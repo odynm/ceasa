@@ -45,13 +45,15 @@ const EditOrder = ({
 	setConfirmDelete,
 	setDucksOrderStatus,
 }) => {
-	const [currentOrder, setCurrentOrder] = useState([])
+	// The current order state at edition start
+	const [currentOrderSnapshot, setCurrentOrderSnapshot] = useState([])
+
 	const [internalStatus, setInternalStatus] = useState(status)
 	const [modalConfirmEdit, setModalConfirmEdit] = useState(false)
 
 	useEffect(() => {
-		setCurrentOrder([...orderItems])
-	}, [id])
+		setCurrentOrderSnapshot([...orderItems])
+	}, [id, orderItems]) // TODO this doesn't seem optimal at all, but it's working for now
 
 	const handleDelete = async () => {
 		if (noConnection) {
@@ -91,6 +93,7 @@ const EditOrder = ({
 		} else {
 			navigation.navigate(screens.editProductsOrder, {
 				status,
+				currentOrderSnapshot,
 			})
 		}
 	}

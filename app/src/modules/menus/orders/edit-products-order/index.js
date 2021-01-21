@@ -12,7 +12,6 @@ import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
 import AddProduct from 'src/components/ceasa/sell/add-product'
 import TotalSegment from 'src/components/ceasa/sell/total-segment'
-import MergedProductsService from 'src/services/mergedProductsService'
 import ProductListSegment from 'src/components/ceasa/sell/product-list-segment'
 
 const EditProductsOrder = ({
@@ -30,7 +29,8 @@ const EditProductsOrder = ({
 		value: 0.0,
 	})
 	const [openAddMenu, setOpenAddMenu] = useState(false)
-	const [orderItemsMerged, setOrderItemsMerged] = useState([])
+	// The state of the order at the start of edition
+	const [currentOrderSnapshot, setCurrentOrderSnapshot] = useState([])
 	const [storedItemsEditNormalized, setStoredItemsEditNormalized] = useState(
 		[],
 	)
@@ -47,6 +47,10 @@ const EditProductsOrder = ({
 			setCantEdit(false)
 		}
 
+		if (navigation.state?.params?.currentOrderSnapshot) {
+			setCurrentOrderSnapshot(navigation.state.params.currentOrderSnapshot)
+		}
+
 		updateNormalizedStorage()
 	}, [])
 
@@ -59,10 +63,7 @@ const EditProductsOrder = ({
 	}, [storedItems])
 
 	const updateNormalizedStorage = () => {
-		setOrderItemsMerged(
-			MergedProductsService.mergeSimilarProducts(orderItems),
-		)
-
+		// We will use the order state at the start of the editing (currentOrderSnapshot)
 		if (storedItems && storedItems.length > 0) {
 			const normalized = storedItems.map(x => ({
 				...x,
@@ -70,7 +71,7 @@ const EditProductsOrder = ({
 					x.amount +
 						// I can't use storageId because it can be any of the many storage ids
 						// when the item is merged, so we use productId, productTypeId and descriptionId
-						orderItemsMerged.find(
+						currentOrderSnapshot.find(
 							oi =>
 								oi.productId === x.productId &&
 								oi.productTypeId === x.productTypeId &&
@@ -79,7 +80,6 @@ const EditProductsOrder = ({
 			}))
 
 			setStoredItemsEditNormalized(normalized)
-			updatePrice()
 		}
 	}
 
@@ -113,7 +113,6 @@ const EditProductsOrder = ({
 	const editProduct = product => {
 		setProductListIsDirty(true)
 		addOrderItem(product)
-		// TODO why we decrease items order in addProduct(above) and not here?
 		updatePrice()
 		updateNormalizedStorage()
 	}
@@ -132,7 +131,7 @@ const EditProductsOrder = ({
 				cantEdit={cantEdit}
 				style={styles.items}
 				editProduct={editProduct}
-				orderItems={orderItemsMerged}
+				orderItems={orderItems}
 				removeProduct={removeProduct}
 				storageItems={storedItemsEditNormalized}
 			/>
