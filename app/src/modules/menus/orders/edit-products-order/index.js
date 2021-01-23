@@ -147,6 +147,7 @@ const EditProductsOrder = ({
 				setOpen={setOpenAddMenu}
 				storageItems={storedItems}
 				removeProduct={removeProduct}
+				alreadyAddedProducts={orderItems}
 			/>
 		</ScreenBase>
 	)

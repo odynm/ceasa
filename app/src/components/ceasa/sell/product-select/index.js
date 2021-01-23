@@ -70,7 +70,12 @@ const ProductSelect = ({
 										.startsWith(searchStringUpper) &&
 									(alreadyAddedProducts &&
 									alreadyAddedProducts.length > 0
-										? alreadyAddedProducts.every(y => y.id !== x.id)
+										? alreadyAddedProducts.every(
+												y =>
+													y.productId !== x.productId ||
+													y.productTypeId !== x.productTypeId ||
+													y.descriptionId !== x.descriptionId,
+										  )
 										: true),
 							)
 							.map((item, index) => (

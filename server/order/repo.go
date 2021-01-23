@@ -253,7 +253,8 @@ func DbGetOrderProductsForEdit(userId int, orderId int) ([]OrderProductForEdit, 
 	FROM %v.order_product op
 	LEFT JOIN %v.storage_item si ON si.id = op.storage_id
 	WHERE order_id = $1 
-		AND si.deleted = false`, schema, schema)
+		AND si.deleted = false
+	ORDER BY product_id, product_type_id, description_id`, schema, schema)
 
 	rows, err := db.Instance.Db.Query(statement, orderId)
 
