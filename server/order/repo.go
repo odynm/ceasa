@@ -235,6 +235,62 @@ func DbGetOrderProducts(userId int, orderId int) ([]OrderProduct, bool) {
 	return orderProducts, true
 }
 
+func DbGetOrderProductsForEdit(userId int, orderId int) ([]OrderProductForEdit, bool) {
+	// Edit is a special case in which we don't want to know the storageId, just the
+	// productId, productTypeId and descriptionId
+	schema := fmt.Sprint("u", userId)
+	var orderProducts []OrderProductForEdit
+
+	statement := fmt.Sprintf(`
+	SELECT 
+		si.id,
+		si.product_id,
+		si.product_type_id,
+		si.description_id,
+		op.unit_price,
+		op.amount,
+		op.storage_amount
+	FROM %v.order_product op
+	LEFT JOIN %v.storage_item si ON si.id = op.storage_id
+	WHERE order_id = $1 
+		AND si.deleted = false`, schema, schema)
+
+	rows, err := db.Instance.Db.Query(statement, orderId)
+
+	if err != nil {
+		return orderProducts, false
+	}
+
+	for rows.Next() {
+		var orderProduct OrderProductForEdit
+
+		var productTypeId sql.NullInt32
+
+		err := rows.Scan(
+			&orderProduct.StorageId,
+			&orderProduct.ProductId,
+			&productTypeId,
+			&orderProduct.DescriptionId,
+			&orderProduct.UnitPrice,
+			&orderProduct.Amount,
+			&orderProduct.StorageAmount)
+
+		if productTypeId.Valid {
+			orderProduct.ProductTypeId = int(productTypeId.Int32)
+		} else {
+			orderProduct.ProductTypeId = 0
+		}
+
+		if err != nil {
+			return orderProducts, false
+		}
+
+		orderProducts = append(orderProducts, orderProduct)
+	}
+
+	return orderProducts, true
+}
+
 func DbGetOrderProductsFull(userId int, orderId int) ([]OrderListItemProduct, bool) {
 	schema := fmt.Sprint("u", userId)
 	var orderProducts []OrderListItemProduct

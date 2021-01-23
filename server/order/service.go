@@ -59,119 +59,139 @@ Error:
 }
 
 func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) (int, []OrderFulfillmentError) {
-	// 	var clientId int
-	// 	var orderId int
-	// 	var order OrderCreation
-	// 	var ok bool
+	var clientId int
+	var orderId int
+	var order OrderCreation
+	var ok bool
+	var errors []OrderFulfillmentError
 
-	// 	orderStatus := DbGetOrderStatus(userId, orderDto.Id)
+	orderStatus := DbGetOrderStatus(userId, orderDto.Id)
 
-	// 	if orderStatus == S_Done || orderStatus == S_Deleted {
-	// 		utils.Failed(w, utils.ORDER_CANT_EDIT)
-	// 		goto Error
-	// 	}
+	if orderStatus == S_Done || orderStatus == S_Deleted {
+		utils.Failed(w, utils.ORDER_CANT_EDIT)
+		goto Error
+	}
 
-	// 	clientId = client.AddOrUpdateClient(orderDto.Client, userId, w)
-	// 	if clientId == 0 {
-	// 		utils.Failed(w, utils.ORDER_GENERIC)
-	// 		goto Error
-	// 	}
+	errors, ok = checkOrderEditCanBeFulfilled(userId, orderDto)
 
-	// 	order = OrderCreation{
-	// 		ClientId: clientId,
-	// 		Urgent:   orderDto.Urgent,
-	// 		Status:   orderDto.Status,
-	// 	}
-	// 	if orderDto.Status == S_Released {
-	// 		order.ReleasedAt = time.Now().UTC()
-	// 	}
-	// 	orderId = DbEditOrder(order, orderDto.Id, userId)
-	// 	if orderId == 0 {
-	// 		utils.Failed(w, utils.ORDER_GENERIC)
-	// 		goto Error
-	// 	}
-	// 	if orderDto.ProductListIsDirty {
-	// 		var dbStoredProducts []OrderProduct
-	// 		dbStoredProducts, ok = DbGetOrderProducts(userId, orderId)
-	// 		if !ok {
-	// 			utils.Failed(w, utils.ORDER_GENERIC)
-	// 			goto Error
-	// 		}
+	if !ok {
+		return 0, errors
+	}
 
-	// 		// Update storage
-	// 		/*
-	// 			* We add all new items that are not in db to the toAddProductList
-	// 			* We compare the stored with the new items
-	// 				* If there's a deleted one, we readd the products to store
-	// 				* If there's a updated one, we:
-	// 					* we readd the products to store
-	// 					* add to toAddProductList
-	// 		*/
-	// 		var toAddProductList []ProductDto
-	// 		for _, newProduct := range orderDto.Products {
-	// 			isNewItem := true
-	// 			for _, dbStoredProduct := range dbStoredProducts {
-	// 				if newProduct.StorageItemId == dbStoredProduct.StorageItemId {
-	// 					isNewItem = false
-	// 					break
-	// 				}
-	// 			}
-	// 			if isNewItem {
-	// 				toAddProductList = append(toAddProductList, newProduct)
-	// 			}
-	// 		}
+	clientId = client.AddOrUpdateClient(orderDto.Client, userId, w)
+	if clientId == 0 {
+		utils.Failed(w, utils.ORDER_GENERIC)
+		goto Error
+	}
 
-	// 		for _, dbStoredProduct := range dbStoredProducts {
-	// 			isDeletedItem := true
-	// 			for _, newProduct := range orderDto.Products {
-	// 				if newProduct.StorageItemId == dbStoredProduct.StorageItemId {
-	// 					isDeletedItem = false
-	// 					// Update storage
-	// 					if newProduct.Amount != dbStoredProduct.Amount {
-	// 						storage.DbIncreaseAmount(newProduct.StorageItemId, dbStoredProduct.StorageAmount, userId)
-	// 						toAddProductList = append(toAddProductList, newProduct)
-	// 					}
-	// 				}
-	// 				if isDeletedItem {
-	// 					storage.DbIncreaseAmount(newProduct.StorageItemId, dbStoredProduct.Amount, userId)
-	// 				}
-	// 			}
-	// 		}
+	order = OrderCreation{
+		ClientId: clientId,
+		Urgent:   orderDto.Urgent,
+		Status:   orderDto.Status,
+	}
+	if orderDto.Status == S_Released {
+		order.ReleasedAt = time.Now().UTC()
+	}
+	orderId = DbEditOrder(order, orderDto.Id, userId)
+	if orderId == 0 {
+		utils.Failed(w, utils.ORDER_GENERIC)
+		goto Error
+	}
 
-	// 		ok = DbDeleteProductsFromOrderId(userId, orderId)
-	// 		if !ok {
-	// 			utils.Failed(w, utils.ORDER_GENERIC)
-	// 			goto Error
-	// 		}
+	if orderDto.ProductListIsDirty {
+		var dbStoredProducts []OrderProductForEdit
+		dbStoredProducts, ok = DbGetOrderProductsForEdit(userId, orderId)
+		if !ok {
+			utils.Failed(w, utils.ORDER_GENERIC)
+			goto Error
+		}
 
-	// 		ok = addProducts(userId, orderId, orderDto.Products)
-	// 		if !ok {
-	// 			utils.Failed(w, utils.ORDER_GENERIC)
-	// 			goto Error
-	// 		}
-	// 	}
+		// TODO better naming
+		dbStoredProductsDistinct := createCurrentDbOrderItems(dbStoredProducts)
 
-	// 	if orderStatus == S_Carrying {
-	// 		relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
-	// 		loaderId := DbGetLoaderId(userId, orderId)
-	// 		device := device.DbGetDeviceHashFromLoaderId(loaderId)
+		// Update storage
+		/*
+			* We add all new items that are not in db to the toAddProductList
+			* We compare the stored with the new items
+				* If there's a deleted one, we readd the products to store
+				* If there's a updated one, we:
+					* we readd the products to store
+					* add to toAddProductList
+		*/
+		var toAddProductList []ProductDto
+		for _, newOrderProduct := range orderDto.Products {
+			isNewItem := true
+			for _, dbStoredProduct := range dbStoredProductsDistinct {
+				if newOrderProduct.ProductId == dbStoredProduct.ProductId &&
+					newOrderProduct.ProductTypeId == dbStoredProduct.ProductTypeId &&
+					newOrderProduct.DescriptionId == dbStoredProduct.DescriptionId {
+					isNewItem = false
+					break
+				}
+			}
+			if isNewItem {
+				toAddProductList = append(toAddProductList, newOrderProduct)
+			}
+		}
 
-	// 		notification.SendNotification(
-	// 			device,
-	// 			"Pedido EDITADO",
-	// 			"Um pedido foi editado pelo vendedor",
-	// 			NotificationData{
-	// 				Type:     "edit",
-	// 				Client:   orderDto.Client,
-	// 				Products: relatedProducts,
-	// 			},
-	// 		)
-	// 	}
+		for _, dbStoredProduct := range dbStoredProductsDistinct {
+			isDeletedItem := true
+			for _, newOrderProduct := range orderDto.Products {
+				if newOrderProduct.ProductId == dbStoredProduct.ProductId &&
+					newOrderProduct.ProductTypeId == dbStoredProduct.ProductTypeId &&
+					newOrderProduct.DescriptionId == dbStoredProduct.DescriptionId {
+					isDeletedItem = false
+					// Update storage
+					//if newOrderProduct.Amount != dbStoredProduct.Amount {
+					// Add back to storage to use on the recreation of the item
+					for _, storedProductId := range dbStoredProduct.StorageIds {
+						storage.DbIncreaseAmount(storedProductId.Id, storedProductId.StorageAmount, userId)
+					}
+					toAddProductList = append(toAddProductList, newOrderProduct)
+					//}
+				}
+				if isDeletedItem {
+					for _, storedProductId := range dbStoredProduct.StorageIds {
+						storage.DbIncreaseAmount(storedProductId.Id, storedProductId.StorageAmount, userId)
+					}
+				}
+			}
+		}
 
-	// 	return orderId
+		ok = DbDeleteProductsFromOrderId(userId, orderId)
+		if !ok {
+			utils.Failed(w, utils.ORDER_GENERIC)
+			goto Error
+		}
 
-	// Error:
-	return 0, nil
+		ok = addProducts(userId, orderId, orderDto.Products)
+		if !ok {
+			utils.Failed(w, utils.ORDER_GENERIC)
+			goto Error
+		}
+	}
+
+	if orderStatus == S_Carrying {
+		relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
+		loaderId := DbGetLoaderId(userId, orderId)
+		device := device.DbGetDeviceHashFromLoaderId(loaderId)
+
+		notification.SendNotification(
+			device,
+			"Pedido EDITADO",
+			"Um pedido foi editado pelo vendedor",
+			NotificationData{
+				Type:     "edit",
+				Client:   orderDto.Client,
+				Products: relatedProducts,
+			},
+		)
+	}
+
+	return orderId, nil
+
+Error:
+	return 0, errors
 }
 
 func GetIds(userId int, id int, w http.ResponseWriter) (OrderIds, bool) {
@@ -273,6 +293,26 @@ func checkOrderAddCanBeFulfilled(userId int, orderDto OrderDto) ([]OrderFulfillm
 	return errors, len(errors) == 0
 }
 
+func checkOrderEditCanBeFulfilled(userId int, orderDto OrderDto) ([]OrderFulfillmentError, bool) {
+	var errors []OrderFulfillmentError
+
+	for _, product := range orderDto.Products {
+		amountInDb := storage.DbGetProductAmount(userId, product.ProductId, product.ProductTypeId, product.DescriptionId)
+		previusOrderAmount := storage.DbGetProductAmountFromOrder(userId, orderDto.Id, product.ProductId, product.ProductTypeId, product.DescriptionId)
+		if amountInDb+previusOrderAmount < product.Amount {
+			e := OrderFulfillmentError{
+				ProductId:     product.ProductId,
+				ProductTypeId: product.ProductTypeId,
+				MissingAmount: amountInDb - product.Amount,
+			}
+
+			errors = append(errors, e)
+		}
+	}
+
+	return errors, len(errors) == 0
+}
+
 func addProducts(userId int, orderId int, products []ProductDto) bool {
 	for _, product := range products {
 		storageItems := storage.DbGetAllByProductId(product.ProductId, product.ProductTypeId, product.DescriptionId, userId)
@@ -330,4 +370,62 @@ func addProducts(userId int, orderId int, products []ProductDto) bool {
 	}
 
 	return true
+}
+
+func createNewCurrentDbOrderItem(dbStoredProduct OrderProductForEdit, currentDbOrderItemProducts []CurrentDbOrderItemProduct) CurrentDbOrderItem {
+	var currentDbOrderItem CurrentDbOrderItem
+
+	currentDbOrderItem.ProductId = dbStoredProduct.ProductId
+	currentDbOrderItem.ProductTypeId = dbStoredProduct.ProductTypeId
+	currentDbOrderItem.DescriptionId = dbStoredProduct.DescriptionId
+
+	for _, storedData := range currentDbOrderItemProducts {
+		currentDbOrderItem.Amount += storedData.Amount
+		currentDbOrderItem.StorageAmount += storedData.StorageAmount
+	}
+
+	currentDbOrderItem.StorageIds = currentDbOrderItemProducts
+
+	return currentDbOrderItem
+}
+
+func createCurrentDbOrderItems(dbStoredProducts []OrderProductForEdit) []CurrentDbOrderItem {
+	var currentDbOrderItems []CurrentDbOrderItem
+	var currentDbOrderItemProducts []CurrentDbOrderItemProduct
+
+	var lastProductId, lastProductTypeId, lastDescriptionId int
+
+	for i, dbStoredProduct := range dbStoredProducts {
+		if i != 0 &&
+			lastProductId != dbStoredProduct.ProductId &&
+			lastProductTypeId != dbStoredProduct.ProductTypeId &&
+			lastDescriptionId != dbStoredProduct.DescriptionId {
+			currentDbOrderItems = append(
+				currentDbOrderItems,
+				createNewCurrentDbOrderItem(dbStoredProduct, currentDbOrderItemProducts),
+			)
+			currentDbOrderItemProducts = nil
+		}
+
+		currentDbOrderItemProduct := CurrentDbOrderItemProduct{
+			Id:            dbStoredProduct.StorageId,
+			Amount:        dbStoredProduct.Amount,
+			StorageAmount: dbStoredProduct.StorageAmount,
+		}
+
+		currentDbOrderItemProducts = append(currentDbOrderItemProducts, currentDbOrderItemProduct)
+
+		lastProductId = dbStoredProduct.ProductId
+		lastProductTypeId = dbStoredProduct.ProductTypeId
+		lastDescriptionId = dbStoredProduct.DescriptionId
+	}
+
+	// At the end, add once more
+	var lastArrayIndex = len(dbStoredProducts) - 1
+	currentDbOrderItems = append(
+		currentDbOrderItems,
+		createNewCurrentDbOrderItem(dbStoredProducts[lastArrayIndex], currentDbOrderItemProducts),
+	)
+
+	return currentDbOrderItems
 }

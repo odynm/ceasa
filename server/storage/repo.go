@@ -370,3 +370,32 @@ func DbGetProductAmount(userId int, productId int, productTypeId int, descriptio
 Error:
 	return 0
 }
+
+func DbGetProductAmountFromOrder(userId int, orderId int, productId int, productTypeId int, descriptionId int) int {
+	var amount int
+	schema := fmt.Sprint("u", userId)
+
+	statement := fmt.Sprintf(`
+	SELECT SUM(storage_amount)
+		FROM %v.order_order o
+		LEFT JOIN %v.order_product op ON o.id = op.order_id
+		LEFT JOIN %v.storage_item si ON si.id = op.storage_id
+		WHERE 
+			o.id = $1 AND
+			si.deleted = false AND
+			product_id = $2 AND
+			((product_type_id IS NULL AND $3 = 0) OR product_type_id = $3) AND
+			description_id = $4`, schema, schema, schema)
+
+	err := db.Instance.Db.
+		QueryRow(statement, orderId, productId, productTypeId, descriptionId).
+		Scan(&amount)
+
+	if err != nil {
+		goto Error
+	}
+
+	return amount
+Error:
+	return 0
+}

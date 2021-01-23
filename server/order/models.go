@@ -32,6 +32,33 @@ type OrderProduct struct {
 	StorageAmount int
 }
 
+type OrderProductForEdit struct {
+	StorageId     int
+	ProductId     int
+	ProductTypeId int
+	DescriptionId int
+	UnitPrice     int
+	Amount        int
+	StorageAmount int
+}
+
+type CurrentDbOrderItemProduct struct {
+	Id            int
+	Amount        int
+	StorageAmount int
+}
+
+// This is the equivalent of a merged item in the frontend,
+// and stores the items that already are in the order on the DB
+type CurrentDbOrderItem struct {
+	StorageIds    []CurrentDbOrderItemProduct
+	ProductId     int
+	ProductTypeId int
+	DescriptionId int
+	Amount        int
+	StorageAmount int
+}
+
 type OrderDto struct {
 	Id                 int              `json:"id"`
 	Client             client.ClientDto `json:"client"`
