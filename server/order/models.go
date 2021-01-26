@@ -119,7 +119,8 @@ type NotificationData struct {
 }
 
 type OrderFulfillmentError struct {
-	ProductId     int `json:"productId"`
-	ProductTypeId int `json:"productTypeId"`
-	MissingAmount int `json:"missingAmount"`
+	ProductId     int    `json:"productId"`
+	ProductTypeId int    `json:"productTypeId"`
+	Description   string `json:"description"`
+	MissingAmount int    `json:"missingAmount"`
 }

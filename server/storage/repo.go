@@ -399,3 +399,25 @@ func DbGetProductAmountFromOrder(userId int, orderId int, productId int, product
 Error:
 	return 0
 }
+
+func DbGetDescriptionFromId(userId int, descriptionId int) string {
+	var description string
+	schema := fmt.Sprint("u", userId)
+
+	statement := fmt.Sprintf(`
+		SELECT description 
+		FROM %v.storage_item_description
+		WHERE id = $1`, schema)
+
+	err := db.Instance.Db.
+		QueryRow(statement, descriptionId).
+		Scan(&description)
+
+	if err != nil {
+		goto Error
+	}
+
+	return description
+Error:
+	return ""
+}

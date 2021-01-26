@@ -112,6 +112,10 @@
 			"header": "Confirmar exclusão",
 			"content": "Quer excluir esse item?"
 		},
+		"modalMissing": {
+			"header": "Itens faltando no estoque",
+			"missingAmount": "Quantidade faltando:"
+		},
 		"errors": {
 			"priceRequired": "Digite o preço",
 			"noItems": "Adicione um produto antes de continuar",

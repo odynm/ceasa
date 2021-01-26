@@ -48,6 +48,8 @@ const Sell = ({
 		value: 0.0,
 	})
 	const [openAddMenu, setOpenAddMenu] = useState(false)
+	// { productId, productTypeId, description, missingAmount }
+	const [missingItems, setMissingItems] = useState([])
 
 	useEffect(() => {
 		loadProducts()
@@ -76,11 +78,11 @@ const Sell = ({
 		await addOrderItem(product)
 
 		// TODO maybe not needed
-		const available = StorageSelectors.getAvailable({
-			storageItems: storageItems,
-			product: product,
-		})
-		const difference = available - product.storageAmount
+		// const available = StorageSelectors.getAvailable({
+		// 	storageItems: storageItems,
+		// 	product: product,
+		// })
+		// const difference = available - product.storageAmount
 		//setItemsOrder({ id: product.id, amount: difference })
 		updatePrice()
 	}
@@ -127,7 +129,9 @@ const Sell = ({
 					if (success) {
 						ToastService.show({ message: translate('sell.added') })
 					} else {
-						console.warn(data)
+						setMissingItems(data.data)
+						setClientStep(false)
+						setWorking(false)
 						return
 					}
 					handleClear()
@@ -163,10 +167,12 @@ const Sell = ({
 			openAddMenu={openAddMenu}
 			handlePress={handlePress}
 			handleClear={handleClear}
+			missingItems={missingItems}
 			storageItems={storageItems}
 			generateLoad={generateLoad}
 			removeProduct={removeProduct}
 			setOpenAddMenu={setOpenAddMenu}
+			setMissingItems={setMissingItems}
 			setGenerateLoad={setGenerateLoad}
 			setReleasedStatus={setReleasedStatus}
 		/>

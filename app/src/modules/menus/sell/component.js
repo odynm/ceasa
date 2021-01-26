@@ -12,6 +12,7 @@ import CheckBox from '@react-native-community/checkbox'
 import AddProduct from 'src/components/ceasa/sell/add-product'
 import TotalSegment from 'src/components/ceasa/sell/total-segment'
 import ClientSegment from 'src/components/ceasa/sell/client-segment'
+import MissingItemsModal from 'src/components/ceasa/sell/missing-items-modal'
 import ProductListSegment from 'src/components/ceasa/sell/product-list-segment'
 import CloseKeyboardView from 'src/components/fw/screen-base/close-keyboard-view'
 
@@ -30,10 +31,12 @@ const SellComponent = ({
 	handleClear,
 	openAddMenu,
 	editProduct,
+	missingItems,
 	storageItems,
 	generateLoad,
 	removeProduct,
 	setOpenAddMenu,
+	setMissingItems,
 	setGenerateLoad,
 	setReleasedStatus,
 }) => {
@@ -122,6 +125,10 @@ const SellComponent = ({
 				removeProduct={removeProduct}
 				storageItems={storageItems}
 				alreadyAddedProducts={orderItems}
+			/>
+			<MissingItemsModal
+				missingItems={missingItems}
+				setMissingItems={setMissingItems}
 			/>
 		</ScreenBase>
 	)

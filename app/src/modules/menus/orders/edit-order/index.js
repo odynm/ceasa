@@ -22,6 +22,7 @@ import CheckBox from '@react-native-community/checkbox'
 import ScreenHeader from 'src/components/fw/screen-header'
 import ClientSegment from 'src/components/ceasa/sell/client-segment'
 import ConfirmationModal from 'src/components/fw/confirmation-modal'
+import MissingItemsModal from 'src/components/ceasa/sell/missing-items-modal'
 
 const EditOrder = ({
 	id,
@@ -51,6 +52,8 @@ const EditOrder = ({
 	const [internalStatus, setInternalStatus] = useState(status)
 	const [modalConfirmEdit, setModalConfirmEdit] = useState(false)
 
+	const [missingItems, setMissingItems] = useState([])
+
 	useEffect(() => {
 		setCurrentOrderSnapshot([...orderItems])
 	}, [id, orderItems]) // TODO this doesn't seem optimal at all, but it's working for now
@@ -71,14 +74,16 @@ const EditOrder = ({
 		} else {
 			setAppLoader(true)
 			await setDucksOrderStatus(internalStatus)
-			const data = await sendOrder()
-			if (data.success) {
+			const { success, data } = await sendOrder()
+			if (success) {
 				navigation.navigate(screens.orders)
 			} else {
 				if (data.data.errorCode === errors.ORDER_CANT_EDIT) {
 					ToastService.show({
 						message: translate('orders.errors.cantEditAnymore'),
 					})
+				} else {
+					setMissingItems(data.data)
 				}
 			}
 			await loadOrders()
@@ -229,6 +234,10 @@ const EditOrder = ({
 				onClose={() => setModalConfirmEdit(false)}
 				header={translate('editOrder.editModal.header')}
 				content={translate('editOrder.editModal.content')}
+			/>
+			<MissingItemsModal
+				missingItems={missingItems}
+				setMissingItems={setMissingItems}
 			/>
 		</>
 	)

@@ -12,7 +12,7 @@ import (
 	"ceasa/utils"
 )
 
-func Add(orderDto OrderDto, userId int, w http.ResponseWriter) (int, []OrderFulfillmentError) {
+func Add(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	var clientId int
 	var orderId int
 	var order OrderCreation
@@ -20,7 +20,7 @@ func Add(orderDto OrderDto, userId int, w http.ResponseWriter) (int, []OrderFulf
 	errors, ok := checkOrderAddCanBeFulfilled(userId, orderDto)
 
 	if !ok {
-		return 0, errors
+		goto Error
 	}
 
 	clientId = client.AddOrUpdateClient(orderDto.Client, userId, w)
@@ -51,14 +51,14 @@ func Add(orderDto OrderDto, userId int, w http.ResponseWriter) (int, []OrderFulf
 		goto Error
 	}
 
-	return orderId, nil
+	return orderId
 
 Error:
-	utils.BadRequest(w, "Order")
-	return 0, nil
+	utils.FailedWithObj(w, -1, errors)
+	return 0
 }
 
-func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) (int, []OrderFulfillmentError) {
+func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	var clientId int
 	var orderId int
 	var order OrderCreation
@@ -75,7 +75,7 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) (int, []OrderFul
 	errors, ok = checkOrderEditCanBeFulfilled(userId, orderDto)
 
 	if !ok {
-		return 0, errors
+		goto Error
 	}
 
 	clientId = client.AddOrUpdateClient(orderDto.Client, userId, w)
@@ -142,13 +142,10 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) (int, []OrderFul
 					newOrderProduct.DescriptionId == dbStoredProduct.DescriptionId {
 					isDeletedItem = false
 					// Update storage
-					//if newOrderProduct.Amount != dbStoredProduct.Amount {
-					// Add back to storage to use on the recreation of the item
 					for _, storedProductId := range dbStoredProduct.StorageIds {
 						storage.DbIncreaseAmount(storedProductId.Id, storedProductId.StorageAmount, userId)
 					}
 					toAddProductList = append(toAddProductList, newOrderProduct)
-					//}
 				}
 				if isDeletedItem {
 					for _, storedProductId := range dbStoredProduct.StorageIds {
@@ -188,10 +185,11 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) (int, []OrderFul
 		)
 	}
 
-	return orderId, nil
+	return orderId
 
 Error:
-	return 0, errors
+	utils.FailedWithObj(w, -1, errors)
+	return 0
 }
 
 func GetIds(userId int, id int, w http.ResponseWriter) (OrderIds, bool) {
@@ -277,13 +275,18 @@ func DeleteOrder(userId int, orderId int, w http.ResponseWriter) {
 func checkOrderAddCanBeFulfilled(userId int, orderDto OrderDto) ([]OrderFulfillmentError, bool) {
 	var errors []OrderFulfillmentError
 
+	// TODO make this faster
+	// This is a time consuming check, because it envolves two blocking queries
+	// The first one can be taken as a list, the second one can be batched to run after the process
 	for _, product := range orderDto.Products {
 		amountInDb := storage.DbGetProductAmount(userId, product.ProductId, product.ProductTypeId, product.DescriptionId)
-		if amountInDb < product.Amount {
+		if amountInDb < product.StorageAmount {
+			description := storage.DbGetDescriptionFromId(userId, product.DescriptionId)
 			e := OrderFulfillmentError{
 				ProductId:     product.ProductId,
 				ProductTypeId: product.ProductTypeId,
-				MissingAmount: amountInDb - product.Amount,
+				Description:   description,
+				MissingAmount: product.StorageAmount - amountInDb,
 			}
 
 			errors = append(errors, e)
@@ -299,11 +302,11 @@ func checkOrderEditCanBeFulfilled(userId int, orderDto OrderDto) ([]OrderFulfill
 	for _, product := range orderDto.Products {
 		amountInDb := storage.DbGetProductAmount(userId, product.ProductId, product.ProductTypeId, product.DescriptionId)
 		previusOrderAmount := storage.DbGetProductAmountFromOrder(userId, orderDto.Id, product.ProductId, product.ProductTypeId, product.DescriptionId)
-		if amountInDb+previusOrderAmount < product.Amount {
+		if amountInDb+previusOrderAmount < product.StorageAmount {
 			e := OrderFulfillmentError{
 				ProductId:     product.ProductId,
 				ProductTypeId: product.ProductTypeId,
-				MissingAmount: amountInDb - product.Amount,
+				MissingAmount: product.StorageAmount - amountInDb - previusOrderAmount,
 			}
 
 			errors = append(errors, e)
