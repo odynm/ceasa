@@ -1,7 +1,7 @@
 import config from 'src/config'
 import store from 'src/ducks'
 import StorageService from './storageService'
-import NetInfo from '@react-native-community/netinfo'
+import InternetService from 'src/services/internetService'
 import { Creators as AppCreators } from 'src/ducks/app'
 import { Creators as OfflineCreators } from 'src/ducks/offline'
 
@@ -52,37 +52,36 @@ const stop = () => {
 const refresh = async () => {
 	const { inUse } = store.getState().offline
 
-	NetInfo.fetch().then(data => {
-		if (data.isInternetReachable) {
-			if (inUse) {
-				store.dispatch(OfflineCreators.executeQueue())
-			} else {
-				if (_user && _user.accessToken && _user.id) {
-					// Vendor
-					if (_loadVendorOrders) {
-						_loadVendorOrders()
-						// Storage
-						_getStorage()
-						// Home
-						_getHome()
-					}
-				} else if (
-					_loader &&
-					_loader.accessToken &&
-					_loader.id &&
-					_loaderUserId > 0
-				) {
-					//Loader
-					if (_loadLoaderOrders) {
-						_loadLoaderOrders()
-						_loadCarryingOrders()
-					}
+	const isInternetReachable = await InternetService.isInternetReachable()
+	if (isInternetReachable) {
+		if (inUse) {
+			store.dispatch(OfflineCreators.executeQueue())
+		} else {
+			if (_user && _user.accessToken && _user.id) {
+				// Vendor
+				if (_loadVendorOrders) {
+					_loadVendorOrders()
+					// Storage
+					_getStorage()
+					// Home
+					_getHome()
+				}
+			} else if (
+				_loader &&
+				_loader.accessToken &&
+				_loader.id &&
+				_loaderUserId > 0
+			) {
+				//Loader
+				if (_loadLoaderOrders) {
+					_loadLoaderOrders()
+					_loadCarryingOrders()
 				}
 			}
-		} else {
-			store.dispatch(AppCreators.setNoConnection(true))
 		}
-	})
+	} else {
+		store.dispatch(AppCreators.setNoConnection(true))
+	}
 
 	if (!_stop) {
 		new Promise(function(resolve) {

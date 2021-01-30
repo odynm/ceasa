@@ -34,12 +34,18 @@ const loadOrders = () => async dispatch => {
 	return success
 }
 
+const createOfflineOrder = order => async (dispatch, getState) => {
+	const { orderList } = getState().ordersVendor
+	dispatch(setOrderList([...orderList, order]))
+}
+
 const initialState = {
 	orderList: [],
 }
 
 export const Creators = {
 	loadOrders,
+	createOfflineOrder,
 }
 
 export default function reducer(state = initialState, action) {

@@ -15,7 +15,7 @@ import orderStatus from 'src/enums/order'
 import SellHeader from './components/header'
 import MoneyService from 'src/services/moneyService'
 import ToastService from 'src/services/toastService'
-import NetInfo from '@react-native-community/netinfo'
+import InternetService from 'src/services/internetService'
 
 const Sell = ({
 	client,
@@ -40,6 +40,8 @@ const Sell = ({
 	setStoredItems,
 	removeOrderItem,
 	setGenerateLoad,
+	createOfflineOrder,
+	decreaseOfflineStorageAmount,
 }) => {
 	const [working, setWorking] = useState(false)
 	const [errors, setErrors] = useState({})
@@ -113,14 +115,48 @@ const Sell = ({
 			if (validateCreate(client, setErrors)) {
 				setWorking(true)
 				// Ensure that we don't try to send if we are offline
-				if (noConnection || !(await NetInfo.fetch()).isInternetReachable) {
-					addToQueue()
-					// TODO While offline, update the storage with the sold items decreased,
-					// and also do some logic to create the merged order pretty much like we do
-					// in the backend, using productId and productTypeId
-					// We can probably use the decrease function we had before, just rememeber
-					// that we have the thing of the merged to watch out for
-					// setStoredItems(itemsAfterSell)
+				if (
+					noConnection ||
+					!(await InternetService.isInternetReachable())
+						.isInternetReachable
+				) {
+					// For now, nothing works offline
+					ToastService.show({
+						message: translate('app.noConnectionError'),
+					})
+					return
+
+					// const offlineOrderId = new Date().getTime()
+
+					// addToQueue(offlineOrderId)
+
+					// // TODO While offline, update the storage with the sold items decreased,
+					// // and also do some logic to create the merged order pretty much like we do
+					// // in the backend, using productId and productTypeId
+					// // We can probably use the decrease function we had before, just rememeber
+					// // that we have the thing of the merged to watch out for
+					// // setStoredItems(itemsAfterSell)
+
+					// {
+					// 	const offlineOrder = {
+					// 		offlineId: offlineOrderId,
+					// 		client: client,
+					// 		products: orderItems,
+					// 		status: status,
+					// 		createdAt: new Date(),
+					// 	}
+					// 	createOfflineOrder(offlineOrder)
+
+					// 	orderItems.forEach(item => {
+					// 		decreaseOfflineStorageAmount(
+					// 			item.productId,
+					// 			item.productTypeId,
+					// 			item.descriptionId,
+					// 			item.amount,
+					// 		)
+					// 	})
+					// }
+
 					handleClear()
 					ToastService.show({ message: translate('sell.addedOffline') })
 					setWorking(false)
@@ -210,6 +246,8 @@ const mapDispatchToProps = {
 	setStoredItems: StorageCreators.setStoredItems,
 	removeOrderItem: OrderCreators.removeOrderItem,
 	setGenerateLoad: OrderCreators.setGenerateLoad,
+	createOfflineOrder: OrdersVendorCreators.createOfflineOrder,
+	decreaseOfflineStorageAmount: StorageCreators.decreaseOfflineStorageAmount,
 }
 
 export default connect(

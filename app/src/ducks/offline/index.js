@@ -35,10 +35,13 @@ const setExecutingQueue = executingQueue => ({
 	type: Types.SET_EXECUTING_QUEUE,
 })
 
-const addToQueue = () => async (dispatch, getState) => {
+const addToQueue = offlineId => async (dispatch, getState) => {
 	dispatch(setInUse(true))
 	dispatch(setLoading(true))
+
 	const order = getState().order
+	order.offlineId = offlineId
+
 	const { queue } = getState().offline
 	const newQueue = [...queue, { ...order }]
 

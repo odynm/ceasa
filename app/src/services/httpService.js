@@ -5,7 +5,7 @@ import { Creators as UserCreators } from 'src/ducks/user'
 import axios from 'axios'
 import store from 'src/ducks'
 import config from 'src/config'
-import NetInfo from '@react-native-community/netinfo'
+import InternetService from 'src/services/internetService'
 // import { Creators as ModalCreators } from '../ducks/modal'
 import * as retryAxios from 'retry-axios'
 import screens from 'src/constants/screens'
@@ -47,8 +47,8 @@ const requestInterceptor = requestConfig => {
 }
 
 const responseErrorInterceptor = async error => {
-	const netInfo = await NetInfo.fetch()
-	if (!netInfo.isInternetReachable) {
+	const isInternetReachable = await InternetService.isInternetReachable()
+	if (!isInternetReachable) {
 		Keyboard.dismiss()
 		console.warn('net not reachable')
 		store.dispatch(AppCreators.setNoConnection(true))

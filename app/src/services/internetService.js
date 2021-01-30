@@ -5,7 +5,7 @@ export const getIp = async () => {
 	return await PublicIP()
 }
 
-const verifyInternet = async () => {
+const isInternetReachable = async () => {
 	const data = await NetInfo.fetch()
 	// TODO show modal no internet and
 	// make a logic somewhere to start offline mode
@@ -15,7 +15,7 @@ const verifyInternet = async () => {
 
 const InternetService = {
 	getIp,
-	verifyInternet,
+	isInternetReachable: isInternetReachable,
 }
 
 export default InternetService

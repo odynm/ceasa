@@ -27,6 +27,64 @@ const setStoredItems = storedItems => ({
 	type: Types.SET_STORED_ITEMS,
 })
 
+// WARNING: This should only be used on offline mode
+// In online, the amount should be controled by the server
+const decreaseOfflineStorageAmount = (
+	productId,
+	productTypeId,
+	descriptionId,
+	amount,
+) => async (dispatch, getStore) => {
+	const { storedItems } = getStore().storage
+
+	const updatedStoredItems = storedItems.map(item => {
+		const decreaseAmountInMerged = (items, amountToDecrease) => {
+			const sortedByValue = items.sort((a, b) => {
+				return a.costPrice.value > b.costPrice.value ? 1 : -1
+			})
+			let remainingToDecrease = amountToDecrease
+
+			const mappedItems = sortedByValue.map(x => {
+				if (remainingToDecrease > 0) {
+					const decrease = Math.min(remainingToDecrease, x.amount)
+					console.warn('dec', decrease, remainingToDecrease, x.amount)
+					remainingToDecrease -= decrease
+					return { ...x, amount: x.amount - decrease }
+				} else {
+					return x
+				}
+			})
+
+			return mappedItems
+		}
+
+		if (
+			item.productId === productId &&
+			item.productTypeId === productTypeId &&
+			item.descriptionId === descriptionId
+		) {
+			if (item.isMerged) {
+				return {
+					...item,
+					amount: item.amount - amount, // Decrease parent...
+					mergedData: {
+						// ...and childs
+						...item.mergedData,
+						items: decreaseAmountInMerged(item.mergedData.items, amount),
+					},
+				}
+			} else {
+				return { ...item, amount: item.amount - amount }
+			}
+		} else {
+			return item
+		}
+	})
+
+	console.warn(updatedStoredItems)
+	dispatch(setStoredItems(updatedStoredItems))
+}
+
 const add = item => async (dispatch, getStore) => {
 	const { storedItems } = getStore().storage
 	const { products, productTypes } = getStore().products
@@ -175,7 +233,7 @@ const add = item => async (dispatch, getStore) => {
 	return success
 }
 
-// TODO: this item currently only workd with the server online
+// TODO: this item currently only works with the server online
 const deleteItem = item => async (_, getStore) => {
 	const { noConnection } = getStore().app
 	// At least for now, don't touch the storage on offline mode
@@ -224,6 +282,7 @@ export const Creators = {
 	deleteItem,
 	setWorking,
 	setStoredItems,
+	decreaseOfflineStorageAmount,
 }
 
 export default function reducer(state = initialState, action) {

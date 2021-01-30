@@ -95,7 +95,6 @@ const EditProductsOrder = ({
 	const handleOpenAddMenu = () => {
 		if (noConnection) {
 			ToastService.show({ message: translate('app.noConnectionError') })
-			return
 		} else if (cantEdit) {
 			ToastService.show({
 				message: translate('orders.errors.cantEditAnymore'),

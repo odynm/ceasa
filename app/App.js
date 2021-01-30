@@ -26,7 +26,7 @@ const App = () => {
 	}, [])
 
 	const initialize = async () => {
-		const hasInternetConnection = await InternetService.verifyInternet()
+		const hasInternetConnection = await InternetService.isInternetReachable()
 		if (!hasInternetConnection) {
 			console.warn('No internet connection - no startup')
 			return
