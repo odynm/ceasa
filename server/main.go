@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"ceasa/additionalCost"
 	"ceasa/admin"
 	"ceasa/carry"
 	"ceasa/client"
@@ -52,6 +53,7 @@ func main() {
 	home.HandleRequest()
 	client.HandleRequest()
 	test.HandleRequest()
+	additionalCost.HandleRequest()
 
 	portOS := os.Getenv("PORT")
 	port := ":10000"

@@ -14,6 +14,7 @@ import ordersVendor from './orders-vendor'
 import ordersLoader from './orders-loader'
 import notifications from './notifications'
 import editStorage from './storage/edit-storage'
+import additionalCost from './additional-cost'
 
 import thunk from 'redux-thunk'
 import logger from 'redux-logger'
@@ -36,6 +37,7 @@ const reducers = combineReducers({
 	ordersVendor,
 	ordersLoader,
 	notifications,
+	additionalCost,
 })
 
 const middlewares = [thunk]

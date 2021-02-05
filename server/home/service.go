@@ -3,13 +3,15 @@ package home
 import (
 	"net/http"
 
+	"ceasa/additionalCost"
 	"ceasa/utils"
 )
 
 func Get(userId int, timezone string, w http.ResponseWriter) {
 	homeList := DbGetHomeItems(userId, timezone)
+	additionalCostTotal := additionalCost.DbGetTotalAdditionalCostForDay(userId, timezone)
 
-	dailyBalance := calculateDailyBalance(homeList)
+	dailyBalance := calculateDailyBalance(homeList, additionalCostTotal)
 
 	response := HomeBalance{
 		homeList,
@@ -19,7 +21,7 @@ func Get(userId int, timezone string, w http.ResponseWriter) {
 	utils.Success(w, response)
 }
 
-func calculateDailyBalance(homeItem []HomeItem) DailyBalance {
+func calculateDailyBalance(homeItem []HomeItem, additionalCostTotal int) DailyBalance {
 	dailyBalance := DailyBalance{}
 	if homeItem != nil {
 		for _, item := range homeItem {
@@ -30,6 +32,9 @@ func calculateDailyBalance(homeItem []HomeItem) DailyBalance {
 			dailyBalance.TotalEarned = dailyBalance.TotalEarned + item.TotalEarned
 		}
 	}
+
+	dailyBalance.TotalCostPrice += additionalCostTotal
+	dailyBalance.TotalProfit -= additionalCostTotal
 
 	return dailyBalance
 }

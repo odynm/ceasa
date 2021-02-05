@@ -49,7 +49,8 @@
 		"editOrder": "Ver Pedido",
 		"editStorage": "Alterar Estoque",
 		"editProductsOrder": "Alterar Produtos do Pedido",
-		"addNonExistent": "Adicionar Novo"
+		"addNonExistent": "Adicionar Novo",
+		"additionalCost": "Custos Adicionais"
 	},
 	"loaderMenus": {
 		"orders": "Pedidos",
@@ -192,6 +193,7 @@
 		"totalExpenses": "Total Custos",
 		"totalProfit": "Lucro Total",
 		"details": "Detalhes",
+		"addAdditionalCost": "Adicionar Custo",
 		"modalAccept":{
 			"header": "Finalizar o Dia",
 			"content": "Deseja limpar todo seu estoque do dia?",
@@ -230,6 +232,19 @@
 				"4": "* Ele deve clicar em \"entrar como carregador\"\n",
 				"5": "* Tudo que ele precisa fazer agora é ler o QR Code abaixo"
 			}
+		}
+	},
+	"additionalCost": {
+		"description": "Motivo (opcional)",
+		"value": "Valor",
+		"add": "Adicionar",
+		"delete": "Excluir",
+		"errors":{
+			"value": "Insira o valor"
+		},
+		"modalDelete":{
+			"header": "Confirmar exclusão",
+			"content": "Deseja excluir este custo adicional?"
 		}
 	},
 	"optionsLoader": {

@@ -7,6 +7,8 @@ import { Creators as HomeCreators } from 'src/ducks/home'
 import styles from './styles'
 import KText from 'src/components/fw/ktext'
 import ItemCardHome from './item-card-home'
+import Space from 'src/components/fw/space'
+import screens from 'src/constants/screens'
 import Loader from 'src/components/fw/loader'
 import Button from 'src/components/fw/button'
 import MoneyService from 'src/services/moneyService'
@@ -14,7 +16,14 @@ import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
 import ConfirmationModal from 'src/components/fw/confirmation-modal'
 
-const Home = ({ balance, overview, loadHome, loading, resetStorage }) => {
+const Home = ({
+	loading,
+	balance,
+	overview,
+	loadHome,
+	navigation,
+	resetStorage,
+}) => {
 	const [confirmDelete, setConfirmDelete] = useState(false)
 
 	useEffect(() => {
@@ -23,6 +32,10 @@ const Home = ({ balance, overview, loadHome, loading, resetStorage }) => {
 
 	const handleDeleteStorage = async () => {
 		await resetStorage()
+	}
+
+	const openAdditionalCost = () => {
+		navigation.navigate(screens.additionalCost)
 	}
 
 	return (
@@ -80,6 +93,14 @@ const Home = ({ balance, overview, loadHome, loading, resetStorage }) => {
 											: 0,
 									).text
 								}`}
+							/>
+						</View>
+						<Space size2 />
+						<View style={styles.flexRowEnd}>
+							<Button
+								tiny
+								label={translate('home.addAdditionalCost')}
+								onPress={() => openAdditionalCost()}
 							/>
 						</View>
 						<KText

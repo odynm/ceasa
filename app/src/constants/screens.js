@@ -19,6 +19,7 @@ const screens = {
 	loadersTeam: 'LoadersTeam',
 	addLoader: 'AddLoader',
 	addNonExistent: 'AddNonExistent',
+	additionalCost: 'AdditionalCost',
 }
 
 export default screens

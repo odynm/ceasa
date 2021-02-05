@@ -24,8 +24,12 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 	},
+	flexRowEnd: {
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+	},
 	details: {
-		marginTop: hp(20),
+		marginTop: hp(10),
 	},
 })
 

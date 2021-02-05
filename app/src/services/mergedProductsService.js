@@ -71,7 +71,9 @@ const calculateMergedPrice = items => {
 }
 
 const sortProducts = arr => {
+	// TODO missing sort by description too?
 	const sortedItems = arr.sort((a, b) => {
+		//console.warn(a) //sort by description?
 		const res = a.productName.localeCompare(b.productName)
 		if (res === 0) {
 			return a.productTypeName.localeCompare(b.productTypeName)
