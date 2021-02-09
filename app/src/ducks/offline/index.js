@@ -43,10 +43,10 @@ const deleteOrder = (id, offlineId) => async (dispatch, getState) => {
 	dispatch(setLoading(true))
 
 	const { queue } = getState().offline
-	const hasItem = queue.some(item => item.offlineId === offlineId)
+	const hasItem = queue.some(item => item.data.offlineId === offlineId)
 
 	if (hasItem) {
-		const newQueue = queue.filter(item => item.offlineId !== offlineId)
+		const newQueue = queue.filter(item => item.data.offlineId !== offlineId)
 		dispatch(setQueue(newQueue))
 	} else {
 		const newQueue = [...queue, { jobType: jobTypes.deleteOrder, data: id }]

@@ -75,6 +75,8 @@ const EditOrder = ({
 			// It will work has expected for both methods
 			await deleteOrderOnOrdersList(id, offlineId)
 			await deleteOrderOnOfflineQueue(id, offlineId)
+			//TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+			// needs to increase the storage again =(
 		} else {
 			// await deleteOrder(id)
 			// await loadOrders()
