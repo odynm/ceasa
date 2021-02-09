@@ -1,5 +1,7 @@
+import { jobTypes } from './jobTypes'
 import { Creators as AppCreators } from 'src/ducks/app'
 import { Creators as OrderCreators } from 'src/ducks/order'
+import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
 
 const prefix = 'offline/'
 const Types = {
@@ -35,15 +37,32 @@ const setExecutingQueue = executingQueue => ({
 	type: Types.SET_EXECUTING_QUEUE,
 })
 
-const addToQueue = offlineId => async (dispatch, getState) => {
+// delete order
+const deleteOrder = (id, offlineId) => async (dispatch, getState) => {
 	dispatch(setInUse(true))
 	dispatch(setLoading(true))
 
-	const order = getState().order
-	order.offlineId = offlineId
+	const { queue } = getState().offline
+	const hasItem = queue.some(item => item.offlineId === offlineId)
+
+	if (hasItem) {
+		const newQueue = queue.filter(item => item.offlineId !== offlineId)
+		dispatch(setQueue(newQueue))
+	} else {
+		const newQueue = [...queue, { jobType: jobTypes.deleteOrder, data: id }]
+		dispatch(setQueue(newQueue))
+	}
+
+	dispatch(setLoading(false))
+}
+
+// add order or add additional cost
+const addToQueue = (jobType, data) => async (dispatch, getState) => {
+	dispatch(setInUse(true))
+	dispatch(setLoading(true))
 
 	const { queue } = getState().offline
-	const newQueue = [...queue, { ...order }]
+	const newQueue = [...queue, { jobType, data }]
 
 	dispatch(setQueue(newQueue))
 	dispatch(setLoading(false))
@@ -51,23 +70,39 @@ const addToQueue = offlineId => async (dispatch, getState) => {
 
 const executeQueue = () => async (dispatch, getState) => {
 	const { executingQueue } = getState().offline
+
 	if (executingQueue) {
 		return
 	}
+
 	dispatch(AppCreators.setAppLoader(true))
 	dispatch(setExecutingQueue(true))
 	dispatch(setErrors([]))
+
 	const { queue } = getState().offline
-	queue.forEach(async order => {
-		const { success, data } = await dispatch(
-			await OrderCreators.sendOrder({ useParam: true, order: order }),
-		)
-		if (!success) {
+
+	queue.forEach(async item => {
+		let response
+		switch (item.jobType) {
+			case jobTypes.addOrder:
+				response = await dispatch(
+					OrderCreators.sendOrder({
+						useParam: true,
+						order: item.data,
+					}),
+				)
+				break
+			case jobTypes.deleteOrder:
+				response = await dispatch(EditOrderCreators.deleteOrder(item.data))
+				break
+		}
+		if (!response.success) {
 			const { errors: curErrors } = getState().offline
-			const newErrors = [...curErrors, data]
+			const newErrors = [...curErrors, response.data]
 			dispatch(setErrors(newErrors))
 		}
 	})
+
 	dispatch(setQueue([]))
 	dispatch(setExecutingQueue(false))
 	dispatch(setInUse(false))
@@ -76,6 +111,7 @@ const executeQueue = () => async (dispatch, getState) => {
 
 export const Creators = {
 	addToQueue,
+	deleteOrder,
 	executeQueue,
 }
 

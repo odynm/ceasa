@@ -87,6 +87,7 @@ const OrdersVendor = ({
 									loader={item.loader}
 									status={item.status}
 									clientKey={item.client.key}
+									isOfflineOrder={item.offlineId > 0}
 									onPress={() => editOrder({ item })}
 									releasedHour={
 										item.releasedAt && toHour(item.releasedAt)

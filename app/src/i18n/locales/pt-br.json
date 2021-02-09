@@ -128,6 +128,7 @@
 		"doneAt": "Concluída às",
 		"urgent": "URGENTE",
 		"none": "Ainda não há nenhum pedido cadastrado.",
+		"notSent": "Não enviado",
 		"errors": {
 			"cantEditAnymore": "Você não pode mais editar esse pedido"
 		},

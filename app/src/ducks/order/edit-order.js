@@ -49,6 +49,7 @@ const deleteOrder = orderId => async () => {
 const initialState = {
 	id: 0,
 	status: 0,
+	offlineId: 0, // only used on order created in offline mode
 	urgent: false,
 	orderItems: [],
 	isEditing: false,

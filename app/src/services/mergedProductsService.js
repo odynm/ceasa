@@ -10,7 +10,10 @@ const mergeSimilarItems = storageItems => {
 	const getItem = obj => {
 		return {
 			amount: obj.amount,
-			storageAmount: obj.storageAmount, // sometimes is undefined
+			storageAmount:
+				obj.storageAmount && obj.storageAmount != null
+					? obj.storageAmount
+					: obj.amount, // sometimes is undefined
 			id: obj.id,
 			// This is clunky, but its correct because of the way we treat products:
 			// * sometimes we use storedItems, which only have an "id" prop

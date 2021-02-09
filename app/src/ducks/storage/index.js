@@ -47,7 +47,6 @@ const decreaseOfflineStorageAmount = (
 			const mappedItems = sortedByValue.map(x => {
 				if (remainingToDecrease > 0) {
 					const decrease = Math.min(remainingToDecrease, x.amount)
-					console.warn('dec', decrease, remainingToDecrease, x.amount)
 					remainingToDecrease -= decrease
 					return { ...x, amount: x.amount - decrease }
 				} else {
@@ -81,7 +80,6 @@ const decreaseOfflineStorageAmount = (
 		}
 	})
 
-	console.warn(updatedStoredItems)
 	dispatch(setStoredItems(updatedStoredItems))
 }
 

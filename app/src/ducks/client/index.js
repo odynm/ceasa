@@ -19,7 +19,6 @@ const setClients = clients => ({
 const loadClients = () => async dispatch => {
 	const { data, success } = await HttpService.get('clients')
 	if (success && data) {
-		console.warn(data)
 		dispatch(setClients(data))
 	}
 }

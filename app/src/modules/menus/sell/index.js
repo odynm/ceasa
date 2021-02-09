@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
+import { jobTypes } from 'src/ducks/offline/jobTypes'
 import { Creators as OrderCreators } from 'src/ducks/order'
 import { Creators as ClientCreators } from 'src/ducks/client'
 import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as OfflineCreators } from 'src/ducks/offline'
 import { Creators as ProductCreators } from 'src/ducks/products'
-import { Selectors as StorageSelectors } from 'src/ducks/storage'
 import { validateCreate } from 'src/ducks/order/validations/create'
 import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
-import rfdc from 'rfdc'
 import SellComponent from './component'
 import orderStatus from 'src/enums/order'
 import SellHeader from './components/header'
@@ -40,6 +39,7 @@ const Sell = ({
 	setStoredItems,
 	removeOrderItem,
 	setGenerateLoad,
+	orderCreationData,
 	createOfflineOrder,
 	decreaseOfflineStorageAmount,
 }) => {
@@ -124,38 +124,36 @@ const Sell = ({
 					ToastService.show({
 						message: translate('app.noConnectionError'),
 					})
-					return
 
-					// const offlineOrderId = new Date().getTime()
+					const offlineOrderId = new Date().getTime()
 
-					// addToQueue(offlineOrderId)
+					const orderToCreate = { ...orderCreationData }
+					orderToCreate.offlineId = offlineOrderId
 
-					// // TODO While offline, update the storage with the sold items decreased,
-					// // and also do some logic to create the merged order pretty much like we do
-					// // in the backend, using productId and productTypeId
-					// // We can probably use the decrease function we had before, just rememeber
-					// // that we have the thing of the merged to watch out for
-					// // setStoredItems(itemsAfterSell)
+					addToQueue(jobTypes.addOrder, orderToCreate)
 
-					// {
-					// 	const offlineOrder = {
-					// 		offlineId: offlineOrderId,
-					// 		client: client,
-					// 		products: orderItems,
-					// 		status: status,
-					// 		createdAt: new Date(),
-					// 	}
-					// 	createOfflineOrder(offlineOrder)
+					const offlineOrder = {
+						offlineId: offlineOrderId,
+						client: client,
+						products: orderItems.map(item => ({
+							...item,
+							unitPrice: item.unitPrice.value * 100,
+							productId: 10,
+							productTypeId: 42,
+						})),
+						status: status,
+						createdAt: new Date(),
+					}
+					createOfflineOrder(offlineOrder)
 
-					// 	orderItems.forEach(item => {
-					// 		decreaseOfflineStorageAmount(
-					// 			item.productId,
-					// 			item.productTypeId,
-					// 			item.descriptionId,
-					// 			item.amount,
-					// 		)
-					// 	})
-					// }
+					orderItems.forEach(item => {
+						decreaseOfflineStorageAmount(
+							item.productId,
+							item.productTypeId,
+							item.descriptionId,
+							item.amount,
+						)
+					})
 
 					handleClear()
 					ToastService.show({ message: translate('sell.addedOffline') })
@@ -229,6 +227,7 @@ const mapStateToProps = ({ app, storage, client, order }) => ({
 	noConnection: app.noConnection,
 	generateLoad: order.generateLoad,
 	storageItems: storage.storedItems,
+	orderCreationData: order,
 })
 
 const mapDispatchToProps = {

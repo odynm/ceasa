@@ -14,6 +14,7 @@ const OrderCard = ({
 	clientKey,
 	releasedHour,
 	completedHour,
+	isOfflineOrder,
 }) => {
 	const style = [
 		styles.container,
@@ -57,11 +58,21 @@ const OrderCard = ({
 							style={styles.client}
 						/>
 						{status !== orderStatus.blocked && (
-							<KText
-								fontSize={14}
-								text={releasedHour}
-								style={styles.hourReleased}
-							/>
+							<>
+								{isOfflineOrder ? (
+									<KText
+										fontSize={14}
+										text={translate('orders.notSent')}
+										style={styles.hourReleased}
+									/>
+								) : (
+									<KText
+										fontSize={14}
+										text={releasedHour}
+										style={styles.hourReleased}
+									/>
+								)}
+							</>
 						)}
 					</View>
 					{status === orderStatus.done && (

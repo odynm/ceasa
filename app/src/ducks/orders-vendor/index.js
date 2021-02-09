@@ -36,7 +36,16 @@ const loadOrders = () => async dispatch => {
 
 const createOfflineOrder = order => async (dispatch, getState) => {
 	const { orderList } = getState().ordersVendor
-	dispatch(setOrderList([...orderList, order]))
+	dispatch(setOrderList([order, ...orderList]))
+}
+
+// delete by id OR offline id (offline can be null)
+const deleteOrder = (id, offlineId) => async (dispatch, getState) => {
+	const { orderList } = getState().ordersVendor
+	const orderListFiltered = orderList.filter(
+		x => x.id !== id || (offlineId ? x.offlineId !== offlineId : false),
+	)
+	dispatch(setOrderList(orderListFiltered))
 }
 
 const initialState = {
@@ -45,6 +54,7 @@ const initialState = {
 
 export const Creators = {
 	loadOrders,
+	deleteOrder,
 	createOfflineOrder,
 }
 

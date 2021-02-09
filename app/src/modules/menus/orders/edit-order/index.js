@@ -6,6 +6,7 @@ import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
 import { Creators as AppCreators } from 'src/ducks/app'
 import { Creators as StorageCreators } from 'src/ducks/storage'
+import { Creators as OfflineCreators } from 'src/ducks/offline'
 import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
 import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
 import styles from './styles'
@@ -31,6 +32,7 @@ const EditOrder = ({
 	urgent,
 	loader,
 	clients,
+	offlineId,
 	setClient,
 	setUrgent,
 	sendOrder,
@@ -45,6 +47,8 @@ const EditOrder = ({
 	confirmDelete,
 	setConfirmDelete,
 	setDucksOrderStatus,
+	deleteOrderOnOrdersList,
+	deleteOrderOnOfflineQueue,
 }) => {
 	// The current order state at edition start
 	const [currentOrderSnapshot, setCurrentOrderSnapshot] = useState([])
@@ -59,13 +63,23 @@ const EditOrder = ({
 	}, [id, orderItems]) // TODO this doesn't seem optimal at all, but it's working for now
 
 	const handleDelete = async () => {
+		/* 
+			----------------------------------------------------------------------------------
+			so here we need to create a func that:
+				* check if its' offline
+					* if it is, then check if theres a offlineId order in queue
+						* if is, delete it, and then delete the order on 'orders' ducks
+			 */
 		if (noConnection) {
-			ToastService.show({ message: translate('app.noConnectionError') })
+			// If it's not an online order, nothing bad will happen
+			// It will work has expected for both methods
+			await deleteOrderOnOrdersList(id, offlineId)
+			await deleteOrderOnOfflineQueue(id, offlineId)
 		} else {
-			await deleteOrder(id)
-			await loadOrders()
-			navigation.navigate(screens.orders)
+			// await deleteOrder(id)
+			// await loadOrders()
 		}
+		navigation.navigate(screens.orders)
 	}
 
 	const handleEdit = async () => {
@@ -74,6 +88,15 @@ const EditOrder = ({
 		} else {
 			setAppLoader(true)
 			await setDucksOrderStatus(internalStatus)
+			/* 
+			----------------------------------------------------------------------------------
+			(do first delete)
+			so here we need to create a func that:
+				* check if its' offline
+					* if it is, then check if theres a offlineId order in queue
+						* if is, delete it and push the new one to stack
+						* else, just add to stack
+			 */
 			const { success, data } = await sendOrder()
 			if (success) {
 				navigation.navigate(screens.orders)
@@ -93,14 +116,10 @@ const EditOrder = ({
 	}
 
 	const handleEditProducts = () => {
-		if (noConnection) {
-			ToastService.show({ message: translate('app.noConnectionError') })
-		} else {
-			navigation.navigate(screens.editProductsOrder, {
-				status,
-				currentOrderSnapshot,
-			})
-		}
+		navigation.navigate(screens.editProductsOrder, {
+			status,
+			currentOrderSnapshot,
+		})
 	}
 
 	const setOrderStatus = checked => {
@@ -260,6 +279,8 @@ const mapDispatchToProps = {
 	loadOrders: OrdersVendorCreators.loadOrders,
 	setDucksOrderStatus: EditOrderCreators.setStatus,
 	setConfirmDelete: EditOrderCreators.setConfirmDelete,
+	deleteOrderOnOfflineQueue: OfflineCreators.deleteOrder,
+	deleteOrderOnOrdersList: OrdersVendorCreators.deleteOrder,
 }
 
 const mapStateToProps = ({ app, client, editOrder }) => ({
@@ -269,6 +290,7 @@ const mapStateToProps = ({ app, client, editOrder }) => ({
 	client: editOrder.client,
 	urgent: editOrder.urgent,
 	loader: editOrder.loader,
+	offlineId: editOrder.offlineId,
 	noConnection: app.noConnection,
 	orderItems: editOrder.orderItems,
 	completedAt: editOrder.completedAt,

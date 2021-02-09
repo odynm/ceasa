@@ -69,7 +69,6 @@ function common(types, duck) {
 		} = source
 
 		const products = []
-		console.warn(orderItems)
 
 		for (let i = 0; i < orderItems.length; i++) {
 			const oi = orderItems[i]

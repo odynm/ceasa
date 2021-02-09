@@ -51,7 +51,9 @@ const EditProductsOrder = ({
 			setCurrentOrderSnapshot(navigation.state.params.currentOrderSnapshot)
 		}
 
-		updateNormalizedStorage()
+		// TODO WARNING this might be needed, but when called, the curentOrderSnapshot
+		// hasn't been set yet
+		//updateNormalizedStorage()
 	}, [])
 
 	useEffect(() => {
@@ -60,7 +62,10 @@ const EditProductsOrder = ({
 
 	useEffect(() => {
 		updateNormalizedStorage()
-	}, [storedItems])
+	}, [
+		storedItems,
+		currentOrderSnapshot?.length > 0 ? currentOrderSnapshot[0]?.id : null,
+	])
 
 	const updateNormalizedStorage = () => {
 		// We will use the order state at the start of the editing (currentOrderSnapshot)
@@ -69,14 +74,14 @@ const EditProductsOrder = ({
 				...x,
 				amount:
 					x.amount +
-						// I can't use storageId because it can be any of the many storage ids
-						// when the item is merged, so we use productId, productTypeId and descriptionId
-						currentOrderSnapshot.find(
-							oi =>
-								oi.productId === x.productId &&
-								oi.productTypeId === x.productTypeId &&
-								oi.descriptionId === x.descriptionId,
-						)?.storageAmount || 0,
+					// I can't use storageId because it can be any of the many storage ids
+					// when the item is merged, so we use productId, productTypeId and descriptionId
+					(currentOrderSnapshot.find(
+						oi =>
+							oi.productId === x.productId &&
+							oi.productTypeId === x.productTypeId &&
+							oi.descriptionId === x.descriptionId,
+					)?.storageAmount || 0),
 			}))
 
 			setStoredItemsEditNormalized(normalized)
