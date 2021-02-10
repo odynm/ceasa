@@ -37,8 +37,20 @@ const decreaseOfflineStorageAmount = (
 ) => async (dispatch, getStore) => {
 	const { storedItems } = getStore().storage
 
+	// To be used to RESTORE the original value on storage, if needed
+	// on the function restoreOfflineStorageAmount()
+	const decreasedDataArr = []
+
 	const updatedStoredItems = storedItems.map(item => {
 		const decreaseAmountInMerged = (items, amountToDecrease) => {
+			const decreasedData = {
+				productId: item.productId,
+				productTypeId: item.productTypeId,
+				descriptionId: item.descriptionId,
+				items: [],
+				amount: amountToDecrease,
+			}
+
 			const sortedByValue = items.sort((a, b) => {
 				return a.costPrice.value > b.costPrice.value ? 1 : -1
 			})
@@ -48,12 +60,14 @@ const decreaseOfflineStorageAmount = (
 				if (remainingToDecrease > 0) {
 					const decrease = Math.min(remainingToDecrease, x.amount)
 					remainingToDecrease -= decrease
+					decreasedData.items.push({ ...x, amount: x.amount - decrease })
 					return { ...x, amount: x.amount - decrease }
 				} else {
 					return x
 				}
 			})
 
+			decreasedDataArr.push(decreasedData)
 			return mappedItems
 		}
 
@@ -77,6 +91,51 @@ const decreaseOfflineStorageAmount = (
 			}
 		} else {
 			return item
+		}
+	})
+
+	dispatch(setStoredItems(updatedStoredItems))
+	return decreasedDataArr
+}
+
+// Restore a decreased storage
+// WARNING: This should only be used on offline mode
+// In online, the amount should be controled by the server
+const restoreOfflineStorageAmount = items => async (dispatch, getStore) => {
+	const { storedItems } = getStore().storage
+
+	const updatedStoredItems = storedItems.map(stored => {
+		const item = items.find(
+			x =>
+				x.productId === stored.productId &&
+				x.productTypeId === stored.productTypeId &&
+				x.descriptionId === stored.descriptionId,
+		)
+		if (item) {
+			const newItem = {
+				...stored,
+				amount: stored.amount + item.amount,
+			}
+
+			if (stored.isMerged) {
+				item.items.map(mergedInfo => {
+					const storedMerged = stored.mergedData.items.find(
+						x => x.storageId === mergedInfo.storageId,
+					)
+					if (storedMerged) {
+						return {
+							...storedMerged,
+							amount: mergedInfo.storageAmount,
+						}
+					} else {
+						return storedMerged
+					}
+				})
+			}
+
+			return newItem
+		} else {
+			return stored
 		}
 	})
 
@@ -280,6 +339,7 @@ export const Creators = {
 	deleteItem,
 	setWorking,
 	setStoredItems,
+	restoreOfflineStorageAmount,
 	decreaseOfflineStorageAmount,
 }
 

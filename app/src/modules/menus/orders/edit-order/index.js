@@ -41,7 +41,7 @@ const EditOrder = ({
 	loadOrders,
 	loadStorage,
 	completedAt,
-	deleteOrder,
+	offlineData,
 	noConnection,
 	setAppLoader,
 	confirmDelete,
@@ -49,6 +49,7 @@ const EditOrder = ({
 	setDucksOrderStatus,
 	deleteOrderOnOrdersList,
 	deleteOrderOnOfflineQueue,
+	restoreOfflineStorageAmount,
 }) => {
 	// The current order state at edition start
 	const [currentOrderSnapshot, setCurrentOrderSnapshot] = useState([])
@@ -75,8 +76,10 @@ const EditOrder = ({
 			// It will work has expected for both methods
 			await deleteOrderOnOrdersList(id, offlineId)
 			await deleteOrderOnOfflineQueue(id, offlineId)
-			//TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-			// needs to increase the storage again =(
+			// Restore the offline storage with the previously collected data
+			offlineData.offlineStorageRestoreData.forEach(item => {
+				restoreOfflineStorageAmount(item)
+			})
 		} else {
 			// await deleteOrder(id)
 			// await loadOrders()
@@ -283,6 +286,7 @@ const mapDispatchToProps = {
 	setConfirmDelete: EditOrderCreators.setConfirmDelete,
 	deleteOrderOnOfflineQueue: OfflineCreators.deleteOrder,
 	deleteOrderOnOrdersList: OrdersVendorCreators.deleteOrder,
+	restoreOfflineStorageAmount: StorageCreators.restoreOfflineStorageAmount,
 }
 
 const mapStateToProps = ({ app, client, editOrder }) => ({
@@ -296,6 +300,7 @@ const mapStateToProps = ({ app, client, editOrder }) => ({
 	noConnection: app.noConnection,
 	orderItems: editOrder.orderItems,
 	completedAt: editOrder.completedAt,
+	offlineData: editOrder.offlineData,
 	confirmDelete: editOrder.confirmDelete,
 })
 

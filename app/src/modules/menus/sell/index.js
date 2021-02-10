@@ -132,8 +132,22 @@ const Sell = ({
 
 					addToQueue(jobTypes.addOrder, orderToCreate)
 
+					const offlineStorageRestoreData = []
+
+					orderItems.forEach(async item => {
+						offlineStorageRestoreData.push(
+							await decreaseOfflineStorageAmount(
+								item.productId,
+								item.productTypeId,
+								item.descriptionId,
+								item.amount,
+							),
+						)
+					})
+
 					const offlineOrder = {
 						offlineId: offlineOrderId,
+						offlineData: { offlineStorageRestoreData },
 						client: client,
 						products: orderItems.map(item => ({
 							...item,
@@ -145,15 +159,6 @@ const Sell = ({
 						createdAt: new Date(),
 					}
 					createOfflineOrder(offlineOrder)
-
-					orderItems.forEach(item => {
-						decreaseOfflineStorageAmount(
-							item.productId,
-							item.productTypeId,
-							item.descriptionId,
-							item.amount,
-						)
-					})
 
 					handleClear()
 					ToastService.show({ message: translate('sell.addedOffline') })
