@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { ScrollView } from 'react-native'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
+import { jobTypes } from 'src/ducks/offline/jobTypes'
+import { Creators as OfflineCreators } from 'src/ducks/offline'
 import { Creators as AdditionalCostCreators } from 'src/ducks/additional-cost'
 import AdditionalCostCard from './card'
 import Space from 'src/components/fw/space'
@@ -17,15 +19,23 @@ import ConfirmationModal from 'src/components/fw/confirmation-modal'
 
 const AdditionalCost = ({
 	loading,
+	addToQueue,
+	noConnection,
 	additionalCosts,
 	addAdditionalCost,
 	loadAdditionalCosts,
 	deleteAdditionalCost,
+	addAdditionalCostOffline,
+	deleteAdditionalCostOffline,
+	deleteAdditionalCostFromList,
 }) => {
 	const [description, setDescription] = useState('')
 	const [value, setValue] = useState('0,00')
 	const [errors, setErrors] = useState({})
-	const [idItemToBeDeleted, setIdItemToBeDeleted] = useState(0)
+	const [idItemToBeDeleted, setIdItemToBeDeleted] = useState({
+		id: 0,
+		offlineId: 0,
+	})
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
 	useEffect(() => {
@@ -40,24 +50,46 @@ const AdditionalCost = ({
 			return
 		}
 
-		const success = await addAdditionalCost(description, money)
+		if (noConnection) {
+			const offlineItem = {
+				offlineId: new Date().getTime(),
+				description,
+				costValue: money,
+			}
 
-		if (success) {
-			await loadAdditionalCosts()
-			setDescription('')
-			setValue('0,00')
-			setErrors({})
+			addToQueue(jobTypes.addAdditionalCost, offlineItem)
+			addAdditionalCostOffline(offlineItem)
+		} else {
+			const success = await addAdditionalCost(description, money)
+
+			if (success) {
+				await loadAdditionalCosts()
+				setDescription('')
+				setValue('0,00')
+				setErrors({})
+			}
 		}
 	}
 
-	const askConfirmDelete = id => {
-		setIdItemToBeDeleted(id)
+	const askConfirmDelete = (id, offlineId) => {
+		setIdItemToBeDeleted({ id, offlineId })
 		setDeleteModalOpen(true)
 	}
 
 	const handleDelete = async () => {
-		await deleteAdditionalCost(idItemToBeDeleted)
-		await loadAdditionalCosts()
+		if (noConnection) {
+			await deleteAdditionalCostOffline(
+				idItemToBeDeleted.id,
+				idItemToBeDeleted.offlineId,
+			)
+			await deleteAdditionalCostFromList(
+				idItemToBeDeleted.id,
+				idItemToBeDeleted.offlineId,
+			)
+		} else {
+			await deleteAdditionalCost(idItemToBeDeleted.id)
+			await loadAdditionalCosts()
+		}
 	}
 
 	return (
@@ -81,7 +113,7 @@ const AdditionalCost = ({
 				/>
 				<Space />
 				<>
-					{loading ? (
+					{loading && !noConnection ? (
 						<Loader />
 					) : (
 						<Button
@@ -97,6 +129,7 @@ const AdditionalCost = ({
 						<AdditionalCostCard
 							key={index}
 							id={cost.id}
+							offlineId={cost.offlineId}
 							costValue={cost.costValue}
 							createdAt={cost.createdAt}
 							description={cost.description}
@@ -123,12 +156,18 @@ AdditionalCost.navigationOptions = () => ({
 })
 
 const mapDispatchToProps = {
+	addToQueue: OfflineCreators.addToQueue,
 	addAdditionalCost: AdditionalCostCreators.addAdditionalCost,
 	loadAdditionalCosts: AdditionalCostCreators.loadAdditionalCosts,
 	deleteAdditionalCost: AdditionalCostCreators.deleteAdditionalCost,
+	deleteAdditionalCostOffline: OfflineCreators.deleteAdditionalCost,
+	addAdditionalCostOffline: AdditionalCostCreators.addAdditionalCostOffline,
+	deleteAdditionalCostFromList:
+		AdditionalCostCreators.deleteAdditionalCostFromList,
 }
 
-const mapStateToProps = ({ additionalCost }) => ({
+const mapStateToProps = ({ app, additionalCost }) => ({
+	noConnection: app.noConnection,
 	loading: additionalCost.loading,
 	additionalCosts: additionalCost.additionalCosts,
 })

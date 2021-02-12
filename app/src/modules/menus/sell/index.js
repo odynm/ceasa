@@ -120,11 +120,6 @@ const Sell = ({
 					!(await InternetService.isInternetReachable())
 						.isInternetReachable
 				) {
-					// For now, nothing works offline
-					ToastService.show({
-						message: translate('app.noConnectionError'),
-					})
-
 					const offlineOrderId = new Date().getTime()
 
 					const orderToCreate = { ...orderCreationData }
@@ -152,8 +147,9 @@ const Sell = ({
 						products: orderItems.map(item => ({
 							...item,
 							unitPrice: item.unitPrice.value * 100,
-							productId: 10,
-							productTypeId: 42,
+							productId: item.productId,
+							productTypeId: item.productTypeId,
+							descriptionId: item.descriptionId,
 						})),
 						status: status,
 						createdAt: new Date(),

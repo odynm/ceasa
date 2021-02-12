@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { toHour } from 'src/utils/date'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
+import { jobTypes } from 'src/ducks/offline/jobTypes'
 import { Creators as AppCreators } from 'src/ducks/app'
 import { Creators as StorageCreators } from 'src/ducks/storage'
 import { Creators as OfflineCreators } from 'src/ducks/offline'
@@ -26,82 +27,120 @@ import ConfirmationModal from 'src/components/fw/confirmation-modal'
 import MissingItemsModal from 'src/components/ceasa/sell/missing-items-modal'
 
 const EditOrder = ({
-	id,
-	client,
-	status,
-	urgent,
-	loader,
 	clients,
-	offlineId,
 	setClient,
 	setUrgent,
 	sendOrder,
+	editOrder,
+	addToQueue,
 	navigation,
-	orderItems,
 	loadOrders,
 	loadStorage,
-	completedAt,
-	offlineData,
+	deleteOrder,
 	noConnection,
 	setAppLoader,
-	confirmDelete,
 	setConfirmDelete,
+	createOfflineOrder,
 	setDucksOrderStatus,
 	deleteOrderOnOrdersList,
 	deleteOrderOnOfflineQueue,
 	restoreOfflineStorageAmount,
+	increaseOfflineStorageAmount,
+	decreaseOfflineStorageAmount,
 }) => {
 	// The current order state at edition start
 	const [currentOrderSnapshot, setCurrentOrderSnapshot] = useState([])
 
-	const [internalStatus, setInternalStatus] = useState(status)
+	const [internalStatus, setInternalStatus] = useState(editOrder.status)
 	const [modalConfirmEdit, setModalConfirmEdit] = useState(false)
 
 	const [missingItems, setMissingItems] = useState([])
 
 	useEffect(() => {
-		setCurrentOrderSnapshot([...orderItems])
-	}, [id, orderItems]) // TODO this doesn't seem optimal at all, but it's working for now
+		setCurrentOrderSnapshot([...editOrder.orderItems])
+	}, [editOrder.id, editOrder.orderItems]) // TODO this doesn't seem optimal at all, but it's working for now
 
 	const handleDelete = async () => {
-		/* 
-			----------------------------------------------------------------------------------
-			so here we need to create a func that:
-				* check if its' offline
-					* if it is, then check if theres a offlineId order in queue
-						* if is, delete it, and then delete the order on 'orders' ducks
-			 */
 		if (noConnection) {
 			// If it's not an online order, nothing bad will happen
 			// It will work has expected for both methods
-			await deleteOrderOnOrdersList(id, offlineId)
-			await deleteOrderOnOfflineQueue(id, offlineId)
-			// Restore the offline storage with the previously collected data
-			offlineData.offlineStorageRestoreData.forEach(item => {
-				restoreOfflineStorageAmount(item)
-			})
+			await deleteOrderOnOrdersList(editOrder.id, editOrder.offlineId)
+			await deleteOrderOnOfflineQueue(editOrder.id, editOrder.offlineId)
+
+			if (editOrder.offlineId > 0) {
+				// Restore the offline storage with the previously collected data
+				editOrder.offlineData.offlineStorageRestoreData.forEach(
+					async item => {
+						await restoreOfflineStorageAmount(item)
+					},
+				)
+			} else {
+				readdStorageItemsFromSnapshot()
+			}
 		} else {
-			// await deleteOrder(id)
-			// await loadOrders()
+			await deleteOrder(editOrder.id)
+			await loadOrders()
 		}
 		navigation.navigate(screens.orders)
 	}
 
 	const handleEdit = async () => {
+		setAppLoader(true)
+		await setDucksOrderStatus(internalStatus)
 		if (noConnection) {
-			ToastService.show({ message: translate('app.noConnectionError') })
+			/*
+			Here we are:
+				* deleting order from queue and orderslist
+				* adding order to add queue
+				* increasing storage items from previous order
+				* decreasing storage items for new order
+				* adding new order to orders list
+			*/
+
+			// If it's not an online order, nothing bad will happen
+			// It will work has expected for both methods,
+			// even if there's nothing to delete
+			await deleteOrderOnOrdersList(editOrder.id, editOrder.offlineId)
+			await deleteOrderOnOfflineQueue(editOrder.id, editOrder.offlineId)
+
+			await addToQueue(jobTypes.addOrder, {
+				...editOrder,
+				id: undefined,
+			})
+
+			readdStorageItemsFromSnapshot()
+
+			const offlineStorageRestoreData = []
+
+			editOrder.orderItems.forEach(async item => {
+				offlineStorageRestoreData.push(
+					await decreaseOfflineStorageAmount(
+						item.productId,
+						item.productTypeId,
+						item.descriptionId,
+						item.amount,
+					),
+				)
+			})
+
+			const offlineOrder = {
+				offlineId: new Date().getTime(),
+				offlineData: { offlineStorageRestoreData },
+				client: editOrder.client,
+				products: editOrder.orderItems.map(item => ({
+					...item,
+					unitPrice: item.unitPrice.value * 100,
+					productId: item.productId,
+					productTypeId: item.productTypeId,
+					descriptionId: item.descriptionId,
+				})),
+				status: editOrder.status,
+				createdAt: new Date(),
+			}
+
+			await createOfflineOrder(offlineOrder)
+			navigation.navigate(screens.orders)
 		} else {
-			setAppLoader(true)
-			await setDucksOrderStatus(internalStatus)
-			/* 
-			----------------------------------------------------------------------------------
-			(do first delete)
-			so here we need to create a func that:
-				* check if its' offline
-					* if it is, then check if theres a offlineId order in queue
-						* if is, delete it and push the new one to stack
-						* else, just add to stack
-			 */
 			const { success, data } = await sendOrder()
 			if (success) {
 				navigation.navigate(screens.orders)
@@ -116,13 +155,13 @@ const EditOrder = ({
 			}
 			await loadOrders()
 			await loadStorage()
-			setAppLoader(false)
 		}
+		setAppLoader(false)
 	}
 
 	const handleEditProducts = () => {
 		navigation.navigate(screens.editProductsOrder, {
-			status,
+			status: editOrder.status,
 			currentOrderSnapshot,
 		})
 	}
@@ -133,6 +172,30 @@ const EditOrder = ({
 		} else {
 			setInternalStatus(orderStatus.blocked)
 		}
+	}
+
+	const readdStorageItemsFromSnapshot = () => {
+		currentOrderSnapshot.forEach(async item => {
+			if (item.isMerged) {
+				item.mergedData.items.forEach(x => {
+					increaseOfflineStorageAmount({
+						productId: item.productId,
+						productTypeId: item.productTypeId,
+						descriptionId: item.descriptionId,
+						costPrice: x.costPrice,
+						storageAmount: x.storageAmount,
+					})
+				})
+			} else {
+				increaseOfflineStorageAmount({
+					productId: item.productId,
+					productTypeId: item.productTypeId,
+					descriptionId: item.descriptionId,
+					costPrice: item.costPrice,
+					storageAmount: item.storageAmount,
+				})
+			}
+		})
 	}
 
 	return (
@@ -154,12 +217,12 @@ const EditOrder = ({
 				)}
 				<View style={styles.client}>
 					<ClientSegment
-						client={client}
+						client={editOrder.client}
 						clients={clients}
 						setClient={setClient}
 						editable={
-							status !== orderStatus.carrying &&
-							status !== orderStatus.done
+							editOrder.status !== orderStatus.carrying &&
+							editOrder.status !== orderStatus.done
 						}
 					/>
 				</View>
@@ -168,37 +231,40 @@ const EditOrder = ({
 					onPress={handleEditProducts}
 					style={styles.editProductView}
 					label={
-						status !== orderStatus.done && status !== orderStatus.deleted
+						editOrder.status !== orderStatus.done &&
+						editOrder.status !== orderStatus.deleted
 							? translate('editOrder.editProducts')
 							: translate('editOrder.seeProducts')
 					}
 				/>
-				{status === orderStatus.carrying ? (
+				{editOrder.status === orderStatus.carrying ? (
 					<>
 						<Space />
 						<KText
 							bold
-							text={`${translate('editOrder.loader')}: ${loader}`}
+							text={`${translate('editOrder.loader')}: ${
+								editOrder.loader
+							}`}
 						/>
 					</>
 				) : (
-					status === orderStatus.done && (
+					editOrder.status === orderStatus.done && (
 						<>
 							<Space />
 							<>
-								{loader ? (
+								{editOrder.loader ? (
 									<KText
 										bold
-										text={`${loader} ${translate(
+										text={`${editOrder.loader} ${translate(
 											'editOrder.done',
-										)} ${toHour(completedAt)}`}
+										)} ${toHour(editOrder.completedAt)}`}
 									/>
 								) : (
 									<KText
 										bold
 										text={`${translate(
 											'editOrder.doneNoCarrier',
-										)} ${toHour(completedAt)}`}
+										)} ${toHour(editOrder.completedAt)}`}
 									/>
 								)}
 							</>
@@ -206,7 +272,7 @@ const EditOrder = ({
 					)
 				)}
 				<View style={styles.footer}>
-					{status === orderStatus.blocked && (
+					{editOrder.status === orderStatus.blocked && (
 						<View style={styles.row}>
 							<KText
 								bold
@@ -227,7 +293,7 @@ const EditOrder = ({
 							text={translate('editOrder.urgent')}
 						/>
 						<CheckBox
-							value={urgent}
+							value={editOrder.urgent}
 							style={styles.checkbox}
 							onValueChange={checked => setUrgent(checked)}
 						/>
@@ -246,7 +312,7 @@ const EditOrder = ({
 				</View>
 			</ScreenBase>
 			<ConfirmationModal
-				open={confirmDelete}
+				open={editOrder.confirmDelete}
 				onAccept={handleDelete}
 				onClose={() => setConfirmDelete(false)}
 				header={translate('editOrder.deleteModal.header')}
@@ -280,28 +346,23 @@ const mapDispatchToProps = {
 	setUrgent: EditOrderCreators.setUrgent,
 	setStatus: EditOrderCreators.setStatus,
 	sendOrder: EditOrderCreators.sendOrder,
+	addToQueue: OfflineCreators.addToQueue,
 	deleteOrder: EditOrderCreators.deleteOrder,
 	loadOrders: OrdersVendorCreators.loadOrders,
 	setDucksOrderStatus: EditOrderCreators.setStatus,
 	setConfirmDelete: EditOrderCreators.setConfirmDelete,
 	deleteOrderOnOfflineQueue: OfflineCreators.deleteOrder,
 	deleteOrderOnOrdersList: OrdersVendorCreators.deleteOrder,
+	createOfflineOrder: OrdersVendorCreators.createOfflineOrder,
 	restoreOfflineStorageAmount: StorageCreators.restoreOfflineStorageAmount,
+	increaseOfflineStorageAmount: StorageCreators.increaseOfflineStorageAmount,
+	decreaseOfflineStorageAmount: StorageCreators.decreaseOfflineStorageAmount,
 }
 
 const mapStateToProps = ({ app, client, editOrder }) => ({
-	id: editOrder.id,
+	editOrder: editOrder,
 	clients: client.clients,
-	status: editOrder.status,
-	client: editOrder.client,
-	urgent: editOrder.urgent,
-	loader: editOrder.loader,
-	offlineId: editOrder.offlineId,
 	noConnection: app.noConnection,
-	orderItems: editOrder.orderItems,
-	completedAt: editOrder.completedAt,
-	offlineData: editOrder.offlineData,
-	confirmDelete: editOrder.confirmDelete,
 })
 
 export default connect(

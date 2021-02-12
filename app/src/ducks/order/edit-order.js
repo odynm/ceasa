@@ -55,6 +55,7 @@ const initialState = {
 	orderItems: [],
 	isEditing: false,
 	clientStep: false,
+	generateLoad: false,
 	confirmDelete: false,
 	productListIsDirty: false,
 	client: { key: '', place: '', vehicle: '' },
@@ -92,6 +93,7 @@ export default function reducer(state = initialState, action) {
 				offlineId: action.payload.order.offlineId,
 				offlineData: action.payload.order.offlineData,
 				loader: action.payload.order.loader,
+				generateLoad: action.payload.order.generateLoad,
 				completedAt: new Date(action.payload.order.completedAt),
 			}
 		case Types.SET_STATUS:

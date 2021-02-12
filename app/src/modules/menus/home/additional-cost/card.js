@@ -9,6 +9,7 @@ import MoneyService from 'src/services/moneyService'
 
 const AdditionalCostCard = ({
 	id,
+	offlineId,
 	costValue,
 	createdAt,
 	description,
@@ -26,11 +27,19 @@ const AdditionalCostCard = ({
 							} `}
 						/>
 						<View style={styles.alignRight}>
-							<KText
-								style={styles.itemLabel}
-								fontSize={14}
-								text={toHour(createdAt)}
-							/>
+							{offlineId > 0 ? (
+								<KText
+									style={styles.itemLabel}
+									fontSize={14}
+									text={translate('orders.notSent')}
+								/>
+							) : (
+								<KText
+									style={styles.itemLabel}
+									fontSize={14}
+									text={toHour(createdAt)}
+								/>
+							)}
 						</View>
 					</View>
 					<View style={styles.row}>
@@ -39,7 +48,7 @@ const AdditionalCostCard = ({
 				</View>
 				<TouchableOpacity
 					onPress={() => {
-						handlePress(id)
+						handlePress(id, offlineId)
 					}}
 					style={styles.buttonContainer}>
 					<View style={styles.buttonBox}>

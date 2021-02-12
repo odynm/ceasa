@@ -28,7 +28,7 @@ const addAdditionalCost = (description, costValue) => async dispatch => {
 	return success
 }
 
-const loadAdditionalCosts = () => async (dispatch, getStore) => {
+const loadAdditionalCosts = () => async (dispatch, getState) => {
 	dispatch(setLoading(true))
 	const { data, success } = await HttpService.get('additional-cost')
 
@@ -42,7 +42,7 @@ const loadAdditionalCosts = () => async (dispatch, getStore) => {
 		dispatch(setAdditionalCosts(mappedItems))
 	} else if (
 		success &&
-		getStore().home.additionalCosts?.length &&
+		getState().additionalCost.additionalCosts?.length &&
 		!data?.length
 	) {
 		dispatch(setAdditionalCosts([]))
@@ -50,18 +50,47 @@ const loadAdditionalCosts = () => async (dispatch, getStore) => {
 	dispatch(setLoading(false))
 }
 
-const deleteAdditionalCost = id => async (dispatch, getStore) => {
-	const { noConnection } = getStore().app
+const deleteAdditionalCost = id => async (dispatch, getState) => {
+	dispatch(setLoading(true))
+	const { success } = await HttpService.delete(`additional-cost?id=${id}`)
+	dispatch(setLoading(false))
 
-	if (!noConnection) {
-		dispatch(setLoading(true))
-		const { success } = await HttpService.delete(`additional-cost?id=${id}`)
-		dispatch(setLoading(false))
+	return success
+}
 
-		return success
-	} else {
-		return false
-	}
+// WARNING: only offline
+const addAdditionalCostOffline = ({
+	offlineId,
+	costValue,
+	description,
+}) => async (dispatch, getState) => {
+	const { additionalCosts } = getState().additionalCost
+
+	const mappedItems = [
+		{
+			offlineId,
+			description,
+			costValue,
+		},
+		...additionalCosts,
+	]
+
+	dispatch(setAdditionalCosts(mappedItems))
+}
+
+// WARNING: only offline
+const deleteAdditionalCostFromList = (id, offlineId) => async (
+	dispatch,
+	getState,
+) => {
+	console.warn(id, offlineId)
+	const { additionalCosts } = getState().additionalCost
+
+	const mappedItems = additionalCosts.filter(
+		x => x.offlineId !== offlineId && x.id !== id,
+	)
+
+	dispatch(setAdditionalCosts(mappedItems))
 }
 
 export const Creators = {
@@ -69,6 +98,8 @@ export const Creators = {
 	addAdditionalCost,
 	loadAdditionalCosts,
 	deleteAdditionalCost,
+	addAdditionalCostOffline,
+	deleteAdditionalCostFromList,
 }
 
 const initialState = {

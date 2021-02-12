@@ -2,6 +2,7 @@ import { jobTypes } from './jobTypes'
 import { Creators as AppCreators } from 'src/ducks/app'
 import { Creators as OrderCreators } from 'src/ducks/order'
 import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
+import { Creators as AdditionalCostCreators } from 'src/ducks/additional-cost'
 
 const prefix = 'offline/'
 const Types = {
@@ -56,6 +57,28 @@ const deleteOrder = (id, offlineId) => async (dispatch, getState) => {
 	dispatch(setLoading(false))
 }
 
+// delete additionalCost
+const deleteAdditionalCost = (id, offlineId) => async (dispatch, getState) => {
+	dispatch(setInUse(true))
+	dispatch(setLoading(true))
+
+	const { queue } = getState().offline
+	const hasItem = queue.some(item => item.data.offlineId === offlineId)
+
+	if (hasItem) {
+		const newQueue = queue.filter(item => item.data.offlineId !== offlineId)
+		dispatch(setQueue(newQueue))
+	} else {
+		const newQueue = [
+			...queue,
+			{ jobType: jobTypes.deleteAdditionalCost, data: id },
+		]
+		dispatch(setQueue(newQueue))
+	}
+
+	dispatch(setLoading(false))
+}
+
 // add order or add additional cost
 const addToQueue = (jobType, data) => async (dispatch, getState) => {
 	dispatch(setInUse(true))
@@ -95,8 +118,22 @@ const executeQueue = () => async (dispatch, getState) => {
 			case jobTypes.deleteOrder:
 				response = await dispatch(EditOrderCreators.deleteOrder(item.data))
 				break
+			case jobTypes.addAdditionalCost:
+				response = await dispatch(
+					AdditionalCostCreators.addAdditionalCost(
+						item.data.description,
+						item.data.costValue,
+					),
+				)
+				break
+			case jobTypes.deleteAdditionalCost:
+				response = await dispatch(
+					AdditionalCostCreators.deleteAdditionalCost(item.data),
+				)
+				break
 		}
-		if (!response.success) {
+
+		if (!response || !response.success) {
 			const { errors: curErrors } = getState().offline
 			const newErrors = [...curErrors, response.data]
 			dispatch(setErrors(newErrors))
@@ -113,6 +150,7 @@ export const Creators = {
 	addToQueue,
 	deleteOrder,
 	executeQueue,
+	deleteAdditionalCost,
 }
 
 const initialState = {

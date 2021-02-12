@@ -112,13 +112,12 @@ const restoreOfflineStorageAmount = items => async (dispatch, getStore) => {
 				x.descriptionId === stored.descriptionId,
 		)
 		if (item) {
-			const newItem = {
-				...stored,
-				amount: stored.amount + item.amount,
-			}
+			const newItem = rfdc()(stored) // seems to be needed
+
+			newItem.amount = stored.amount + item.amount
 
 			if (stored.isMerged) {
-				item.items.map(mergedInfo => {
+				newItem.mergedData.items = item.items.map(mergedInfo => {
 					const storedMerged = stored.mergedData.items.find(
 						x => x.storageId === mergedInfo.storageId,
 					)
@@ -129,6 +128,45 @@ const restoreOfflineStorageAmount = items => async (dispatch, getStore) => {
 						}
 					} else {
 						return storedMerged
+					}
+				})
+			}
+
+			return newItem
+		} else {
+			return stored
+		}
+	})
+
+	dispatch(setStoredItems(updatedStoredItems))
+}
+
+// WARNING: This should only be used on offline mode
+// In online, the amount should be controled by the server
+const increaseOfflineStorageAmount = item => async (dispatch, getStore) => {
+	const { storedItems } = getStore().storage
+
+	const updatedStoredItems = storedItems.map(stored => {
+		if (
+			item.productId === stored.productId &&
+			item.productTypeId === stored.productTypeId &&
+			item.descriptionId === stored.descriptionId
+		) {
+			const newItem = rfdc()(stored) // seems to be needed
+
+			newItem.amount += item.storageAmount
+
+			if (stored.isMerged) {
+				console.warn('ni', newItem)
+				newItem.mergedData.items = stored.mergedData.items.map(merged => {
+					console.warn('m,i', merged, item)
+					if (merged.costPrice.value === item.costPrice.value) {
+						return {
+							...merged,
+							amount: stored.amount + item.storageAmount,
+						}
+					} else {
+						return merged
 					}
 				})
 			}
@@ -340,6 +378,7 @@ export const Creators = {
 	setWorking,
 	setStoredItems,
 	restoreOfflineStorageAmount,
+	increaseOfflineStorageAmount,
 	decreaseOfflineStorageAmount,
 }
 
