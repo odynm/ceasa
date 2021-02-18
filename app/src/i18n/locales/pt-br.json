@@ -67,7 +67,7 @@
 		"registerNotListedProductType": "Cadastrar tipo não listado...",
 		"additionalDescription": "Descrição adicional (opcional)",
 		"amount": "Quantidade",
-		"costPrice":"Preço de Custo (unidade)",
+		"costPrice": "Preço de Custo (unidade)",
 		"costPriceShort": "Preço Custo",
 		"costPriceMerged": "Média Preço Custo",
 		"add": "Adicionar",
@@ -195,7 +195,8 @@
 		"totalProfit": "Lucro Total",
 		"details": "Detalhes",
 		"addAdditionalCost": "Adicionar Custo",
-		"modalAccept":{
+		"noBalanceWhenNoConnection": "Balanço indisponível enquanto offline",
+		"modalAccept": {
 			"header": "Finalizar o Dia",
 			"content": "Deseja limpar todo seu estoque do dia?",
 			"headerDelete": "Zerar Estoque",
@@ -208,12 +209,12 @@
 		"description": "Nome",
 		"relatedProduct": "Relacionar ao Produto",
 		"add": "Adicionar",
-		"errors":{
+		"errors": {
 			"description": "Insira um nome válido",
 			"relatedProduct": "Escolha um produto para relacionar o tipo"
 		}
 	},
-	"user" : {
+	"user": {
 		"logout": "Sair",
 		"loadersTeam": {
 			"title": "Meus Carregadores",
@@ -227,7 +228,7 @@
 		"addLoader": {
 			"title": "Adicionar Carregador",
 			"instructions": {
-				"1":"* Peça para o seu carregador baixar o aplicativo ",
+				"1": "* Peça para o seu carregador baixar o aplicativo ",
 				"2": "Ceasa Estoque",
 				"3": ".\n",
 				"4": "* Ele deve clicar em \"entrar como carregador\"\n",
@@ -240,10 +241,10 @@
 		"value": "Valor",
 		"add": "Adicionar",
 		"delete": "Excluir",
-		"errors":{
+		"errors": {
 			"value": "Insira o valor"
 		},
-		"modalDelete":{
+		"modalDelete": {
 			"header": "Confirmar exclusão",
 			"content": "Deseja excluir este custo adicional?"
 		}

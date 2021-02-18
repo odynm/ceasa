@@ -23,6 +23,7 @@ const Home = ({
 	loadHome,
 	navigation,
 	resetStorage,
+	noConnection,
 }) => {
 	const [confirmDelete, setConfirmDelete] = useState(false)
 
@@ -49,53 +50,65 @@ const Home = ({
 					useKeyboardClose={false}>
 					<Button
 						small
+						disabled={noConnection}
 						label={translate('home.deleteStorage')}
 						onPress={() => setConfirmDelete(true)}
 					/>
 					<View style={styles.container}>
-						<KText
-							bold
-							fontSize={20}
-							text={translate('home.dailyBalance')}
-						/>
-						<View style={styles.row}>
-							<KText text={translate('home.totalEntries')} />
-							<KText
-								text={`${MoneyService.getCurrency().text} ${
-									MoneyService.toMoney(
-										balance.totalEarned
-											? balance.totalEarned / 100
-											: 0,
-									).text
-								}`}
-							/>
-						</View>
-						<View style={styles.row}>
-							<KText text={translate('home.totalExpenses')} />
-							<KText
-								text={`${MoneyService.getCurrency().text} ${
-									MoneyService.toMoney(
-										balance.totalCostPrice
-											? balance.totalCostPrice / 100
-											: 0,
-									).text
-								}`}
-							/>
-						</View>
-						<View style={styles.row}>
-							<KText bold text={translate('home.totalProfit')} />
-							<KText
-								bold
-								text={`${MoneyService.getCurrency().text} ${
-									MoneyService.toMoney(
-										balance.totalProfit
-											? balance.totalProfit / 100
-											: 0,
-									).text
-								}`}
-							/>
-						</View>
-						<Space size2 />
+						{noConnection ? (
+							<View style={[styles.align, styles.placeholder]}>
+								<KText
+									text={translate('home.noBalanceWhenNoConnection')}
+								/>
+								<Space size2 />
+							</View>
+						) : (
+							<>
+								<KText
+									bold
+									fontSize={20}
+									text={translate('home.dailyBalance')}
+								/>
+								<View style={styles.row}>
+									<KText text={translate('home.totalEntries')} />
+									<KText
+										text={`${MoneyService.getCurrency().text} ${
+											MoneyService.toMoney(
+												balance.totalEarned
+													? balance.totalEarned / 100
+													: 0,
+											).text
+										}`}
+									/>
+								</View>
+								<View style={styles.row}>
+									<KText text={translate('home.totalExpenses')} />
+									<KText
+										text={`${MoneyService.getCurrency().text} ${
+											MoneyService.toMoney(
+												balance.totalCostPrice
+													? balance.totalCostPrice / 100
+													: 0,
+											).text
+										}`}
+									/>
+								</View>
+								<View style={styles.row}>
+									<KText bold text={translate('home.totalProfit')} />
+									<KText
+										bold
+										text={`${MoneyService.getCurrency().text} ${
+											MoneyService.toMoney(
+												balance.totalProfit
+													? balance.totalProfit / 100
+													: 0,
+											).text
+										}`}
+									/>
+								</View>
+								<Space size2 />
+							</>
+						)}
 						<View style={styles.flexRowEnd}>
 							<Button
 								tiny
@@ -103,33 +116,41 @@ const Home = ({
 								onPress={() => openAdditionalCost()}
 							/>
 						</View>
-						<KText
-							bold
-							style={styles.details}
-							fontSize={20}
-							text={translate('home.details')}
-						/>
-						<ScrollView style={styles.scrollView}>
-							{overview && overview.length > 0 ? (
-								overview.map(item => (
-									<View key={item.id}>
-										<ItemCardHome
-											sold={item.sold}
-											amount={item.amount}
-											product={item.productName}
-											costPrice={item.costPrice}
-											description={item.description}
-											totalEarned={item.totalEarned}
-											liquidEarned={item.liquidEarned}
-											productType={item.productTypeName}
-											startingTotalItems={item.startingTotalItems}
-										/>
-									</View>
-								))
-							) : (
-								<KText text={translate('home.empty')} />
-							)}
-						</ScrollView>
+						{noConnection ? (
+							<View />
+						) : (
+							<>
+								<KText
+									bold
+									style={styles.details}
+									fontSize={20}
+									text={translate('home.details')}
+								/>
+								<ScrollView style={styles.scrollView}>
+									{overview && overview.length > 0 ? (
+										overview.map(item => (
+											<View key={item.id}>
+												<ItemCardHome
+													sold={item.sold}
+													amount={item.amount}
+													product={item.productName}
+													costPrice={item.costPrice}
+													description={item.description}
+													totalEarned={item.totalEarned}
+													liquidEarned={item.liquidEarned}
+													productType={item.productTypeName}
+													startingTotalItems={
+														item.startingTotalItems
+													}
+												/>
+											</View>
+										))
+									) : (
+										<KText text={translate('home.empty')} />
+									)}
+								</ScrollView>
+							</>
+						)}
 					</View>
 				</ScreenBase>
 			)}
@@ -178,10 +199,11 @@ const mapDispatchToProps = {
 	resetStorage: HomeCreators.resetStorage,
 }
 
-const mapStateToProps = ({ home }) => ({
+const mapStateToProps = ({ app, home }) => ({
 	loading: home.loading,
 	balance: home.balance,
 	overview: home.overview,
+	noConnection: app.noConnection,
 })
 
 export default connect(

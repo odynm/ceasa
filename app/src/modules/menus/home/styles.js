@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
 	flex: {
 		flex: 1,
 	},
+	align: {
+		alignItems: 'center',
+	},
 	buttons: {
 		alignItems: 'center',
 		justifyContent: 'space-between',
@@ -30,6 +33,9 @@ const styles = StyleSheet.create({
 	},
 	details: {
 		marginTop: hp(10),
+	},
+	placeholder: {
+		marginTop: hp(80),
 	},
 })
 
