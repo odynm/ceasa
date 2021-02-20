@@ -1,5 +1,6 @@
 import HttpService from 'src/services/httpService'
 import MoneyService from 'src/services/moneyService'
+import StorageService from 'src/services/storageService'
 
 const prefix = 'additional-cost/'
 const Types = {
@@ -12,10 +13,14 @@ const setLoading = loading => ({
 	type: Types.SET_LOADING,
 })
 
-const setAdditionalCosts = additionalCosts => ({
-	payload: { additionalCosts },
-	type: Types.SET_ADDITIONAL_COSTS,
-})
+const setAdditionalCosts = additionalCosts => {
+	StorageService.offlineOrders.set(additionalCosts)
+
+	return {
+		payload: { additionalCosts },
+		type: Types.SET_ADDITIONAL_COSTS,
+	}
+}
 
 const addAdditionalCost = (description, costValue) => async dispatch => {
 	dispatch(setLoading(true))
@@ -96,6 +101,7 @@ const deleteAdditionalCostFromList = (id, offlineId) => async (
 export const Creators = {
 	setLoading,
 	addAdditionalCost,
+	setAdditionalCosts,
 	loadAdditionalCosts,
 	deleteAdditionalCost,
 	addAdditionalCostOffline,

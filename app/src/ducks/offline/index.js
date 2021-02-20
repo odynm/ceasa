@@ -3,6 +3,7 @@ import { Creators as AppCreators } from 'src/ducks/app'
 import { Creators as OrderCreators } from 'src/ducks/order'
 import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
 import { Creators as AdditionalCostCreators } from 'src/ducks/additional-cost'
+import StorageService from 'src/services/storageService'
 
 const prefix = 'offline/'
 const Types = {
@@ -13,20 +14,28 @@ const Types = {
 	SET_EXECUTING_QUEUE: prefix + 'SET_EXECUTING_QUEUE',
 }
 
-const setInUse = inUse => ({
-	payload: { inUse },
-	type: Types.SET_IN_USE,
-})
+const setInUse = inUse => {
+	StorageService.offlineInUse.set(inUse)
+
+	return {
+		payload: { inUse },
+		type: Types.SET_IN_USE,
+	}
+}
 
 const setErrors = errors => ({
 	payload: { errors },
 	type: Types.SET_ERRORS,
 })
 
-const setQueue = queue => ({
-	payload: { queue },
-	type: Types.SET_QUEUE,
-})
+const setQueue = queue => {
+	StorageService.offlineQueue.set(queue)
+
+	return {
+		payload: { queue },
+		type: Types.SET_QUEUE,
+	}
+}
 
 const setLoading = loading => ({
 	payload: { loading },
@@ -147,6 +156,7 @@ const executeQueue = () => async (dispatch, getState) => {
 }
 
 export const Creators = {
+	setQueue,
 	addToQueue,
 	deleteOrder,
 	executeQueue,

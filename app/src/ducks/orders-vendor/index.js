@@ -1,15 +1,20 @@
 import sort from '../order/sort'
 import HttpService from 'src/services/httpService'
+import StorageService from 'src/services/storageService'
 
 const prefix = 'order-vendor/'
 const Types = {
 	SET_ORDER_LIST: prefix + 'SET_ORDER_LIST',
 }
 
-const setOrderList = orderList => ({
-	payload: { orderList },
-	type: Types.SET_ORDER_LIST,
-})
+const setOrderList = orderList => {
+	StorageService.offlineOrders.set(orderList)
+
+	return {
+		payload: { orderList },
+		type: Types.SET_ORDER_LIST,
+	}
+}
 
 const loadOrders = () => async dispatch => {
 	const { data, success } = await HttpService.get('order')
@@ -55,6 +60,7 @@ const initialState = {
 export const Creators = {
 	loadOrders,
 	deleteOrder,
+	setOrderList,
 	createOfflineOrder,
 }
 

@@ -2,6 +2,7 @@ import rfdc from 'rfdc'
 import HttpService from 'src/services/httpService'
 import MoneyService from 'src/services/moneyService'
 import MergedProductsService from 'src/services/mergedProductsService'
+import StorageService from 'src/services/storageService'
 
 export { Selectors } from './selectors'
 
@@ -22,10 +23,14 @@ const setWorking = working => ({
 	type: Types.SET_WORKING,
 })
 
-const setStoredItems = storedItems => ({
-	payload: { storedItems },
-	type: Types.SET_STORED_ITEMS,
-})
+const setStoredItems = storedItems => {
+	StorageService.offlineStoredItems.set(storedItems)
+
+	return {
+		payload: { storedItems },
+		type: Types.SET_STORED_ITEMS,
+	}
+}
 
 // WARNING: This should only be used on offline mode
 // In online, the amount should be controled by the server

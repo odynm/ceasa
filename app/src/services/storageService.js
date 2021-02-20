@@ -2,7 +2,11 @@ import AsyncStorage from '@react-native-community/async-storage'
 
 const setItem = key => async item => {
 	try {
-		await AsyncStorage.setItem(key, JSON.stringify(item))
+		if (item) {
+			await AsyncStorage.setItem(key, JSON.stringify(item))
+		} else {
+			await AsyncStorage.removeItem(key)
+		}
 	} catch (error) {
 		console.warn(error)
 	}
@@ -36,7 +40,12 @@ const keys = {
 	loginType: 'loginType',
 	rememberMe: 'rememberMe',
 	introduction: 'introduction',
+	offlineInUse: 'offlineInUse',
+	offlineQueue: 'offlineQueue',
+	offlineOrders: 'offlineOrders', // to save order list state
 	refresherRunning: 'refresherRunning',
+	offlineStoredItems: 'offlineStoredItems', // to save stogae state
+	offlineAdditionalCosts: 'offlineAdditionalCosts', // to save cost list state
 }
 
 const StorageService = {
@@ -60,10 +69,35 @@ const StorageService = {
 		set: setItem(keys.rememberMe),
 		remove: removeItem(keys.rememberMe),
 	},
+	offlineInUse: {
+		get: getItem(keys.offlineInUse),
+		set: setItem(keys.offlineInUse),
+		remove: removeItem(keys.offlineInUse),
+	},
+	offlineQueue: {
+		get: getItem(keys.offlineQueue),
+		set: setItem(keys.offlineQueue),
+		remove: removeItem(keys.offlineQueue),
+	},
+	offlineOrders: {
+		get: getItem(keys.offlineOrders),
+		set: setItem(keys.offlineOrders),
+		remove: removeItem(keys.offlineOrders),
+	},
 	refresherRunning: {
 		get: getItem(keys.refresherRunning),
 		set: setItem(keys.refresherRunning),
 		remove: removeItem(keys.refresherRunning),
+	},
+	offlineStoredItems: {
+		get: getItem(keys.offlineStoredItems),
+		set: setItem(keys.offlineStoredItems),
+		remove: removeItem(keys.offlineStoredItems),
+	},
+	offlineAdditionalCosts: {
+		get: getItem(keys.offlineAdditionalCosts),
+		set: setItem(keys.offlineAdditionalCosts),
+		remove: removeItem(keys.offlineAdditionalCosts),
 	},
 }
 
