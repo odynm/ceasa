@@ -9,6 +9,7 @@ import screens from 'src/constants/screens'
 import ToastService from 'src/services/toastService'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
+import InternetService from 'src/services/internetService'
 import StoredItemCard from 'src/components/ceasa/stored-item-card'
 
 const ListMergedStorage = ({
@@ -29,8 +30,8 @@ const ListMergedStorage = ({
 		}
 	}, [navigation])
 
-	const handleEdit = id => {
-		if (noConnection) {
+	const handleEdit = async id => {
+		if (noConnection || !(await InternetService.isInternetReachable())) {
 			ToastService.show({ message: translate('app.noConnectionError') })
 		} else {
 			if (orderItems && orderItems.length > 0) {

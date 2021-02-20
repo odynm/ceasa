@@ -14,6 +14,7 @@ import Loader from 'src/components/fw/loader'
 import ToastService from 'src/services/toastService'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
+import InternetService from 'src/services/internetService'
 import ConfirmationModal from 'src/components/fw/confirmation-modal'
 
 const LoadersTeam = ({
@@ -53,8 +54,11 @@ const LoadersTeam = ({
 									<View key={item.id}>
 										<TeamCard
 											name={item.loaderName}
-											onDelete={() => {
-												if (noConnection) {
+											onDelete={async () => {
+												if (
+													noConnection ||
+													!(await InternetService.isInternetReachable())
+												) {
 													ToastService.show({
 														message: translate(
 															'app.noConnectionError',
@@ -78,8 +82,11 @@ const LoadersTeam = ({
 					<Space size2 />
 					<View style={styles.footer}>
 						<Button
-							onPress={() => {
-								if (noConnection) {
+							onPress={async () => {
+								if (
+									noConnection ||
+									!(await InternetService.isInternetReachable())
+								) {
 									ToastService.show({
 										message: translate('app.noConnectionError'),
 									})

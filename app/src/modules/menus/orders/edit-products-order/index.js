@@ -10,6 +10,7 @@ import MoneyService from 'src/services/moneyService'
 import ToastService from 'src/services/toastService'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
+import InternetService from 'src/services/internetService'
 import AddProduct from 'src/components/ceasa/sell/add-product'
 import TotalSegment from 'src/components/ceasa/sell/total-segment'
 import ProductListSegment from 'src/components/ceasa/sell/product-list-segment'
@@ -97,8 +98,8 @@ const EditProductsOrder = ({
 		)
 	}
 
-	const handleOpenAddMenu = () => {
-		if (noConnection) {
+	const handleOpenAddMenu = async () => {
+		if (noConnection || !(await InternetService.isInternetReachable())) {
 			ToastService.show({ message: translate('app.noConnectionError') })
 		} else if (cantEdit) {
 			ToastService.show({

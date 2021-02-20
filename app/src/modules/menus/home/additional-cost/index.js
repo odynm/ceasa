@@ -16,6 +16,7 @@ import ScreenBase from 'src/components/fw/screen-base'
 import MoneyInput from 'src/components/fw/money-input'
 import ScreenHeader from 'src/components/fw/screen-header'
 import ConfirmationModal from 'src/components/fw/confirmation-modal'
+import InternetService from 'src/services/internetService'
 
 const AdditionalCost = ({
 	loading,
@@ -50,7 +51,7 @@ const AdditionalCost = ({
 			return
 		}
 
-		if (noConnection) {
+		if (noConnection || !(await InternetService.isInternetReachable())) {
 			const offlineItem = {
 				offlineId: new Date().getTime(),
 				description,
@@ -77,7 +78,7 @@ const AdditionalCost = ({
 	}
 
 	const handleDelete = async () => {
-		if (noConnection) {
+		if (noConnection || !(await InternetService.isInternetReachable())) {
 			await deleteAdditionalCostOffline(
 				idItemToBeDeleted.id,
 				idItemToBeDeleted.offlineId,
@@ -125,17 +126,18 @@ const AdditionalCost = ({
 				</>
 				<Space />
 				<ScrollView>
-					{additionalCosts.map((cost, index) => (
-						<AdditionalCostCard
-							key={index}
-							id={cost.id}
-							offlineId={cost.offlineId}
-							costValue={cost.costValue}
-							createdAt={cost.createdAt}
-							description={cost.description}
-							handlePress={askConfirmDelete}
-						/>
-					))}
+					{additionalCosts?.length > 0 &&
+						additionalCosts.map((cost, index) => (
+							<AdditionalCostCard
+								key={index}
+								id={cost.id}
+								offlineId={cost.offlineId}
+								costValue={cost.costValue}
+								createdAt={cost.createdAt}
+								description={cost.description}
+								handlePress={askConfirmDelete}
+							/>
+						))}
 				</ScrollView>
 				<Space size4 />
 			</ScreenBase>

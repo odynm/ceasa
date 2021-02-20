@@ -22,6 +22,7 @@ import ToastService from 'src/services/toastService'
 import ScreenBase from 'src/components/fw/screen-base'
 import CheckBox from '@react-native-community/checkbox'
 import ScreenHeader from 'src/components/fw/screen-header'
+import InternetService from 'src/services/internetService'
 import ClientSegment from 'src/components/ceasa/sell/client-segment'
 import ConfirmationModal from 'src/components/fw/confirmation-modal'
 import MissingItemsModal from 'src/components/ceasa/sell/missing-items-modal'
@@ -61,7 +62,7 @@ const EditOrder = ({
 	}, [editOrder.id, editOrder.orderItems]) // TODO this doesn't seem optimal at all, but it's working for now
 
 	const handleDelete = async () => {
-		if (noConnection) {
+		if (noConnection || !(await InternetService.isInternetReachable())) {
 			// If it's not an online order, nothing bad will happen
 			// It will work has expected for both methods
 			await deleteOrderOnOrdersList(editOrder.id, editOrder.offlineId)
@@ -87,7 +88,7 @@ const EditOrder = ({
 	const handleEdit = async () => {
 		setAppLoader(true)
 		await setDucksOrderStatus(internalStatus)
-		if (noConnection) {
+		if (noConnection || !(await InternetService.isInternetReachable())) {
 			/*
 			Here we are:
 				* deleting order from queue and orderslist

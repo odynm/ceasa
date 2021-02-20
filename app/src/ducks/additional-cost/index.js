@@ -14,7 +14,7 @@ const setLoading = loading => ({
 })
 
 const setAdditionalCosts = additionalCosts => {
-	StorageService.offlineOrders.set(additionalCosts)
+	StorageService.offlineAdditionalCosts.set(additionalCosts)
 
 	return {
 		payload: { additionalCosts },

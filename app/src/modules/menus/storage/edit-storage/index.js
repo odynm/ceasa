@@ -18,6 +18,7 @@ import ToastService from 'src/services/toastService'
 import MoneyInput from 'src/components/fw/money-input'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
+import InternetService from 'src/services/internetService'
 import ConfirmationModal from 'src/components/fw/confirmation-modal'
 
 const EditStorage = ({
@@ -45,7 +46,7 @@ const EditStorage = ({
 	}
 
 	const handleEdit = async () => {
-		if (noConnection) {
+		if (noConnection || !(await InternetService.isInternetReachable())) {
 			ToastService.show({ message: translate('app.noConnectionError') })
 		} else {
 			setAppLoader(true)

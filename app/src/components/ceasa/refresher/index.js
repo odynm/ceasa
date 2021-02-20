@@ -18,6 +18,7 @@ const Refresher = ({
 	loadVendorOrders,
 	loadLoaderOrders,
 	loadCarryingOrders,
+	setInUse,
 	setOrderList,
 	setOfflineQueue,
 	setStoredItems,
@@ -33,15 +34,13 @@ const Refresher = ({
 			const offlineStoredItems = await StorageService.offlineStoredItems.get()
 			const offlineAdditionalCosts = await StorageService.offlineAdditionalCosts.get()
 
-			console.warn('offlineQueue', offlineQueue)
-			setOrderList(offlineOrders)
-			setOfflineQueue(offlineQueue)
-			setStoredItems(offlineStoredItems)
-			setAdditionalCosts(offlineAdditionalCosts)
-			here
-			/*for some reason, offline queue is setting correctly, but it's not running
-			as it should. no idea why.
-			*/
+			setInUse(true)
+			setOrderList(offlineOrders ? offlineOrders : [])
+			setOfflineQueue(offlineQueue ? offlineQueue : [])
+			setStoredItems(offlineStoredItems ? offlineStoredItems : [])
+			setAdditionalCosts(
+				offlineAdditionalCosts ? offlineAdditionalCosts : [],
+			)
 
 			setTimeout(() => RefresherService.start(), 1000)
 		}
@@ -78,6 +77,7 @@ const mapStateToProps = ({ user, loader }) => ({
 const mapDispatchToProps = {
 	getHome: HomeCreators.loadHome,
 	getStorage: StorageCreators.get,
+	setInUse: OfflineCreators.setInUse,
 	setOfflineQueue: OfflineCreators.setQueue,
 	setStoredItems: StorageCreators.setStoredItems,
 	setOrderList: OrdersVendorCreators.setOrderList,

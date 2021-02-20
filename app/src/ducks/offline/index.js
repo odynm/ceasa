@@ -156,6 +156,7 @@ const executeQueue = () => async (dispatch, getState) => {
 }
 
 export const Creators = {
+	setInUse,
 	setQueue,
 	addToQueue,
 	deleteOrder,
