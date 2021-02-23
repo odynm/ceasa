@@ -34,25 +34,29 @@ const addAdditionalCost = (description, costValue) => async dispatch => {
 }
 
 const loadAdditionalCosts = () => async (dispatch, getState) => {
-	dispatch(setLoading(true))
-	const { data, success } = await HttpService.get('additional-cost')
+	const { inUse } = getState().offline
 
-	if (success && data?.length > 0) {
-		const mappedItems = data.map(x => ({
-			...x,
-			costValue: MoneyService.toMoney(x.costValue / 100),
-			createdAt: new Date(x.createdAt),
-		}))
+	if (!inUse) {
+		dispatch(setLoading(true))
+		const { data, success } = await HttpService.get('additional-cost')
 
-		dispatch(setAdditionalCosts(mappedItems))
-	} else if (
-		success &&
-		getState().additionalCost.additionalCosts?.length &&
-		!data?.length
-	) {
-		dispatch(setAdditionalCosts([]))
+		if (success && data?.length > 0) {
+			const mappedItems = data.map(x => ({
+				...x,
+				costValue: MoneyService.toMoney(x.costValue / 100),
+				createdAt: new Date(x.createdAt),
+			}))
+
+			dispatch(setAdditionalCosts(mappedItems))
+		} else if (
+			success &&
+			getState().additionalCost.additionalCosts?.length &&
+			!data?.length
+		) {
+			dispatch(setAdditionalCosts([]))
+		}
+		dispatch(setLoading(false))
 	}
-	dispatch(setLoading(false))
 }
 
 const deleteAdditionalCost = id => async (dispatch, getState) => {

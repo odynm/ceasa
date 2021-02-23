@@ -16,27 +16,33 @@ const setOrderList = orderList => {
 	}
 }
 
-const loadOrders = () => async dispatch => {
-	const { data, success } = await HttpService.get('order')
-	if (success) {
-		if (!data) {
-			await dispatch(setOrderList([]))
-			return
+const loadOrders = () => async (dispatch, getState) => {
+	const { inUse } = getState().offline
+
+	if (!inUse) {
+		const { data, success } = await HttpService.get('order')
+
+		if (success) {
+			if (!data) {
+				await dispatch(setOrderList([]))
+				return
+			}
+
+			const mappedData = data.map(item => ({
+				...item,
+				createdAt: new Date(item.createdAt),
+				releasedAt: new Date(item.releasedAt),
+				completedAt: new Date(item.completedAt),
+			}))
+			const orderedData = mappedData.sort((a, b) => {
+				return sort(a, b)
+			})
+			console.warn('set get')
+			await dispatch(setOrderList(orderedData))
 		}
 
-		const mappedData = data.map(item => ({
-			...item,
-			createdAt: new Date(item.createdAt),
-			releasedAt: new Date(item.releasedAt),
-			completedAt: new Date(item.completedAt),
-		}))
-		const orderedData = mappedData.sort((a, b) => {
-			return sort(a, b)
-		})
-		await dispatch(setOrderList(orderedData))
+		return success
 	}
-
-	return success
 }
 
 const createOfflineOrder = order => async (dispatch, getState) => {

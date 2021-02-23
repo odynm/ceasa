@@ -6,8 +6,8 @@ import { Creators as OfflineCreators } from 'src/ducks/offline'
 import { Creators as OrdersVendorCreators } from 'src/ducks/orders-vendor'
 import { Creators as OrdersLoaderCreators } from 'src/ducks/orders-loader'
 import { Creators as AdditionalCostCreators } from 'src/ducks/additional-cost'
-import RefresherService from 'src/services/refresherService'
 import StorageService from 'src/services/storageService'
+import RefresherService from 'src/services/refresherService'
 
 const Refresher = ({
 	user,
@@ -35,6 +35,7 @@ const Refresher = ({
 			const offlineAdditionalCosts = await StorageService.offlineAdditionalCosts.get()
 
 			setInUse(true)
+			console.warn('set off')
 			setOrderList(offlineOrders ? offlineOrders : [])
 			setOfflineQueue(offlineQueue ? offlineQueue : [])
 			setStoredItems(offlineStoredItems ? offlineStoredItems : [])

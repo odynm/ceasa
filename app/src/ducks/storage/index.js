@@ -347,8 +347,10 @@ const deleteItem = item => async (_, getStore) => {
 
 const get = () => async (dispatch, getStore) => {
 	const { noConnection } = getStore().app
+	const { inUse } = getStore().offline
+
 	// At least for now, don't touch the storage on offline mode
-	if (!noConnection) {
+	if (!noConnection && !inUse) {
 		dispatch(setLoading(true))
 		const { data, success } = await HttpService.get('storage')
 		if (success && data?.length > 0) {
