@@ -195,7 +195,7 @@
 		"totalProfit": "Lucro Total",
 		"details": "Detalhes",
 		"addAdditionalCost": "Adicionar Custo",
-		"noBalanceWhenNoConnection": "Balanço indisponível enquanto offline",
+		"noBalanceWhenNoConnection": "Balanço indisponível enquanto estiver sem conexão com o sistema",
 		"modalAccept": {
 			"header": "Finalizar o Dia",
 			"content": "Deseja limpar todo seu estoque do dia?",

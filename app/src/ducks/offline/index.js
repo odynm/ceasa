@@ -53,10 +53,11 @@ const deleteOrder = (id, offlineId) => async (dispatch, getState) => {
 	dispatch(setLoading(true))
 
 	const { queue } = getState().offline
-	const hasItem = queue.some(item => item.data.offlineId === offlineId)
+	const hasItemOnlyOffline = queue.some(item => item.data === offlineId)
 
-	if (hasItem) {
-		const newQueue = queue.filter(item => item.data.offlineId !== offlineId)
+	if (hasItemOnlyOffline) {
+		const newQueue = queue.filter(item => item.data !== offlineId)
+		console.warn('has', newQueue, queue, id, offlineId)
 		dispatch(setQueue(newQueue))
 	} else {
 		const newQueue = [...queue, { jobType: jobTypes.deleteOrder, data: id }]
@@ -72,10 +73,10 @@ const deleteAdditionalCost = (id, offlineId) => async (dispatch, getState) => {
 	dispatch(setLoading(true))
 
 	const { queue } = getState().offline
-	const hasItem = queue.some(item => item.data.offlineId === offlineId)
+	const hasItemOnlyOffline = queue.some(item => item.data === offlineId)
 
-	if (hasItem) {
-		const newQueue = queue.filter(item => item.data.offlineId !== offlineId)
+	if (hasItemOnlyOffline) {
+		const newQueue = queue.filter(item => item.data !== offlineId)
 		dispatch(setQueue(newQueue))
 	} else {
 		const newQueue = [
