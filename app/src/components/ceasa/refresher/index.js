@@ -26,7 +26,6 @@ const Refresher = ({
 }) => {
 	const initialize = async () => {
 		const offlineInUse = await StorageService.offlineInUse.get()
-		console.warn('init offlineInUse', offlineInUse)
 
 		if (offlineInUse) {
 			const offlineOrders = await StorageService.offlineOrders.get()
@@ -35,7 +34,6 @@ const Refresher = ({
 			const offlineAdditionalCosts = await StorageService.offlineAdditionalCosts.get()
 
 			setInUse(true)
-			console.warn('set off')
 			setOrderList(offlineOrders ? offlineOrders : [])
 			setOfflineQueue(offlineQueue ? offlineQueue : [])
 			setStoredItems(offlineStoredItems ? offlineStoredItems : [])
@@ -44,6 +42,8 @@ const Refresher = ({
 			)
 
 			setTimeout(() => RefresherService.start(), 1000)
+		} else {
+			RefresherService.start()
 		}
 	}
 

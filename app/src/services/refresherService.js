@@ -57,14 +57,16 @@ const refresh = async () => {
 		if (inUse) {
 			store.dispatch(OfflineCreators.executeQueue())
 		} else {
+			const requests = []
+
 			if (_user && _user.accessToken && _user.id) {
 				// Vendor
 				if (_loadVendorOrders) {
-					_loadVendorOrders()
+					requests.push(_loadVendorOrders())
 					// Storage
-					_getStorage()
+					requests.push(_getStorage())
 					// Home
-					_getHome()
+					requests.push(_getHome())
 				}
 			} else if (
 				_loader &&
@@ -74,10 +76,12 @@ const refresh = async () => {
 			) {
 				//Loader
 				if (_loadLoaderOrders) {
-					_loadLoaderOrders()
-					_loadCarryingOrders()
+					requests.push(_loadLoaderOrders())
+					requests.push(_loadCarryingOrders())
 				}
 			}
+
+			await promiseResolveAllSettled(requests)
 		}
 	} else {
 		store.dispatch(AppCreators.setNoConnection(true))
@@ -88,6 +92,26 @@ const refresh = async () => {
 			setTimeout(resolve, config.REFRESH_RATE_MS)
 		}).then(refresh)
 	}
+}
+
+// Promise.allSettled is not yet available, so we use this polyfill
+const promiseResolveAllSettled = function(promises) {
+	let mappedPromises = promises.map(p => {
+		return p
+			.then(value => {
+				return {
+					status: 'fulfilled',
+					value,
+				}
+			})
+			.catch(reason => {
+				return {
+					status: 'rejected',
+					reason,
+				}
+			})
+	})
+	return Promise.all(mappedPromises)
 }
 
 const RefresherService = { start, stop, setData }
