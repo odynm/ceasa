@@ -57,7 +57,6 @@ const deleteOrder = (id, offlineId) => async (dispatch, getState) => {
 
 	if (hasItemOnlyOffline) {
 		const newQueue = queue.filter(item => item.data !== offlineId)
-		console.warn('has', newQueue, queue, id, offlineId)
 		dispatch(setQueue(newQueue))
 	} else {
 		const newQueue = [...queue, { jobType: jobTypes.deleteOrder, data: id }]

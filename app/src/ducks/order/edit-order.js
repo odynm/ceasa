@@ -1,4 +1,5 @@
 import commonObj from './common'
+import orderStatus from 'src/enums/order'
 import HttpService from 'src/services/httpService'
 
 const prefix = 'edit-order/'
@@ -93,7 +94,12 @@ export default function reducer(state = initialState, action) {
 				offlineId: action.payload.order.offlineId,
 				offlineData: action.payload.order.offlineData,
 				loader: action.payload.order.loader,
-				generateLoad: action.payload.order.generateLoad,
+				// Generate load is not a prop saved in server now, so we arbitrarily
+				// chose those status to be automatically "generateLoad:  true"
+				generateLoad:
+					action.payload.order.status === orderStatus.blocked ||
+					action.payload.order.status === orderStatus.released ||
+					action.payload.order.status === orderStatus.carrying,
 				completedAt: new Date(action.payload.order.completedAt),
 			}
 		case Types.SET_STATUS:

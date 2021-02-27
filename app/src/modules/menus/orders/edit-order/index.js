@@ -137,6 +137,7 @@ const EditOrder = ({
 				})),
 				status: editOrder.status,
 				createdAt: new Date(),
+				generateLoad: editOrder.generateLoad,
 			}
 
 			await createOfflineOrder(offlineOrder)

@@ -37,7 +37,7 @@ const loadOrders = () => async (dispatch, getState) => {
 			const orderedData = mappedData.sort((a, b) => {
 				return sort(a, b)
 			})
-			console.warn('set get')
+
 			await dispatch(setOrderList(orderedData))
 		}
 

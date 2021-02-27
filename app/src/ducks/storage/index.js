@@ -162,9 +162,7 @@ const increaseOfflineStorageAmount = item => async (dispatch, getStore) => {
 			newItem.amount += item.storageAmount
 
 			if (stored.isMerged) {
-				console.warn('ni', newItem)
 				newItem.mergedData.items = stored.mergedData.items.map(merged => {
-					console.warn('m,i', merged, item)
 					if (merged.costPrice.value === item.costPrice.value) {
 						return {
 							...merged,
