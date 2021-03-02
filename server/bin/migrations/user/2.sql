@@ -80,3 +80,23 @@ CREATE TABLE _user_.order_product
 WITH (
     OIDS=FALSE
 );
+
+/* ADDITIONAL_COST */
+
+CREATE SEQUENCE _user_.additional_cost_id_seq
+    INCREMENT 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+
+CREATE TABLE _user_.additional_cost
+(
+    id int NOT NULL DEFAULT nextval('_user_.additional_cost_id_seq'::regclass),
+    cost_value int NOT NULL,
+    description character varying(30),
+	created_at timestamp
+)
+WITH (
+    OIDS=FALSE
+);

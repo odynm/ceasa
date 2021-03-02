@@ -20,7 +20,11 @@ CREATE TABLE public.user_info
     deleted_date timestamp,
     plan smallint,
     permissions int,
-    CONSTRAINT user_info_pkey PRIMARY KEY (id)
+    parent_user_id int,
+    CONSTRAINT user_info_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_parentuser_user FOREIGN KEY (parent_user_id)
+        REFERENCES public.user_info (id)
+        ON DELETE NO ACTION
 )
 WITH (
     OIDS=FALSE
