@@ -118,7 +118,6 @@ const Sell = ({
 				if (
 					noConnection ||
 					!(await InternetService.isInternetReachable())
-						.isInternetReachable
 				) {
 					const offlineOrderId = new Date().getTime()
 
