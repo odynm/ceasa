@@ -357,7 +357,7 @@ func addProducts(userId int, orderId int, products []ProductDto) bool {
 				OrderId:       orderId,
 				StorageItemId: storageItem.Id,
 				UnitPrice:     product.UnitPrice,
-				Amount:        amountToAdd,
+				Amount:        product.Amount,
 				StorageAmount: amountStorageToAdd,
 			}
 

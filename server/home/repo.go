@@ -23,6 +23,7 @@ func DbGetHomeItems(userId int, timezone string) []HomeItem {
 		amount,
 		cost_price,
 		order_data.sold,
+		order_data.sold_amount,
 		order_data.total_earned
 	FROM %v.storage_item si
 	INNER JOIN public.products_product pp ON pp.id = si.product_id
@@ -31,6 +32,7 @@ func DbGetHomeItems(userId int, timezone string) []HomeItem {
 	LEFT JOIN LATERAL (
 		SELECT
 			SUM(op.amount) AS sold,
+			SUM(op.storage_amount) AS sold_amount,
 			SUM(op.unit_price * op.amount) AS total_earned
 		FROM %v.order_order AS o
 		INNER JOIN %v.order_product op ON op.order_id = o.id
@@ -58,6 +60,7 @@ func DbGetHomeItems(userId int, timezone string) []HomeItem {
 		var productTypeName sql.NullString
 		var description sql.NullString
 		var sold sql.NullInt32
+		var soldAmount sql.NullInt32
 		var totalEarned sql.NullInt32
 
 		err := rows.Scan(&homeItem.Id,
@@ -69,6 +72,7 @@ func DbGetHomeItems(userId int, timezone string) []HomeItem {
 			&homeItem.Amount,
 			&homeItem.CostPrice,
 			&sold,
+			&soldAmount,
 			&totalEarned)
 
 		if err != nil {
@@ -86,6 +90,9 @@ func DbGetHomeItems(userId int, timezone string) []HomeItem {
 		}
 		if sold.Valid {
 			homeItem.Sold = int(sold.Int32)
+		}
+		if soldAmount.Valid {
+			homeItem.SoldAmount = int(soldAmount.Int32)
 		}
 		if totalEarned.Valid {
 			homeItem.TotalEarned = int(totalEarned.Int32)

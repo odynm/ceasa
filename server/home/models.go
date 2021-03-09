@@ -9,6 +9,7 @@ type HomeItem struct {
 	Description     string `json:"description"`
 	CostPrice       int    `json:"costPrice"`
 	Amount          int    `json:"amount"`
+	SoldAmount      int    `json:"soldAmount"`
 	Sold            int    `json:"sold"`
 	TotalEarned     int    `json:"totalEarned"`
 }

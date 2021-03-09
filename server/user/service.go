@@ -21,9 +21,9 @@ type AuthData struct {
 var tokens = map[int]AuthData{}
 
 func CreateUser(userDto UserDto, w http.ResponseWriter) {
-	id := DbGetId(userDto.Login)
+	login := strings.ToUpper(userDto.Login)
+	id := DbGetId(login)
 	if id == 0 {
-		login := strings.ToUpper(userDto.Login)
 		hash := utils.GetHash(login + "@" + userDto.Pass)
 		permissions := int(1) // Padrão vendedor
 		DbCreateUser(login, hash, userDto.ParentUser, permissions)
