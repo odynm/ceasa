@@ -3,16 +3,19 @@ import { Creators as NotificationsCreators } from 'src/ducks/notifications'
 import store from 'src/ducks'
 import OneSignal from 'react-native-onesignal'
 import DeviceInfo from 'react-native-device-info'
+import notificationType from 'src/enums/notifications'
 import messaging from '@react-native-firebase/messaging'
 
 const start = () => {
 	messaging().setBackgroundMessageHandler(async remoteMessage => {
 		console.warn('Message handled in the background!', remoteMessage)
+		Vibration.vibrate()
 		const data = fixObject(remoteMessage)?.data?.custom?.a
 		switch (data?.type) {
 			case 'edit':
 				store.dispatch(
-					NotificationsCreators.setEditionModal({
+					NotificationsCreators.addNotification({
+						type: notificationType.edited,
 						open: true,
 						content: fixObject(remoteMessage)?.data?.custom?.a,
 					}),
@@ -20,7 +23,8 @@ const start = () => {
 				break
 			case 'delete':
 				store.dispatch(
-					NotificationsCreators.setCancelationModal({
+					NotificationsCreators.addNotification({
+						type: notificationType.cancelation,
 						open: true,
 						content: fixObject(remoteMessage)?.data?.custom?.a,
 					}),
@@ -38,7 +42,8 @@ const start = () => {
 		switch (data?.type) {
 			case 'edit':
 				store.dispatch(
-					NotificationsCreators.setEditionModal({
+					NotificationsCreators.addNotification({
+						type: notificationType.edited,
 						open: true,
 						content: fixObject(remoteMessage)?.data?.custom?.a,
 					}),
@@ -46,7 +51,8 @@ const start = () => {
 				break
 			case 'delete':
 				store.dispatch(
-					NotificationsCreators.setCancelationModal({
+					NotificationsCreators.addNotification({
+						type: notificationType.cancelation,
 						open: true,
 						content: fixObject(remoteMessage)?.data?.custom?.a,
 					}),

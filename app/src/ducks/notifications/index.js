@@ -1,41 +1,44 @@
 const prefix = 'notifications/'
 const Types = {
-	SET_EDITION_MODAL: prefix + 'SET_EDITION_MODAL',
-	SET_CANCELATION_MODAL: prefix + 'SET_CANCELATION_MODAL',
+	SET_NOTIFICATIONS: prefix + 'SET_NOTIFICATIONS',
 }
 
-const setEditionModal = editionModal => ({
-	payload: { editionModal },
-	type: Types.SET_EDITION_MODAL,
-})
+const addNotification = notification => async (dispatch, getState) => {
+	const { notifications } = getState().notifications
 
-const setCancelationModal = cancelationModal => ({
-	payload: { cancelationModal },
-	type: Types.SET_CANCELATION_MODAL,
-})
+	dispatch({
+		payload: { notifications: [...notifications, notification] },
+		type: Types.SET_NOTIFICATIONS,
+	})
+}
+
+const popLastNotification = () => async (dispatch, getState) => {
+	const { notifications } = getState().notifications
+
+	dispatch({
+		payload: { notifications: notifications.slice(1) },
+		type: Types.SET_NOTIFICATIONS,
+	})
+}
 
 export const Creators = {
-	setEditionModal,
-	setCancelationModal,
+	addNotification,
+	popLastNotification,
 }
 
 const initialState = {
-	editionModal: {
-		open: false,
-		content: {},
-	},
-	cancelationModal: {
-		open: false,
-		content: {},
-	},
+	// notification: {
+	// type: 0,
+	// open: false,
+	// content: {},
+	// }
+	notifications: [],
 }
 
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
-		case Types.SET_EDITION_MODAL:
-			return { ...state, editionModal: action.payload.editionModal }
-		case Types.SET_CANCELATION_MODAL:
-			return { ...state, cancelationModal: action.payload.cancelationModal }
+		case Types.SET_NOTIFICATIONS:
+			return { ...state, notifications: action.payload.notifications }
 		default:
 			return state
 	}

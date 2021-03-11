@@ -6,9 +6,23 @@ import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
 import Button from 'src/components/fw/button'
 
-const GenericModal = ({ title, message, modalData, setModalData }) => {
+const GenericModal = ({
+	title,
+	message,
+	modalData,
+	closeModal,
+	numberStack,
+}) => {
 	return (
 		<Modal transparent={true}>
+			{numberStack > 0 && (
+				<KText
+					bold
+					fontSize={24}
+					style={styles.number}
+					text={numberStack}
+				/>
+			)}
 			<View style={styles.view}>
 				<View style={styles.modal}>
 					<KText bold style={styles.title} text={title} />
@@ -54,9 +68,7 @@ const GenericModal = ({ title, message, modalData, setModalData }) => {
 						small
 						style={styles.button}
 						label={'Ok'}
-						onPress={() => {
-							setModalData({ open: false })
-						}}
+						onPress={closeModal}
 					/>
 				</View>
 			</View>
@@ -112,6 +124,18 @@ const styles = StyleSheet.create({
 	},
 	scrollView: {
 		flex: 1,
+	},
+	number: {
+		color: 'white',
+		backgroundColor: colors.red,
+		position: 'absolute',
+		width: wp(40),
+		height: hp(40),
+		borderRadius: wp(5),
+		textAlign: 'center',
+		top: hp(90),
+		right: wp(20),
+		zIndex: 99,
 	},
 })
 

@@ -147,12 +147,16 @@ const EditOrder = ({
 			if (success) {
 				navigation.navigate(screens.orders)
 			} else {
-				if (data.data.errorCode === errors.ORDER_CANT_EDIT) {
+				if (data?.data?.errorCode === errors.ORDER_CANT_EDIT) {
 					ToastService.show({
 						message: translate('orders.errors.cantEditAnymore'),
 					})
 				} else {
-					setMissingItems(data.data)
+					if (data?.data) {
+						setMissingItems(data.data)
+					} else {
+						console.warn('ERRO EDIÇÃO NÃO DEFINIDO')
+					}
 				}
 			}
 			await loadOrders()

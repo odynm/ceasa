@@ -1,36 +1,45 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { Creators as NotificationsCreators } from 'src/ducks/notifications'
 import GenericModal from './genericModal'
+import notificationType from 'src/enums/notifications'
 import NotifierService from 'src/services/notifierService'
 
-const Notifier = ({
-	editionModal,
-	cancelationModal,
-	setEditionModal,
-	setCancelationModal,
-}) => {
+const Notifier = ({ notifications, popLastNotification }) => {
+	const [curNotification, setCurNotification] = useState({})
+
 	useEffect(() => {
 		NotifierService.start()
 	}, [])
 
+	useEffect(() => {
+		if (notifications?.length > 0) {
+			const cur = notifications[0]
+
+			setCurNotification({
+				title:
+					cur.type === notificationType.edited
+						? translate('notifications.editOrder.title')
+						: translate('notifications.deleteOrder.title'),
+				message:
+					cur.type === notificationType.edited
+						? translate('notifications.editOrder.message')
+						: translate('notifications.deleteOrder.message'),
+				editionModal: cur,
+			})
+		}
+	}, [notifications])
+
 	return (
 		<>
-			{editionModal.open && (
+			{notifications?.length > 0 && (
 				<GenericModal
-					title={translate('notifications.editOrder.title')}
-					message={translate('notifications.editOrder.message')}
-					modalData={editionModal}
-					setModalData={setEditionModal}
-				/>
-			)}
-			{cancelationModal.open && (
-				<GenericModal
-					title={translate('notifications.deleteOrder.title')}
-					message={translate('notifications.deleteOrder.message')}
-					modalData={cancelationModal}
-					setModalData={setCancelationModal}
+					title={curNotification.title}
+					closeModal={popLastNotification}
+					message={curNotification.message}
+					numberStack={notifications?.length}
+					modalData={curNotification.editionModal}
 				/>
 			)}
 		</>
@@ -38,13 +47,11 @@ const Notifier = ({
 }
 
 const mapStateToProps = ({ notifications }) => ({
-	editionModal: notifications.editionModal,
-	cancelationModal: notifications.cancelationModal,
+	notifications: notifications.notifications,
 })
 
 const mapDispatchToProps = {
-	setEditionModal: NotificationsCreators.setEditionModal,
-	setCancelationModal: NotificationsCreators.setCancelationModal,
+	popLastNotification: NotificationsCreators.popLastNotification,
 }
 
 export default connect(
