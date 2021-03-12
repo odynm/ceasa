@@ -9,6 +9,7 @@ import KModal from 'src/components/fw/kmodal'
 import Button from 'src/components/fw/button'
 
 const MissingItemsModal = ({
+	onFinish,
 	products,
 	productTypes,
 	loadProducts,
@@ -47,7 +48,12 @@ const MissingItemsModal = ({
 		<KModal
 			size={450}
 			open={missingItems?.length > 0}
-			onClose={() => setMissingItems([])}
+			onClose={() => {
+				if (onFinish) {
+					onFinish()
+				}
+				setMissingItems([])
+			}}
 			header={translate('sell.modalMissing.header')}>
 			<ScrollView style={styles.scrollview}>
 				{missingItemsWithText?.map((missingItem, i) => (
@@ -84,6 +90,9 @@ const MissingItemsModal = ({
 				label={'Ok'}
 				onPress={() => {
 					setMissingItems([])
+					if (onFinish) {
+						onFinish()
+					}
 				}}
 			/>
 		</KModal>

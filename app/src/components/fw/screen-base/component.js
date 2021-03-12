@@ -3,6 +3,7 @@ import { View, ScrollView, StyleSheet } from 'react-native'
 import { wp, hp, widthPercentageToDP, getWorkableArea } from 'src/utils/screen'
 import NoInternetFlag from './no-internet-flag'
 import CloseKeyboardView from './close-keyboard-view'
+import UnexpectedError from 'src/components/ceasa/unexpected-error'
 
 const ScreenBaseComponent = ({
 	style,
@@ -11,42 +12,46 @@ const ScreenBaseComponent = ({
 	heightStyle,
 	useKeyboardClose,
 	...props
-}) =>
-	useKeyboardClose ? (
-		<CloseKeyboardView style={heightStyle}>
-			{useScroll ? (
-				<ScrollView style={styles.scrollView}>
-					<View style={[styles.containerView, style]} {...props}>
-						{children}
-					</View>
-				</ScrollView>
-			) : (
-				<View style={[styles.containerView, style]} {...props}>
-					{children}
-				</View>
-			)}
-		</CloseKeyboardView>
-	) : (
-		<View style={heightStyle}>
-			{useScroll ? (
-				<>
+}) => (
+	<>
+		<UnexpectedError />
+		{useKeyboardClose ? (
+			<CloseKeyboardView style={heightStyle}>
+				{useScroll ? (
 					<ScrollView style={styles.scrollView}>
 						<View style={[styles.containerView, style]} {...props}>
 							{children}
 						</View>
 					</ScrollView>
-					<NoInternetFlag />
-				</>
-			) : (
-				<>
+				) : (
 					<View style={[styles.containerView, style]} {...props}>
 						{children}
 					</View>
-					<NoInternetFlag />
-				</>
-			)}
-		</View>
-	)
+				)}
+			</CloseKeyboardView>
+		) : (
+			<View style={heightStyle}>
+				{useScroll ? (
+					<>
+						<ScrollView style={styles.scrollView}>
+							<View style={[styles.containerView, style]} {...props}>
+								{children}
+							</View>
+						</ScrollView>
+						<NoInternetFlag />
+					</>
+				) : (
+					<>
+						<View style={[styles.containerView, style]} {...props}>
+							{children}
+						</View>
+						<NoInternetFlag />
+					</>
+				)}
+			</View>
+		)}
+	</>
+)
 
 const styles = StyleSheet.create({
 	scrollView: {

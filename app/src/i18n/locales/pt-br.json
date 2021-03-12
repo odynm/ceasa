@@ -1,10 +1,15 @@
 {
 	"app": {
+		"ok": "Ok",
 		"no": "Não",
 		"yes": "Sim",
 		"delete": "Excluir",
 		"noConnection": "Sem conexão com o sistema",
-		"noConnectionError": "Essa opção está desabilitada enquanto você estiver sem conexão."
+		"noConnectionError": "Essa opção está desabilitada enquanto você estiver sem conexão.",
+		"error": {
+			"unexpected": "Erro",
+			"unexpectedText": "Ocorreu um erro inexperado"
+		}
 	},
 	"loginSelect": {
 		"vendor": "Entrar como vendedor",

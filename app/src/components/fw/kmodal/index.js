@@ -4,7 +4,7 @@ import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
 
-const KModal = ({ children, onClose, open, size, header }) => {
+const KModal = ({ children, onClose, open, size, header, style }) => {
 	const containerStyle =
 		size > 0
 			? [
@@ -16,13 +16,15 @@ const KModal = ({ children, onClose, open, size, header }) => {
 			  ]
 			: styles.container
 
+	const mergedContainerStyles = [containerStyle, style]
+
 	return (
 		open && (
 			<TouchableWithoutFeedback onPress={onClose}>
 				<View style={styles.base}>
 					<View
 						onStartShouldSetResponder={() => true}
-						style={containerStyle}>
+						style={mergedContainerStyles}>
 						{header && header.length > 0 && (
 							<View style={styles.header}>
 								<KText bold text={header} />

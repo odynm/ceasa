@@ -58,6 +58,11 @@ func SendNotification(device string, title string, message string, data interfac
 		"https://onesignal.com/api/v1/notifications",
 		bytes.NewBuffer(jsonByte),
 	)
+
+	if err != nil {
+		fmt.Print(err)
+	}
+
 	request.Header.Set("Authorization", "Basic ZjBiNDAwNGYtMWEyZi00Zjg5LTk2NDQtNTdjMGRjNTA1NGI4")
 	request.Header.Set("Content-Type", "application/json")
 

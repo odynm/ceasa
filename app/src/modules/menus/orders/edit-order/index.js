@@ -332,6 +332,9 @@ const EditOrder = ({
 				content={translate('editOrder.editModal.content')}
 			/>
 			<MissingItemsModal
+				onFinish={() => {
+					navigation.goBack()
+				}}
 				missingItems={missingItems}
 				setMissingItems={setMissingItems}
 			/>
