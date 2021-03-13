@@ -29,6 +29,7 @@ export const Creators = {
 	setClientStep: common.setClientStep,
 	removeOrderItem: common.removeOrderItem,
 	setGenerateLoad: common.setGenerateLoad,
+	sendRecreateOrder: common.sendRecreateOrder,
 }
 
 export default function reducer(state = initialState, action) {

@@ -93,6 +93,36 @@ func delete(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func recreate(w http.ResponseWriter, r *http.Request) {
+	userId := user.CheckLogin(w, r)
+	if userId > 0 {
+		var orderDto OrderDto
+		err := json.NewDecoder(r.Body).Decode(&orderDto)
+		if err != nil ||
+			orderDto.Client.Key == "" ||
+			orderDto.Products == nil ||
+			(len(orderDto.Products) == 0 && orderDto.ProductListIsDirty == false) {
+			utils.BadRequest(w, "Order format is incorrect")
+		}
+
+		var result int
+
+		if orderDto.Id > 0 {
+				DeleteOrderDeFacto(userId, orderDto.Id, w)
+				orderDto.Id = 0
+				result = Add(orderDto, userId, w)
+		} else {
+			result = Add(orderDto, userId, w)
+		}
+
+		if result > 0 {
+			utils.Success(w, result)
+		} else {
+			// Failed is dealth within the service in this case
+		}
+	}
+}
+
 func orderRouter(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
@@ -115,7 +145,17 @@ func orderLoaderRouter(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func orderRecreateRouter(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPost:
+		recreate(w, r)
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
 func HandleRequest() {
 	http.HandleFunc("/order", orderRouter)
 	http.HandleFunc("/order/loader", orderLoaderRouter)
+	http.HandleFunc("/order/recreate", orderRecreateRouter)
 }

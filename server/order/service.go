@@ -286,6 +286,23 @@ func DeleteOrder(userId int, orderId int, w http.ResponseWriter) {
 	}
 }
 
+func DeleteOrderDeFacto(userId int, orderId int, w http.ResponseWriter) {
+	dbStoredProducts, ok := DbGetOrderProducts(userId, orderId)
+	if ok {
+		for _, dbStoredProduct := range dbStoredProducts {
+			storage.DbIncreaseAmount(dbStoredProduct.StorageItemId, dbStoredProduct.Amount, userId)
+		}
+		ok = DbDeleteOrderDeFacto(userId, orderId)
+		if ok {
+			utils.Success(w, orderId)
+		} else {
+			utils.Failed(w, -1)
+		}
+	} else {
+		utils.Failed(w, -1)
+	}
+}
+
 func checkOrderAddCanBeFulfilled(userId int, orderDto OrderDto) ([]OrderFulfillmentError, bool) {
 	var errors []OrderFulfillmentError
 

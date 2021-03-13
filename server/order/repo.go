@@ -393,6 +393,21 @@ Error:
 	return false
 }
 
+func DbDeleteOrderDeFacto(userId int, orderId int) bool {
+	schema := fmt.Sprint("u", userId)
+
+	statement := fmt.Sprintf(`
+					DELETE %v.order_order WHERE id = $1`, schema)
+	_, err := db.Instance.Db.Exec(statement, orderId)
+	if err != nil {
+		goto Error
+	}
+
+	return true
+Error:
+	return false
+}
+
 func DbDeleteProductsFromOrderId(userId int, orderId int) bool {
 	schema := fmt.Sprint("u", userId)
 

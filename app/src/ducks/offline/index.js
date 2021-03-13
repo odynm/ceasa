@@ -118,10 +118,7 @@ const executeQueue = () => async (dispatch, getState) => {
 		switch (item.jobType) {
 			case jobTypes.addOrder:
 				response = await dispatch(
-					OrderCreators.sendOrder({
-						useParam: true,
-						order: item.data,
-					}),
+					OrderCreators.sendRecreateOrder(item.data),
 				)
 				break
 			case jobTypes.deleteOrder:

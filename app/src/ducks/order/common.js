@@ -96,6 +96,46 @@ function common(types, duck) {
 		const data = await HttpService.post('order', postData)
 		return data
 	}
+
+	this.sendRecreateOrder = order => async (_, getState) => {
+		const {
+			id,
+			status,
+			client,
+			urgent,
+			orderItems,
+			generateLoad,
+			productListIsDirty = false,
+		} = order
+
+		const products = []
+
+		for (let i = 0; i < orderItems.length; i++) {
+			const oi = orderItems[i]
+			// We don't make discrimination between merged items and not-merged ones, because
+			// this difference will be solved on the backend
+			products.push({
+				productId: oi.productId,
+				productTypeId: oi.productTypeId,
+				descriptionId: oi.descriptionId,
+				unitPrice: Math.round(oi.unitPrice.value * 100),
+				amount: oi.amount,
+				storageAmount: oi.storageAmount,
+			})
+		}
+
+		const postData = {
+			id,
+			client,
+			status,
+			urgent,
+			generateLoad: generateLoad,
+			products: products,
+			productListIsDirty,
+		}
+		const data = await HttpService.post('order/recreate', postData)
+		return data
+	}
 }
 
 export default common
