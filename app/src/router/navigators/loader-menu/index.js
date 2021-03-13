@@ -1,15 +1,15 @@
 import React from 'react'
 import { SvgXml } from 'react-native-svg'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
-import svgUser from 'res/svgs/v9/svgUser.svg'
+import svgUser from 'res/svgs/v12/svgUser.svg'
 import OrdersLoaderStack from './items/orders'
 import OptionsLoaderStack from './items/options'
-import svgOrders from 'res/svgs/v9/svgOrders.svg'
+import svgOrders from 'res/svgs/v12/svgOrders.svg'
 import CarryingLoaderStack from './items/carrying'
-import svgCarrying from 'res/svgs/v9/svgCarrying.svg'
-import svgUserSelected from 'res/svgs/v9/svgUserSelected.svg'
-import svgOrdersSelected from 'res/svgs/v9/svgOrdersSelected.svg'
-import svgCarryingSelected from 'res/svgs/v9/svgCarryingSelected.svg'
+import svgCarrying from 'res/svgs/v12/svgCarrying.svg'
+import svgUserSelected from 'res/svgs/v12/svgUserSelected.svg'
+import svgOrdersSelected from 'res/svgs/v12/svgOrdersSelected.svg'
+import svgCarryingSelected from 'res/svgs/v12/svgCarryingSelected.svg'
 
 //const enabledRoutesForAnonymous = [screens.home, screens.search]
 

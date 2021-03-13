@@ -4,8 +4,8 @@ import { StyleSheet } from 'react-native'
 const styles = StyleSheet.create({
 	logo: {
 		alignSelf: 'center',
-		marginBottom: hp(70),
-		marginTop: hp(80),
+		marginBottom: hp(90),
+		marginTop: hp(90),
 	},
 	wppView: {
 		alignItems: 'center',

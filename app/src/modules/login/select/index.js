@@ -10,7 +10,7 @@ import KText from 'src/components/fw/ktext'
 import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
-import svgLogo from 'res/svgs/v9/svgLogo.svg'
+import svgLogo from 'res/svgs/v12/svgLogo.svg'
 import ScreenBase from 'src/components/fw/screen-base'
 import ScreenHeader from 'src/components/fw/screen-header'
 
