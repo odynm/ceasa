@@ -55,7 +55,9 @@ const refresh = async () => {
 	const isInternetReachable = await InternetService.isInternetReachable()
 	if (isInternetReachable) {
 		if (inUse) {
-			store.dispatch(OfflineCreators.executeQueue())
+			if (_user?.id) {
+				store.dispatch(OfflineCreators.executeQueue())
+			}
 		} else {
 			const requests = []
 

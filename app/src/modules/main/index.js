@@ -44,49 +44,43 @@ const Main = ({
 		// }
 		// return
 
-		const user = await StorageService.user.get()
-		const introduction = await StorageService.introduction.get()
+		// Always logout when close app
+		//const user = await StorageService.user.get()
 
-		if (user) {
-			await loadLoggedUser()
+		// const accepted = await checkTerms()
+		// if (!accepted) {
+		// 	return navigation.navigate(screens.terms)
+		// }
 
-			// const accepted = await checkTerms()
-			// if (!accepted) {
-			// 	return navigation.navigate(screens.terms)
-			// }
+		// setHasRegistrationInProgress(
+		// 	(await StorageService.registrationsInProgress.get([])).includes(
+		// 		user.id,
+		// 	),
+		// )
+		// const regularRegistration = Object.values(userRoles).includes(
+		// 	user.userType,
+		// )
 
-			// setHasRegistrationInProgress(
-			// 	(await StorageService.registrationsInProgress.get([])).includes(
-			// 		user.id,
-			// 	),
-			// )
-			// const regularRegistration = Object.values(userRoles).includes(
-			// 	user.userType,
-			// )
+		// if (regularRegistration && !hasRegistrationInProgress) {
+		// }
 
-			// if (regularRegistration && !hasRegistrationInProgress) {
-			return navigation.navigate(screens.orders)
-			// }
+		//setHasEmailRegistered(true)
+		// } else if (introduction.read) {
+		// 	navigation.navigate(screens.login)
+		// TODO ajustar para cair na tela certa de acordo com o login anteriormente feito
 
-			//setHasEmailRegistered(true)
-			// } else if (introduction.read) {
-			// 	navigation.navigate(screens.login)
-		} else {
-			// TODO ajustar para cair na tela certa de acordo com o login anteriormente feito
-
-			switch (await StorageService.loginType.get()) {
-				case loginType.loader:
-					navigation.navigate(screens.loginLoader)
-					break
-				case loginType.vendor:
-					navigation.navigate(screens.login)
-					break
-				default:
-					navigation.navigate(screens.loginSelect)
-					break
-			}
-			//navigation.navigate(screens.introduction)
+		switch (await StorageService.loginType.get()) {
+			case loginType.loader:
+				navigation.navigate(screens.loginLoader)
+				break
+			case loginType.vendor:
+				navigation.navigate(screens.login)
+				break
+			default:
+				navigation.navigate(screens.loginSelect)
+				break
 		}
+		//navigation.navigate(screens.introduction)
 	}
 
 	useEffect(() => {

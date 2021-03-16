@@ -78,10 +78,9 @@ const responseErrorInterceptor = async error => {
 		console.warn('Return status', status, JSON.stringify(error))
 	} else {
 		store.dispatch(AppCreators.setNoConnection(true))
+		store.dispatch(AppCreators.setUnexpectedError(true))
 		console.warn('server down')
 	}
-
-	store.dispatch(AppCreators.setUnexpectedError(true))
 
 	return Promise.reject(error)
 }
