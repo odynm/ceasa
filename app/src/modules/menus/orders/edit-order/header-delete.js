@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import ScreenHeaderDelete from 'src/components/fw/screen-header-delete'
 import { Creators as EditOrderCreators } from 'src/ducks/order/edit-order'
+import ScreenHeaderDelete from 'src/components/fw/screen-header-delete'
 
-const ScreenHeaderDeleteOrder = ({ noConnection, setConfirmDelete }) => {
+const ScreenHeaderDeleteOrder = ({ setConfirmDelete }) => {
 	return (
 		<ScreenHeaderDelete
 			customFunction={() => {
@@ -13,7 +13,7 @@ const ScreenHeaderDeleteOrder = ({ noConnection, setConfirmDelete }) => {
 	)
 }
 
-const mapStateToProps = ({ app }) => ({ noConnection: app.noConnection })
+const mapStateToProps = ({}) => ({})
 
 const mapDispatchToProps = {
 	setConfirmDelete: EditOrderCreators.setConfirmDelete,

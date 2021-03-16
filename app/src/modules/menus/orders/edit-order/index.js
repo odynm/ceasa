@@ -16,9 +16,10 @@ import orderStatus from 'src/enums/order'
 import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import KText from 'src/components/fw/ktext'
+import ScreenHeaderBack from './header-back'
 import Button from 'src/components/fw/button'
-import ScreenHeaderDeleteOrder from './header'
 import ToastService from 'src/services/toastService'
+import ScreenHeaderDeleteOrder from './header-delete'
 import ScreenBase from 'src/components/fw/screen-base'
 import CheckBox from '@react-native-community/checkbox'
 import ScreenHeader from 'src/components/fw/screen-header'
@@ -40,6 +41,7 @@ const EditOrder = ({
 	deleteOrder,
 	noConnection,
 	setAppLoader,
+	setConfirmBack,
 	setConfirmDelete,
 	createOfflineOrder,
 	setDucksOrderStatus,
@@ -331,6 +333,13 @@ const EditOrder = ({
 				header={translate('editOrder.editModal.header')}
 				content={translate('editOrder.editModal.content')}
 			/>
+			<ConfirmationModal
+				open={editOrder.confirmBack}
+				onAccept={() => navigation.goBack(null)}
+				onClose={() => setConfirmBack(false)}
+				header={translate('editOrder.confirmBack.header')}
+				content={translate('editOrder.confirmBack.content')}
+			/>
 			<MissingItemsModal
 				onFinish={() => {
 					navigation.goBack()
@@ -344,7 +353,7 @@ const EditOrder = ({
 
 EditOrder.navigationOptions = () => ({
 	title: translate('menus.editOrder'),
-	headerLeft: props => <ScreenHeader {...props} />,
+	headerLeft: props => <ScreenHeaderBack {...props} />,
 	headerRight: props => <ScreenHeaderDeleteOrder {...props} />,
 })
 
@@ -358,6 +367,7 @@ const mapDispatchToProps = {
 	addToQueue: OfflineCreators.addToQueue,
 	deleteOrder: EditOrderCreators.deleteOrder,
 	loadOrders: OrdersVendorCreators.loadOrders,
+	setConfirmBack: EditOrderCreators.setConfirmBack,
 	setDucksOrderStatus: EditOrderCreators.setStatus,
 	setConfirmDelete: EditOrderCreators.setConfirmDelete,
 	deleteOrderOnOfflineQueue: OfflineCreators.deleteOrder,

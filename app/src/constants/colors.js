@@ -5,6 +5,7 @@ const colors = {
 	link: '#2C3696',
 	red: '#ff0000',
 	lemonChiffon: '#FFF9C5',
+	white: '#ffffff',
 }
 
 export default colors

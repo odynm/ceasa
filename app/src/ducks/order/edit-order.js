@@ -11,6 +11,7 @@ const Types = {
 	SET_IS_EDITING: prefix + 'SET_IS_EDITING',
 	SET_ORDER_ITEMS: prefix + 'SET_ORDER_ITEMS',
 	SET_CLIENT_STEP: prefix + 'SET_CLIENT_STEP',
+	SET_CONFIRM_BACK: prefix + 'SET_CONFIRM_BACK',
 	SET_CONFIRM_DELETE: prefix + 'SET_CONFIRM_DELETE',
 	SET_PRODUCT_LIST_IS_DIRTY: prefix + 'SET_PRODUCT_LIST_IS_DIRTY',
 }
@@ -37,6 +38,11 @@ const setConfirmDelete = confirmDelete => ({
 	type: Types.SET_CONFIRM_DELETE,
 })
 
+const setConfirmBack = confirmBack => ({
+	payload: { confirmBack },
+	type: Types.SET_CONFIRM_BACK,
+})
+
 const setProductListIsDirty = productListIsDirty => ({
 	payload: { productListIsDirty },
 	type: Types.SET_PRODUCT_LIST_IS_DIRTY,
@@ -56,6 +62,7 @@ const initialState = {
 	orderItems: [],
 	isEditing: false,
 	clientStep: false,
+	confirmBack: false,
 	generateLoad: false,
 	confirmDelete: false,
 	productListIsDirty: false,
@@ -74,6 +81,7 @@ export const Creators = {
 	setClient: common.setClient,
 	sendOrder: common.sendOrder,
 	resetOrder: common.resetOrder,
+	setConfirmBack: setConfirmBack,
 	addOrderItem: common.addOrderItem,
 	setConfirmDelete: setConfirmDelete,
 	setClientStep: common.setClientStep,
@@ -131,6 +139,11 @@ export default function reducer(state = initialState, action) {
 			return {
 				...state,
 				clientStep: action.payload.clientStep,
+			}
+		case Types.SET_CONFIRM_BACK:
+			return {
+				...state,
+				confirmBack: action.payload.confirmBack,
 			}
 		case Types.SET_CONFIRM_DELETE:
 			return {

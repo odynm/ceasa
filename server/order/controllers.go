@@ -16,7 +16,6 @@ func add(w http.ResponseWriter, r *http.Request) {
 		var orderDto OrderDto
 		err := json.NewDecoder(r.Body).Decode(&orderDto)
 		if err != nil ||
-			orderDto.Client.Key == "" ||
 			orderDto.Products == nil ||
 			(len(orderDto.Products) == 0 && orderDto.ProductListIsDirty == false) {
 			utils.BadRequest(w, "Order format is incorrect")

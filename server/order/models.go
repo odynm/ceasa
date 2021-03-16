@@ -1,6 +1,7 @@
 package order
 
 import (
+	"database/sql"
 	"time"
 
 	"ceasa/client"
@@ -71,7 +72,7 @@ type OrderDto struct {
 }
 
 type OrderCreation struct {
-	ClientId    int
+	ClientId    sql.NullInt32
 	ProductsIds []int
 	Urgent      bool
 	Status      int

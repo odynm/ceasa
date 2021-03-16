@@ -112,7 +112,7 @@ const Sell = ({
 
 	const handlePress = async () => {
 		if (clientStep) {
-			if (validateCreate(client, setErrors)) {
+			if (validateCreate(client, generateLoad, setErrors)) {
 				setWorking(true)
 				// Ensure that we don't try to send if we are offline
 				if (

@@ -156,6 +156,10 @@
 		"editModal": {
 			"header": "Editar Pedido",
 			"content": "Esse pedido já foi liberado e pode estar sendo carregado. Editar mesmo assim?"
+		},
+		"confirmBack": {
+			"header": "Sair sem salvar",
+			"content": "Tem certeza de que deseja SAIR SEM SALVAR a alteração? Toda alteração feita será perdida!"
 		}
 	},
 	"editStorage": {

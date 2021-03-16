@@ -1,6 +1,6 @@
 import React from 'react'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { wp, hp, getWidth, getWorkableArea } from 'src/utils/screen'
-import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
 
@@ -20,20 +20,27 @@ const KModal = ({ children, onClose, open, size, header, style }) => {
 
 	return (
 		open && (
-			<TouchableWithoutFeedback onPress={onClose}>
-				<View style={styles.base}>
-					<View
-						onStartShouldSetResponder={() => true}
-						style={mergedContainerStyles}>
-						{header && header.length > 0 && (
+			<View style={styles.base}>
+				<View
+					onStartShouldSetResponder={() => true}
+					style={mergedContainerStyles}>
+					{header && header.length > 0 && (
+						<>
+							<TouchableOpacity
+								style={styles.clickable}
+								onPress={onClose}>
+								<View style={styles.closeX}>
+									<KText bold fontSize={24} text="X" />
+								</View>
+							</TouchableOpacity>
 							<View style={styles.header}>
 								<KText bold text={header} />
 							</View>
-						)}
-						<View style={styles.content}>{children}</View>
-					</View>
+						</>
+					)}
+					<View style={styles.content}>{children}</View>
 				</View>
-			</TouchableWithoutFeedback>
+			</View>
 		)
 	)
 }
@@ -67,6 +74,27 @@ const styles = StyleSheet.create({
 		marginBottom: hp(20),
 		marginHorizontal: wp(10),
 		marginTop: hp(10),
+	},
+	clickable: {
+		flex: 1,
+		height: hp(60),
+		position: 'absolute',
+		right: wp(-10),
+		top: hp(-20),
+		width: hp(60),
+		zIndex: 150,
+	},
+	closeX: {
+		alignItems: 'center',
+		backgroundColor: colors.white,
+		borderColor: colors.primary,
+		borderRadius: wp(30),
+		borderWidth: hp(3),
+		flex: 1,
+		height: hp(60),
+		justifyContent: 'center',
+		position: 'absolute',
+		width: hp(60),
 	},
 })
 

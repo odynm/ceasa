@@ -1,6 +1,7 @@
 package order
 
 import (
+	"database/sql"
 	"net/http"
 	"sort"
 	"time"
@@ -13,7 +14,7 @@ import (
 )
 
 func Add(orderDto OrderDto, userId int, w http.ResponseWriter) int {
-	var clientId int
+	var clientId sql.NullInt32
 	var orderId int
 	var order OrderCreation
 
@@ -23,9 +24,14 @@ func Add(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 		goto Error
 	}
 
-	clientId = client.AddOrUpdateClient(orderDto.Client, userId, w)
-	if clientId == 0 {
-		goto Error
+	// If has client
+	if(orderDto.Client.Key != "") {
+		clientId.Scan(client.AddOrUpdateClient(orderDto.Client, userId, w))
+
+		if !clientId.Valid || clientId.Int32 == 0 {
+			utils.Failed(w, utils.ORDER_GENERIC)
+			goto Error
+		}
 	}
 
 	order = OrderCreation{
@@ -73,7 +79,7 @@ Error:
 }
 
 func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
-	var clientId int
+	var clientId sql.NullInt32
 	var orderId int
 	var order OrderCreation
 	var ok bool
@@ -92,10 +98,14 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 		goto Error
 	}
 
-	clientId = client.AddOrUpdateClient(orderDto.Client, userId, w)
-	if clientId == 0 {
-		utils.Failed(w, utils.ORDER_GENERIC)
-		goto Error
+	// If has client
+	if(orderDto.Client.Key != "") {
+		clientId.Scan(client.AddOrUpdateClient(orderDto.Client, userId, w))
+
+		if !clientId.Valid || clientId.Int32 == 0 {
+			utils.Failed(w, utils.ORDER_GENERIC)
+			goto Error
+		}
 	}
 
 	order = OrderCreation{
