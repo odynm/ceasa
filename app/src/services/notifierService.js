@@ -30,6 +30,15 @@ const start = () => {
 					}),
 				)
 				break
+			case 'finished':
+				store.dispatch(
+					NotificationsCreators.addNotification({
+						type: notificationType.finished,
+						open: true,
+						content: fixObject(remoteMessage)?.data?.custom?.a,
+					}),
+				)
+				break
 			default:
 				break
 		}
@@ -53,6 +62,15 @@ const start = () => {
 				store.dispatch(
 					NotificationsCreators.addNotification({
 						type: notificationType.cancelation,
+						open: true,
+						content: fixObject(remoteMessage)?.data?.custom?.a,
+					}),
+				)
+				break
+			case 'finished':
+				store.dispatch(
+					NotificationsCreators.addNotification({
+						type: notificationType.finished,
 						open: true,
 						content: fixObject(remoteMessage)?.data?.custom?.a,
 					}),

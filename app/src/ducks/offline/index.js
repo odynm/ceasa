@@ -74,10 +74,12 @@ const deleteAdditionalCost = (id, offlineId) => async (dispatch, getState) => {
 	dispatch(setLoading(true))
 
 	const { queue } = getState().offline
-	const hasItemOnlyOffline = queue.some(item => item.data === offlineId)
+	const hasItemOnlyOffline = queue.some(
+		item => item.data.offlineId === offlineId,
+	)
 
 	if (hasItemOnlyOffline) {
-		const newQueue = queue.filter(item => item.data !== offlineId)
+		const newQueue = queue.filter(item => item.data.offlineId !== offlineId)
 		dispatch(setQueue(newQueue))
 	} else {
 		const newQueue = [

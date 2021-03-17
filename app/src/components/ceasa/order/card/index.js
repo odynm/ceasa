@@ -76,11 +76,23 @@ const OrderCard = ({
 						)}
 					</View>
 					{status === orderStatus.done && (
-						<KText
-							fontSize={14}
-							style={styles.hourReleased}
-							text={`${translate('orders.doneAt')} ${completedHour}`}
-						/>
+						<>
+							{completedHour ? (
+								<KText
+									fontSize={14}
+									style={styles.hourReleased}
+									text={`${translate(
+										'orders.doneAt',
+									)} ${completedHour}`}
+								/>
+							) : (
+								<KText
+									fontSize={14}
+									style={styles.hourReleased}
+									text={`${translate('orders.done')}`}
+								/>
+							)}
+						</>
 					)}
 				</View>
 				{status === orderStatus.blocked && (

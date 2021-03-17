@@ -42,6 +42,7 @@ const EditOrder = ({
 	noConnection,
 	setAppLoader,
 	setConfirmBack,
+	setConfirmFinish,
 	setConfirmDelete,
 	createOfflineOrder,
 	setDucksOrderStatus,
@@ -89,7 +90,7 @@ const EditOrder = ({
 		navigation.navigate(screens.orders)
 	}
 
-	const handleEdit = async () => {
+	const handleEdit = async isFinishingOrder => {
 		setAppLoader(true)
 		await setDucksOrderStatus(internalStatus)
 		if (noConnection || !(await InternetService.isInternetReachable())) {
@@ -107,13 +108,6 @@ const EditOrder = ({
 			// even if there's nothing to delete
 			await deleteOrderOnOrdersList(editOrder.id, editOrder.offlineId)
 			await deleteOrderOnOfflineQueue(editOrder.id, editOrder.offlineId)
-
-			await addToQueue(jobTypes.addOrder, {
-				...editOrder,
-				id: undefined,
-			})
-
-			readdStorageItemsFromSnapshot()
 
 			const offlineStorageRestoreData = []
 
@@ -139,10 +133,25 @@ const EditOrder = ({
 					productTypeId: item.productTypeId,
 					descriptionId: item.descriptionId,
 				})),
-				status: editOrder.status,
 				createdAt: new Date(),
-				generateLoad: editOrder.generateLoad,
+				// Override if is finishing
+				loader: isFinishingOrder ? '' : editOrder.loader,
+				status: isFinishingOrder ? orderStatus.done : editOrder.status,
+				urgent: isFinishingOrder ? false : editOrder.urgent,
+				generateLoad: isFinishingOrder ? false : editOrder.generateLoad,
 			}
+
+			await addToQueue(jobTypes.addOrder, {
+				...editOrder,
+				id: undefined,
+				offlineId: offlineOrder.offlineId,
+				// Override if is finishing
+				loader: isFinishingOrder ? '' : editOrder.loader,
+				urgent: isFinishingOrder ? false : editOrder.urgent,
+				generateLoad: isFinishingOrder ? false : editOrder.generateLoad,
+			})
+
+			readdStorageItemsFromSnapshot()
 
 			await createOfflineOrder(offlineOrder)
 			navigation.navigate(screens.orders)
@@ -174,6 +183,10 @@ const EditOrder = ({
 			status: editOrder.status,
 			currentOrderSnapshot,
 		})
+	}
+
+	const handleFinishOrder = () => {
+		handleEdit(true)
 	}
 
 	const setOrderStatus = checked => {
@@ -270,12 +283,23 @@ const EditOrder = ({
 										)} ${toHour(editOrder.completedAt)}`}
 									/>
 								) : (
-									<KText
-										bold
-										text={`${translate(
-											'editOrder.doneNoCarrier',
-										)} ${toHour(editOrder.completedAt)}`}
-									/>
+									<>
+										{editOrder.offlineId ? (
+											<KText
+												bold
+												text={`${translate(
+													'editOrder.doneOffline',
+												)} ${toHour(editOrder.completedAt)}`}
+											/>
+										) : (
+											<KText
+												bold
+												text={`${translate(
+													'editOrder.doneNoCarrier',
+												)}`}
+											/>
+										)}
+									</>
 								)}
 							</>
 						</>
@@ -309,18 +333,48 @@ const EditOrder = ({
 						/>
 						<Space size2 />
 					</View>
-					<Button
-						onPress={() => {
-							if (orderStatus.released || orderStatus.carrying) {
-								setModalConfirmEdit(true)
-							} else {
-								handleEdit()
+					<View style={styles.row}>
+						{(editOrder.status === orderStatus.released ||
+							editOrder.status === orderStatus.carrying ||
+							editOrder.status === orderStatus.blocked) && (
+							<Button
+								tiny
+								onPress={() => {
+									setConfirmFinish(true)
+								}}
+								label={translate('editOrder.finish')}
+							/>
+						)}
+						<Button
+							tiny={
+								editOrder.status === orderStatus.released ||
+								editOrder.status === orderStatus.carrying ||
+								editOrder.status === orderStatus.blocked
 							}
-						}}
-						label={translate('editOrder.edit')}
-					/>
+							onPress={() => {
+								if (
+									editOrder.status === orderStatus.released ||
+									editOrder.status === orderStatus.carrying
+								) {
+									setModalConfirmEdit(true)
+								} else {
+									handleEdit()
+								}
+							}}
+							label={translate('editOrder.edit')}
+						/>
+					</View>
 				</View>
 			</ScreenBase>
+			<ConfirmationModal
+				open={editOrder.confirmFinish}
+				onAccept={handleFinishOrder}
+				onClose={() => {
+					setConfirmFinish(false)
+				}}
+				header={translate('editOrder.finishOrder.header')}
+				content={translate('editOrder.finishOrder.content')}
+			/>
 			<ConfirmationModal
 				open={editOrder.confirmDelete}
 				onAccept={handleDelete}
@@ -364,14 +418,15 @@ const mapDispatchToProps = {
 	setAppLoader: AppCreators.setAppLoader,
 	setClient: EditOrderCreators.setClient,
 	setUrgent: EditOrderCreators.setUrgent,
-	setStatus: EditOrderCreators.setStatus,
 	sendOrder: EditOrderCreators.sendOrder,
 	addToQueue: OfflineCreators.addToQueue,
 	deleteOrder: EditOrderCreators.deleteOrder,
 	loadOrders: OrdersVendorCreators.loadOrders,
 	setConfirmBack: EditOrderCreators.setConfirmBack,
 	setDucksOrderStatus: EditOrderCreators.setStatus,
+	setGenerateLoad: EditOrderCreators.setGenerateLoad,
 	setConfirmDelete: EditOrderCreators.setConfirmDelete,
+	setConfirmFinish: EditOrderCreators.setConfirmFinish,
 	deleteOrderOnOfflineQueue: OfflineCreators.deleteOrder,
 	deleteOrderOnOrdersList: OrdersVendorCreators.deleteOrder,
 	createOfflineOrder: OrdersVendorCreators.createOfflineOrder,

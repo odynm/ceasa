@@ -21,11 +21,15 @@ const Notifier = ({ notifications, popLastNotification }) => {
 				title:
 					cur.type === notificationType.edited
 						? translate('notifications.editOrder.title')
-						: translate('notifications.deleteOrder.title'),
+						: cur.type === notificationType.cancelation
+						? translate('notifications.deleteOrder.title')
+						: translate('notifications.finishedOrder.title'),
 				message:
 					cur.type === notificationType.edited
 						? translate('notifications.editOrder.message')
-						: translate('notifications.deleteOrder.message'),
+						: cur.type === notificationType.cancelation
+						? translate('notifications.deleteOrder.message')
+						: translate('notifications.finishedOrder.message'),
 				editionModal: cur,
 			})
 		}

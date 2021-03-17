@@ -12,6 +12,8 @@ const Types = {
 	SET_ORDER_ITEMS: prefix + 'SET_ORDER_ITEMS',
 	SET_CLIENT_STEP: prefix + 'SET_CLIENT_STEP',
 	SET_CONFIRM_BACK: prefix + 'SET_CONFIRM_BACK',
+	SET_GENERATE_LOAD: prefix + 'SET_GENERATE_LOAD',
+	SET_CONFIRM_FINISH: prefix + 'SET_CONFIRM_FINISH',
 	SET_CONFIRM_DELETE: prefix + 'SET_CONFIRM_DELETE',
 	SET_PRODUCT_LIST_IS_DIRTY: prefix + 'SET_PRODUCT_LIST_IS_DIRTY',
 }
@@ -33,14 +35,19 @@ const setOrder = order => ({
 	type: Types.SET_ORDER,
 })
 
+const setConfirmBack = confirmBack => ({
+	payload: { confirmBack },
+	type: Types.SET_CONFIRM_BACK,
+})
+
 const setConfirmDelete = confirmDelete => ({
 	payload: { confirmDelete },
 	type: Types.SET_CONFIRM_DELETE,
 })
 
-const setConfirmBack = confirmBack => ({
-	payload: { confirmBack },
-	type: Types.SET_CONFIRM_BACK,
+const setConfirmFinish = confirmFinish => ({
+	payload: { confirmFinish },
+	type: Types.SET_CONFIRM_FINISH,
 })
 
 const setProductListIsDirty = productListIsDirty => ({
@@ -65,6 +72,7 @@ const initialState = {
 	confirmBack: false,
 	generateLoad: false,
 	confirmDelete: false,
+	confirmFinish: false,
 	productListIsDirty: false,
 	client: { key: '', place: '', vehicle: '' },
 	loader: '',
@@ -84,8 +92,10 @@ export const Creators = {
 	setConfirmBack: setConfirmBack,
 	addOrderItem: common.addOrderItem,
 	setConfirmDelete: setConfirmDelete,
+	setConfirmFinish: setConfirmFinish,
 	setClientStep: common.setClientStep,
 	setOrderItems: common.setOrderItems,
+	setGenerateLoad: common.setGenerateLoad,
 	removeOrderItem: common.removeOrderItem,
 	setProductListIsDirty: setProductListIsDirty,
 }
@@ -144,6 +154,11 @@ export default function reducer(state = initialState, action) {
 			return {
 				...state,
 				confirmBack: action.payload.confirmBack,
+			}
+		case Types.SET_CONFIRM_FINISH:
+			return {
+				...state,
+				confirmFinish: action.payload.confirmFinish,
 			}
 		case Types.SET_CONFIRM_DELETE:
 			return {

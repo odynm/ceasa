@@ -25,7 +25,7 @@ func Add(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	}
 
 	// If has client
-	if(orderDto.Client.Key != "") {
+	if orderDto.Client.Key != "" {
 		clientId.Scan(client.AddOrUpdateClient(orderDto.Client, userId, w))
 
 		if !clientId.Valid || clientId.Int32 == 0 {
@@ -92,6 +92,12 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 		goto Error
 	}
 
+	// If generated load was set, means the loader has
+	// finished the order by himself
+	if orderDto.GenerateLoad {
+		FinishOrder(userId, orderDto.Id, w)
+	}
+
 	errors, ok = checkOrderEditCanBeFulfilled(userId, orderDto)
 
 	if !ok {
@@ -99,7 +105,7 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	}
 
 	// If has client
-	if(orderDto.Client.Key != "") {
+	if orderDto.Client.Key != "" {
 		clientId.Scan(client.AddOrUpdateClient(orderDto.Client, userId, w))
 
 		if !clientId.Valid || clientId.Int32 == 0 {
@@ -308,6 +314,34 @@ func DeleteOrderDeFacto(userId int, orderId int, w http.ResponseWriter) {
 		} else {
 			utils.Failed(w, -1)
 		}
+	} else {
+		utils.Failed(w, -1)
+	}
+}
+
+func FinishOrder(userId int, orderId int, w http.ResponseWriter) {
+	orderStatus := DbGetOrderStatus(userId, orderId)
+	if orderStatus == S_Carrying {
+		relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
+		client := client.DbGetClientFromOrder(userId, orderId)
+		loaderId := DbGetLoaderId(userId, orderId)
+		device := device.DbGetDeviceHashFromLoaderId(loaderId)
+
+		notification.SendNotification(
+			device,
+			"Pedido FINALIZADO",
+			"Um pedido foi finalizado pelo vendedor",
+			NotificationData{
+				Type:     "finished",
+				Client:   client,
+				Products: relatedProducts,
+			},
+		)
+	}
+
+	id := DbFinishOrderByLoader(userId, orderId)
+	if id > 0 {
+		utils.Success(w, id)
 	} else {
 		utils.Failed(w, -1)
 	}

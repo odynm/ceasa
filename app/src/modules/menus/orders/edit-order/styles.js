@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 	},
 	row: {
 		flexDirection: 'row',
-		justifyContent: 'center',
+		justifyContent: 'space-between',
 	},
 	rowAlignText: {
 		alignSelf: 'center',

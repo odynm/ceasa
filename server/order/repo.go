@@ -440,3 +440,27 @@ func DbGetLoaderId(userId int, orderId int) int {
 
 	return loaderId
 }
+
+func DbFinishOrderByLoader(userId int, orderId int) int {
+	schema := fmt.Sprint("u", userId)
+
+	var itemId int
+	// We gonna nulify loaderId, because it was closed by the vendor
+	statement := fmt.Sprintf(`
+				UPDATE %v."order_order" SET
+					loader_id = NULL, 
+					status = $1,
+					completed_at = TIMEZONE('utc', NOW())
+				WHERE id = $2
+				RETURNING id`, schema)
+	err := db.Instance.Db.
+		QueryRow(statement, S_Done, orderId).
+		Scan(&itemId)
+	if err != nil {
+		goto Error
+	}
+
+	return itemId
+Error:
+	return 0
+}

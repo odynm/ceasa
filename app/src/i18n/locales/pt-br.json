@@ -131,6 +131,7 @@
 	"orders": {
 		"blocked": "NÃO LIBERADO",
 		"doneAt": "Concluída às",
+		"done": "Concluída",
 		"urgent": "URGENTE",
 		"none": "Ainda não há nenhum pedido cadastrado.",
 		"notSent": "Não enviado",
@@ -148,7 +149,9 @@
 		"loader": "Sendo carregado por",
 		"done": "terminou essa entrega em",
 		"doneNoCarrier": "Essa venda não gerou carregamento e foi feita às",
+		"doneOffline": "Venda concluída",
 		"edit": "Salvar",
+		"finish": "Salvar e Finalizar",
 		"deleteModal": {
 			"header": "Deletar Pedido",
 			"content": "Tem certeza que quer deletar esse pedido?"
@@ -160,6 +163,10 @@
 		"confirmBack": {
 			"header": "Sair sem salvar",
 			"content": "Tem certeza de que deseja SAIR SEM SALVAR a alteração? Toda alteração feita será perdida!"
+		},
+		"finishOrder": {
+			"header": "Finalizar pedido",
+			"content": "Tem certeza de que deseja finalizar esse pedido sem carregamento?"
 		}
 	},
 	"editStorage": {
@@ -271,7 +278,11 @@
 		},
 		"editOrder": {
 			"title": "Pedido ALTERADO",
-			"message": "Atenção: o seguinte pedido foi alterado:"
+			"message": "O seguinte pedido foi alterado:"
+		},
+		"finishedOrder": {
+			"title": "Pedido FINALIZADO",
+			"message": "O seguinte pedido foi finalizado pelo vendedor:"
 		}
 	},
 	"fw": {
