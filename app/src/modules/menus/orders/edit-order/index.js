@@ -45,6 +45,7 @@ const EditOrder = ({
 	setConfirmDelete,
 	createOfflineOrder,
 	setDucksOrderStatus,
+	setProductListIsDirty,
 	deleteOrderOnOrdersList,
 	deleteOrderOnOfflineQueue,
 	restoreOfflineStorageAmount,
@@ -60,6 +61,7 @@ const EditOrder = ({
 	const [missingItems, setMissingItems] = useState([])
 
 	useEffect(() => {
+		setProductListIsDirty(false)
 		setCurrentOrderSnapshot([...editOrder.orderItems])
 	}, [editOrder.id, editOrder.orderItems]) // TODO this doesn't seem optimal at all, but it's working for now
 
@@ -373,6 +375,7 @@ const mapDispatchToProps = {
 	deleteOrderOnOfflineQueue: OfflineCreators.deleteOrder,
 	deleteOrderOnOrdersList: OrdersVendorCreators.deleteOrder,
 	createOfflineOrder: OrdersVendorCreators.createOfflineOrder,
+	setProductListIsDirty: EditOrderCreators.setProductListIsDirty,
 	restoreOfflineStorageAmount: StorageCreators.restoreOfflineStorageAmount,
 	increaseOfflineStorageAmount: StorageCreators.increaseOfflineStorageAmount,
 	decreaseOfflineStorageAmount: StorageCreators.decreaseOfflineStorageAmount,
