@@ -33,7 +33,7 @@ CREATE SEQUENCE _user_.order_order_id_seq
 CREATE TABLE _user_.order_order
 (
     id int NOT NULL DEFAULT nextval('_user_.order_order_id_seq'::regclass),
-    client_id int NOT NULL,
+    client_id int,
     loader_id int,
     urgent boolean NOT NULL,
     status smallint NOT NULL,
