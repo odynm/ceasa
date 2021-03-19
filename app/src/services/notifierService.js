@@ -39,6 +39,15 @@ const start = () => {
 					}),
 				)
 				break
+			case 'urgent':
+				store.dispatch(
+					NotificationsCreators.addNotification({
+						type: notificationType.urgent,
+						open: true,
+						content: fixObject(remoteMessage)?.data?.custom?.a,
+					}),
+				)
+				break
 			default:
 				break
 		}
@@ -71,6 +80,15 @@ const start = () => {
 				store.dispatch(
 					NotificationsCreators.addNotification({
 						type: notificationType.finished,
+						open: true,
+						content: fixObject(remoteMessage)?.data?.custom?.a,
+					}),
+				)
+				break
+			case 'urgent':
+				store.dispatch(
+					NotificationsCreators.addNotification({
+						type: notificationType.urgent,
 						open: true,
 						content: fixObject(remoteMessage)?.data?.custom?.a,
 					}),

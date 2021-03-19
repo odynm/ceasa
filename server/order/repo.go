@@ -59,7 +59,7 @@ func DbEditOrder(order OrderCreation, orderId int, userId int) int {
 					client_id = $1, 
 					urgent = $2, 
 					status = $3, 
-					released_at = $4
+					released_at = CASE WHEN $4 > date '0001-01-01' THEN $4 ELSE released_at END 
 				WHERE id = $5
 				RETURNING id`, schema)
 	err := db.Instance.Db.
@@ -113,6 +113,25 @@ func DbGetOrderStatus(userId int, orderId int) int {
 	}
 
 	return status
+}
+
+func DbIsOrderUrgent(userId int, orderId int) bool {
+	schema := fmt.Sprint("u", userId)
+	var urgent bool
+
+	statement := fmt.Sprintf(`
+	SELECT 
+		urgent
+	FROM %v.order_order
+	WHERE id = $1`, schema)
+
+	err := db.Instance.Db.QueryRow(statement, orderId).Scan(&urgent)
+
+	if err != nil {
+		return false
+	}
+
+	return urgent
 }
 
 func dbGetOrders(userId int, excludedStatus string, timezone string) ([]OrderListItem, bool) {
@@ -397,7 +416,7 @@ func DbDeleteOrderDeFacto(userId int, orderId int) bool {
 	schema := fmt.Sprint("u", userId)
 
 	statement := fmt.Sprintf(`
-					DELETE %v.order_order WHERE id = $1`, schema)
+					DELETE FROM %v.order_order WHERE id = $1`, schema)
 	_, err := db.Instance.Db.Exec(statement, orderId)
 	if err != nil {
 		goto Error
@@ -441,26 +460,26 @@ func DbGetLoaderId(userId int, orderId int) int {
 	return loaderId
 }
 
-func DbFinishOrderByLoader(userId int, orderId int) int {
+func DbFinishOrderByVendor(userId int, orderId int) bool {
 	schema := fmt.Sprint("u", userId)
 
 	var itemId int
-	// We gonna nulify loaderId, because it was closed by the vendor
+
 	statement := fmt.Sprintf(`
 				UPDATE %v."order_order" SET
 					loader_id = NULL, 
-					status = $1,
 					completed_at = TIMEZONE('utc', NOW())
-				WHERE id = $2
+				WHERE id = $1
 				RETURNING id`, schema)
 	err := db.Instance.Db.
-		QueryRow(statement, S_Done, orderId).
+		QueryRow(statement, orderId).
 		Scan(&itemId)
+
 	if err != nil {
 		goto Error
 	}
 
-	return itemId
+	return itemId > 0
 Error:
-	return 0
+	return false
 }

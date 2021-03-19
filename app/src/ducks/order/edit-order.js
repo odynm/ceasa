@@ -12,7 +12,6 @@ const Types = {
 	SET_ORDER_ITEMS: prefix + 'SET_ORDER_ITEMS',
 	SET_CLIENT_STEP: prefix + 'SET_CLIENT_STEP',
 	SET_CONFIRM_BACK: prefix + 'SET_CONFIRM_BACK',
-	SET_GENERATE_LOAD: prefix + 'SET_GENERATE_LOAD',
 	SET_CONFIRM_FINISH: prefix + 'SET_CONFIRM_FINISH',
 	SET_CONFIRM_DELETE: prefix + 'SET_CONFIRM_DELETE',
 	SET_PRODUCT_LIST_IS_DIRTY: prefix + 'SET_PRODUCT_LIST_IS_DIRTY',
@@ -95,7 +94,6 @@ export const Creators = {
 	setConfirmFinish: setConfirmFinish,
 	setClientStep: common.setClientStep,
 	setOrderItems: common.setOrderItems,
-	setGenerateLoad: common.setGenerateLoad,
 	removeOrderItem: common.removeOrderItem,
 	setProductListIsDirty: setProductListIsDirty,
 }

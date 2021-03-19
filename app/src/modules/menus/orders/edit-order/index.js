@@ -107,7 +107,6 @@ const EditOrder = ({
 			// It will work has expected for both methods,
 			// even if there's nothing to delete
 			await deleteOrderOnOrdersList(editOrder.id, editOrder.offlineId)
-			await deleteOrderOnOfflineQueue(editOrder.id, editOrder.offlineId)
 
 			const offlineStorageRestoreData = []
 
@@ -123,7 +122,9 @@ const EditOrder = ({
 			})
 
 			const offlineOrder = {
-				offlineId: new Date().getTime(),
+				offlineId: editOrder.offlineId
+					? editOrder.offlineId
+					: new Date().getTime(),
 				offlineData: { offlineStorageRestoreData },
 				client: editOrder.client,
 				products: editOrder.orderItems.map(item => ({
@@ -143,7 +144,6 @@ const EditOrder = ({
 
 			await addToQueue(jobTypes.addOrder, {
 				...editOrder,
-				id: undefined,
 				offlineId: offlineOrder.offlineId,
 				// Override if is finishing
 				loader: isFinishingOrder ? '' : editOrder.loader,
@@ -156,7 +156,19 @@ const EditOrder = ({
 			await createOfflineOrder(offlineOrder)
 			navigation.navigate(screens.orders)
 		} else {
-			const { success, data } = await sendOrder()
+			const { success, data } = await sendOrder(
+				isFinishingOrder
+					? {
+							useParam: true,
+							order: {
+								...editOrder,
+								generateLoad: false,
+								status: orderStatus.done,
+								urgent: false,
+							},
+					  }
+					: undefined,
+			)
 			if (success) {
 				navigation.navigate(screens.orders)
 			} else {
@@ -424,7 +436,6 @@ const mapDispatchToProps = {
 	loadOrders: OrdersVendorCreators.loadOrders,
 	setConfirmBack: EditOrderCreators.setConfirmBack,
 	setDucksOrderStatus: EditOrderCreators.setStatus,
-	setGenerateLoad: EditOrderCreators.setGenerateLoad,
 	setConfirmDelete: EditOrderCreators.setConfirmDelete,
 	setConfirmFinish: EditOrderCreators.setConfirmFinish,
 	deleteOrderOnOfflineQueue: OfflineCreators.deleteOrder,

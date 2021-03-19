@@ -84,6 +84,9 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	var order OrderCreation
 	var ok bool
 	var errors []OrderFulfillmentError
+	var hasChangedAmount bool = false // Has the amount of ANY item changed in this edit?
+	var hasBecomeUrgent bool = false  // Did the order became urgent?
+	var curLoaderId int
 
 	orderStatus := DbGetOrderStatus(userId, orderDto.Id)
 
@@ -92,16 +95,28 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 		goto Error
 	}
 
-	// If generated load was set, means the loader has
-	// finished the order by himself
-	if orderDto.GenerateLoad {
-		FinishOrder(userId, orderDto.Id, w)
-	}
-
-	errors, ok = checkOrderEditCanBeFulfilled(userId, orderDto)
+	errors, ok, hasChangedAmount = checkOrderEditCanBeFulfilled(userId, orderDto)
 
 	if !ok {
 		goto Error
+	}
+
+	if !DbIsOrderUrgent(userId, orderDto.Id) {
+		hasBecomeUrgent = orderDto.Urgent
+	}
+
+	// Set current loader id here, before any changes
+	curLoaderId = DbGetLoaderId(userId, orderDto.Id)
+
+	// If generated load was unset, means the loader has
+	// finished the order by himself
+	if !orderDto.GenerateLoad {
+		orderDto.Status = S_Done
+		ok = DbFinishOrderByVendor(userId, orderDto.Id)
+
+		if !ok {
+			goto Error
+		}
 	}
 
 	// If has client
@@ -200,19 +215,46 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 
 	if orderStatus == S_Carrying {
 		relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
-		loaderId := DbGetLoaderId(userId, orderId)
-		device := device.DbGetDeviceHashFromLoaderId(loaderId)
+		device := device.DbGetDeviceHashFromLoaderId(curLoaderId)
 
-		notification.SendNotification(
-			device,
-			"Pedido EDITADO",
-			"Um pedido foi editado pelo vendedor",
-			NotificationData{
-				Type:     "edit",
-				Client:   orderDto.Client,
-				Products: relatedProducts,
-			},
-		)
+		if !orderDto.GenerateLoad {
+			notification.SendNotification(
+				device,
+				"Pedido FINALIZADO",
+				"Um pedido foi finalizado pelo vendedor",
+				NotificationData{
+					Type:     "finished",
+					Client:   orderDto.Client,
+					Products: relatedProducts,
+				},
+			)
+		} else {
+			if hasChangedAmount {
+				notification.SendNotification(
+					device,
+					"Pedido EDITADO",
+					"Um pedido foi editado pelo vendedor",
+					NotificationData{
+						Type:     "edit",
+						Client:   orderDto.Client,
+						Products: relatedProducts,
+					},
+				)
+			}
+
+			if hasBecomeUrgent {
+				notification.SendNotification(
+					device,
+					"Pedido URGENTE",
+					"Um pedido é agora considerado URGENTE",
+					NotificationData{
+						Type:     "urgent",
+						Client:   orderDto.Client,
+						Products: relatedProducts,
+					},
+				)
+			}
+		}
 	}
 
 	return orderId
@@ -319,34 +361,6 @@ func DeleteOrderDeFacto(userId int, orderId int, w http.ResponseWriter) {
 	}
 }
 
-func FinishOrder(userId int, orderId int, w http.ResponseWriter) {
-	orderStatus := DbGetOrderStatus(userId, orderId)
-	if orderStatus == S_Carrying {
-		relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
-		client := client.DbGetClientFromOrder(userId, orderId)
-		loaderId := DbGetLoaderId(userId, orderId)
-		device := device.DbGetDeviceHashFromLoaderId(loaderId)
-
-		notification.SendNotification(
-			device,
-			"Pedido FINALIZADO",
-			"Um pedido foi finalizado pelo vendedor",
-			NotificationData{
-				Type:     "finished",
-				Client:   client,
-				Products: relatedProducts,
-			},
-		)
-	}
-
-	id := DbFinishOrderByLoader(userId, orderId)
-	if id > 0 {
-		utils.Success(w, id)
-	} else {
-		utils.Failed(w, -1)
-	}
-}
-
 func checkOrderAddCanBeFulfilled(userId int, orderDto OrderDto) ([]OrderFulfillmentError, bool) {
 	var errors []OrderFulfillmentError
 
@@ -371,12 +385,19 @@ func checkOrderAddCanBeFulfilled(userId int, orderDto OrderDto) ([]OrderFulfillm
 	return errors, len(errors) == 0
 }
 
-func checkOrderEditCanBeFulfilled(userId int, orderDto OrderDto) ([]OrderFulfillmentError, bool) {
+// Returns: OrderErrors, hasErros, hasChangedAmount
+func checkOrderEditCanBeFulfilled(userId int, orderDto OrderDto) ([]OrderFulfillmentError, bool, bool) {
+	var hasChangedAmount bool = false
 	var errors []OrderFulfillmentError
 
 	for _, product := range orderDto.Products {
 		amountInDb := storage.DbGetProductAmount(userId, product.ProductId, product.ProductTypeId, product.DescriptionId)
 		previusOrderAmount := storage.DbGetProductAmountFromOrder(userId, orderDto.Id, product.ProductId, product.ProductTypeId, product.DescriptionId)
+
+		if !hasChangedAmount {
+			hasChangedAmount = previusOrderAmount != product.StorageAmount
+		}
+
 		if amountInDb+previusOrderAmount < product.StorageAmount {
 			e := OrderFulfillmentError{
 				ProductId:     product.ProductId,
@@ -388,7 +409,7 @@ func checkOrderEditCanBeFulfilled(userId int, orderDto OrderDto) ([]OrderFulfill
 		}
 	}
 
-	return errors, len(errors) == 0
+	return errors, len(errors) == 0, hasChangedAmount
 }
 
 func addProducts(userId int, orderId int, products []ProductDto) bool {

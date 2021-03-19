@@ -283,6 +283,10 @@
 		"finishedOrder": {
 			"title": "Pedido FINALIZADO",
 			"message": "O seguinte pedido foi finalizado pelo vendedor:"
+		},
+		"urgentOrder": {
+			"title": "Pedido URGENTE",
+			"message": "O seguinte pedido é agora URGENTE:"
 		}
 	},
 	"fw": {

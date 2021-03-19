@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
 	ScrollView,
 	View,
@@ -13,6 +13,13 @@ import TextInput from 'src/components/fw/text-input'
 const ClientSegment = ({ client, clients, errors, editable, setClient }) => {
 	const [keyUpper, setKeyUpper] = useState(false)
 	const [writingKey, setWritingKey] = useState(false)
+	const [filteredClients, setFilteredClients] = useState(false)
+
+	useEffect(() => {
+		setFilteredClients(
+			clients.filter(x => x.key.toUpperCase().startsWith(keyUpper)),
+		)
+	}, [client.key])
 
 	return (
 		<View>
@@ -29,28 +36,26 @@ const ClientSegment = ({ client, clients, errors, editable, setClient }) => {
 					setClient({ ...client, key: value })
 				}}
 			/>
-			{writingKey && client.key.length > 0 && clients?.length > 0 ? (
+			{writingKey && client.key.length > 0 && filteredClients?.length > 0 ? (
 				<View style={styles.autocompleteSelector}>
 					<ScrollView keyboardShouldPersistTaps="handled">
-						{clients
-							.filter(x => x.key.toUpperCase().startsWith(keyUpper))
-							.map((item, i) => (
-								<TouchableWithoutFeedback
-									key={i}
-									onPress={() => {
-										setClient(item)
-										setWritingKey('')
-										setKeyUpper('')
-										Keyboard.dismiss()
-									}}>
-									<View>
-										<KText
-											style={styles.autocompleteText}
-											text={item.key}
-										/>
-									</View>
-								</TouchableWithoutFeedback>
-							))}
+						{filteredClients.map((item, i) => (
+							<TouchableWithoutFeedback
+								key={i}
+								onPress={() => {
+									setClient(item)
+									setWritingKey('')
+									setKeyUpper('')
+									Keyboard.dismiss()
+								}}>
+								<View>
+									<KText
+										style={styles.autocompleteText}
+										text={item.key}
+									/>
+								</View>
+							</TouchableWithoutFeedback>
+						))}
 					</ScrollView>
 				</View>
 			) : (

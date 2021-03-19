@@ -98,9 +98,15 @@ const addToQueue = (jobType, data) => async (dispatch, getState) => {
 	dispatch(setLoading(true))
 
 	const { queue } = getState().offline
-	const newQueue = [...queue, { jobType, data }]
 
-	dispatch(setQueue(newQueue))
+	const newQueue = queue.filter(
+		item =>
+			(!data.offlineId || item.data.offlineId !== data.offlineId) &&
+			(!data.id || item.data.id !== data.id),
+	)
+	const newQueueAdded = [...newQueue, { jobType, data }]
+
+	dispatch(setQueue(newQueueAdded))
 	dispatch(setLoading(false))
 }
 
@@ -122,7 +128,7 @@ const executeQueue = () => async (dispatch, getState) => {
 		switch (item.jobType) {
 			case jobTypes.addOrder:
 				response = await dispatch(
-					OrderCreators.sendRecreateOrder(item.data),
+					OrderCreators.sendOrder({ useParam: true, order: item.data }),
 				)
 				break
 			case jobTypes.deleteOrder:
