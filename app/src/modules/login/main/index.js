@@ -7,6 +7,7 @@ import { TouchableOpacity, View } from 'react-native'
 import { loginType } from 'src/constants/login-type'
 import { Creators as UserCreators } from 'src/ducks/user'
 import styles from './styles'
+import config from 'src/config'
 import colors from 'src/constants/colors'
 import stacks from 'src/constants/stacks'
 import KText from 'src/components/fw/ktext'
@@ -61,49 +62,52 @@ const Login = ({ login, navigation, userId, accessToken, loading }) => {
 	}
 
 	return (
-		<ScreenBase>
-			<TouchableOpacity
-				activeOpacity={0.3}
-				style={styles.backButton}
-				onPress={handlePress}>
-				<SvgXml
-					xml={svgBack}
-					stroke={colors.primary}
-					strokeWidth="5"
-					strokeLinejoin={'round'}
-					strokeLinecap={'round'}
+		<>
+			<ScreenBase>
+				<TouchableOpacity
+					activeOpacity={0.3}
+					style={styles.backButton}
+					onPress={handlePress}>
+					<SvgXml
+						xml={svgBack}
+						stroke={colors.primary}
+						strokeWidth="5"
+						strokeLinejoin={'round'}
+						strokeLinecap={'round'}
+					/>
+				</TouchableOpacity>
+				<SvgXml style={styles.logo} xml={svgLogo} />
+				<TextInput
+					maxLength={50}
+					value={userText}
+					setValue={setUserText}
+					label={translate('login.user')}
 				/>
-			</TouchableOpacity>
-			<SvgXml style={styles.logo} xml={svgLogo} />
-			<TextInput
-				maxLength={50}
-				value={userText}
-				setValue={setUserText}
-				label={translate('login.user')}
-			/>
-			<Space />
-			<TextInput
-				password
-				maxLength={50}
-				value={passwordText}
-				setValue={setPasswordText}
-				label={translate('login.password')}
-			/>
-			<View style={styles.row}>
-				<KText text={translate('login.rememberMe')} />
-				<CheckBox
-					value={rememberMeCheck}
-					style={styles.checkbox}
-					onValueChange={checked => setRememberMeCheck(checked)}
+				<Space />
+				<TextInput
+					password
+					maxLength={50}
+					value={passwordText}
+					setValue={setPasswordText}
+					label={translate('login.password')}
 				/>
-			</View>
-			<Space size2 />
-			{loading ? (
-				<Loader style={styles.loader} />
-			) : (
-				<Button onPress={handleLogin} label={translate('login.login')} />
-			)}
-		</ScreenBase>
+				<View style={styles.row}>
+					<KText text={translate('login.rememberMe')} />
+					<CheckBox
+						value={rememberMeCheck}
+						style={styles.checkbox}
+						onValueChange={checked => setRememberMeCheck(checked)}
+					/>
+				</View>
+				<Space size2 />
+				{loading ? (
+					<Loader style={styles.loader} />
+				) : (
+					<Button onPress={handleLogin} label={translate('login.login')} />
+				)}
+			</ScreenBase>
+			<KText style={styles.version} text={`Versão: ${config.VERSION}`} />
+		</>
 	)
 }
 

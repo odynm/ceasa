@@ -18,6 +18,11 @@ const styles = StyleSheet.create({
 		height: hp(40),
 		width: wp(40),
 	},
+	version: {
+		bottom: hp(5),
+		position: 'absolute',
+		right: hp(5),
+	},
 })
 
 export default styles

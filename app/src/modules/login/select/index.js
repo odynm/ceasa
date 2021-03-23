@@ -5,6 +5,7 @@ import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
 import { Image, View, TouchableOpacity, Linking } from 'react-native'
 import styles from './styles'
+import config from 'src/config'
 import pngWpp from 'res/pngs/wpp.png'
 import KText from 'src/components/fw/ktext'
 import screens from 'src/constants/screens'
@@ -24,41 +25,44 @@ const Login = ({ navigation }) => {
 	}
 
 	return (
-		<ScreenBase>
-			<SvgXml style={styles.logo} xml={svgLogo} />
-			<Button
-				onPress={clickVendor}
-				label={translate('loginSelect.vendor')}
-			/>
-			<Space size2 />
-			<Button
-				onPress={clickLoader}
-				label={translate('loginSelect.loader')}
-			/>
-			<View>
-				<TouchableOpacity
-					onPress={() => {
-						Linking.openURL(
-							'https://api.whatsapp.com/send?phone=5551996582662',
-						)
-					}}>
-					<View style={styles.wppView}>
-						<View>
-							<KText text={translate('loginSelect.support')} />
-							<KText bold text={translate('loginSelect.wpp')} />
+		<>
+			<ScreenBase>
+				<SvgXml style={styles.logo} xml={svgLogo} />
+				<Button
+					onPress={clickVendor}
+					label={translate('loginSelect.vendor')}
+				/>
+				<Space size2 />
+				<Button
+					onPress={clickLoader}
+					label={translate('loginSelect.loader')}
+				/>
+				<View>
+					<TouchableOpacity
+						onPress={() => {
+							Linking.openURL(
+								'https://api.whatsapp.com/send?phone=5551996582662',
+							)
+						}}>
+						<View style={styles.wppView}>
+							<View>
+								<KText text={translate('loginSelect.support')} />
+								<KText bold text={translate('loginSelect.wpp')} />
+							</View>
+							<Image
+								width={wp(20)}
+								height={hp(20)}
+								source={pngWpp}
+								resizeMode={'center'}
+								style={styles.wppLogo}
+								resizeMethod={'resize'}
+							/>
 						</View>
-						<Image
-							width={wp(20)}
-							height={hp(20)}
-							source={pngWpp}
-							resizeMode={'center'}
-							style={styles.wppLogo}
-							resizeMethod={'resize'}
-						/>
-					</View>
-				</TouchableOpacity>
-			</View>
-		</ScreenBase>
+					</TouchableOpacity>
+				</View>
+			</ScreenBase>
+			<KText style={styles.version} text={`Versão: ${config.VERSION}`} />
+		</>
 	)
 }
 

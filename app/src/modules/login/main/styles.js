@@ -18,6 +18,11 @@ const styles = StyleSheet.create({
 	row: {
 		flexDirection: 'row',
 	},
+	version: {
+		bottom: hp(5),
+		position: 'absolute',
+		right: hp(5),
+	},
 })
 
 export default styles

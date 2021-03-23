@@ -4,6 +4,9 @@ import { connect } from 'react-redux'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
 import { Creators as UserCreators } from 'src/ducks/user'
+import styles from './styles'
+import config from 'src/config'
+import KText from 'src/components/fw/ktext'
 import screens from 'src/constants/screens'
 import Space from 'src/components/fw/space'
 import Button from 'src/components/fw/button'
@@ -32,6 +35,7 @@ const User = ({ logout, navigation }) => {
 					label={translate('user.logout')}
 				/>
 			</View>
+			<KText style={styles.version} text={`Versão: ${config.VERSION}`} />
 		</ScreenBase>
 	)
 }
