@@ -139,6 +139,11 @@ func dbGetOrders(userId int, excludedStatus string, timezone string) ([]OrderLis
 
 	var orderList []OrderListItem
 
+	// Select all that are either:
+	// * NOT on excludedStatus (might be 'deleted' or more)
+	// * RELEASED today
+	// * COMPLETED today
+
 	statement := fmt.Sprintf(`
 	SELECT 
 		"order".id,
@@ -158,10 +163,12 @@ func dbGetOrders(userId int, excludedStatus string, timezone string) ([]OrderLis
 		AND (
 			"order".status != %v OR
 			(
-				date_trunc('day', TIMEZONE($1, NOW()) + interval '1 day') > 
-					"order".released_at AT TIME ZONE 'UTC' AT TIME ZONE $1 AND
 				date_trunc('day', TIMEZONE($1, NOW())) <
 					"order".released_at AT TIME ZONE 'UTC' AT TIME ZONE $1
+			) OR
+			(
+				date_trunc('day', TIMEZONE($1, NOW())) <
+					"order".completed_at AT TIME ZONE 'UTC' AT TIME ZONE $1
 			)
 		)
 	`, schema, schema, excludedStatus, S_Done)
