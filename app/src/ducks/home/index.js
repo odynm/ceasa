@@ -36,7 +36,7 @@ const loadHome = () => async (dispatch, getStore) => {
 			liquidEarned: MoneyService.toMoney(
 				(x.totalEarned - x.costPrice * x.sold) / 100,
 			),
-			startingTotalItems: x.amount + x.soldAmount,
+			startingTotalItems: x.amount + x.soldStorageAmount,
 		}))
 
 		const sortedItems = MergedProductsService.sortProducts(mappedItems)

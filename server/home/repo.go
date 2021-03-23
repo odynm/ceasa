@@ -92,7 +92,7 @@ func DbGetHomeItems(userId int, timezone string) []HomeItem {
 			homeItem.Sold = int(sold.Int32)
 		}
 		if soldAmount.Valid {
-			homeItem.SoldAmount = int(soldAmount.Int32)
+			homeItem.SoldStorageAmount = int(soldAmount.Int32)
 		}
 		if totalEarned.Valid {
 			homeItem.TotalEarned = int(totalEarned.Int32)
