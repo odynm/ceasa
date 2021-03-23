@@ -27,7 +27,7 @@ func calculateDailyBalance(homeItem []HomeItem, additionalCostTotal int) DailyBa
 		for _, item := range homeItem {
 			if item.Sold > 0 {
 				dailyBalance.TotalCostPrice = dailyBalance.TotalCostPrice + item.CostPrice*item.SoldStorageAmount
-				dailyBalance.TotalProfit = dailyBalance.TotalProfit + item.TotalEarned - item.CostPrice*item.Sold
+				dailyBalance.TotalProfit = dailyBalance.TotalProfit + item.TotalEarned - item.CostPrice*item.SoldStorageAmount
 			}
 			dailyBalance.TotalEarned = dailyBalance.TotalEarned + item.TotalEarned
 		}
