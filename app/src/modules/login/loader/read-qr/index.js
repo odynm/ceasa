@@ -71,7 +71,7 @@ const ReadQr = ({ navigation, joinTeam, loadLoaderTeams }) => {
 }
 
 ReadQr.navigationOptions = () => ({
-	title: translate('loaderLogin.login'),
+	title: translate('loaderMenus.loader'),
 	headerLeft: props => <ScreenHeader {...props} />,
 })
 

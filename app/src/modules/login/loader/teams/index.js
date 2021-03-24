@@ -86,10 +86,20 @@ const LoaderTeams = ({
 					) : (
 						<KText text={translate('loaderTeams.none')} />
 					)}
+					<KText
+						bold
+						style={styles.joinText}
+						text={`${translate('loaderTeams.joinTeam')}:`}
+					/>
 					<Button
 						style={styles.button}
 						onPress={() => navigation.navigate(screens.readQr)}
 						label={translate('loaderTeams.read')}
+					/>
+					<Button
+						style={styles.lastButton}
+						onPress={() => navigation.navigate(screens.writeQr)}
+						label={translate('loaderTeams.write')}
 					/>
 				</ScreenBase>
 			)}
@@ -98,7 +108,7 @@ const LoaderTeams = ({
 }
 
 LoaderTeams.navigationOptions = () => ({
-	title: translate('loaderLogin.login'),
+	title: translate('loaderMenus.loader'),
 	headerLeft: props => <ScreenHeader noBack {...props} />,
 })
 

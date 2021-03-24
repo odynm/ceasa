@@ -9,7 +9,16 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 	},
+	joinText: {
+		marginBottom: hp(10),
+		marginTop: 'auto',
+		textAlign: 'center',
+	},
 	button: {
+		marginBottom: hp(10),
+		marginTop: 'auto',
+	},
+	lastButton: {
 		marginBottom: hp(30),
 		marginTop: 'auto',
 	},

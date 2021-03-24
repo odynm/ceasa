@@ -49,9 +49,13 @@ func LoginUser(userLogin UserDto, w http.ResponseWriter) {
 		} else {
 			parentUser = 0
 		}
+
+		// Shorten it up to be easier to write
+		loaderToken :=  strings.ToUpper(utils.GetHash("L" + time.Now().UTC().String())[0:5])
+
 		tokens[dbUser.Id] = AuthData{
 			Token:        token,
-			LoaderToken:  utils.GetHash("L" + time.Now().UTC().String()),
+			LoaderToken:  loaderToken,
 			CreationDate: time.Now().UTC(),
 			RefreshToken: refreshToken,
 			ParentUser:   parentUser,
@@ -147,13 +151,4 @@ Error:
 func GetUserIdAuthData(userId int, w http.ResponseWriter) (AuthData, bool) {
 	authData := tokens[userId]
 	return authData, true
-}
-
-func GetUserFromLoaderToken(loaderToken string) (int, bool) {
-	for key, token := range tokens {
-		if token.LoaderToken == loaderToken {
-			return key, true
-		}
-	}
-	return 0, false
 }

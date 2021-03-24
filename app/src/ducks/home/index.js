@@ -34,7 +34,7 @@ const loadHome = () => async (dispatch, getStore) => {
 			costPrice: MoneyService.toMoney(x.costPrice / 100),
 			totalEarned: MoneyService.toMoney(x.totalEarned / 100),
 			liquidEarned: MoneyService.toMoney(
-				(x.totalEarned - x.costPrice * x.sold) / 100,
+				(x.totalEarned - x.costPrice * x.soldStorageAmount) / 100,
 			),
 			startingTotalItems: x.amount + x.soldStorageAmount,
 		}))

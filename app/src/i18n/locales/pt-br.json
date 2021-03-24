@@ -42,8 +42,13 @@
 		"logout": "Sair",
 		"none": "Você não está em nenhuma equipe ainda",
 		"registeredTeams": "Equipes registradas:",
-		"read": "Ler Código",
-		"readFail": "Falha ao ler o QR Code"
+		"read": "Ler Código (QR Code)",
+		"write": "Escrever Código",
+		"readFail": "Falha ao ler o QR Code",
+		"joinFail": "Falha ao entrar na equipe. Verifique se o código está correto.",
+		"joinTeamButton": "Entrar na equipe",
+		"joinTeam": "Registrar-se em uma nova equipe",
+		"insertCode": "Insira o código da equipe"
 	},
 	"menus": {
 		"storage": "Cadastrar",
@@ -60,7 +65,8 @@
 	"loaderMenus": {
 		"orders": "Pedidos",
 		"options": "Opções",
-		"carrying": "Carregamentos"
+		"carrying": "Carregamentos",
+		"loader": "Carregador"
 	},
 	"storage": {
 		"product": "Produto",
@@ -243,12 +249,15 @@
 		},
 		"addLoader": {
 			"title": "Adicionar Carregador",
+			"code": "CÓDIGO:",
 			"instructions": {
+				"header": "Instruções para adicionar",
+				"title": "Instruções",
 				"1": "* Peça para o seu carregador baixar o aplicativo ",
 				"2": "Ceasa Estoque",
 				"3": ".\n",
 				"4": "* Ele deve clicar em \"entrar como carregador\"\n",
-				"5": "* Tudo que ele precisa fazer agora é ler o QR Code abaixo"
+				"5": "* Tudo que ele precisa fazer agora é ler o QR Code, OU digitar o código."
 			}
 		}
 	},

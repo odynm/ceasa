@@ -2,6 +2,8 @@ package team
 
 import (
 	"net/http"
+	"strconv"
+	"strings"
 
 	"ceasa/user"
 	"ceasa/utils"
@@ -24,25 +26,28 @@ func GetAllTeamsFromVendor(userId int, w http.ResponseWriter) ([]TeamFull, bool)
 }
 
 func AddToTeam(loaderId int, token string, w http.ResponseWriter) {
-	userId, success := user.GetUserFromLoaderToken(token)
+	userIdStr := token[0 : len(token)-5]
+	securityToken := token[len(token)-5:]
 
-	if !success {
-		utils.Failed(w, -1)
-		return
-	}
+	userId64, err := strconv.ParseInt(userIdStr, 10, 32)
+	userId := int(userId64)
 
-	teamId := DbGetTeam(loaderId, userId)
-	if teamId > 0 {
-		utils.Failed(w, -1)
-		return
-	}
+	if err != nil {
+		userAuthData, success := user.GetUserIdAuthData(userId, w)
 
-	authData, ok := user.GetUserIdAuthData(userId, w)
-	if ok {
-		if authData.LoaderToken == token {
-			id := DbCreateTeam(loaderId, userId)
-			if id > 0 {
-				utils.Success(w, id)
+		if success {
+			teamId := DbGetTeam(loaderId, userId)
+			if teamId > 0 {
+				if userAuthData.LoaderToken == strings.ToUpper(securityToken) {
+					id := DbCreateTeam(loaderId, userId)
+					if id > 0 {
+						utils.Success(w, id)
+					} else {
+						utils.Failed(w, -1)
+					}
+				} else {
+					utils.Failed(w, -1)
+				}
 			} else {
 				utils.Failed(w, -1)
 			}

@@ -2,6 +2,7 @@ package team
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -39,8 +40,9 @@ func getCode(w http.ResponseWriter, r *http.Request) {
 	if userId > 0 {
 		auth, ok := user.GetUserIdAuthData(userId, w)
 		if ok {
+			userIdStr := fmt.Sprintf("%05d", userId)
 			joinTeamToken := JoinTeamToken{
-				Token: auth.LoaderToken,
+				Token: userIdStr + auth.LoaderToken,
 			}
 			utils.Success(w, joinTeamToken)
 		}
