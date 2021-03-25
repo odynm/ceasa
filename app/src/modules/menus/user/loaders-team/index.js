@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { hp, wp } from 'src/utils/screen'
 import { translate } from 'src/i18n/translate'
-import { withNavigation } from 'react-navigation'
+import { withNavigationFocus } from 'react-navigation'
 import { Creators as TeamCreators } from 'src/ducks/team'
 import { StyleSheet, View, ScrollView } from 'react-native'
 import TeamCard from './card'
@@ -19,6 +19,7 @@ import ConfirmationModal from 'src/components/fw/confirmation-modal'
 
 const LoadersTeam = ({
 	loading,
+	isFocused,
 	navigation,
 	deleteTeam,
 	vendorTeams,
@@ -31,7 +32,7 @@ const LoadersTeam = ({
 
 	useEffect(() => {
 		loadVendorTeams()
-	}, [])
+	}, [isFocused])
 
 	const handleDelete = async () => {
 		await deleteTeam(selectedId)
@@ -146,4 +147,4 @@ const mapDispatchToProps = {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(withNavigation(LoadersTeam))
+)(withNavigationFocus(LoadersTeam))

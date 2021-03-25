@@ -9,18 +9,26 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 	},
-	joinText: {
-		marginBottom: hp(10),
-		marginTop: 'auto',
-		textAlign: 'center',
+	flex: {
+		flex: 1,
 	},
-	button: {
-		marginBottom: hp(10),
+	scrollView: {
+		flex: 1,
+		marginBottom: hp(20),
+	},
+	card: {
+		marginBottom: hp(20),
+	},
+	joinArea: {
+		marginBottom: hp(30),
 		marginTop: 'auto',
+		flex: 1,
+	},
+	joinText: {
+		textAlign: 'center',
 	},
 	lastButton: {
 		marginBottom: hp(30),
-		marginTop: 'auto',
 	},
 })
 

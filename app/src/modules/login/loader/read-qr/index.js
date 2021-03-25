@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { RNCamera } from 'react-native-camera'
@@ -14,6 +14,7 @@ import ScreenHeader from 'src/components/fw/screen-header'
 //import xmlQrScanBorder from 'res/svgs/v12/qr-scan-border.svg'
 
 const ReadQr = ({ navigation, joinTeam, loadLoaderTeams }) => {
+	const camRef = useRef(null)
 	const [handling, setHandling] = useState(false)
 	const [loading, setLoading] = useState(false)
 
@@ -49,6 +50,7 @@ const ReadQr = ({ navigation, joinTeam, loadLoaderTeams }) => {
 			) : (
 				<View style={styles.container}>
 					<RNCamera
+						ref={camRef}
 						type={'back'}
 						captureAudio={false}
 						style={styles.camera}
@@ -71,7 +73,7 @@ const ReadQr = ({ navigation, joinTeam, loadLoaderTeams }) => {
 }
 
 ReadQr.navigationOptions = () => ({
-	title: translate('loaderMenus.loader'),
+	title: translate('loaderMenus.join'),
 	headerLeft: props => <ScreenHeader {...props} />,
 })
 

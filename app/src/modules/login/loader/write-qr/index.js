@@ -59,7 +59,7 @@ const WriteQr = ({ navigation, joinTeam, loadLoaderTeams }) => {
 }
 
 WriteQr.navigationOptions = () => ({
-	title: translate('loaderMenus.loader'),
+	title: translate('loaderMenus.join'),
 	headerLeft: props => <ScreenHeader {...props} />,
 })
 

@@ -42,7 +42,7 @@ const LoaderTeams = ({
 			{teamsLoading ? (
 				<Loader fullScreen />
 			) : (
-				<ScreenBase>
+				<ScreenBase useScroll={false}>
 					<View style={styles.rowSpaceAround}>
 						<Button
 							tiny
@@ -68,39 +68,44 @@ const LoaderTeams = ({
 						/>
 						<KText bold fontSize={22} text={loader.name} />
 					</View>
-					{loaderTeams && loaderTeams.length > 0 ? (
-						<>
-							<Space />
-							<KText text={translate('loaderTeams.registeredTeams')} />
-							<Space />
-							<ScrollView>
-								{loaderTeams.map((x, i) => (
-									<TeamCard
-										key={i}
-										name={x.userName}
-										onPress={() => handleSelect(x.userId)}
-									/>
-								))}
-							</ScrollView>
-						</>
-					) : (
-						<KText text={translate('loaderTeams.none')} />
-					)}
-					<KText
-						bold
-						style={styles.joinText}
-						text={`${translate('loaderTeams.joinTeam')}:`}
-					/>
-					<Button
-						style={styles.button}
-						onPress={() => navigation.navigate(screens.readQr)}
-						label={translate('loaderTeams.read')}
-					/>
-					<Button
-						style={styles.lastButton}
-						onPress={() => navigation.navigate(screens.writeQr)}
-						label={translate('loaderTeams.write')}
-					/>
+					<View style={styles.flex}>
+						{loaderTeams && loaderTeams.length > 0 ? (
+							<>
+								<Space />
+								<KText
+									text={translate('loaderTeams.registeredTeams')}
+								/>
+								<Space />
+								<ScrollView style={styles.scrollView}>
+									{loaderTeams.map((x, i) => (
+										<TeamCard
+											key={i}
+											style={styles.card}
+											name={x.userName}
+											onPress={() => handleSelect(x.userId)}
+										/>
+									))}
+								</ScrollView>
+							</>
+						) : (
+							<KText text={translate('loaderTeams.none')} />
+						)}
+					</View>
+
+					<View style={styles.joinArea}>
+						<KText bold text={`${translate('loaderTeams.joinTeam')}:`} />
+						<Space />
+						<Button
+							onPress={() => navigation.navigate(screens.readQr)}
+							label={translate('loaderTeams.read')}
+						/>
+						<Space />
+						<Button
+							style={styles.lastButton}
+							onPress={() => navigation.navigate(screens.writeQr)}
+							label={translate('loaderTeams.write')}
+						/>
+					</View>
 				</ScreenBase>
 			)}
 		</>

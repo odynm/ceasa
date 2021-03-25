@@ -32,12 +32,13 @@ func AddToTeam(loaderId int, token string, w http.ResponseWriter) {
 	userId64, err := strconv.ParseInt(userIdStr, 10, 32)
 	userId := int(userId64)
 
-	if err != nil {
+	if err == nil {
 		userAuthData, success := user.GetUserIdAuthData(userId, w)
 
 		if success {
 			teamId := DbGetTeam(loaderId, userId)
-			if teamId > 0 {
+			// If already on team
+			if teamId == 0 {
 				if userAuthData.LoaderToken == strings.ToUpper(securityToken) {
 					id := DbCreateTeam(loaderId, userId)
 					if id > 0 {
