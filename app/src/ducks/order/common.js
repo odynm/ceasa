@@ -1,3 +1,4 @@
+import orderStatus from 'src/enums/order'
 import HttpService from 'src/services/httpService'
 
 function common(types, duck) {
@@ -60,6 +61,7 @@ function common(types, duck) {
 		const source = useParam ? order : getState()[duck]
 		const {
 			id,
+			loader,
 			status,
 			client,
 			urgent,
@@ -87,7 +89,7 @@ function common(types, duck) {
 		const postData = {
 			id,
 			client,
-			status,
+			status: loader ? orderStatus.carrying : status,
 			urgent,
 			generateLoad: generateLoad,
 			products: products,

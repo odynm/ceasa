@@ -57,19 +57,16 @@ func Add(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 		goto Error
 	}
 
-	// TODO add notification, but this will be sent to ALL loaders
-	// device := device.DbGetDeviceHashFromLoaderId(loaderId)
-
-	// notification.SendNotification(
-	// 	device,
-	// 	"Pedido CANCELADO",
-	// 	"Um pedido foi cancelado pelo vendedor",
-	// 	NotificationData{
-	// 		Type:     "add",
-	// 		Client:   client,
-	// 		Products: relatedProducts,
-	// 	},
-	// )
+	for _, device := range device.DbGetAllDevicesFromUserId(userId) {
+		notification.SendNotification(
+			device,
+			"NOVO pedido cadastrado",
+			"Um novo pedido está na fila",
+			NotificationData{
+				Type: "add",
+			},
+		)
+	}
 
 	return orderId
 

@@ -44,3 +44,31 @@ func DbCreateDevice(hash string) int {
 	}
 	return id
 }
+
+func DbGetAllDevicesFromUserId(userId int) []string {
+	var hashes []string
+
+	statement := `
+		SELECT hash as device FROM public.team_info ti
+			LEFT JOIN public.loader_info li ON ti.loader_id = li.id
+			LEFT JOIN public.device d ON li.device_id = d.id
+		WHERE ti.user_id = $1`
+
+	rows, err := db.Instance.Db.Query(statement, userId)
+
+	if err != nil {
+		return hashes
+	}
+
+	for rows.Next() {
+		var hash string
+
+		err := rows.Scan(&hash)
+
+		if err == nil {
+			hashes = append(hashes, hash)
+		}
+	}
+
+	return hashes
+}
