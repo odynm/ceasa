@@ -22,13 +22,9 @@ const styles = StyleSheet.create({
 	joinArea: {
 		marginBottom: hp(30),
 		marginTop: 'auto',
-		flex: 1,
 	},
 	joinText: {
 		textAlign: 'center',
-	},
-	lastButton: {
-		marginBottom: hp(30),
 	},
 })
 

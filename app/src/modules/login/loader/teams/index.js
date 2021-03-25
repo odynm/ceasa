@@ -32,6 +32,13 @@ const LoaderTeams = ({
 		loadLoaderTeams()
 	}, [])
 
+	const handleEdit = userId => {
+		setUserId(userId)
+		navigation.navigate(screens.loaderEdit, {
+			name: loader.name,
+		})
+	}
+
 	const handleSelect = userId => {
 		setUserId(userId)
 		navigation.navigate(stacks.loaderMenu)
@@ -47,8 +54,10 @@ const LoaderTeams = ({
 						<Button
 							tiny
 							style={styles.editButton}
-							onPress={() => {}}
 							label={translate('loaderTeams.edit')}
+							onPress={() => {
+								handleEdit()
+							}}
 						/>
 						<Button
 							tiny
@@ -91,7 +100,6 @@ const LoaderTeams = ({
 							<KText text={translate('loaderTeams.none')} />
 						)}
 					</View>
-
 					<View style={styles.joinArea}>
 						<KText bold text={`${translate('loaderTeams.joinTeam')}:`} />
 						<Space />
@@ -101,7 +109,6 @@ const LoaderTeams = ({
 						/>
 						<Space />
 						<Button
-							style={styles.lastButton}
 							onPress={() => navigation.navigate(screens.writeQr)}
 							label={translate('loaderTeams.write')}
 						/>

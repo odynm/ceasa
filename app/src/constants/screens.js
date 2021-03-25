@@ -6,6 +6,7 @@ const screens = {
 	loginSelect: 'LoginSelect',
 	loginLoader: 'LoginLoader',
 	loaderTeams: 'LoaderTeams',
+	loaderEdit: 'LoaderEdit',
 	readQr: 'ReadQr',
 	writeQr: 'WriteQr',
 	sell: 'Sell',

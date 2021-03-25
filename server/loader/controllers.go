@@ -13,7 +13,16 @@ func create(w http.ResponseWriter, r *http.Request) {
 	if err != nil || createLoaderDto.Device == "" {
 		utils.Failed(w, -1)
 	}
-	CreateLoader(createLoaderDto, w)
+	var loaderDto LoaderDto
+	loaderDto.Device = createLoaderDto.Device
+
+	dbLoader, ok := DbGetLoader(loaderDto)
+
+	if ok && dbLoader.Id > 0 {
+		EditLoader(createLoaderDto, dbLoader.Id, dbLoader.DeviceId, w)
+	} else {
+		CreateLoader(createLoaderDto, w)
+	}
 }
 
 func login(w http.ResponseWriter, r *http.Request) {

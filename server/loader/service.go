@@ -33,6 +33,24 @@ func CreateLoader(createLoader CreateLoaderDto, w http.ResponseWriter) int {
 	return 0
 }
 
+func EditLoader(createLoader CreateLoaderDto, id int, deviceId int, w http.ResponseWriter) int {
+	loader := Loader{
+		Id:       id,
+		DeviceId: deviceId,
+		Name:     createLoader.Name,
+	}
+
+	returnedId := DbEditLoader(loader)
+
+	if returnedId == 0 {
+		utils.Failed(w, -1)
+	} else {
+		return returnedId
+	}
+
+	return 0
+}
+
 func LoginLoader(loaderDto LoaderDto, w http.ResponseWriter) {
 	loader, ok := DbGetLoader(loaderDto)
 	if ok && loader.Id > 0 {

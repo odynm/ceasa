@@ -35,6 +35,11 @@
 		"nameRequired": "Insira um nome com pelo menos 3 caracteres",
 		"loginButton": "Entrar"
 	},
+	"loaderEdit": {
+		"title": "Editar Carregador",
+		"name": "Nome",
+		"editButton": "Editar"
+	},
 	"loaderTeams": {
 		"teams": "Equipes",
 		"loggedAs": "Carregador",
