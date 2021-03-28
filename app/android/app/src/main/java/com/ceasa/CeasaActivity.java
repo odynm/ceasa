@@ -1,4 +1,4 @@
-package com.ceasa;
+package com.primatas.ceasa;
 import android.app.Activity;
 import android.graphics.Rect;
 import android.os.Bundle;

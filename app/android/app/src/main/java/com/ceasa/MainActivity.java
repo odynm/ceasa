@@ -1,4 +1,4 @@
-package com.ceasa;
+package com.primatas.ceasa;
 
 public class MainActivity extends CeasaActivity {
 
