@@ -20,13 +20,14 @@ type AuthData struct {
 
 var tokens = map[int]AuthData{}
 
-func CreateUser(userDto UserDto, w http.ResponseWriter) {
+func CreateUser(w http.ResponseWriter, userDto UserDto, adminId int) {
 	login := strings.ToUpper(userDto.Login)
 	id := DbGetId(login)
 	if id == 0 {
 		hash := utils.GetHash(login + "@" + userDto.Pass)
 		permissions := int(1) // Padrão vendedor
-		DbCreateUser(login, hash, userDto.ParentUser, permissions)
+		DbCreateUser(login, hash, userDto.ParentUser, permissions, adminId)
+		utils.Success(w, nil)
 	} else {
 		utils.InsertError(w, "User já existente")
 	}
@@ -51,7 +52,7 @@ func LoginUser(userLogin UserDto, w http.ResponseWriter) {
 		}
 
 		// Shorten it up to be easier to write
-		loaderToken :=  strings.ToUpper(utils.GetHash("L" + time.Now().UTC().String())[0:5])
+		loaderToken := strings.ToUpper(utils.GetHash("L" + time.Now().UTC().String())[0:5])
 
 		tokens[dbUser.Id] = AuthData{
 			Token:        token,
@@ -111,7 +112,7 @@ func IsLogged(id int, auth string, w http.ResponseWriter) bool {
 }
 
 func CheckLogin(w http.ResponseWriter, r *http.Request) int {
-	// ChildUsers are users that doesn't have storage, but use someone else's one
+	// ChildUsers are users that don't have storage, but use someone else's one
 	// If there's no child element, it is a main user
 	// Those are used for login then, but the User is always the returned one
 	// to ensure correct access to storage

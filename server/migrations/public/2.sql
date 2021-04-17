@@ -66,3 +66,31 @@ CREATE TABLE public.team_info
 WITH (
     OIDS=FALSE
 );
+
+/* USER PAYMENT */
+
+CREATE SEQUENCE public.user_payment_id_seq
+    INCREMENT 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    START 1
+    CACHE 1;
+
+CREATE TABLE public.user_payment
+(
+    id int NOT NULL DEFAULT nextval('public.user_payment_id_seq'::regclass),
+    date_due date NOT NULL,
+    date_paid timestamp NOT NULL,
+	user_id int NOT NULL,
+    admin_id int NOT NULL,
+    CONSTRAINT user_payment_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_payment_user FOREIGN KEY (user_id)
+        REFERENCES public.user_info (id)
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_adminuser_user FOREIGN KEY (admin_id)
+        REFERENCES public.admin_info (id)
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS=FALSE
+);

@@ -142,8 +142,9 @@ android {
     defaultConfig {
         applicationId "com.primatas.ceasa"
         minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion        versionCode 7,
-        versionName 'Beta 21.03.28',
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 10
+        versionName 'Beta 21.03.28'
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
     }
@@ -191,7 +192,8 @@ android {
             def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
-                output.versionCodeOverride =        versionCode 7,
+                output.versionCodeOverride =
+                versionCode 10
             }
 
         }

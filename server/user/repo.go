@@ -22,18 +22,18 @@ func DbGetId(login string) int {
 	return id
 }
 
-func DbCreateUser(login string, hash string, parentUser int, permissions int) int {
+func DbCreateUser(login string, hash string, parentUser int, permissions int, adminId int) int {
 	var parentUserSql sql.NullInt32
 	if parentUser > 0 {
 		parentUserSql.Scan(parentUser)
 	}
 
 	statement := `
-		INSERT INTO "user_info" (login, hash, last_logged, active, deleted_date, plan, parent_user_id, permissions)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+		INSERT INTO "user_info" (login, hash, last_logged, active, deleted_date, plan, parent_user_id, permissions, admin_id, created_date)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, TIMEZONE('UTC', NOW()))
 		RETURNING id`
 	id := 0
-	err := db.Instance.Db.QueryRow(statement, login, hash, nil, true, nil, 1, parentUserSql, permissions).Scan(&id)
+	err := db.Instance.Db.QueryRow(statement, login, hash, nil, true, nil, 1, parentUserSql, permissions, adminId).Scan(&id)
 	if err != nil {
 		goto Error
 	}

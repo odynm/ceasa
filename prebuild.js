@@ -14,60 +14,33 @@ function doUpdate() {
     (date.getMonth() + 1).toString()
   )}.${pad(date.getDate().toString())}`;
 
-  //;
+  //
   // UPDATE CONFIG.JS
   //
-
-  //VERSION
   fs.readFile(configJs, "utf8", function (err, data) {
     if (err) {
       return console.log(err);
     }
 
-    const result = data.replace(
-      /\t*VERSION:.+/gm,
-      `	VERSION: 'Beta ${version}',`
+    let result = data.replace(/\t*VERSION:.+/gm, `	VERSION: 'Beta ${version}',`);
+
+    const serverUrl = "https://ceasa-estoque.herokuapp.com";
+    result = result.replace(
+      /^\s*\/*\s*API_URL: 'https:\/\/ceasa-estoque\.herokuapp\.com'/gm,
+      `	API_URL: '${serverUrl}'`
     );
 
+    const localUrl = result.match(/^\s*API_URL:\s'http:\/\/192\..+/gm)[0];
+
+    if (localUrl && localUrl.length > 0) {
+      result = result.replace(
+        /^\s*API_URL:\s'http:\/\/192\..+/gm,
+        `	// ${localUrl.trim()}`
+      );
+    }
+    console.log(result);
     fs.writeFile(configJs, result, "utf8", function (err) {
       if (err) return console.log(err);
-    });
-
-    // SET THE CORRECT URL
-    // Comment local
-    fs.readFile(configJs, "utf8", function (err, data) {
-      if (err) {
-        return console.log(err);
-      }
-
-      const localUrl = data.match(/^\s*API_URL:\s'http:\/\/192\..+/gm)[0];
-
-      if (localUrl && localUrl.length > 0) {
-        const result = data.replace(
-          /^\s*API_URL:\s'http:\/\/192\..+/gm,
-          `	// ${localUrl.trim()}`
-        );
-
-        // Uncomment PRD
-        fs.writeFile(configJs, result, "utf8", function (err) {
-          if (err) return console.log(err);
-        });
-
-        fs.readFile(configJs, "utf8", function (err, data) {
-          if (err) {
-            return console.log(err);
-          }
-
-          const serverUrl = "https://ceasa-estoque.herokuapp.com";
-          const result = data.replace(
-            /^\s*\/*\s*API_URL: 'https:\/\/ceasa-estoque\.herokuapp\.com'/gm,
-            `	API_URL: '${serverUrl}'`
-          );
-          fs.writeFile(configJs, result, "utf8", function (err) {
-            if (err) return console.log(err);
-          });
-        });
-      }
     });
   });
 
@@ -79,12 +52,14 @@ function doUpdate() {
       return console.log(err);
     }
 
-    const curVersion = data.match(/^\s*versionCode\s+(\d+)/m)[1];
+    const curVersion = data.match(/versionCode\s+(\d+)/m)[1];
 
-    const result = data.replace(
-      /^\s*versionCode.+/gm,
-      `        versionCode ${parseInt(curVersion) + 1},`
+    let result = data.replace(
+      /versionCode\s\d*/gm,
+      `versionCode ${parseInt(curVersion) + 1}`
     );
+
+    result = result.replace(/versionName.+/gm, `versionName 'Beta ${version}'`);
 
     fs.writeFile(buildGradle, result, "utf8", function (err) {
       if (err) return console.log(err);

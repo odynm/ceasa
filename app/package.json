@@ -68,8 +68,8 @@
 	"prettier": {
 		"semi": false,
 		"singleQuote": true,
-		"tabWidth": 3,
-		"useTabs": true,
+		"tabWidth": 4,
+		"useTabs": false,
 		"jsxBracketSameLine": true,
 		"arrowParens": "avoid",
 		"trailingComma": "all"

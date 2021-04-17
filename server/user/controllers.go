@@ -33,17 +33,15 @@ func refresh(w http.ResponseWriter, r *http.Request) {
 func post(w http.ResponseWriter, r *http.Request) {
 	var userDto UserDto
 	err := json.NewDecoder(r.Body).Decode(&userDto)
-	if len(userDto.Pass) < 1 {
+	if err != nil || len(userDto.Pass) < 1 {
 		utils.Failed(w, -1)
 		return
-	}
-	auth := r.Header.Get("Auth")
-	if err != nil {
-		utils.NoAuth(w)
 	} else {
-		ok := admin.IsAdminLogged(auth, w)
-		if ok {
-			CreateUser(userDto, w)
+		adminId := admin.CheckAdminLogin(w, r)
+		if adminId > 0 {
+			CreateUser(w, userDto, adminId)
+		} else {
+			utils.NoAuth(w)
 		}
 	}
 }
@@ -59,7 +57,10 @@ func test(w http.ResponseWriter, r *http.Request) {
 
 func userRouter(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
+	case http.MethodOptions:
+		utils.AllowCors(w, r)
 	case http.MethodPost:
+		utils.AllowCors(w, r)
 		post(w, r)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)

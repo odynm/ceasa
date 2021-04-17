@@ -4,126 +4,126 @@ import StorageService from 'src/services/storageService'
 
 const prefix = 'additional-cost/'
 const Types = {
-	SET_LOADING: prefix + 'SET_LOADING',
-	SET_ADDITIONAL_COSTS: prefix + 'SET_ADDITIONAL_COSTS',
+    SET_LOADING: prefix + 'SET_LOADING',
+    SET_ADDITIONAL_COSTS: prefix + 'SET_ADDITIONAL_COSTS',
 }
 
 const setLoading = loading => ({
-	payload: { loading },
-	type: Types.SET_LOADING,
+    payload: { loading },
+    type: Types.SET_LOADING,
 })
 
 const setAdditionalCosts = additionalCosts => {
-	StorageService.offlineAdditionalCosts.set(additionalCosts)
+    StorageService.offlineAdditionalCosts.set(additionalCosts)
 
-	return {
-		payload: { additionalCosts },
-		type: Types.SET_ADDITIONAL_COSTS,
-	}
+    return {
+        payload: { additionalCosts },
+        type: Types.SET_ADDITIONAL_COSTS,
+    }
 }
 
 const addAdditionalCost = (description, costValue) => async dispatch => {
-	dispatch(setLoading(true))
-	const { success } = await HttpService.post('additional-cost', {
-		description,
-		costValue: Math.round(costValue.value * 100),
-	})
+    dispatch(setLoading(true))
+    const { success } = await HttpService.post('additional-cost', {
+        description,
+        costValue: Math.round(costValue.value * 100),
+    })
 
-	dispatch(setLoading(false))
-	return success
+    dispatch(setLoading(false))
+    return success
 }
 
 const loadAdditionalCosts = () => async (dispatch, getState) => {
-	const { inUse } = getState().offline
+    const { inUse } = getState().offline
 
-	if (!inUse) {
-		dispatch(setLoading(true))
-		const { data, success } = await HttpService.get('additional-cost')
+    if (!inUse) {
+        dispatch(setLoading(true))
+        const { data, success } = await HttpService.get('additional-cost')
 
-		if (success && data?.length > 0) {
-			const mappedItems = data.map(x => ({
-				...x,
-				costValue: MoneyService.toMoney(x.costValue / 100),
-				createdAt: new Date(x.createdAt),
-			}))
+        if (success && data?.length > 0) {
+            const mappedItems = data.map(x => ({
+                ...x,
+                costValue: MoneyService.toMoney(x.costValue / 100),
+                createdAt: new Date(x.createdAt),
+            }))
 
-			dispatch(setAdditionalCosts(mappedItems))
-		} else if (
-			success &&
-			getState().additionalCost.additionalCosts?.length &&
-			!data?.length
-		) {
-			dispatch(setAdditionalCosts([]))
-		}
-		dispatch(setLoading(false))
-	}
+            dispatch(setAdditionalCosts(mappedItems))
+        } else if (
+            success &&
+            getState().additionalCost.additionalCosts?.length &&
+            !data?.length
+        ) {
+            dispatch(setAdditionalCosts([]))
+        }
+        dispatch(setLoading(false))
+    }
 }
 
 const deleteAdditionalCost = id => async (dispatch, getState) => {
-	dispatch(setLoading(true))
-	const { success } = await HttpService.delete(`additional-cost?id=${id}`)
-	dispatch(setLoading(false))
+    dispatch(setLoading(true))
+    const { success } = await HttpService.delete(`additional-cost?id=${id}`)
+    dispatch(setLoading(false))
 
-	return success
+    return success
 }
 
 // WARNING: only offline
 const addAdditionalCostOffline = ({
-	offlineId,
-	costValue,
-	description,
+    offlineId,
+    costValue,
+    description,
 }) => async (dispatch, getState) => {
-	const { additionalCosts } = getState().additionalCost
+    const { additionalCosts } = getState().additionalCost
 
-	const mappedItems = [
-		{
-			offlineId,
-			description,
-			costValue,
-		},
-		...additionalCosts,
-	]
+    const mappedItems = [
+        {
+            offlineId,
+            description,
+            costValue,
+        },
+        ...additionalCosts,
+    ]
 
-	dispatch(setAdditionalCosts(mappedItems))
+    dispatch(setAdditionalCosts(mappedItems))
 }
 
 // WARNING: only offline
 const deleteAdditionalCostFromList = (id, offlineId) => async (
-	dispatch,
-	getState,
+    dispatch,
+    getState,
 ) => {
-	console.warn(id, offlineId)
-	const { additionalCosts } = getState().additionalCost
+    console.warn(id, offlineId)
+    const { additionalCosts } = getState().additionalCost
 
-	const mappedItems = additionalCosts.filter(
-		x => x.offlineId !== offlineId && x.id !== id,
-	)
+    const mappedItems = additionalCosts.filter(
+        x => x.offlineId !== offlineId && x.id !== id,
+    )
 
-	dispatch(setAdditionalCosts(mappedItems))
+    dispatch(setAdditionalCosts(mappedItems))
 }
 
 export const Creators = {
-	setLoading,
-	addAdditionalCost,
-	setAdditionalCosts,
-	loadAdditionalCosts,
-	deleteAdditionalCost,
-	addAdditionalCostOffline,
-	deleteAdditionalCostFromList,
+    setLoading,
+    addAdditionalCost,
+    setAdditionalCosts,
+    loadAdditionalCosts,
+    deleteAdditionalCost,
+    addAdditionalCostOffline,
+    deleteAdditionalCostFromList,
 }
 
 const initialState = {
-	loading: false,
-	additionalCosts: [],
+    loading: false,
+    additionalCosts: [],
 }
 
 export default function reducer(state = initialState, action) {
-	switch (action.type) {
-		case Types.SET_LOADING:
-			return { ...state, loading: action.payload.loading }
-		case Types.SET_ADDITIONAL_COSTS:
-			return { ...state, additionalCosts: action.payload.additionalCosts }
-		default:
-			return state
-	}
+    switch (action.type) {
+        case Types.SET_LOADING:
+            return { ...state, loading: action.payload.loading }
+        case Types.SET_ADDITIONAL_COSTS:
+            return { ...state, additionalCosts: action.payload.additionalCosts }
+        default:
+            return state
+    }
 }

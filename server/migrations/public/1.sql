@@ -13,6 +13,8 @@ CREATE TABLE public.user_info
     id int NOT NULL DEFAULT nextval('user_info_id_seq'::regclass),
     login character varying(50) NOT NULL,
     hash character varying(50) NOT NULL,
+    created_date timestamp NOT NULL,
+    admin_id int NOT NULL,
     refresh_token character varying(50),
     refresh_token_expiration timestamp,
     last_logged timestamp,
@@ -24,6 +26,9 @@ CREATE TABLE public.user_info
     CONSTRAINT user_info_pkey PRIMARY KEY (id),
     CONSTRAINT fk_parentuser_user FOREIGN KEY (parent_user_id)
         REFERENCES public.user_info (id)
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_adminuser_user FOREIGN KEY (admin_id)
+        REFERENCES public.admin_info (id)
         ON DELETE NO ACTION
 )
 WITH (
