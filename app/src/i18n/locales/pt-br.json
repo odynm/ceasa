@@ -4,6 +4,7 @@
         "no": "Não",
         "yes": "Sim",
         "delete": "Excluir",
+        "noInternet": "Sem internet",
         "noConnection": "Sem conexão com o sistema",
         "noConnectionError": "Essa opção está desabilitada enquanto você estiver sem conexão.",
         "error": {

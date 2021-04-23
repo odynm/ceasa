@@ -16,50 +16,76 @@ import AppContainer, { navigationRef } from 'src/router'
 import StorageService from 'src/services/storageService'
 import LocationService from 'src/services/locationService'
 import InternetService from 'src/services/internetService'
+import KText from 'src/components/fw/ktext'
+import { translate } from 'src/i18n/translate'
+import KModal from 'src/components/fw/kmodal'
 
 const App = () => {
-	const toastRef = useRef()
-	const [appLoaded, setAppLoaded] = useState(false)
+    const toastRef = useRef()
+    const [appLoaded, setAppLoaded] = useState(false)
+    const [noInternet, setNoInternet] = useState(false)
 
-	useEffect(() => {
-		initialize()
-	}, [])
+    useEffect(() => {
+        initialize()
+    }, [])
 
-	const initialize = async () => {
-		const hasInternetConnection = await InternetService.isInternetReachable()
-		if (!hasInternetConnection) {
-			console.warn('No internet connection - no startup')
-			return
-		}
+    const initialize = async () => {
+        i18n.locale = 'pt-BR' //TODO set according to location
 
-		// Reset refresher
-		await StorageService.refresherRunning.set(false)
+        const hasInternetConnection = await InternetService.isInternetReachable()
+        if (!hasInternetConnection) {
+            console.warn('No internet connection - no startup')
+            setNoInternet(true)
 
-		HttpService.initialize(navigationRef, NavigationActions)
-		MoneyService.initialize()
-		ToastService.initialize(toastRef)
+            // try again
+            setTimeout(initialize, 2000)
 
-		await LocationService.initialize()
-		i18n.locale = 'pt-BR' //TODO set according to location
+            return
+        } else {
+            setNoInternet(false)
+        }
 
-		setAppLoaded(true)
-	}
+        // Reset refresher
+        await StorageService.refresherRunning.set(false)
 
-	return (
-		<Provider store={store}>
-			{appLoaded && (
-				<>
-					<Refresher />
-					<Notifier />
-					<AppContainer
-						ref={navigationRef}
-						onNavigationStateChange={onNavigationStateChange}
-					/>
-				</>
-			)}
-			<Toast ref={toastRef} />
-		</Provider>
-	)
+        HttpService.initialize(navigationRef, NavigationActions)
+        MoneyService.initialize()
+        ToastService.initialize(toastRef)
+
+        await LocationService.initialize()
+
+        setAppLoaded(true)
+    }
+
+    return (
+        <Provider store={store}>
+            {noInternet ? (
+                <KModal
+                    noClose
+                    size={250}
+                    open={noInternet}
+                    header={translate('app.noInternet')}>
+                    <KText text={translate('app.noConnection')} />
+                </KModal>
+            ) : (
+                <>
+                    {appLoaded && (
+                        <>
+                            <Refresher />
+                            <Notifier />
+                            <AppContainer
+                                ref={navigationRef}
+                                onNavigationStateChange={
+                                    onNavigationStateChange
+                                }
+                            />
+                        </>
+                    )}
+                </>
+            )}
+            <Toast ref={toastRef} />
+        </Provider>
+    )
 }
 
 export default App
