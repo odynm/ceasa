@@ -1,313 +1,314 @@
 {
-	"app": {
-		"ok": "Ok",
-		"no": "Não",
-		"yes": "Sim",
-		"delete": "Excluir",
-		"noConnection": "Sem conexão com o sistema",
-		"noConnectionError": "Essa opção está desabilitada enquanto você estiver sem conexão.",
-		"error": {
-			"unexpected": "Erro",
-			"unexpectedText": "Ocorreu um erro inexperado"
-		}
-	},
-	"loginSelect": {
-		"vendor": "Entrar como vendedor",
-		"loader": "Entrar como carregador",
-		"support": "Novo usuário ou dúvidas,",
-		"wpp": "contate-nos via Whatsapp"
-	},
-	"login": {
-		"login": "Login",
-		"user": "Usuário",
-		"password": "Senha",
-		"rememberMe": "Lembrar meu usuário e senha",
-		"error": "Usuário ou senha incorretos",
-		"errors": {
-			"connection": "Erro de conexão"
-		}
-	},
-	"loaderLogin": {
-		"login": "Login",
-		"createTitle": "Entrar como carregador",
-		"createText": "Escreva seu nome para começar como carregador:",
-		"name": "Nome",
-		"nameRequired": "Insira um nome com pelo menos 3 caracteres",
-		"loginButton": "Entrar"
-	},
-	"loaderEdit": {
-		"title": "Editar Carregador",
-		"name": "Nome",
-		"editButton": "Editar"
-	},
-	"loaderTeams": {
-		"teams": "Equipes",
-		"loggedAs": "Carregador",
-		"edit": "Editar",
-		"logout": "Sair",
-		"none": "Você não está em nenhuma equipe ainda",
-		"registeredTeams": "Equipes registradas:",
-		"read": "Ler Código (QR Code)",
-		"write": "Escrever Código",
-		"readFail": "Falha ao ler o QR Code",
-		"joinFail": "Falha ao entrar na equipe. Verifique se o código está correto.",
-		"joinTeamButton": "Entrar na equipe",
-		"joinTeam": "Registrar-se em uma nova equipe",
-		"insertCode": "Insira o código da equipe"
-	},
-	"menus": {
-		"storage": "Cadastrar",
-		"home": "Visão Geral",
-		"sell": "Vender",
-		"orders": "Pedidos",
-		"user": "Usuário",
-		"editOrder": "Ver Pedido",
-		"editStorage": "Alterar Estoque",
-		"editProductsOrder": "Alterar Produtos do Pedido",
-		"addNonExistent": "Adicionar Novo",
-		"additionalCost": "Custos Adicionais"
-	},
-	"loaderMenus": {
-		"orders": "Pedidos",
-		"options": "Opções",
-		"carrying": "Carregamentos",
-		"loader": "Carregador",
-		"join": "Entrar em equipe"
-	},
-	"storage": {
-		"product": "Produto",
-		"products": "Produtos",
-		"productType": "Tipo (opcional)",
-		"productTypes": "Tipos",
-		"select": "Selecione",
-		"registerNotListedProduct": "Cadastrar produto não listado...",
-		"registerNotListedProductType": "Cadastrar tipo não listado...",
-		"additionalDescription": "Descrição adicional (opcional)",
-		"amount": "Quantidade",
-		"costPrice": "Preço de Custo (unidade)",
-		"costPriceShort": "Preço Custo",
-		"costPriceMerged": "Média Preço Custo",
-		"add": "Adicionar",
-		"errors": {
-			"noProduct": "Selecione o produto",
-			"cantEdit": "Você não pode editar o estoque enquanto faz uma venda."
-		}
-	},
-	"sell": {
-		"restart": "Recomeçar venda",
-		"total": "Total:",
-		"generateLoad": "Gerar carregamento",
-		"released": "Carregamento liberado",
-		"unitPrice": "Un.",
-		"amount": "Qtde.",
-		"inStock": "Em estoque",
-		"emptyStorage": "O estoque está vazio",
-		"noItemsAdded": "Adicione um produto para começar uma venda.",
-		"sellProduct": "Vender produto",
-		"sellAvailable": "Disponível",
-		"sellAmount": "Quantidade venda",
-		"costPrice": "Preço de Custo (unidade)",
-		"averageCostPrice": "Preço de Custo Médio (un)",
-		"sellUnitPrice": "Preço (unidade)",
-		"sellTotal": "Total",
-		"clientKey": "Nome/Placa/Box",
-		"clientPlace": "Lugar (opcional)",
-		"clientVehicle": "Veículo (opcional)",
-		"exceededWarning": "Excede estoque",
-		"add": "Adicionar",
-		"edit": "Editar",
-		"delete": "Excluir",
-		"continue": "Continuar",
-		"addSell": "Adicionar Venda",
-		"added": "Venda adicionada!",
-		"addedOffline": "A venda será adicionada quando voltar a conexão",
-		"modal": {
-			"finishSell": "Finalizar venda",
-			"areYouSure": "Você quer confirmar a venda?",
-			"dontHaveInStorage": "Falta no estoque:"
-		},
-		"modalDelete": {
-			"header": "Confirmar exclusão",
-			"content": "Quer excluir esse item?"
-		},
-		"modalMissing": {
-			"header": "Itens faltando no estoque",
-			"missingAmount": "Quantidade faltando:"
-		},
-		"errors": {
-			"priceRequired": "Digite o preço",
-			"noItems": "Adicione um produto antes de continuar",
-			"insertClient": "Digite informação do cliente"
-		}
-	},
-	"orders": {
-		"blocked": "NÃO LIBERADO",
-		"doneAt": "Concluída às",
-		"done": "Concluída",
-		"urgent": "URGENTE",
-		"none": "Ainda não há nenhum pedido cadastrado.",
-		"notSent": "Não enviado",
-		"errors": {
-			"cantEditAnymore": "Você não pode mais editar esse pedido"
-		},
-		"noOrdersYet": "Sem pedidos no momento."
-	},
-	"editOrder": {
-		"delete": "Excluir Pedido",
-		"editProducts": "Alterar lista de produtos",
-		"seeProducts": "Ver lista de produtos",
-		"released": "Carregamento liberado",
-		"urgent": "Definir como urgente",
-		"loader": "Sendo carregado por",
-		"done": "terminou essa entrega em",
-		"doneNoCarrier": "Essa venda não gerou carregamento e foi feita às",
-		"doneOffline": "Venda concluída",
-		"edit": "Salvar",
-		"finish": "Salvar e Finalizar",
-		"deleteModal": {
-			"header": "Deletar Pedido",
-			"content": "Tem certeza que quer deletar esse pedido?"
-		},
-		"editModal": {
-			"header": "Editar Pedido",
-			"content": "Esse pedido já foi liberado e pode estar sendo carregado. Editar mesmo assim?"
-		},
-		"confirmBack": {
-			"header": "Sair sem salvar",
-			"content": "Tem certeza de que deseja SAIR SEM SALVAR a alteração? Toda alteração feita será perdida!"
-		},
-		"finishOrder": {
-			"header": "Finalizar pedido",
-			"content": "Tem certeza de que deseja finalizar esse pedido sem carregamento?"
-		}
-	},
-	"editStorage": {
-		"edit": "Editar",
-		"deleteModal": {
-			"header": "Deletar Item do Estoque",
-			"content": "Tem certeza que quer deletar esse item do seu estoque?"
-		}
-	},
-	"loaderOrderInfo": {
-		"clientKey": "Nome/Placa/Box",
-		"clientPlace": "Lugar",
-		"clientVehicle": "Veículo",
-		"products": "Produtos",
-		"begin": "Começar"
-	},
-	"loaderCarrying": {
-		"finish": "Finalizar",
-		"none": "Você não começou a carregar nada ainda",
-		"modal": {
-			"finishCarry": "Finalizar entrega",
-			"areYouSure": "Finalizar entrega?",
-			"itemsNotDelivered": "Os seguintes itens NÃO foram entregues e voltarão ao estoque:"
-		},
-		"modalAccept": {
-			"header": "Confirmar carregamento",
-			"content": "Você quer confirmar este carregamento?"
-		}
-	},
-	"home": {
-		"costPrice": "Preço de Custo (unidade)",
-		"startingTotal": "Total inicial",
-		"sold": "Vendidos",
-		"inStorage": "Em estoque",
-		"netTotal": "Ganho Bruto",
-		"profit": "Lucro",
-		"empty": "Nada no estoque. Adicione produtos para começar.",
-		"deleteStorage": "Zerar Estoque",
-		"dailyBalance": "Balanço do Dia",
-		"totalEntries": "Total Vendas",
-		"totalExpenses": "Total Custos",
-		"totalProfit": "Lucro Total",
-		"details": "Detalhes",
-		"addAdditionalCost": "Adicionar Custo",
-		"noBalanceWhenNoConnection": "Balanço indisponível enquanto estiver sem conexão com o sistema",
-		"modalAccept": {
-			"header": "Finalizar o Dia",
-			"content": "Deseja limpar todo seu estoque do dia?",
-			"headerDelete": "Zerar Estoque",
-			"contentDelete": "Tem certeza de que deseja limpar TODO seu estoque?"
-		}
-	},
-	"addNonExistent": {
-		"addProduct": "Adicionar Produto Não Existente",
-		"addType": "Adicionar Tipo Não Existente",
-		"description": "Nome",
-		"relatedProduct": "Relacionar ao Produto",
-		"add": "Adicionar",
-		"errors": {
-			"description": "Insira um nome válido",
-			"relatedProduct": "Escolha um produto para relacionar o tipo"
-		}
-	},
-	"user": {
-		"logout": "Sair",
-		"loadersTeam": {
-			"title": "Meus Carregadores",
-			"noLoaders": "Você ainda não tem nenhum carregador.",
-			"delete": "Excluir",
-			"modalDelete": {
-				"header": "Confirmar exclusão",
-				"content": "Deseja excluir {0} da sua lista de carregadores?"
-			}
-		},
-		"addLoader": {
-			"title": "Adicionar Carregador",
-			"code": "CÓDIGO:",
-			"instructions": {
-				"header": "Instruções para adicionar",
-				"title": "Instruções",
-				"1": "* Peça para o seu carregador baixar o aplicativo ",
-				"2": "Ceasa Estoque",
-				"3": ".\n",
-				"4": "* Ele deve clicar em \"entrar como carregador\"\n",
-				"5": "* Tudo que ele precisa fazer agora é ler o QR Code, OU digitar o código."
-			}
-		}
-	},
-	"additionalCost": {
-		"description": "Motivo (opcional)",
-		"value": "Valor",
-		"add": "Adicionar",
-		"delete": "Excluir",
-		"errors": {
-			"value": "Insira o valor"
-		},
-		"modalDelete": {
-			"header": "Confirmar exclusão",
-			"content": "Deseja excluir este custo adicional?"
-		}
-	},
-	"optionsLoader": {
-		"logout": "Voltar Para Lista de Equipes"
-	},
-	"errors": {
-		"serverError": "Não foi possível comunicar com o servidor"
-	},
-	"notifications": {
-		"deleteOrder": {
-			"title": "Pedido CANCELADO",
-			"message": "O seguinte pedido foi cancelado e não deve mais ser entregue:"
-		},
-		"editOrder": {
-			"title": "Pedido ALTERADO",
-			"message": "O seguinte pedido foi alterado:"
-		},
-		"finishedOrder": {
-			"title": "Pedido FINALIZADO",
-			"message": "O seguinte pedido foi finalizado pelo vendedor:"
-		},
-		"urgentOrder": {
-			"title": "Pedido URGENTE",
-			"message": "O seguinte pedido é agora URGENTE:"
-		}
-	},
-	"fw": {
-		"recentRegisterPicker": {
-			"recents": "Recentes",
-			"search": "Pesquisar"
-		}
-	}
+    "app": {
+        "ok": "Ok",
+        "no": "Não",
+        "yes": "Sim",
+        "delete": "Excluir",
+        "noConnection": "Sem conexão com o sistema",
+        "noConnectionError": "Essa opção está desabilitada enquanto você estiver sem conexão.",
+        "error": {
+            "unexpected": "Erro",
+            "unexpectedText": "Ocorreu um erro inexperado"
+        }
+    },
+    "loginSelect": {
+        "vendor": "Entrar como vendedor",
+        "loader": "Entrar como carregador",
+        "support": "Novo usuário ou dúvidas,",
+        "wpp": "contate-nos via Whatsapp"
+    },
+    "login": {
+        "login": "Login",
+        "user": "Usuário",
+        "password": "Senha",
+        "rememberMe": "Lembrar meu usuário e senha",
+        "error": "Usuário ou senha incorretos",
+        "errors": {
+            "connection": "Erro de conexão"
+        }
+    },
+    "loaderLogin": {
+        "login": "Login",
+        "createTitle": "Entrar como carregador",
+        "createText": "Escreva seu nome para começar como carregador:",
+        "name": "Nome",
+        "nameRequired": "Insira um nome com pelo menos 3 caracteres",
+        "loginButton": "Entrar"
+    },
+    "loaderEdit": {
+        "title": "Editar Carregador",
+        "name": "Nome",
+        "editButton": "Editar"
+    },
+    "loaderTeams": {
+        "teams": "Equipes",
+        "loggedAs": "Carregador",
+        "edit": "Editar",
+        "logout": "Sair",
+        "none": "Você não está em nenhuma equipe ainda",
+        "registeredTeams": "Equipes registradas:",
+        "read": "Ler Código (QR Code)",
+        "write": "Escrever Código",
+        "readFail": "Falha ao ler o QR Code",
+        "joinFail": "Falha ao entrar na equipe. Verifique se o código está correto.",
+        "joinTeamButton": "Entrar na equipe",
+        "joinTeam": "Registrar-se em uma nova equipe",
+        "insertCode": "Insira o código da equipe"
+    },
+    "menus": {
+        "storage": "Cadastrar",
+        "home": "Visão Geral",
+        "sell": "Vender",
+        "orders": "Pedidos",
+        "user": "Usuário",
+        "editOrder": "Ver Pedido",
+        "editStorage": "Alterar Estoque",
+        "editProductsOrder": "Alterar Produtos do Pedido",
+        "addNonExistent": "Adicionar Novo",
+        "additionalCost": "Custos Adicionais"
+    },
+    "loaderMenus": {
+        "orders": "Pedidos",
+        "options": "Opções",
+        "carrying": "Carregamentos",
+        "loader": "Carregador",
+        "join": "Entrar em equipe"
+    },
+    "storage": {
+        "product": "Produto",
+        "products": "Produtos",
+        "productType": "Tipo (opcional)",
+        "productTypes": "Tipos",
+        "select": "Selecione",
+        "registerNotListedProduct": "Cadastrar produto não listado...",
+        "registerNotListedProductType": "Cadastrar tipo não listado...",
+        "additionalDescription": "Descrição adicional (opcional)",
+        "amount": "Quantidade",
+        "costPrice": "Preço de Custo (unidade)",
+        "costPriceShort": "Preço Custo",
+        "costPriceMerged": "Média Preço Custo",
+        "add": "Adicionar",
+        "errors": {
+            "noProduct": "Selecione o produto",
+            "cantEdit": "Você não pode editar o estoque enquanto faz uma venda."
+        }
+    },
+    "sell": {
+        "restart": "Recomeçar venda",
+        "total": "Total:",
+        "generateLoad": "Gerar carregamento",
+        "released": "Carregamento liberado",
+        "unitPrice": "Un.",
+        "amount": "Qtde.",
+        "inStock": "Em estoque",
+        "emptyStorage": "O estoque está vazio",
+        "noItemsAdded": "Adicione um produto para começar uma venda.",
+        "sellProduct": "Vender produto",
+        "sellAvailable": "Disponível",
+        "sellAmount": "Quantidade venda",
+        "costPrice": "Preço de Custo (unidade)",
+        "averageCostPrice": "Preço de Custo Médio (un)",
+        "sellUnitPrice": "Preço (unidade)",
+        "sellTotal": "Total",
+        "clientKey": "Nome/Placa/Box",
+        "clientPlace": "Lugar (opcional)",
+        "clientVehicle": "Veículo (opcional)",
+        "exceededWarning": "Excede estoque",
+        "add": "Adicionar",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "continue": "Continuar",
+        "addSell": "Adicionar Venda",
+        "added": "Venda adicionada!",
+        "addedOffline": "A venda será adicionada quando voltar a conexão",
+        "modal": {
+            "finishSell": "Finalizar venda",
+            "areYouSure": "Você quer confirmar a venda?",
+            "dontHaveInStorage": "Falta no estoque:"
+        },
+        "modalDelete": {
+            "header": "Confirmar exclusão",
+            "content": "Quer excluir esse item?"
+        },
+        "modalMissing": {
+            "header": "Itens faltando no estoque",
+            "missingAmount": "Quantidade faltando:"
+        },
+        "errors": {
+            "priceRequired": "Digite o preço",
+            "noItems": "Adicione um produto antes de continuar",
+            "insertClient": "Digite informação do cliente"
+        }
+    },
+    "orders": {
+        "blocked": "NÃO LIBERADO",
+        "doneAt": "Concluída às",
+        "done": "Concluída",
+        "urgent": "URGENTE",
+        "none": "Ainda não há nenhum pedido cadastrado.",
+        "notSent": "Não enviado",
+        "errors": {
+            "cantEditAnymore": "Você não pode mais editar esse pedido"
+        },
+        "noOrdersYet": "Sem pedidos no momento."
+    },
+    "editOrder": {
+        "delete": "Excluir Pedido",
+        "editProducts": "Alterar lista de produtos",
+        "seeProducts": "Ver lista de produtos",
+        "released": "Carregamento liberado",
+        "urgent": "Definir como urgente",
+        "loader": "Sendo carregado por",
+        "done": "terminou essa entrega em",
+        "doneNoCarrier": "Essa venda não gerou carregamento e foi feita às",
+        "doneOffline": "Venda concluída",
+        "edit": "Salvar",
+        "finish": "Salvar e Finalizar",
+        "deleteModal": {
+            "header": "Deletar Pedido",
+            "content": "Tem certeza que quer deletar esse pedido?"
+        },
+        "editModal": {
+            "header": "Editar Pedido",
+            "content": "Esse pedido já foi liberado e pode estar sendo carregado. Editar mesmo assim?"
+        },
+        "confirmBack": {
+            "header": "Sair sem salvar",
+            "content": "Tem certeza de que deseja SAIR SEM SALVAR a alteração? Toda alteração feita será perdida!"
+        },
+        "finishOrder": {
+            "header": "Finalizar pedido",
+            "content": "Tem certeza de que deseja finalizar esse pedido sem carregamento?"
+        }
+    },
+    "editStorage": {
+        "edit": "Editar",
+        "deleteModal": {
+            "header": "Deletar Item do Estoque",
+            "content": "Tem certeza que quer deletar esse item do seu estoque?"
+        }
+    },
+    "loaderOrderInfo": {
+        "clientKey": "Nome/Placa/Box",
+        "clientPlace": "Lugar",
+        "clientVehicle": "Veículo",
+        "products": "Produtos",
+        "begin": "Começar"
+    },
+    "loaderCarrying": {
+        "exceeds": "Produto excede o estoque",
+        "finish": "Finalizar",
+        "none": "Você não começou a carregar nada ainda",
+        "modal": {
+            "finishCarry": "Finalizar entrega",
+            "areYouSure": "Finalizar entrega?",
+            "itemsNotDelivered": "Os seguintes itens NÃO foram entregues e voltarão ao estoque:"
+        },
+        "modalAccept": {
+            "header": "Confirmar carregamento",
+            "content": "Você quer confirmar este carregamento?"
+        }
+    },
+    "home": {
+        "costPrice": "Preço de Custo (unidade)",
+        "startingTotal": "Total inicial",
+        "sold": "Vendidos",
+        "inStorage": "Em estoque",
+        "netTotal": "Ganho Bruto",
+        "profit": "Lucro",
+        "empty": "Nada no estoque. Adicione produtos para começar.",
+        "deleteStorage": "Zerar Estoque",
+        "dailyBalance": "Balanço do Dia",
+        "totalEntries": "Total Vendas",
+        "totalExpenses": "Total Custos",
+        "totalProfit": "Lucro Total",
+        "details": "Detalhes",
+        "addAdditionalCost": "Adicionar Custo",
+        "noBalanceWhenNoConnection": "Balanço indisponível enquanto estiver sem conexão com o sistema",
+        "modalAccept": {
+            "header": "Finalizar o Dia",
+            "content": "Deseja limpar todo seu estoque do dia?",
+            "headerDelete": "Zerar Estoque",
+            "contentDelete": "Tem certeza de que deseja limpar TODO seu estoque?"
+        }
+    },
+    "addNonExistent": {
+        "addProduct": "Adicionar Produto Não Existente",
+        "addType": "Adicionar Tipo Não Existente",
+        "description": "Nome",
+        "relatedProduct": "Relacionar ao Produto",
+        "add": "Adicionar",
+        "errors": {
+            "description": "Insira um nome válido",
+            "relatedProduct": "Escolha um produto para relacionar o tipo"
+        }
+    },
+    "user": {
+        "logout": "Sair",
+        "loadersTeam": {
+            "title": "Meus Carregadores",
+            "noLoaders": "Você ainda não tem nenhum carregador.",
+            "delete": "Excluir",
+            "modalDelete": {
+                "header": "Confirmar exclusão",
+                "content": "Deseja excluir {0} da sua lista de carregadores?"
+            }
+        },
+        "addLoader": {
+            "title": "Adicionar Carregador",
+            "code": "CÓDIGO:",
+            "instructions": {
+                "header": "Instruções para adicionar",
+                "title": "Instruções",
+                "1": "* Peça para o seu carregador baixar o aplicativo ",
+                "2": "Ceasa Estoque",
+                "3": ".\n",
+                "4": "* Ele deve clicar em \"entrar como carregador\"\n",
+                "5": "* Tudo que ele precisa fazer agora é ler o QR Code, OU digitar o código."
+            }
+        }
+    },
+    "additionalCost": {
+        "description": "Motivo (opcional)",
+        "value": "Valor",
+        "add": "Adicionar",
+        "delete": "Excluir",
+        "errors": {
+            "value": "Insira o valor"
+        },
+        "modalDelete": {
+            "header": "Confirmar exclusão",
+            "content": "Deseja excluir este custo adicional?"
+        }
+    },
+    "optionsLoader": {
+        "logout": "Voltar Para Lista de Equipes"
+    },
+    "errors": {
+        "serverError": "Não foi possível comunicar com o servidor"
+    },
+    "notifications": {
+        "deleteOrder": {
+            "title": "Pedido CANCELADO",
+            "message": "O seguinte pedido foi cancelado e não deve mais ser entregue:"
+        },
+        "editOrder": {
+            "title": "Pedido ALTERADO",
+            "message": "O seguinte pedido foi alterado:"
+        },
+        "finishedOrder": {
+            "title": "Pedido FINALIZADO",
+            "message": "O seguinte pedido foi finalizado pelo vendedor:"
+        },
+        "urgentOrder": {
+            "title": "Pedido URGENTE",
+            "message": "O seguinte pedido é agora URGENTE:"
+        }
+    },
+    "fw": {
+        "recentRegisterPicker": {
+            "recents": "Recentes",
+            "search": "Pesquisar"
+        }
+    }
 }

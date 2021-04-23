@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import { SvgXml } from 'react-native-svg'
 import { translate } from 'src/i18n/translate'
 import { withNavigation } from 'react-navigation'
-import { TouchableOpacity, View } from 'react-native'
 import { loginType } from 'src/constants/login-type'
+import { TouchableOpacity, View } from 'react-native'
+import { heightPercentageToDP } from 'src/utils/screen'
 import { Creators as UserCreators } from 'src/ducks/user'
 import styles from './styles'
 import config from 'src/config'
@@ -23,107 +24,113 @@ import CheckBox from '@react-native-community/checkbox'
 import StorageService from 'src/services/storageService'
 
 const Login = ({ login, navigation, userId, accessToken, loading }) => {
-	const [userText, setUserText] = useState('')
-	const [passwordText, setPasswordText] = useState('')
-	const [rememberMeCheck, setRememberMeCheck] = useState(false)
+    const [userText, setUserText] = useState('')
+    const [passwordText, setPasswordText] = useState('')
+    const [rememberMeCheck, setRememberMeCheck] = useState(false)
 
-	const initialize = async () => {
-		const rememberMe = await StorageService.rememberMe.get()
-		if (rememberMe) {
-			setRememberMeCheck(true)
-			setUserText(rememberMe.userText)
-			setPasswordText(rememberMe.passwordText)
-		}
-	}
+    const initialize = async () => {
+        const rememberMe = await StorageService.rememberMe.get()
+        if (rememberMe) {
+            setRememberMeCheck(true)
+            setUserText(rememberMe.userText)
+            setPasswordText(rememberMe.passwordText)
+        }
+    }
 
-	useEffect(() => {
-		initialize()
-	}, [])
+    useEffect(() => {
+        initialize()
+    }, [])
 
-	const handleLogin = async () => {
-		const success = await login(userText, passwordText)
-		if (success) {
-			await StorageService.loginType.set(loginType.vendor)
+    const handleLogin = async () => {
+        const success = await login(userText, passwordText)
+        if (success) {
+            await StorageService.loginType.set(loginType.vendor)
 
-			if (rememberMeCheck) {
-				await StorageService.rememberMe.set({ userText, passwordText })
-			} else {
-				await StorageService.rememberMe.remove()
-			}
+            if (rememberMeCheck) {
+                await StorageService.rememberMe.set({ userText, passwordText })
+            } else {
+                await StorageService.rememberMe.remove()
+            }
 
-			navigation.navigate(stacks.menu)
-		} else {
-			ToastService.show({ message: translate('login.error') })
-		}
-	}
+            navigation.navigate(stacks.menu)
+        } else {
+            ToastService.show({ message: translate('login.error') })
+        }
+    }
 
-	const handlePress = async () => {
-		navigation.goBack(null)
-	}
+    const handlePress = async () => {
+        navigation.goBack(null)
+    }
 
-	return (
-		<>
-			<ScreenBase>
-				<TouchableOpacity
-					activeOpacity={0.3}
-					style={styles.backButton}
-					onPress={handlePress}>
-					<SvgXml
-						xml={svgBack}
-						stroke={colors.primary}
-						strokeWidth="5"
-						strokeLinejoin={'round'}
-						strokeLinecap={'round'}
-					/>
-				</TouchableOpacity>
-				<SvgXml style={styles.logo} xml={svgLogo} />
-				<TextInput
-					maxLength={50}
-					value={userText}
-					setValue={setUserText}
-					label={translate('login.user')}
-				/>
-				<Space />
-				<TextInput
-					password
-					maxLength={50}
-					value={passwordText}
-					setValue={setPasswordText}
-					label={translate('login.password')}
-				/>
-				<View style={styles.row}>
-					<KText text={translate('login.rememberMe')} />
-					<CheckBox
-						value={rememberMeCheck}
-						style={styles.checkbox}
-						onValueChange={checked => setRememberMeCheck(checked)}
-					/>
-				</View>
-				<Space size2 />
-				{loading ? (
-					<Loader style={styles.loader} />
-				) : (
-					<Button onPress={handleLogin} label={translate('login.login')} />
-				)}
-			</ScreenBase>
-			<KText style={styles.version} text={`Versão: ${config.VERSION}`} />
-		</>
-	)
+    return (
+        <>
+            <ScreenBase style={{ minHeight: heightPercentageToDP(115) }}>
+                <TouchableOpacity
+                    activeOpacity={0.3}
+                    style={styles.backButton}
+                    onPress={handlePress}>
+                    <SvgXml
+                        xml={svgBack}
+                        stroke={colors.primary}
+                        strokeWidth="5"
+                        strokeLinejoin={'round'}
+                        strokeLinecap={'round'}
+                    />
+                </TouchableOpacity>
+                <SvgXml style={styles.logo} xml={svgLogo} />
+                <TextInput
+                    maxLength={50}
+                    value={userText}
+                    setValue={setUserText}
+                    label={translate('login.user')}
+                />
+                <Space />
+                <TextInput
+                    password
+                    maxLength={50}
+                    value={passwordText}
+                    setValue={setPasswordText}
+                    label={translate('login.password')}
+                />
+                <View style={styles.row}>
+                    <KText text={translate('login.rememberMe')} />
+                    <CheckBox
+                        value={rememberMeCheck}
+                        style={styles.checkbox}
+                        onValueChange={checked => setRememberMeCheck(checked)}
+                    />
+                </View>
+                <Space size2 />
+                {loading ? (
+                    <Loader style={styles.loader} />
+                ) : (
+                    <Button
+                        onPress={handleLogin}
+                        label={translate('login.login')}
+                    />
+                )}
+                <KText
+                    style={styles.version}
+                    text={`Versão: ${config.VERSION}`}
+                />
+            </ScreenBase>
+        </>
+    )
 }
 
 const mapStateToProps = ({ user }) => ({
-	userId: user.id,
-	loading: user.loading,
-	accessToken: user.accessToken,
+    userId: user.id,
+    loading: user.loading,
+    accessToken: user.accessToken,
 })
 
 const mapDispatchToProps = {
-	login: UserCreators.login,
+    login: UserCreators.login,
 }
 
 export default withNavigation(
-	connect(
-		mapStateToProps,
-		mapDispatchToProps,
-	)(Login),
+    connect(
+        mapStateToProps,
+        mapDispatchToProps,
+    )(Login),
 )

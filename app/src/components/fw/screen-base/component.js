@@ -6,64 +6,66 @@ import CloseKeyboardView from './close-keyboard-view'
 import UnexpectedError from 'src/components/ceasa/unexpected-error'
 
 const ScreenBaseComponent = ({
-	style,
-	children,
-	useScroll,
-	heightStyle,
-	useKeyboardClose,
-	...props
+    style,
+    children,
+    useScroll,
+    heightStyle,
+    useKeyboardClose,
+    ...props
 }) => (
-	<>
-		<UnexpectedError />
-		{useKeyboardClose ? (
-			<CloseKeyboardView style={heightStyle}>
-				{useScroll ? (
-					<ScrollView style={styles.scrollView}>
-						<View style={[styles.containerView, style]} {...props}>
-							{children}
-						</View>
-					</ScrollView>
-				) : (
-					<View style={[styles.containerView, style]} {...props}>
-						{children}
-					</View>
-				)}
-			</CloseKeyboardView>
-		) : (
-			<View style={heightStyle}>
-				{useScroll ? (
-					<>
-						<ScrollView style={styles.scrollView}>
-							<View style={[styles.containerView, style]} {...props}>
-								{children}
-							</View>
-						</ScrollView>
-						<NoInternetFlag />
-					</>
-				) : (
-					<>
-						<View style={[styles.containerView, style]} {...props}>
-							{children}
-						</View>
-						<NoInternetFlag />
-					</>
-				)}
-			</View>
-		)}
-	</>
+    <>
+        <UnexpectedError />
+        {useKeyboardClose ? (
+            <CloseKeyboardView style={heightStyle}>
+                {useScroll ? (
+                    <ScrollView style={styles.scrollView}>
+                        <View style={[styles.containerView, style]} {...props}>
+                            {children}
+                        </View>
+                    </ScrollView>
+                ) : (
+                    <View style={[styles.containerView, style]} {...props}>
+                        {children}
+                    </View>
+                )}
+            </CloseKeyboardView>
+        ) : (
+            <View style={heightStyle}>
+                {useScroll ? (
+                    <>
+                        <ScrollView style={styles.scrollView}>
+                            <View
+                                style={[styles.containerView, style]}
+                                {...props}>
+                                {children}
+                            </View>
+                        </ScrollView>
+                        <NoInternetFlag />
+                    </>
+                ) : (
+                    <>
+                        <View style={[styles.containerView, style]} {...props}>
+                            {children}
+                        </View>
+                        <NoInternetFlag />
+                    </>
+                )}
+            </View>
+        )}
+    </>
 )
 
 const styles = StyleSheet.create({
-	scrollView: {
-		backgroundColor: 'white',
-		flex: 1,
-	},
-	containerView: {
-		minHeight: getWorkableArea(),
-		paddingHorizontal: wp(25),
-		paddingTop: hp(13),
-		width: widthPercentageToDP(100),
-	},
+    scrollView: {
+        backgroundColor: 'white',
+        flex: 1,
+    },
+    containerView: {
+        minHeight: getWorkableArea(),
+        paddingHorizontal: wp(25),
+        paddingTop: hp(13),
+        width: widthPercentageToDP(100),
+    },
 })
 
 export default ScreenBaseComponent
