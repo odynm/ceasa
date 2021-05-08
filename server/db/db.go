@@ -35,8 +35,10 @@ func InitDb() {
 	// 	host, port, user, password, dbname)
 	// sqlDb, err := sql.Open("postgres", psqlInfo)
 
+	// PROD
+	//databaseUrl := "postgres://bzadttumetjabu:1246ba9bd042a0a2c7795b476b7e8a7e700cb05317ee4e079a542bb3cba8ed3a@ec2-18-211-97-89.compute-1.amazonaws.com:5432/da9pq0vsc5gjuh"
+
 	// Take from OS vars
-	// databaseUrl := "postgres://bzadttumetjabu:1246ba9bd042a0a2c7795b476b7e8a7e700cb05317ee4e079a542bb3cba8ed3a@ec2-18-211-97-89.compute-1.amazonaws.com:5432/da9pq0vsc5gjuh"
 	databaseUrl := os.Getenv("DATABASE_URL")
 	sqlDb, err := sql.Open("postgres", databaseUrl)
 

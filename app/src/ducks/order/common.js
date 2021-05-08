@@ -2,43 +2,43 @@ import orderStatus from 'src/enums/order'
 import HttpService from 'src/services/httpService'
 
 function common(types, duck) {
-    this.setClient = client => ({
-        payload: { client },
+    this.setClient = (client) => ({
+        payload: {client},
         type: types.SET_CLIENT,
     })
 
-    this.setStatus = status => ({
-        payload: { status },
+    this.setStatus = (status) => ({
+        payload: {status},
         type: types.SET_STATUS,
     })
 
-    this.setOrderItems = orderItems => ({
-        payload: { orderItems },
+    this.setOrderItems = (orderItems) => ({
+        payload: {orderItems},
         type: types.SET_ORDER_ITEMS,
     })
 
-    this.setClientStep = clientStep => ({
-        payload: { clientStep },
+    this.setClientStep = (clientStep) => ({
+        payload: {clientStep},
         type: types.SET_CLIENT_STEP,
     })
 
-    this.setGenerateLoad = generateLoad => ({
-        payload: { generateLoad },
+    this.setGenerateLoad = (generateLoad) => ({
+        payload: {generateLoad},
         type: types.SET_GENERATE_LOAD,
     })
 
-    this.resetOrder = () => dispatch => {
+    this.resetOrder = () => (dispatch) => {
         dispatch(this.setClientStep(false))
         dispatch(this.setGenerateLoad(true))
         dispatch(this.setReleasedStatus(true))
         dispatch(this.setOrderItems([]))
-        dispatch(this.setClient({ key: '', place: '', vehicle: '' }))
+        dispatch(this.setClient({key: '', place: '', vehicle: ''}))
     }
 
-    this.addOrderItem = orderItem => (dispatch, getState) => {
+    this.addOrderItem = (orderItem) => (dispatch, getState) => {
         if (orderItem === undefined) return
-        const { orderItems } = getState()[duck]
-        const index = orderItems.findIndex(x => x.id === orderItem.id)
+        const {orderItems} = getState()[duck]
+        const index = orderItems.findIndex((x) => x.id === orderItem.id)
         // Edit
         if (index >= 0) {
             orderItems[index] = orderItem
@@ -50,14 +50,14 @@ function common(types, duck) {
         }
     }
 
-    this.removeOrderItem = orderItem => (dispatch, getState) => {
+    this.removeOrderItem = (orderItem) => (dispatch, getState) => {
         if (orderItem === undefined) return
-        const { orderItems } = getState()[duck]
-        const newOrderItems = orderItems.filter(x => x.id !== orderItem.id)
+        const {orderItems} = getState()[duck]
+        const newOrderItems = orderItems.filter((x) => x.id !== orderItem.id)
         dispatch(this.setOrderItems(newOrderItems))
     }
 
-    this.sendOrder = ({ useParam, order } = {}) => async (_, getState) => {
+    this.sendOrder = ({useParam, order} = {}) => async (_, getState) => {
         // Can come from parameter in the case of offline mode
         const source = useParam ? order : getState()[duck]
         const {

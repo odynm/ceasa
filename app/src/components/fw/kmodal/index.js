@@ -1,10 +1,10 @@
 import React from 'react'
-import { View, StyleSheet, TouchableOpacity } from 'react-native'
-import { wp, hp, getWidth, getWorkableArea } from 'src/utils/screen'
+import {View, StyleSheet, TouchableOpacity} from 'react-native'
+import {wp, hp, getWidth, getWorkableArea} from 'src/utils/screen'
 import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
 
-const KModal = ({ children, noClose, onClose, open, size, header, style }) => {
+const KModal = ({children, noClose, onClose, open, size, header, style}) => {
     const containerStyle =
         size > 0
             ? [

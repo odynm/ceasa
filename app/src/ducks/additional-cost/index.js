@@ -8,23 +8,23 @@ const Types = {
     SET_ADDITIONAL_COSTS: prefix + 'SET_ADDITIONAL_COSTS',
 }
 
-const setLoading = loading => ({
-    payload: { loading },
+const setLoading = (loading) => ({
+    payload: {loading},
     type: Types.SET_LOADING,
 })
 
-const setAdditionalCosts = additionalCosts => {
+const setAdditionalCosts = (additionalCosts) => {
     StorageService.offlineAdditionalCosts.set(additionalCosts)
 
     return {
-        payload: { additionalCosts },
+        payload: {additionalCosts},
         type: Types.SET_ADDITIONAL_COSTS,
     }
 }
 
-const addAdditionalCost = (description, costValue) => async dispatch => {
+const addAdditionalCost = (description, costValue) => async (dispatch) => {
     dispatch(setLoading(true))
-    const { success } = await HttpService.post('additional-cost', {
+    const {success} = await HttpService.post('additional-cost', {
         description,
         costValue: Math.round(costValue.value * 100),
     })
@@ -34,14 +34,14 @@ const addAdditionalCost = (description, costValue) => async dispatch => {
 }
 
 const loadAdditionalCosts = () => async (dispatch, getState) => {
-    const { inUse } = getState().offline
+    const {inUse} = getState().offline
 
     if (!inUse) {
         dispatch(setLoading(true))
-        const { data, success } = await HttpService.get('additional-cost')
+        const {data, success} = await HttpService.get('additional-cost')
 
         if (success && data?.length > 0) {
-            const mappedItems = data.map(x => ({
+            const mappedItems = data.map((x) => ({
                 ...x,
                 costValue: MoneyService.toMoney(x.costValue / 100),
                 createdAt: new Date(x.createdAt),
@@ -59,9 +59,9 @@ const loadAdditionalCosts = () => async (dispatch, getState) => {
     }
 }
 
-const deleteAdditionalCost = id => async (dispatch, getState) => {
+const deleteAdditionalCost = (id) => async (dispatch, getState) => {
     dispatch(setLoading(true))
-    const { success } = await HttpService.delete(`additional-cost?id=${id}`)
+    const {success} = await HttpService.delete(`additional-cost?id=${id}`)
     dispatch(setLoading(false))
 
     return success
@@ -73,7 +73,7 @@ const addAdditionalCostOffline = ({
     costValue,
     description,
 }) => async (dispatch, getState) => {
-    const { additionalCosts } = getState().additionalCost
+    const {additionalCosts} = getState().additionalCost
 
     const mappedItems = [
         {
@@ -92,10 +92,10 @@ const deleteAdditionalCostFromList = (id, offlineId) => async (
     dispatch,
     getState,
 ) => {
-    const { additionalCosts } = getState().additionalCost
+    const {additionalCosts} = getState().additionalCost
 
     const mappedItems = additionalCosts.filter(
-        x => x.offlineId !== offlineId && x.id !== id,
+        (x) => x.offlineId !== offlineId && x.id !== id,
     )
 
     dispatch(setAdditionalCosts(mappedItems))
@@ -119,9 +119,9 @@ const initialState = {
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case Types.SET_LOADING:
-            return { ...state, loading: action.payload.loading }
+            return {...state, loading: action.payload.loading}
         case Types.SET_ADDITIONAL_COSTS:
-            return { ...state, additionalCosts: action.payload.additionalCosts }
+            return {...state, additionalCosts: action.payload.additionalCosts}
         default:
             return state
     }

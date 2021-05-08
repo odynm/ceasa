@@ -1,7 +1,7 @@
 // import qs from 'qs'
 // import i18n from 'i18n-js'
-import { Keyboard } from 'react-native'
-import { Creators as UserCreators } from 'src/ducks/user'
+import {Keyboard} from 'react-native'
+import {Creators as UserCreators} from 'src/ducks/user'
 import axios from 'axios'
 import store from 'src/ducks'
 import config from 'src/config'
@@ -9,7 +9,7 @@ import InternetService from 'src/services/internetService'
 // import { Creators as ModalCreators } from '../ducks/modal'
 import * as retryAxios from 'retry-axios'
 import screens from 'src/constants/screens'
-import { Creators as AppCreators } from 'src/ducks/app'
+import {Creators as AppCreators} from 'src/ducks/app'
 
 // NetInfo.addEventListener(state => {
 // 	if (state.type === 'none') {
@@ -22,10 +22,10 @@ import { Creators as AppCreators } from 'src/ducks/app'
 let navigation = {}
 let navigationActions = {}
 
-const requestInterceptor = requestConfig => {
-    const { user } = store.getState().user
-    const { loader } = store.getState().loader
-    const { timezone } = store.getState().app
+const requestInterceptor = (requestConfig) => {
+    const {user} = store.getState().user
+    const {loader} = store.getState().loader
+    const {timezone} = store.getState().app
     if (user.accessToken && user.id) {
         requestConfig.headers.Auth = user.accessToken
         requestConfig.headers.Timezone = timezone
@@ -36,7 +36,7 @@ const requestInterceptor = requestConfig => {
             requestConfig.headers.User = user.id
         }
     } else if (loader.accessToken && loader.id) {
-        const { userId } = store.getState().loader
+        const {userId} = store.getState().loader
         requestConfig.headers.Auth = loader.accessToken
         requestConfig.headers.Loader = loader.id
         requestConfig.headers.User = userId
@@ -46,7 +46,7 @@ const requestInterceptor = requestConfig => {
     return requestConfig
 }
 
-const responseErrorInterceptor = async error => {
+const responseErrorInterceptor = async (error) => {
     const isInternetReachable = await InternetService.isInternetReachable()
     if (!isInternetReachable) {
         Keyboard.dismiss()
@@ -62,7 +62,7 @@ const responseErrorInterceptor = async error => {
             await store.dispatch(UserCreators.logout())
             if (navigation.current) {
                 navigation.current.dispatch(
-                    navigationActions.navigate({ routeName: screens.login }),
+                    navigationActions.navigate({routeName: screens.login}),
                 )
             }
             // TODO refresh token
@@ -88,11 +88,11 @@ const responseErrorInterceptor = async error => {
 const initialize = (navigationRef, navActions) => {
     navigationActions = navActions
     navigation = navigationRef
-    const instance = axios.create({ baseURL: config.API_URL })
-    instance.defaults.raxConfig = { instance }
+    const instance = axios.create({baseURL: config.API_URL})
+    instance.defaults.raxConfig = {instance}
     retryAxios.attach(instance)
     instance.interceptors.request.use(requestInterceptor)
-    instance.interceptors.response.use(response => {
+    instance.interceptors.response.use((response) => {
         store.dispatch(AppCreators.setNoConnection(false))
         return response
     }, responseErrorInterceptor)
@@ -104,7 +104,7 @@ const initialize = (navigationRef, navActions) => {
 
 // I removed paramsSerializer from this, I don't know if something changed
 const get = (url, configs) =>
-    HttpService.instance.get(url, configs).then(({ data }) => data)
+    HttpService.instance.get(url, configs).then(({data}) => data)
 
 // const put = (url, data, configs) =>
 // 	HttpService.instance.put(url, data, configs).then(({ data }) => data)
@@ -115,18 +115,18 @@ const get = (url, configs) =>
 
 const post = (url, data, reject) =>
     HttpService.instance.post(url, data, undefined).then(
-        ({ data: response }) => response,
-        err => {
+        ({data: response}) => response,
+        (err) => {
             if (reject) {
                 reject(err)
-                return { success: false, handled: true }
+                return {success: false, handled: true}
             }
-            return { success: false, handled: false }
+            return {success: false, handled: false}
         },
     )
 
 const deleteRequest = (url, configs) =>
-    HttpService.instance.delete(url, configs).then(({ data }) => data)
+    HttpService.instance.delete(url, configs).then(({data}) => data)
 
 // const isCancel = axios.isCancel
 // const CancelToken = axios.CancelToken

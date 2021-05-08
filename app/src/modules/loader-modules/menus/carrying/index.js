@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
-import { translate } from 'src/i18n/translate'
-import { View, ScrollView } from 'react-native'
-import { withNavigation } from 'react-navigation'
-import { Creators as AppCreators } from 'src/ducks/app'
-import { Creators as OrdersLoaderCreators } from 'src/ducks/orders-loader'
-import { Selectors as OrdersLoaderSelectors } from 'src/ducks/orders-loader'
+import React, {useEffect, useState} from 'react'
+import {connect} from 'react-redux'
+import {translate} from 'src/i18n/translate'
+import {View, ScrollView} from 'react-native'
+import {withNavigation} from 'react-navigation'
+import {Creators as AppCreators} from 'src/ducks/app'
+import {Creators as OrdersLoaderCreators} from 'src/ducks/orders-loader'
+import {Selectors as OrdersLoaderSelectors} from 'src/ducks/orders-loader'
 import styles from './styles'
 import CarryCard from './carry-card'
 import ProductCard from './product-card'
@@ -57,14 +57,16 @@ const Carrying = ({
             orderId: carryingOrder.id,
             products: carryingOrder.products,
         })
-        const item = carryingList.find(x => x)
+        const item = carryingList.find((x) => x)
         setSelectedCarryingOrderId(item ? item.id : 0)
         await loadOrders()
         setAppLoader(false)
     }
 
     const handlePress = () => {
-        if (carryingOrder.products.some(x => x.amountDelivered !== x.amount)) {
+        if (
+            carryingOrder.products.some((x) => x.amountDelivered !== x.amount)
+        ) {
             setModalWarning(true)
         } else {
             setModalAccept(true)
@@ -140,7 +142,7 @@ const Carrying = ({
                 products={
                     carryingOrder && carryingOrder.products
                         ? carryingOrder.products.filter(
-                              x => x.amount !== x.amountDelivered,
+                              (x) => x.amount !== x.amountDelivered,
                           )
                         : []
                 }
@@ -162,7 +164,7 @@ const Carrying = ({
 
 Carrying.navigationOptions = () => ({
     title: translate('loaderMenus.carrying'),
-    headerLeft: props => <ScreenHeader noBack {...props} />,
+    headerLeft: (props) => <ScreenHeader noBack {...props} />,
 })
 
 const mapDispatchToProps = {
@@ -174,7 +176,7 @@ const mapDispatchToProps = {
     setSelectedCarryingOrderId: OrdersLoaderCreators.setSelectedCarryingOrderId,
 }
 
-const mapStateToProps = ({ ordersLoader }) => ({
+const mapStateToProps = ({ordersLoader}) => ({
     carryingList: ordersLoader.carryingList,
     selectCarryingItemId: ordersLoader.selectCarryingItemId,
     selectedCarryingOrderId: ordersLoader.selectedCarryingOrderId,

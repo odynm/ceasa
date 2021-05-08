@@ -1,10 +1,10 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { translate } from 'src/i18n/translate'
-import { View, ScrollView } from 'react-native'
-import { withNavigation } from 'react-navigation'
-import { Creators as OrdersLoaderCreators } from 'src/ducks/orders-loader'
-import { Selectors as OrdersLoaderSelectors } from 'src/ducks/orders-loader'
+import {connect} from 'react-redux'
+import {translate} from 'src/i18n/translate'
+import {View, ScrollView} from 'react-native'
+import {withNavigation} from 'react-navigation'
+import {Creators as OrdersLoaderCreators} from 'src/ducks/orders-loader'
+import {Selectors as OrdersLoaderSelectors} from 'src/ducks/orders-loader'
 import ItemCard from './card'
 import styles from './styles'
 import orderStatus from 'src/enums/order'
@@ -78,7 +78,7 @@ const LoaderOrderInfo = ({
 
 LoaderOrderInfo.navigationOptions = () => ({
     title: translate('menus.editOrder'),
-    headerLeft: props => <ScreenHeader {...props} />,
+    headerLeft: (props) => <ScreenHeader {...props} />,
 })
 
 const mapDispatchToProps = {
@@ -87,7 +87,7 @@ const mapDispatchToProps = {
     loadCarryingOrders: OrdersLoaderCreators.loadCarryingOrders,
 }
 
-const mapStateToProps = ({ ordersLoader }) => ({
+const mapStateToProps = ({ordersLoader}) => ({
     order: OrdersLoaderSelectors.getOrder(ordersLoader),
 })
 

@@ -1,4 +1,4 @@
-import { createSwitchNavigator } from 'react-navigation'
+import {createSwitchNavigator} from 'react-navigation'
 import Main from 'src/modules/main'
 import MenuNavigator from '../menu'
 import TestScreen from 'src/modules/_test'
@@ -9,14 +9,14 @@ import LoginLoaderStack from '../login/login-loader'
 import LoginLoaderTeamStack from '../login/login-loader-team'
 
 const AppNavigator = createSwitchNavigator({
-	Main,
-	LoginVendorStack,
-	LoginLoaderStack,
-	LoginLoaderTeamStack,
-	Introduction,
-	Menu: MenuNavigator,
-	LoaderMenu: LoaderMenuNavigator,
-	TestScreen,
+    Main,
+    LoginVendorStack,
+    LoginLoaderStack,
+    LoginLoaderTeamStack,
+    Introduction,
+    Menu: MenuNavigator,
+    LoaderMenu: LoaderMenuNavigator,
+    TestScreen,
 })
 
 export default AppNavigator

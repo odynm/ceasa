@@ -1,13 +1,13 @@
 import rfdc from 'rfdc'
 import MoneyService from './moneyService'
 
-const mergeSimilarItems = storageItems => {
+const mergeSimilarItems = (storageItems) => {
     // storageItems is sorted, so we can relly only on the
     // ids for proper merge
     const mergedItems = []
 
     // only needed info
-    const getItem = obj => {
+    const getItem = (obj) => {
         return {
             amount: obj.amount,
             storageAmount:
@@ -64,7 +64,7 @@ const mergeSimilarItems = storageItems => {
 }
 
 // Calculate the merged price of merged products on a selling order
-const calculateMergedPrice = items => {
+const calculateMergedPrice = (items) => {
     const totalAmount = items.reduce((prev, cur) => prev + cur.amount, 0)
     const totalPrice = items.reduce(
         (prev, cur) => prev + cur.amount * cur.costPrice.value,
@@ -73,7 +73,7 @@ const calculateMergedPrice = items => {
     return MoneyService.toMoney(totalPrice / totalAmount)
 }
 
-const sortProducts = arr => {
+const sortProducts = (arr) => {
     // TODO missing sort by description too?
     const sortedItems = arr.sort((a, b) => {
         //sort by description?
@@ -92,7 +92,7 @@ const sortProducts = arr => {
 // we will make a merge of similar items (that are 100% equal) on insertion and on update.
 const addAndMergeSimilar = (cur, item) => {
     const equalItemIndex = cur.findIndex(
-        x =>
+        (x) =>
             !x.isMerged &&
             x.costPrice.value === item.costPrice.value &&
             x.productName === item.productName &&
@@ -120,7 +120,7 @@ const addAndMergeSimilar = (cur, item) => {
     // Try merge all but price (isMerged = true)
     else {
         const mergeItemIndex = cur.findIndex(
-            x =>
+            (x) =>
                 x.productName === item.productName &&
                 x.productTypeName === item.productTypeName &&
                 x.description === item.description,
@@ -147,24 +147,24 @@ const addAndMergeSimilar = (cur, item) => {
                 merged: true,
             }
         } else {
-            return { merged: false }
+            return {merged: false}
         }
     }
 }
 
 // Merge similar products on loader list
-const ordersMergeSimilarProducts = orders => {
+const ordersMergeSimilarProducts = (orders) => {
     const mergedOrders = []
     for (let i = 0; i < orders.length; i++) {
         const order = orders[i]
         const products = orders[i].products
         const mergedProducts = mergeSimilarProducts(products)
-        mergedOrders.push({ ...order, products: mergedProducts })
+        mergedOrders.push({...order, products: mergedProducts})
     }
     return mergedOrders
 }
 
-const mergeSimilarProducts = products => {
+const mergeSimilarProducts = (products) => {
     const orderedProducts = sortProducts(products)
     const mergedProducts = mergeSimilarItems(orderedProducts)
     return mergedProducts

@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { translate } from 'src/i18n/translate'
-import { ScrollView, StyleSheet } from 'react-native'
-import { Selectors as StorageSelectors } from 'src/ducks/storage'
+import React, {useState} from 'react'
+import {translate} from 'src/i18n/translate'
+import {ScrollView, StyleSheet} from 'react-native'
+import {Selectors as StorageSelectors} from 'src/ducks/storage'
 import PriceSelect from '../price-select'
 import KText from 'src/components/fw/ktext'
 import ToastService from 'src/services/toastService'
@@ -20,7 +20,7 @@ const ProductListSegment = ({
     const [product, setProduct] = useState({})
     const [modalOpen, setModalOpen] = useState(false)
 
-    const handlePress = item => {
+    const handlePress = (item) => {
         if (cantEdit) {
             ToastService.show({
                 message: translate('orders.errors.cantEditAnymore'),

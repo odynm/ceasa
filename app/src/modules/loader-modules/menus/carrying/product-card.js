@@ -1,12 +1,12 @@
 import React from 'react'
-import { hp, wp } from 'src/utils/screen'
-import { translate } from 'src/i18n/translate'
-import { View, StyleSheet } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import {hp, wp} from 'src/utils/screen'
+import {translate} from 'src/i18n/translate'
+import {View, StyleSheet} from 'react-native'
+import {TouchableOpacity} from 'react-native-gesture-handler'
 import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
 
-const RoundButton = ({ label, onPress, disabled }) => (
+const RoundButton = ({label, onPress, disabled}) => (
     <TouchableOpacity
         disabled={disabled}
         onPress={onPress}

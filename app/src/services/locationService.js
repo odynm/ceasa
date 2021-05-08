@@ -1,10 +1,10 @@
 const initialize = async () => {
-	// TODO
-	// Request position GPS to know where people are using our app
+    // TODO
+    // Request position GPS to know where people are using our app
 }
 
 const LocationService = {
-	initialize,
+    initialize,
 }
 
 export default LocationService

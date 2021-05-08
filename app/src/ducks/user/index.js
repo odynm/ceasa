@@ -1,4 +1,4 @@
-import { translate } from 'src/i18n/translate'
+import {translate} from 'src/i18n/translate'
 import HttpService from 'src/services/httpService'
 import StorageService from 'src/services/storageService'
 import ToastService from 'src/services/toastService'
@@ -11,7 +11,7 @@ const Types = {
     LOAD_FROM_STORAGE: prefix + 'LOAD_FROM_STORAGE',
 }
 
-const login = (user, password) => async dispatch => {
+const login = (user, password) => async (dispatch) => {
     await dispatch(setLoading(true))
     const response = await HttpService.post(
         'login',
@@ -19,8 +19,8 @@ const login = (user, password) => async dispatch => {
             login: user,
             password,
         },
-        _ => {
-            ToastService.show({ message: translate('login.errors.connection') })
+        (_) => {
+            ToastService.show({message: translate('login.errors.connection')})
         },
     )
     if (response.success) {
@@ -31,33 +31,33 @@ const login = (user, password) => async dispatch => {
     return response
 }
 
-const updateToken = authToken => async dispatch => {
+const updateToken = (authToken) => async (dispatch) => {
     // const user = await StorageService.user.get()
     // user.authToken = authToken
     // await dispatch(setToken(response.data))
     // return authToken
 }
 
-const setLoading = loading => ({
-    payload: { loading },
+const setLoading = (loading) => ({
+    payload: {loading},
     type: Types.SET_LOADING,
 })
 
-const setUser = user => async dispatch => {
+const setUser = (user) => async (dispatch) => {
     dispatch({
         type: Types.SET_USER,
-        payload: { user },
+        payload: {user},
     })
     await StorageService.user.set(user)
 }
 
-const loadLoggedUser = () => dispatch => {
-    dispatch({ type: Types.LOAD_FROM_STORAGE })
-    return StorageService.user.get().then(user => dispatch(setUser(user)))
+const loadLoggedUser = () => (dispatch) => {
+    dispatch({type: Types.LOAD_FROM_STORAGE})
+    return StorageService.user.get().then((user) => dispatch(setUser(user)))
 }
 
-const logout = () => async dispatch => {
-    dispatch({ type: Types.LOGOUT })
+const logout = () => async (dispatch) => {
+    dispatch({type: Types.LOGOUT})
     dispatch(setUser(initialState))
 
     await StorageService.user.remove()
@@ -86,7 +86,7 @@ export const Creators = {
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case Types.SET_LOADING:
-            return { ...state, loading: action.payload.loading }
+            return {...state, loading: action.payload.loading}
         case Types.SET_USER:
             return {
                 ...state,

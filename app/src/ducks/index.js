@@ -18,32 +18,32 @@ import additionalCost from './additional-cost'
 
 import thunk from 'redux-thunk'
 import logger from 'redux-logger'
-import { createStore, combineReducers, applyMiddleware } from 'redux'
+import {createStore, combineReducers, applyMiddleware} from 'redux'
 
 const reducers = combineReducers({
-	app,
-	user,
-	home,
-	team,
-	order,
-	terms,
-	client,
-	loader,
-	offline,
-	storage,
-	products,
-	editOrder,
-	editStorage,
-	ordersVendor,
-	ordersLoader,
-	notifications,
-	additionalCost,
+    app,
+    user,
+    home,
+    team,
+    order,
+    terms,
+    client,
+    loader,
+    offline,
+    storage,
+    products,
+    editOrder,
+    editStorage,
+    ordersVendor,
+    ordersLoader,
+    notifications,
+    additionalCost,
 })
 
 const middlewares = [thunk]
 
 if (__DEV__) {
-	middlewares.push(logger)
+    middlewares.push(logger)
 }
 
 const store = createStore(reducers, applyMiddleware(...middlewares))

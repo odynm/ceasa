@@ -9,27 +9,27 @@ const Types = {
     SET_OVERVIEW: prefix + 'SET_OVERVIEW',
 }
 
-const setLoading = loading => ({
-    payload: { loading },
+const setLoading = (loading) => ({
+    payload: {loading},
     type: Types.SET_LOADING,
 })
 
-const setOverview = overview => ({
-    payload: { overview },
+const setOverview = (overview) => ({
+    payload: {overview},
     type: Types.SET_OVERVIEW,
 })
 
-const setBalance = balance => ({
-    payload: { balance },
+const setBalance = (balance) => ({
+    payload: {balance},
     type: Types.SET_BALANCE,
 })
 
 const loadHome = () => async (dispatch, getStore) => {
-    const { data, success } = await HttpService.get('home')
+    const {data, success} = await HttpService.get('home')
     if (success && data?.list?.length > 0) {
         dispatch(setBalance(data.balance))
 
-        const mappedItems = data.list.map(x => ({
+        const mappedItems = data.list.map((x) => ({
             ...x,
             costPrice: MoneyService.toMoney(x.costPrice / 100),
             totalEarned: MoneyService.toMoney(x.totalEarned / 100),
@@ -53,9 +53,9 @@ const loadHome = () => async (dispatch, getStore) => {
     }
 }
 
-const resetStorage = () => async dispatch => {
+const resetStorage = () => async (dispatch) => {
     setLoading(true)
-    const { success } = await HttpService.get('storage/reset')
+    const {success} = await HttpService.get('storage/reset')
     if (success) {
         await dispatch(loadHome())
     }
@@ -76,11 +76,11 @@ export const Creators = {
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case Types.SET_LOADING:
-            return { ...state, loading: action.payload.loading }
+            return {...state, loading: action.payload.loading}
         case Types.SET_BALANCE:
-            return { ...state, balance: action.payload.balance }
+            return {...state, balance: action.payload.balance}
         case Types.SET_OVERVIEW:
-            return { ...state, overview: action.payload.overview }
+            return {...state, overview: action.payload.overview}
         default:
             return state
     }

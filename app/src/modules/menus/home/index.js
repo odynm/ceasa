@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
-import { translate } from 'src/i18n/translate'
-import { ScrollView, View } from 'react-native'
-import { withNavigation } from 'react-navigation'
-import { Creators as HomeCreators } from 'src/ducks/home'
+import React, {useEffect, useState} from 'react'
+import {connect} from 'react-redux'
+import {translate} from 'src/i18n/translate'
+import {ScrollView, View} from 'react-native'
+import {withNavigation} from 'react-navigation'
+import {Creators as HomeCreators} from 'src/ducks/home'
 import styles from './styles'
 import KText from 'src/components/fw/ktext'
 import ItemCardHome from './item-card-home'
@@ -144,7 +144,7 @@ const Home = ({
                                 />
                                 <ScrollView style={styles.scrollView}>
                                     {overview && overview.length > 0 ? (
-                                        overview.map(item => (
+                                        overview.map((item) => (
                                             <View key={item.id}>
                                                 <ItemCardHome
                                                     sold={item.sold}
@@ -215,7 +215,7 @@ const Home = ({
 
 Home.navigationOptions = () => ({
     title: translate('menus.home'),
-    headerLeft: props => <ScreenHeader noBack {...props} />,
+    headerLeft: (props) => <ScreenHeader noBack {...props} />,
 })
 
 const mapDispatchToProps = {
@@ -223,7 +223,7 @@ const mapDispatchToProps = {
     resetStorage: HomeCreators.resetStorage,
 }
 
-const mapStateToProps = ({ app, home }) => ({
+const mapStateToProps = ({app, home}) => ({
     loading: home.loading,
     balance: home.balance,
     overview: home.overview,

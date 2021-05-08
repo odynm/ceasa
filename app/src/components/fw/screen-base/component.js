@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ScrollView, StyleSheet } from 'react-native'
-import { wp, hp, widthPercentageToDP, getWorkableArea } from 'src/utils/screen'
+import {View, ScrollView, StyleSheet} from 'react-native'
+import {wp, hp, widthPercentageToDP, getWorkableArea} from 'src/utils/screen'
 import NoInternetFlag from './no-internet-flag'
 import CloseKeyboardView from './close-keyboard-view'
 import UnexpectedError from 'src/components/ceasa/unexpected-error'

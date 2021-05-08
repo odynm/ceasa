@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage'
 
-const setItem = key => async item => {
+const setItem = (key) => async (item) => {
     try {
         if (item) {
             await AsyncStorage.setItem(key, JSON.stringify(item))
@@ -12,7 +12,7 @@ const setItem = key => async item => {
     }
 }
 
-const getItem = key => async defaultValue => {
+const getItem = (key) => async (defaultValue) => {
     try {
         const item = await AsyncStorage.getItem(key)
         if (item) {
@@ -27,7 +27,7 @@ const getItem = key => async defaultValue => {
     }
 }
 
-const removeItem = key => async () => {
+const removeItem = (key) => async () => {
     try {
         await AsyncStorage.removeItem(key)
     } catch (error) {

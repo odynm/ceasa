@@ -1,17 +1,17 @@
 let subs = []
 
-const subscribeHide = func => {
-	subs = subs.filter(x => x)
-	subs.push(func)
+const subscribeHide = (func) => {
+    subs = subs.filter((x) => x)
+    subs.push(func)
 }
 
 const keyboardHide = () => {
-	subs.forEach(f => f())
+    subs.forEach((f) => f())
 }
 
 const KeyboardService = {
-	keyboardHide,
-	subscribeHide,
+    keyboardHide,
+    subscribeHide,
 }
 
 export default KeyboardService

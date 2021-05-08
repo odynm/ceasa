@@ -1,11 +1,11 @@
 import React from 'react'
-import { hp, wp } from 'src/utils/screen'
-import { translate } from 'src/i18n/translate'
-import { View, StyleSheet } from 'react-native'
+import {hp, wp} from 'src/utils/screen'
+import {translate} from 'src/i18n/translate'
+import {View, StyleSheet} from 'react-native'
 import colors from 'src/constants/colors'
 import KText from 'src/components/fw/ktext'
 
-const ItemCard = ({ amount, exceeded, product, productType, description }) => {
+const ItemCard = ({amount, exceeded, product, productType, description}) => {
     return (
         <View style={styles.container}>
             <View style={styles.row}>

@@ -19,43 +19,43 @@ const Types = {
 
 const common = new commonObj(Types, 'editOrder')
 
-const setIsEditing = isEditing => ({
-    payload: { isEditing },
+const setIsEditing = (isEditing) => ({
+    payload: {isEditing},
     type: Types.SET_IS_EDITING,
 })
 
-const setUrgent = urgent => ({
-    payload: { urgent },
+const setUrgent = (urgent) => ({
+    payload: {urgent},
     type: Types.SET_URGENT,
 })
 
-const setOrder = order => ({
-    payload: { order },
+const setOrder = (order) => ({
+    payload: {order},
     type: Types.SET_ORDER,
 })
 
-const setConfirmBack = confirmBack => ({
-    payload: { confirmBack },
+const setConfirmBack = (confirmBack) => ({
+    payload: {confirmBack},
     type: Types.SET_CONFIRM_BACK,
 })
 
-const setConfirmDelete = confirmDelete => ({
-    payload: { confirmDelete },
+const setConfirmDelete = (confirmDelete) => ({
+    payload: {confirmDelete},
     type: Types.SET_CONFIRM_DELETE,
 })
 
-const setConfirmFinish = confirmFinish => ({
-    payload: { confirmFinish },
+const setConfirmFinish = (confirmFinish) => ({
+    payload: {confirmFinish},
     type: Types.SET_CONFIRM_FINISH,
 })
 
-const setProductListIsDirty = productListIsDirty => ({
-    payload: { productListIsDirty },
+const setProductListIsDirty = (productListIsDirty) => ({
+    payload: {productListIsDirty},
     type: Types.SET_PRODUCT_LIST_IS_DIRTY,
 })
 
-const deleteOrder = orderId => async () => {
-    const { success } = await HttpService.delete(`order?id=${orderId}`)
+const deleteOrder = (orderId) => async () => {
+    const {success} = await HttpService.delete(`order?id=${orderId}`)
 }
 
 const initialState = {
@@ -72,7 +72,7 @@ const initialState = {
     confirmDelete: false,
     confirmFinish: false,
     productListIsDirty: false,
-    client: { key: '', place: '', vehicle: '' },
+    client: {key: '', place: '', vehicle: ''},
     loader: '',
     completedAt: '',
     createdAt: '',

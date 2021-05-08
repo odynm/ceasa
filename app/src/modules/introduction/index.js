@@ -1,12 +1,12 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import {View, Text} from 'react-native'
 
 const Introduction = () => {
-	return (
-		<View>
-			<Text>Intro</Text>
-		</View>
-	)
+    return (
+        <View>
+            <Text>Intro</Text>
+        </View>
+    )
 }
 
 export default Introduction

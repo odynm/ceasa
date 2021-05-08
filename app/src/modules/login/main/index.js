@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
-import { SvgXml } from 'react-native-svg'
-import { translate } from 'src/i18n/translate'
-import { withNavigation } from 'react-navigation'
-import { loginType } from 'src/constants/login-type'
-import { TouchableOpacity, View } from 'react-native'
-import { heightPercentageToDP } from 'src/utils/screen'
-import { Creators as UserCreators } from 'src/ducks/user'
+import React, {useEffect, useState} from 'react'
+import {connect} from 'react-redux'
+import {SvgXml} from 'react-native-svg'
+import {translate} from 'src/i18n/translate'
+import {withNavigation} from 'react-navigation'
+import {loginType} from 'src/constants/login-type'
+import {TouchableOpacity, View} from 'react-native'
+import {heightPercentageToDP} from 'src/utils/screen'
+import {Creators as UserCreators} from 'src/ducks/user'
 import styles from './styles'
 import config from 'src/config'
 import colors from 'src/constants/colors'
@@ -23,7 +23,7 @@ import ScreenBase from 'src/components/fw/screen-base'
 import CheckBox from '@react-native-community/checkbox'
 import StorageService from 'src/services/storageService'
 
-const Login = ({ login, navigation, userId, accessToken, loading }) => {
+const Login = ({login, navigation, userId, accessToken, loading}) => {
     const [userText, setUserText] = useState('')
     const [passwordText, setPasswordText] = useState('')
     const [rememberMeCheck, setRememberMeCheck] = useState(false)
@@ -42,13 +42,13 @@ const Login = ({ login, navigation, userId, accessToken, loading }) => {
     }, [])
 
     const handleLogin = async () => {
-        const { success, handled } = await login(userText, passwordText)
+        const {success, handled} = await login(userText, passwordText)
 
         if (success) {
             await StorageService.loginType.set(loginType.vendor)
 
             if (rememberMeCheck) {
-                await StorageService.rememberMe.set({ userText, passwordText })
+                await StorageService.rememberMe.set({userText, passwordText})
             } else {
                 await StorageService.rememberMe.remove()
             }
@@ -56,7 +56,7 @@ const Login = ({ login, navigation, userId, accessToken, loading }) => {
             navigation.navigate(stacks.menu)
         } else {
             if (!handled) {
-                ToastService.show({ message: translate('login.error') })
+                ToastService.show({message: translate('login.error')})
             }
         }
     }
@@ -67,7 +67,7 @@ const Login = ({ login, navigation, userId, accessToken, loading }) => {
 
     return (
         <>
-            <ScreenBase style={{ minHeight: heightPercentageToDP(115) }}>
+            <ScreenBase style={{minHeight: heightPercentageToDP(115)}}>
                 <TouchableOpacity
                     activeOpacity={0.3}
                     style={styles.backButton}
@@ -100,7 +100,7 @@ const Login = ({ login, navigation, userId, accessToken, loading }) => {
                     <CheckBox
                         value={rememberMeCheck}
                         style={styles.checkbox}
-                        onValueChange={checked => setRememberMeCheck(checked)}
+                        onValueChange={(checked) => setRememberMeCheck(checked)}
                     />
                 </View>
                 <Space size2 />
@@ -121,7 +121,7 @@ const Login = ({ login, navigation, userId, accessToken, loading }) => {
     )
 }
 
-const mapStateToProps = ({ user }) => ({
+const mapStateToProps = ({user}) => ({
     userId: user.id,
     loading: user.loading,
     accessToken: user.accessToken,
