@@ -55,8 +55,16 @@ const start = () => {
 
     messaging().onMessage(async (remoteMessage) => {
         console.warn('Foreground!', remoteMessage)
-        Vibration.vibrate()
+
         const data = fixObject(remoteMessage)?.data?.custom?.a
+
+        // Add notifications will not have effect on foreground
+        if (data?.type === 'add') {
+            return
+        }
+
+        Vibration.vibrate()
+
         switch (data?.type) {
             case 'edit':
                 store.dispatch(

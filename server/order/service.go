@@ -57,15 +57,8 @@ func Add(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 		goto Error
 	}
 
-	for _, device := range device.DbGetAllDevicesFromUserId(userId) {
-		notification.SendNotification(
-			device,
-			"NOVO pedido cadastrado",
-			"Um novo pedido está na fila",
-			NotificationData{
-				Type: "add",
-			},
-		)
+	if orderDto.Status == S_Released && orderDto.GenerateLoad {
+		notifyAllLoaders(userId)
 	}
 
 	return orderId
@@ -212,7 +205,9 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 		}
 	}
 
-	if prevOrderStatus == S_Carrying {
+	if prevOrderStatus == S_Blocked && orderDto.Status == S_Released {
+		notifyAllLoaders(userId)
+	} else if prevOrderStatus == S_Carrying {
 		relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
 		device := device.DbGetDeviceHashFromLoaderId(curLoaderId)
 
@@ -526,4 +521,17 @@ func createCurrentDbOrderItems(dbStoredProducts []OrderProductForEdit) []Current
 	)
 
 	return currentDbOrderItems
+}
+
+func notifyAllLoaders(userId int) {
+	for _, device := range device.DbGetAllDevicesFromUserId(userId) {
+		notification.SendNotification(
+			device,
+			"NOVO pedido cadastrado",
+			"Um novo pedido está na fila",
+			NotificationData{
+				Type: "add",
+			},
+		)
+	}
 }

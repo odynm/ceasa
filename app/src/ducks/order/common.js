@@ -30,7 +30,6 @@ function common(types, duck) {
     this.resetOrder = () => (dispatch) => {
         dispatch(this.setClientStep(false))
         dispatch(this.setGenerateLoad(true))
-        dispatch(this.setReleasedStatus(true))
         dispatch(this.setOrderItems([]))
         dispatch(this.setClient({key: '', place: '', vehicle: ''}))
     }

@@ -103,6 +103,7 @@ const Sell = ({
             value: 0.0,
         })
         resetOrder()
+        setReleasedStatus(true)
     }
 
     const setReleasedStatus = (checked) => {
