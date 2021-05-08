@@ -22,20 +22,21 @@ function doUpdate() {
       return console.log(err);
     }
 
-    let result = data.replace(/\t*VERSION:.+/gm, `	VERSION: 'Beta ${version}',`);
+    let result = data.replace(/ *VERSION:.+/gm, `    VERSION: 'Beta ${version}',`);
 
     const serverUrl = "https://ceasa-estoque.herokuapp.com";
     result = result.replace(
       /^\s*\/*\s*API_URL: 'https:\/\/ceasa-estoque\.herokuapp\.com'/gm,
-      `	API_URL: '${serverUrl}'`
+      `    API_URL: '${serverUrl}'`
     );
 
-    const localUrl = result.match(/^\s*API_URL:\s'http:\/\/192\..+/gm)[0];
+    const matchLocalUrl = result.match(/^\s*API_URL:\s'http:\/\/192\..+/gm);
+    const localUrl = matchLocalUrl && matchLocalUrl.length > 0 ? matchLocalUrl[0] : null
 
     if (localUrl && localUrl.length > 0) {
       result = result.replace(
         /^\s*API_URL:\s'http:\/\/192\..+/gm,
-        `	// ${localUrl.trim()}`
+        `    // ${localUrl.trim()}`
       );
     }
     console.log(result);

@@ -143,8 +143,8 @@ android {
         applicationId "com.primatas.ceasa"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
-        versionName 'Beta 21.03.28'
+        versionCode 11
+        versionName 'Beta 21.05.07'
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
     }
@@ -193,7 +193,7 @@ android {
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
-                versionCode 10
+                versionCode 11
             }
 
         }
