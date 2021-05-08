@@ -42,7 +42,8 @@ const Login = ({ login, navigation, userId, accessToken, loading }) => {
     }, [])
 
     const handleLogin = async () => {
-        const success = await login(userText, passwordText)
+        const { success, handled } = await login(userText, passwordText)
+
         if (success) {
             await StorageService.loginType.set(loginType.vendor)
 
@@ -54,7 +55,9 @@ const Login = ({ login, navigation, userId, accessToken, loading }) => {
 
             navigation.navigate(stacks.menu)
         } else {
-            ToastService.show({ message: translate('login.error') })
+            if (!handled) {
+                ToastService.show({ message: translate('login.error') })
+            }
         }
     }
 

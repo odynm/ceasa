@@ -92,7 +92,6 @@ const deleteAdditionalCostFromList = (id, offlineId) => async (
     dispatch,
     getState,
 ) => {
-    console.warn(id, offlineId)
     const { additionalCosts } = getState().additionalCost
 
     const mappedItems = additionalCosts.filter(

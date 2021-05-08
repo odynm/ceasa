@@ -54,12 +54,13 @@ func DbEditOrder(order OrderCreation, orderId int, userId int) int {
 
 	var itemId int
 
+	// On release_at, we only change if the argument is not a 0001 date
 	statement := fmt.Sprintf(`
 				UPDATE %v."order_order" SET
 					client_id = $1, 
 					urgent = $2, 
 					status = $3, 
-					released_at = CASE WHEN $4 > date '0001-01-01' THEN $4 ELSE released_at END 
+					released_at = CASE WHEN $4 > date '0001-01-01'::timestamp THEN $4 ELSE released_at END 
 				WHERE id = $5
 				RETURNING id`, schema)
 	err := db.Instance.Db.

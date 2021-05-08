@@ -85,9 +85,9 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	var hasBecomeUrgent bool = false  // Did the order became urgent?
 	var curLoaderId int
 
-	orderStatus := DbGetOrderStatus(userId, orderDto.Id)
+	prevOrderStatus := DbGetOrderStatus(userId, orderDto.Id)
 
-	if orderStatus == S_Done || orderStatus == S_Deleted {
+	if prevOrderStatus == S_Done || prevOrderStatus == S_Deleted {
 		utils.Failed(w, utils.ORDER_CANT_EDIT)
 		goto Error
 	}
@@ -105,7 +105,7 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 	// Set current loader id here, before any changes
 	curLoaderId = DbGetLoaderId(userId, orderDto.Id)
 
-	// If generated load was unset, means the loader has
+	// If generated load was unset, means the vendor has
 	// finished the order by himself
 	if !orderDto.GenerateLoad {
 		orderDto.Status = S_Done
@@ -131,9 +131,11 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 		Urgent:   orderDto.Urgent,
 		Status:   orderDto.Status,
 	}
+
 	if orderDto.Status == S_Released {
 		order.ReleasedAt = time.Now().UTC()
 	}
+
 	orderId = DbEditOrder(order, orderDto.Id, userId)
 	if orderId == 0 {
 		utils.Failed(w, utils.ORDER_GENERIC)
@@ -210,7 +212,7 @@ func Edit(orderDto OrderDto, userId int, w http.ResponseWriter) int {
 		}
 	}
 
-	if orderStatus == S_Carrying {
+	if prevOrderStatus == S_Carrying {
 		relatedProducts, _ := DbGetOrderProductsFull(userId, orderId)
 		device := device.DbGetDeviceHashFromLoaderId(curLoaderId)
 

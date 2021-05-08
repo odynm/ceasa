@@ -164,7 +164,7 @@
         "doneNoCarrier": "Essa venda não gerou carregamento e foi feita às",
         "doneOffline": "Venda concluída",
         "edit": "Salvar",
-        "finish": "Salvar e Finalizar",
+        "finish": "Salvar e Finalizar Pedido",
         "deleteModal": {
             "header": "Deletar Pedido",
             "content": "Tem certeza que quer deletar esse pedido?"
