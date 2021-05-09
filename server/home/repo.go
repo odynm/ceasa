@@ -12,6 +12,9 @@ func DbGetHomeItems(userId int, timezone string) []HomeItem {
 
 	var homeItems []HomeItem
 
+	// IMPORTANT: the home report takes into account the CREATION date
+	// of the order.
+
 	statement := fmt.Sprintf(`
 	SELECT
 		si.id,
@@ -98,7 +101,9 @@ func DbGetHomeItems(userId int, timezone string) []HomeItem {
 			homeItem.TotalEarned = int(totalEarned.Int32)
 		}
 
-		homeItems = append(homeItems, homeItem)
+		if homeItem.Sold > 0 || homeItem.Amount > 0 {
+			homeItems = append(homeItems, homeItem)
+		}
 	}
 
 	return homeItems

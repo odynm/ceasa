@@ -80,7 +80,7 @@ func DbDecreaseAmountOfProduct(orderId int, storageId int, increaseAmount int, u
 
 	statement := fmt.Sprintf(`
 		UPDATE %v."order_product"
-		SET amount = amount - $1
+		SET amount = amount - $1, storage_amount = storage_amount - $1
 		WHERE order_id = $2 AND storage_id = $3`, schema)
 	_, err := db.Instance.Db.Exec(statement, increaseAmount, orderId, storageId)
 	if err != nil {
