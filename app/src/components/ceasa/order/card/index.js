@@ -12,6 +12,7 @@ const OrderCard = ({
     urgent,
     onPress,
     clientKey,
+    clientPlace,
     releasedHour,
     completedHour,
     isOfflineOrder,
@@ -75,7 +76,7 @@ const OrderCard = ({
                             </>
                         )}
                     </View>
-                    {status === orderStatus.done && (
+                    {status === orderStatus.done ? (
                         <>
                             {completedHour ? (
                                 <KText
@@ -93,6 +94,12 @@ const OrderCard = ({
                                 />
                             )}
                         </>
+                    ) : (
+                        <KText
+                            fontSize={14}
+                            text={clientPlace}
+                            style={styles.place}
+                        />
                     )}
                 </View>
                 {status === orderStatus.blocked && (
@@ -145,6 +152,7 @@ const styles = StyleSheet.create({
         marginRight: 0,
         alignSelf: 'center',
     },
+    place: {},
     blocked: {
         backgroundColor: '#F9F0A5',
         borderBottomLeftRadius: wp(10),

@@ -34,6 +34,7 @@ const OrdersLoader = ({
                         loader={item.loader}
                         status={item.status}
                         clientKey={item.client.key}
+                        clientPlace={item.client.place}
                         onPress={() => {
                             setSelectedOrderId(item.id)
                             navigation.navigate(screens.loaderOrderInfo)
