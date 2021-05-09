@@ -6,9 +6,8 @@ import (
 
 	"ceasa/db"
 
-	"strings"
-
 	"ceasa/utils"
+	"strings"
 )
 
 func DbIncreaseAmount(id int, increaseAmount int, userId int) bool {
@@ -71,6 +70,7 @@ func DbGetEqualId(idCurrent int, product int, productType int, descriptionId int
 
 func DbCreateOrGetDescriptionId(description string, userId int) int {
 	schema := fmt.Sprint("u", userId)
+	description = strings.TrimSpace(description)
 
 	var descriptionId int = 0
 
@@ -95,7 +95,6 @@ func DbCreateOrGetDescriptionId(description string, userId int) int {
 
 func DbCreateStorageItem(itemDto ItemDto, userId int, descriptionId int) int {
 	schema := fmt.Sprint("u", userId)
-	itemDto.Description = strings.TrimSpace(itemDto.Description)
 
 	var itemId int
 
@@ -117,7 +116,6 @@ Error:
 
 func DbUpdateStorageItem(itemDto ItemDto, userId int, descriptionId int) int {
 	schema := fmt.Sprint("u", userId)
-	itemDto.Description = strings.TrimSpace(itemDto.Description)
 
 	var itemId int
 
