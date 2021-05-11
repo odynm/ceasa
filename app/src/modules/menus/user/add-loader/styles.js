@@ -1,13 +1,17 @@
-import {hp} from 'src/utils/screen'
 import {StyleSheet} from 'react-native'
 
 const styles = StyleSheet.create({
     alignCenter: {
         alignItems: 'center',
     },
-    codeText: {
-        marginTop: hp(30),
-        marginBottom: hp(20),
+    flexCenter: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    copyIcon: {
+        alignSelf: 'center',
+        transform: [{scaleX: 0.8}, {scaleY: 0.8}],
     },
 })
 

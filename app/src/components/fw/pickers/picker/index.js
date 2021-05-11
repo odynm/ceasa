@@ -6,7 +6,7 @@ import styles from './styles'
 import KText from 'src/components/fw/ktext'
 import Error from 'src/components/fw/error'
 import Loading from 'src/components/fw/loading'
-import svgDropArrow from 'res/svgs/v12/svgDropArrow.svg'
+import svgDropArrow from 'res/svgs/v13/svgDropArrow.svg'
 
 const Picker = ({
     label,

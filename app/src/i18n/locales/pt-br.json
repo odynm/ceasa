@@ -10,7 +10,8 @@
         "error": {
             "unexpected": "Erro",
             "unexpectedText": "Ocorreu um erro inexperado"
-        }
+        },
+        "copyCliboard": "Copiado para a área de transferência"
     },
     "loginSelect": {
         "vendor": "Entrar como vendedor",

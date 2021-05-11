@@ -11,7 +11,7 @@ import ToastService from 'src/services/toastService'
 import ScreenHeader from 'src/components/fw/screen-header'
 //import { wp, hp } from 'src/utils/screen'
 //import SvgXml from 'react-native-svg'
-//import xmlQrScanBorder from 'res/svgs/v12/qr-scan-border.svg'
+//import xmlQrScanBorder from 'res/svgs/v13/qr-scan-border.svg'
 
 const ReadQr = ({navigation, joinTeam, loadLoaderTeams}) => {
     const camRef = useRef(null)
