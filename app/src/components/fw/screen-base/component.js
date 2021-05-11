@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     containerView: {
-        minHeight: getWorkableArea(),
+        minHeight: getWorkableArea() - hp(35),
         paddingHorizontal: wp(25),
         paddingTop: hp(13),
         width: widthPercentageToDP(100),

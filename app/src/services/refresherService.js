@@ -83,7 +83,9 @@ const refresh = async () => {
                 }
             }
 
-            await promiseResolveAllSettled(requests)
+            try {
+                await promiseResolveAllSettled(requests)
+            } catch (e) {}
         }
     } else {
         store.dispatch(AppCreators.setNoConnection(true))

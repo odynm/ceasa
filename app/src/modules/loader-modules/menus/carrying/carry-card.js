@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     card: {
         borderColor: colors.primary,
         borderRightWidth: 1,
-        paddingHorizontal: wp(10),
+        paddingHorizontal: wp(15),
     },
     selected: {
         backgroundColor: colors.primary,

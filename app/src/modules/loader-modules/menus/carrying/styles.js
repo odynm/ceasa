@@ -6,8 +6,8 @@ const styles = StyleSheet.create({
     headerCards: {
         borderBottomWidth: 1,
         borderColor: colors.primary,
-        height: hp(45),
-        paddingVertical: hp(8),
+        height: hp(55),
+        paddingVertical: hp(10),
         position: 'absolute',
         width: wp(375),
     },
