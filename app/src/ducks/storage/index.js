@@ -205,19 +205,17 @@ const add = (item) => async (dispatch, getStore) => {
     }
 
     const {success, data} = await HttpService.post('storage', mappedItemServer)
-
     if (success) {
         // Map item to be added/edited
         const mappedItemView = {
-            id: data,
-            productName: products.find((x) => x.id === item.productId).name,
+            ...data,
+            productName: products.find((x) => x.id === data.productId).name,
             productTypeName:
                 item.productTypeId > 0
-                    ? productTypes.find((x) => x.id === item.productTypeId).name
+                    ? productTypes.find((x) => x.id === data.productTypeId).name
                     : '',
-            description: item.description,
-            amount: item.amount,
-            costPrice: rfdc()(item.costPrice),
+            // costPrice: rfdc()(data.costPrice), // TODO Migh not be needed, delete if not
+            costPrice: data.costPrice,
         }
 
         // Is adding?

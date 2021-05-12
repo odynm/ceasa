@@ -93,10 +93,11 @@ func DbCreateOrGetDescriptionId(description string, userId int) int {
 	return descriptionId
 }
 
-func DbCreateStorageItem(itemDto ItemDto, userId int, descriptionId int) int {
+func DbCreateStorageItem(itemDto ItemDto, userId int, descriptionId int) (StorageItemPartial, bool) {
 	schema := fmt.Sprint("u", userId)
 
 	var itemId int
+	var returnedStorageItem StorageItemPartial
 
 	statement := fmt.Sprintf(`
 		INSERT INTO %v."storage_item" (product_id, product_type_id, description_id, cost_price, amount)
@@ -109,15 +110,25 @@ func DbCreateStorageItem(itemDto ItemDto, userId int, descriptionId int) int {
 		goto Error
 	}
 
-	return itemId
+	returnedStorageItem = StorageItemPartial{
+		Id:            itemId,
+		ProductId:     itemDto.Product,
+		Amount:        itemDto.Amount,
+		CostPrice:     itemDto.CostPrice,
+		ProductTypeId: itemDto.ProductType,
+		DescriptionId: descriptionId,
+	}
+
+	return returnedStorageItem, true
 Error:
-	return 0
+	return returnedStorageItem, false
 }
 
-func DbUpdateStorageItem(itemDto ItemDto, userId int, descriptionId int) int {
+func DbUpdateStorageItem(itemDto ItemDto, userId int, descriptionId int) (StorageItemPartial, bool) {
 	schema := fmt.Sprint("u", userId)
 
 	var itemId int
+	var returnedStorageItem StorageItemPartial
 
 	statement := fmt.Sprintf(`
 		UPDATE %v."storage_item" SET 
@@ -127,7 +138,8 @@ func DbUpdateStorageItem(itemDto ItemDto, userId int, descriptionId int) int {
 			cost_price = $4,
 			amount = $5
 		WHERE id = $6
-		RETURNING id`, schema)
+		RETURNING 
+			id`, schema)
 	err := db.Instance.Db.
 		QueryRow(statement, itemDto.Product, utils.NullIfZero(itemDto.ProductType), descriptionId, itemDto.CostPrice, itemDto.Amount, itemDto.Id).
 		Scan(&itemId)
@@ -135,9 +147,18 @@ func DbUpdateStorageItem(itemDto ItemDto, userId int, descriptionId int) int {
 		goto Error
 	}
 
-	return itemId
+	returnedStorageItem = StorageItemPartial{
+		Id:            itemId,
+		ProductId:     itemDto.Product,
+		Amount:        itemDto.Amount,
+		CostPrice:     itemDto.CostPrice,
+		ProductTypeId: itemDto.ProductType,
+		DescriptionId: descriptionId,
+	}
+
+	return returnedStorageItem, true
 Error:
-	return 0
+	return returnedStorageItem, false
 }
 
 func DbGetAllByProductId(productId int, productTypeId int, descriptionId int, userId int) []StorageItem {

@@ -23,6 +23,15 @@ type StorageItemFull struct {
 	Amount          int    `json:"amount"`
 }
 
+type StorageItemPartial struct {
+	Id            int `json:"id"`
+	ProductId     int `json:"productId"`
+	ProductTypeId int `json:"productTypeId"`
+	DescriptionId int `json:"descriptionId"`
+	CostPrice     int `json:"costPrice"`
+	Amount        int `json:"amount"`
+}
+
 type StorageItem struct {
 	Id            int           `json:"id"`
 	ProductId     int           `json:"productId"`

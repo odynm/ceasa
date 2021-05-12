@@ -7,7 +7,8 @@ import (
 )
 
 func Add(itemDto ItemDto, userId int, w http.ResponseWriter) {
-	var result int
+	var result StorageItemPartial
+	var success bool
 
 	descriptionId := DbCreateOrGetDescriptionId(itemDto.Description, userId)
 	equalId := DbGetEqualId(itemDto.Id, itemDto.Product, itemDto.ProductType, descriptionId, itemDto.CostPrice, userId)
@@ -15,17 +16,18 @@ func Add(itemDto ItemDto, userId int, w http.ResponseWriter) {
 		DbIncreaseAmount(equalId, itemDto.Amount, userId)
 		utils.Success(w, result)
 	} else {
-		result = DbCreateStorageItem(itemDto, userId, descriptionId)
-		if result == 0 {
-			utils.Failed(w, -1)
-		} else {
+		result, success = DbCreateStorageItem(itemDto, userId, descriptionId)
+		if success {
 			utils.Success(w, result)
+		} else {
+			utils.Failed(w, -1)
 		}
 	}
 }
 
 func Edit(itemDto ItemDto, userId int, w http.ResponseWriter) {
-	var result int
+	var result StorageItemPartial
+	var success bool
 
 	descriptionId := DbCreateOrGetDescriptionId(itemDto.Description, userId)
 	equalId := DbGetEqualId(itemDto.Id, itemDto.Product, itemDto.ProductType, descriptionId, itemDto.CostPrice, userId)
@@ -35,11 +37,11 @@ func Edit(itemDto ItemDto, userId int, w http.ResponseWriter) {
 		DbIncreaseAmount(equalId, itemDto.Amount, userId)
 		utils.Success(w, result)
 	} else {
-		result = DbUpdateStorageItem(itemDto, userId, descriptionId)
-		if result == 0 {
-			utils.Failed(w, -1)
-		} else {
+		result, success = DbUpdateStorageItem(itemDto, userId, descriptionId)
+		if success {
 			utils.Success(w, result)
+		} else {
+			utils.Failed(w, -1)
 		}
 	}
 }
